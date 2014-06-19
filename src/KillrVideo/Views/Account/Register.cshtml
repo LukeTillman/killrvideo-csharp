@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "Register for an account";
+    ViewBag.ShowRegister = false;
+}
+
+<div class="row" id="register-account">
+    <div class="col-md-6 col-md-offset-3">
+        <h2>Register</h2>
+
+        <p class="bg-info uimessage" data-bind="visible: !registeredUserId()">
+            Register for an account to upload and comment on videos.
+        </p>
+        
+        <div data-bind="module: { name: 'app/shared/uimessages', data: registerUrl }"></div>
+        
+        <p class="bg-success uimessage" style="display: none" data-bind="visible: registeredUserId()">
+            Your account has been created successfully.  <a href="/">Click here</a> to return to the home page.
+        </p>
+
+        <form role="form" data-bind="submit: registerUser, visible: !registeredUserId()">
+            <div class="row">
+                <div class="col-md-5 form-group">
+                    <label for="register-firstname">First name</label>
+                    <input type="text" class="form-control" id="register-firstname" placeholder="First name" data-bind="value: firstName" />
+                </div>
+                <div class="col-md-7 form-group">
+                    <label for="register-lastname">Last name</label>
+                    <input type="text" class="form-control" id="register-lastname" placeholder="Last name" data-bind="value: lastName" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="register-email">Email address</label>
+                <input type="text" class="form-control" id="register-email" placeholder="Enter your email address" data-bind="value: emailAddress" />
+            </div>
+            <div class="form-group">
+                <label for="register-password">Password</label>
+                <input type="password" class="form-control" id="register-password" placeholder="Choose a password" data-bind="value: password" />
+            </div>
+            <div class="form-group">
+                <label for="register-confirmpassword">Retype password</label>
+                <input type="password" class="form-control" id="register-confirmpassword" placeholder="Retype your password" data-bind="value: confirmPassword" />
+            </div>
+
+            <button type="submit" class="btn btn-primary" data-bind="disable: saving">
+                <i class="fa fa-cog fa-spin" style="display: none" data-bind="visible: saving"></i> Register
+            </button>
+        </form>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        // Apply bindings when DOM is ready
+        require(["knockout", "jquery", "app/account/register", "knockout-amd-helpers", "text", "domReady!"], function(ko, $, registerModel) {
+            var model = new registerModel();
+            ko.applyBindings(model, $("#register-account").get(0));
+        });
+    </script>
+}

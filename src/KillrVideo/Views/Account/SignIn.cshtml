@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "Sign In";
+    ViewBag.ShowSignIn = false;
+}
+
+<div class="row">
+    <div class="col-md-4 col-md-offset-4">
+        <div class="panel panel-default" id="signin-account">
+            <div class="panel-heading">
+                <h2 class="panel-title">Sign In</h2>
+            </div>
+
+            <div class="panel-body">
+                <p class="uimessage bg-info">
+                    If you've already got an account, sign in with your username and password below.
+                </p>
+                
+                <div data-bind="module: { name: 'app/shared/uimessages', data: signInUrl }"></div>
+
+                <form role="form" data-bind="submit: signIn">
+                    <div class="form-group">
+                        <label for="signin-email">Email address</label>
+                        <input type="text" class="form-control" id="signin-email" placeholder="Enter email address" data-bind="value: emailAddress" />
+                    </div>
+                    <div class="form-group">
+                        <label for="signin-password">Password</label>
+                        <input type="password" class="form-control" id="signin-password" placeholder="Password" data-bind="value: password" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" data-bind="disable: inProgress">
+                        <i class="fa fa-cog fa-spin" style="display: none" data-bind="visible: inProgress"></i> Sign In
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        // Apply bindings when DOM is ready
+        require(["knockout", "jquery", "app/account/signin", "knockout-amd-helpers", "text", "domReady!"], function(ko, $, signInModel) {
+            var model = new signInModel();
+            ko.applyBindings(model, $("#signin-account").get(0));
+        });
+    </script>
+}

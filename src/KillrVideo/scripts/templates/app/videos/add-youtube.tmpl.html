@@ -1,0 +1,12 @@
+﻿<div class="row">
+    <div class="col-md-8 form-group">
+        <label for="addvideo-youtubeurl">YouTube URL</label>
+        <input type="text" id="addvideo-youtubeurl" class="form-control" placeholder="Enter the URL for the video on YouTube (i.e. http://www.youtube.com/watch?v=XXXXXXXX)"
+               data-bind="value: youTubeUrl" />
+    </div>
+    <div class="col-md-4 video-preview" data-bind="if: youTubePreviewImageUrl">
+        <label>Preview Image</label>
+        <img data-bind="attr: { src: youTubePreviewImageUrl }" />
+    </div>
+</div>
+

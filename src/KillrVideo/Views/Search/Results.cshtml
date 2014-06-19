@@ -1,0 +1,67 @@
+﻿@model KillrVideo.Models.Search.ShowSearchResultsViewModel
+
+@{
+    ViewBag.Title = string.Format("Search Results for '{0}'", Model.Tag);
+}
+
+@if (string.IsNullOrWhiteSpace(Model.Tag))
+{
+    <h2>No search term entered</h2>
+    <p class="bg-warning uimessage">
+        Enter a tag to search for in the search box to get results.
+    </p>
+}
+else
+{
+    <h2>Search Results for '@Model.Tag'</h2>
+    <div id="search-results" data-bind="module: { name: 'app/shared/video-preview-list', data: searchResultsList }">
+        <h4 data-bind="visible: videos.inProgress">
+            <i class="fa fa-spinner fa-spin"></i> Searching...
+        </h4>
+        
+        <div data-bind="visible: !videos.inProgress(), foreach: { data: videosGrouped, as: 'group' }">
+            <div class="row" data-bind="foreach: { data: group, as: 'videopreview' }">
+                <div class="col-md-3" data-bind="template: { name: 'app/shared/video-preview', data: videopreview }">
+                </div>
+            </div>
+        </div>
+        
+        <p class="bg-info uimessage" data-bind="visible: !videos.inProgress() && videos().length === 0">
+            There are currently no videos for the tag <strong>@Model.Tag</strong>.  Why don't you <a href="@Url.Action("Add", "Videos")">add one</a>?
+        </p>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <button type="button" class="btn btn-default navbar-btn" data-bind="visible: previousPageAvailable, click: previousPage">
+                    <i class="fa fa-chevron-circle-left"></i> Previous Page
+                </button>
+            </div>
+            <div class="col-md-6 text-right">
+                <button type="button" class="btn btn-default navbar-btn" data-bind="visible: nextPageAvailable, click: nextPage">
+                    Next Page <i class="fa fa-chevron-circle-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@section scripts
+{
+    <script type="text/javascript">
+        require(["knockout", "jquery", "knockout-amd-helpers", "text", "domReady!"], function (ko, $) {
+            // Just use a simple object as the model for the page and apply bindings
+            ko.applyBindings({
+                searchResultsList: {
+                    url: '@Url.Action("Videos", "Search")',
+                    ajaxData: {
+                        tag: '@Model.Tag'
+                    },
+                    pageSize: 8,
+                    groupSize: 4
+                }
+            }, $("#search-results").get(0));
+        });
+    </script>
+}

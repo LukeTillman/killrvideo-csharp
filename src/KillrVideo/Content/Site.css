@@ -1,0 +1,170 @@
+﻿body {
+    font-family: 'Roboto Slab', serif;
+}
+
+.body-content {
+    padding: 70px 0;
+}
+
+/* Validation Messages */
+ul.uimessage {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 10px 0;
+}
+
+ul.uimessage > li, p.uimessage {
+    padding: 1em;
+}
+
+.validationMessage {
+    color: #A94442;
+}
+
+/* Main Navbar */
+.navbar-default {
+    background-image: linear-gradient(to bottom, #EEEEEE 0px, #E8E8E8 100%);
+    border-color: #CCC;
+}
+
+.navbar > .container .navbar-brand {
+    padding: 4px 15px 0 0;
+}
+
+.navbar > .container .navbar-brand img {
+    height: 80px;
+    width: auto;
+}
+
+@media (min-width: 768px) {
+    .navbar > .container .navbar-brand {
+        margin-left: -24px;
+    }
+}
+
+#navbar-search > .form-group {
+    width: 50%;
+}
+
+#navbar-search > .form-group > input {
+    width: 100%;
+}
+
+img.navbar-gravatar {
+    height: 24px;
+    width: 24px;
+    margin: -10px 4px -6px 0;
+}
+
+/* Footer */
+footer {
+    border-top: 1px solid #EFEFEF;
+    background-color: #333;
+    color: #FFF;
+}
+
+#footer-main {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+footer h4 {
+    font-weight: bold;
+    color: #428BCA;
+}
+
+#copyright {
+    color: #333;
+    background-color: #CCC;
+    padding: 20px 0;
+}
+
+/* This will push the footer to the bottom on non-mobile devices */
+@media (min-width: 992px) {
+    html, body {
+        height: 100%;
+    }
+
+    #body-wrapper {
+        min-height: 100%;
+        margin-bottom: -360px;
+    }
+
+    #push-footer {
+        height: 360px;
+    }
+
+    footer {
+        height: 360px;
+    }
+}
+
+/* Video Previews */
+.video-preview {
+    margin-bottom: 1.1em;
+}
+
+.video-preview h4 {
+    display: block;
+    height: 2.2em;      /* Matches line-height of 1.1em * 2 */
+    overflow: hidden;
+}
+
+.video-preview img {
+    width: 100%;
+    height: auto;
+}
+
+/* Auto size youtube video player to fit */
+#view-video-thevideo.youtube {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 30px; 
+    height: 0; 
+    overflow: hidden;
+}
+
+#view-video-thevideo.youtube iframe,
+#view-video-thevideo.youtube object,
+#view-video-thevideo.youtube embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Video ratings and tags when viewing videos */
+#view-video-rating, #view-video-tags {
+    font-size: 18px;
+}
+
+#view-video-rating .label, #view-video-tags .label {
+    font-weight: normal;
+}
+
+.video-rating span.star {
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+}
+
+.video-rating.video-rating-enabled span.star {
+    cursor: pointer;
+}
+
+.video-rating span.star:before {
+    color: #999;
+    content: "\f006";
+    padding-right: 5px;
+}
+
+.video-rating span.star.filled:before {
+    content: "\f005";
+}
+
+.video-rating span.star.highlighted:before {
+    content: "\f005";
+    color: #e3cf7a;
+}

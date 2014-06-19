@@ -1,0 +1,17 @@
+﻿<!-- ko with: messagesByType -->
+<ul class="bg-success uimessage" style="display: none" data-bind="visible: success.length > 0, foreach: success">
+    <li data-bind="text: $data"></li>
+</ul>
+
+<ul class="bg-info uimessage" style="display: none" data-bind="visible: info.length > 0, foreach: info">
+    <li data-bind="text: $data"></li>
+</ul>
+
+<ul class="bg-warning uimessage" style="display: none" data-bind="visible: warning.length > 0, foreach: warning">
+    <li data-bind="text: $data"></li>
+</ul>
+
+<ul class="bg-danger uimessage" style="display: none" data-bind="visible: error.length > 0, foreach: error">
+    <li data-bind="text: $data"></li>
+</ul>
+<!-- /ko -->

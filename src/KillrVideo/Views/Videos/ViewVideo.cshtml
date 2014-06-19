@@ -1,0 +1,94 @@
+﻿@model KillrVideo.Models.Videos.ViewVideoViewModel
+
+@{
+    ViewBag.Title = "View Video";
+}
+
+@section htmlhead
+{
+    <style type="text/css">
+        #main-video {
+            padding-left: 30px;
+            padding-top: 20px;
+            -webkit-box-shadow: -15px 0 15px -15px #CCCCCC;
+            box-shadow: -15px 0 15px -15px #CCCCCC;
+        }
+
+        #related-videos > h3 {
+            font-weight: bold;
+        }
+    </style>
+}
+
+<div id="view-video">
+    <div class="row">
+        <div class="col-md-9 col-md-push-3">
+            <div id="main-video">
+                <div id="view-video-thevideo" class="@Model.LocationType.ToString().ToLower()">
+                    <iframe src="http://www.youtube.com/embed/@Model.Location"></iframe>
+                </div>
+                
+                <h2>@Model.Title</h2>
+                <p>
+                    @Model.Description
+                </p>
+
+                <div class="row">
+                    <!-- Video star ratings -->
+                    <div class="col-md-6">
+                        <div id="view-video-rating" data-bind="module : { name: 'app/videos/star-rating', data: videoId }">
+                            <span class="video-rating" data-bind="foreach: availableRatings, css: { 'video-rating-enabled': ratingEnabled }">
+                                <span class="star" data-bind="css: { filled: $parent.displayRating() >= $data, highlighted: $parent.proposedRating() >= $data }, event: { click: $parent.rateVideo, mouseover: $parent.trackProposedRating, mouseout: $parent.resetProposedRating }"></span>
+                            </span>
+                            <span class="label label-info">
+                                <span data-bind="visible: currentUserRating() > 0">You: <span data-bind="text: currentUserRating"></span> stars, </span>
+                                Average: <span data-bind="text: averageRating"></span> (<span data-bind="text: ratingsCount"></span> ratings)
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Video tags -->
+                    <div class="col-md-6">
+                        <div id="view-video-tags" class="text-right">
+                            @foreach (var tag in Model.Tags)
+                            {
+                                <a class="label label-default" href="@Url.Action("Results", "Search", new { tag })">@tag</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div data-bind="module: { name: 'app/videos/comments', data: videoId }">
+                    Comments.
+                </div>
+            </div>
+        </div>
+        <!-- Related videos -->
+        <div class="col-md-3 col-md-pull-9" id="related-videos" data-bind="module: { name: 'app/shared/video-preview-list', data: relatedVideosList }">
+            <h3>Related Videos</h3>
+
+            <h4 data-bind="visible: videos.inProgress">
+                <i class="fa fa-spinner fa-spin"></i> Loading...
+            </h4>
+
+            <div data-bind="visible: !videos.inProgress(), template: { name: 'app/shared/video-preview', foreach: videos }">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        require(["knockout", "jquery", "knockout-amd-helpers", "text", "domReady!"], function (ko, $) {
+            // Just use a simple object as the model for the page and apply bindings
+            ko.applyBindings({
+                videoId: '@Model.VideoId',
+                relatedVideosList: {
+                    url: '@Url.Action("Related", "Videos")',
+                    ajaxData: {
+                        videoId: '@Model.VideoId'
+                    }
+                }
+            }, $("#view-video").get(0));
+        });
+    </script>
+}

@@ -1,0 +1,85 @@
+﻿@model KillrVideo.Models.Home.ViewNavbarViewModel
+
+@{
+    Layout = null;  // Since this will be used by the shared layout, it shouldn't use one
+}
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="@Url.Action("Index", "Home")" class="navbar-brand" title="KillrVideo.com">
+                <img src="@Url.Content("~/content/K.png")" alt="KillrVideo.com Logo"/>
+            </a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <div class="navbar-right">
+                @if (Model.LoggedInUser != null)
+                {
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default navbar-btn" href="@Url.Action("Info", "Account")"
+                                onclick=" window.location.href = this.getAttribute('href'); return false; ">
+                            <img src="https://secure.gravatar.com/avatar/@Model.LoggedInUser.GravatarHash"
+                                 alt="Gravatar for @Model.LoggedInUser.EmailAddress" class="img-rounded navbar-gravatar" />
+
+                            @Model.LoggedInUser.FirstName @Model.LoggedInUser.LastName
+                        </button>
+                        <button type="button" class="btn btn-default dropdown-toggle navbar-btn" data-toggle="dropdown">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="@Url.Action("Add", "Videos")"><i class="fa fa-video-camera fa-fw"></i> Add a video</a></li>
+                            <li class="divider"></li>
+                            <li><a href="@Url.Action("SignOut", "Account")"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    if (ViewBag.ShowRegister ?? true)
+                    {
+                        <button type="button" class="btn btn-success navbar-btn" href="@Url.Action("Register", "Account")"
+                                onclick=" window.location.href = this.getAttribute('href'); return false; ">
+                            Register
+                        </button>
+                    }
+
+                    if (ViewBag.ShowSignIn ?? true)
+                    {
+                        <button type="button" class="btn btn-default navbar-btn" href="@Url.Action("SignIn", "Account")"
+                                onclick=" window.location.href = this.getAttribute('href'); return false; ">
+                            Sign in
+                        </button>
+                    }
+                }
+            </div>
+            
+            <form class="navbar-form" role="search" id="navbar-search" method="GET" action="@Url.Action("Results", "Search")" 
+                  data-bind="module: 'app/shared/search-videos'">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="tag" placeholder="Find videos by tag (ex: cassandra, cats)" 
+                           list="navbar-search-suggestions" data-bind="value: searchValue, valueUpdate: 'input'" />
+                    <datalist id="navbar-search-suggestions" data-bind="foreach: tagSuggestions">
+                        <option data-bind="value: $data"></option>
+                    </datalist>
+                </div>
+                <button type="submit" class="btn btn-default" title="Search">
+                    <span class="glyphicon glyphicon-search" title="Search"></span><span class="text-hide">Search</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<script type="text/javascript">
+    // Requires bootstrap for the current user button dropdown
+    require(["knockout", "jquery", "knockout-amd-helpers", "bootstrap", "text", "domReady!"], function (ko, $) {
+        // Bind the search box
+        ko.applyBindings({}, $("#navbar-search").get(0));
+    });
+</script>

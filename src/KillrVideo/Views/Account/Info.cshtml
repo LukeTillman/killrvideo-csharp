@@ -1,0 +1,121 @@
+﻿@model KillrVideo.Models.Account.AccountInfoViewModel
+
+@{
+    ViewBag.Title = string.Format("{0} {1} - User Info", Model.UserProfile.FirstName, Model.UserProfile.LastName);
+}
+
+@section htmlhead
+{
+    <style type="text/css">
+        h3 {
+            border-bottom: 1px solid #CCC;
+            margin-top: 40px;
+            padding: 10px 0;
+        }
+    </style>
+}
+
+<div class="row">
+    <div class="col-md-5">
+        <h3>
+            <i class="fa fa-info-circle"></i> Profile
+        </h3>
+        <div class="row">
+            <div class="col-md-3">
+                <img src="https://secure.gravatar.com/avatar/@Model.UserProfile.GravatarHash" class="img-rounded pull-left"
+                     alt="Gravatar for @Model.UserProfile.EmailAddress" />
+            </div>
+            <div class="col-md-9">
+                <strong>@Model.UserProfile.FirstName @Model.UserProfile.LastName</strong><br />
+                @Model.UserProfile.EmailAddress
+            </div>
+        </div>
+        
+        <h3>
+            <i class="fa fa-comments"></i> Latest Comments
+        </h3>
+        <div id="user-comments">
+            
+        </div>
+    </div>
+    <div class="col-md-7">
+        
+        <h3>
+            <i class="fa fa-video-camera"></i> @(Model.IsCurrentlyLoggedInUser ? "My " : "")Videos
+        </h3>
+        @if (Model.IsCurrentlyLoggedInUser)
+        {
+            <p>
+                <a href="@Url.Action("Add", "Videos")" class="btn btn-success">
+                    <i class="fa fa-plus-circle"></i> Add a Video
+                </a>
+            </p>
+        }
+        
+        <div id="user-videos" data-bind="module: { name: 'app/shared/video-preview-list', data: userVideosList }">
+            <!-- User's videos in tabular format -->
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Added Date</th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: { data: videos, as: 'video' }, visible: !videos.inProgress()">
+                    <tr>
+                        <td>
+                            <a data-bind="text: video.name, attr: { href: video.videoUrl }" target="_blank"></a>
+                        </td>
+                        <td data-bind="text: video.addedDatePretty"></td>
+                    </tr>
+                </tbody>
+                <!-- Loading Icon -->
+                <tfoot data-bind="visible: videos.inProgress">
+                    <tr>
+                        <td colspan="2">
+                            <h4>
+                                <i class="fa fa-spinner fa-spin"></i> Loading...
+                            </h4>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <!-- Paging of the table -->
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-default navbar-btn" data-bind="visible: previousPageAvailable, click: previousPage">
+                        <i class="fa fa-chevron-circle-left"></i> Previous Page
+                    </button>
+                </div>
+                <div class="col-md-6 text-right">
+                    <button type="button" class="btn btn-default navbar-btn" data-bind="visible: nextPageAvailable, click: nextPage">
+                        Next Page <i class="fa fa-chevron-circle-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        require(["knockout", "jquery", "knockout-amd-helpers", "text", "domReady!"], function (ko, $) {
+            // Just use a simple object as the model for the page and apply bindings to page sections
+            var pageModel = {
+                userVideosList: {
+                    url: '@Url.Action("ByUser", "Videos")',
+                    ajaxData: {
+                        userId: '@Model.UserProfile.UserId'
+                    },
+                    pageSize: 10
+                }
+            };
+
+            $("#user-videos, #user-comments").each(function (idx, el) {
+                ko.applyBindings(pageModel, el);
+            });
+        });
+    </script>
+}
+

@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "Add Video";
+}
+
+<div id="video-add" class="row">
+    <div class="col-md-8 col-md-push-2">
+        <h2>Add Video</h2>
+        
+        <div data-bind="module: { name: 'app/shared/uimessages', data: addUrl }"></div>
+        
+        <p class="bg-success uimessage" style="display: none" data-bind="visible: viewVideoUrl()">
+            Your video has successfully been saved.  <a data-bind="attr: { href: viewVideoUrl }">Click here</a> to view it.
+        </p>
+        
+        <form role="form" data-bind="submit: addVideo, visible: !viewVideoUrl()">
+            <div class="form-group">
+                <label for="addvideo-name">Name</label>
+                <input type="text" id="addvideo-name" class="form-control" placeholder="Video name" data-bind="value: name" />
+            </div>
+            <div class="form-group">
+                <label for="addvideo-description">Description</label>
+                <textarea class="form-control" rows="3" data-bind="value: description" placeholder="Video description"></textarea>
+            </div>
+            <div class="row">
+                <div class="col-md-7 form-group">
+                    <label for="addvideo-tags">Tags</label>
+                    <input type="text" id="addvideo-tags" class="form-control" placeholder="Enter tags seperated by comma (',')" data-bind="value: tags" />
+                </div>
+                <div class="col-md-5 form-group">
+                    <label for="addvideo-type">Source</label>
+                    <select class="form-control" data-bind="options: availableSources, optionsText: 'label', optionsCaption: 'Choose a source...', value: selectedSource"></select>
+                </div>
+            </div>
+            
+            <!-- ko foreach: { data: availableSources, as: 'source' } -->
+            <div data-bind="template: { name: source.template, data: source.model }, visible: $parent.selectedSource() === source" style="display: none">
+            </div>
+            <!-- /ko -->
+            
+            <button type="submit" class="btn btn-primary" data-bind="disable: saving">
+                <i class="fa fa-cog fa-spin" style="display: none" data-bind="visible: saving"></i> Add Video
+            </button>
+        </form>
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        // Apply bindings when DOM is ready
+        require(["knockout", "jquery", "app/videos/add", "knockout-amd-helpers", "text", "domReady!"], function (ko, $, addVideoModel) {
+            var model = new addVideoModel();
+            ko.applyBindings(model, $("#video-add").get(0));
+        });
+    </script>
+}
