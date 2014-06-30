@@ -59,24 +59,24 @@ namespace KillrVideo.Data.Videos
             PreparedStatement[] preparedStatements = await _addVideoStatements;
 
             // INSERT INTO videos
-            batchStatement.AddQuery(preparedStatements[0].Bind(video.VideoId, video.UserId, video.Name, video.Description, video.Location,
-                                                               (int) video.LocationType, previewImage, video.Tags, addDate));
+            batchStatement.Add(preparedStatements[0].Bind(video.VideoId, video.UserId, video.Name, video.Description, video.Location,
+                                                          (int) video.LocationType, previewImage, video.Tags, addDate));
 
             // INSERT INTO user_videos
-            batchStatement.AddQuery(preparedStatements[1].Bind(video.UserId, addDate, video.VideoId, video.Name, previewImage));
+            batchStatement.Add(preparedStatements[1].Bind(video.UserId, addDate, video.VideoId, video.Name, previewImage));
 
             // INSERT INTO latest_videos
-            batchStatement.AddQuery(preparedStatements[2].Bind(yyyymmdd, addDate, video.VideoId, video.Name, previewImage));
+            batchStatement.Add(preparedStatements[2].Bind(yyyymmdd, addDate, video.VideoId, video.Name, previewImage));
             
             // We need to add multiple statements for each tag
             foreach (string tag in video.Tags)
             {
                 // INSERT INTO videos_by_tag
-                batchStatement.AddQuery(preparedStatements[3].Bind(tag, video.VideoId, addDate, video.Name, previewImage, addDate));
+                batchStatement.Add(preparedStatements[3].Bind(tag, video.VideoId, addDate, video.Name, previewImage, addDate));
 
                 // INSERT INTO tags_by_letter
                 string firstLetter = tag.Substring(0, 1);
-                batchStatement.AddQuery(preparedStatements[4].Bind(firstLetter, tag));
+                batchStatement.Add(preparedStatements[4].Bind(firstLetter, tag));
             }
 
             // Send the batch
@@ -120,17 +120,17 @@ namespace KillrVideo.Data.Videos
 
             // Use a batch and bind values for each statement (see PrepareRenameVideoStatements for the CQL and order of the statements)
             var batch = new BatchStatement();
-
+            
             // UPDATE videos ...
-            batch.AddQuery(preparedStatements[0].Bind(renameVideo.Name, renameVideo.VideoId));
+            batch.Add(preparedStatements[0].Bind(renameVideo.Name, renameVideo.VideoId));
             // UPDATE user_videos ...
-            batch.AddQuery(preparedStatements[1].Bind(renameVideo.Name, userid, addedDate, renameVideo.VideoId));
+            batch.Add(preparedStatements[1].Bind(renameVideo.Name, userid, addedDate, renameVideo.VideoId));
             // UPDATE latest_videos ...
-            batch.AddQuery(preparedStatements[2].Bind(renameVideo.Name, yyyymmdd, addedDate, renameVideo.VideoId));
+            batch.Add(preparedStatements[2].Bind(renameVideo.Name, yyyymmdd, addedDate, renameVideo.VideoId));
 
             // UPDATE videos_by_tag
             foreach (string tag in tags)
-                batch.AddQuery(preparedStatements[3].Bind(renameVideo.Name, tag, renameVideo.VideoId));
+                batch.Add(preparedStatements[3].Bind(renameVideo.Name, tag, renameVideo.VideoId));
 
             // Send the batch
             await _session.ExecuteAsync(batch);
