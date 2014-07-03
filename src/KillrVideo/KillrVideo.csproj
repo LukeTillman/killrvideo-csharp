@@ -126,6 +126,12 @@
     <Compile Include="Models\Account\GetAccountInfoViewModel.cs" />
     <Compile Include="Models\Account\SignInUserViewModel.cs" />
     <Compile Include="Models\Account\UserSignedInViewModel.cs" />
+    <Compile Include="Models\Comments\GetUserCommentsViewModel.cs" />
+    <Compile Include="Models\Comments\GetVideoCommentsViewModel.cs" />
+    <Compile Include="Models\Comments\UserCommentsViewModel.cs" />
+    <Compile Include="Models\Comments\UserCommentViewModel.cs" />
+    <Compile Include="Models\Comments\VideoCommentsViewModel.cs" />
+    <Compile Include="Models\Comments\VideoCommentViewModel.cs" />
     <Compile Include="Models\Home\ViewNavbarViewModel.cs" />
     <Compile Include="Models\Search\SearchResultsViewModel.cs" />
     <Compile Include="Models\Search\SearchVideosViewModel.cs" />
@@ -188,7 +194,6 @@
     <Content Include="scripts\templates\app\shared\uimessages.tmpl.html" />
     <Content Include="scripts\templates\app\shared\video-preview.tmpl.html" />
     <Content Include="scripts\templates\app\videos\add-youtube.tmpl.html" />
-    <Content Include="scripts\templates\app\videos\comments.tmpl.html" />
     <Content Include="scripts\lib\knockout-amd-helpers.js" />
     <Content Include="scripts\_references.js" />
     <Content Include="Web.config" />

@@ -64,12 +64,15 @@ namespace KillrVideo.Data.Users
 
         public async Task<IEnumerable<UserProfile>> GetUserProfiles(ISet<Guid> userIds)
         {
-            if (userIds == null) return Enumerable.Empty<UserProfile>();
+            if (userIds == null || userIds.Count == 0) return Enumerable.Empty<UserProfile>();
 
             // Since we're essentially doing a multi-get here, limit the number userIds (i.e. partition keys) to 20 in an attempt
             // to enforce some performance sanity.  Anything larger and we might want to consider a different data model that doesn't 
             // involve doing a multi-get
             if (userIds.Count > 20) throw new ArgumentOutOfRangeException("userIds", "Cannot do multi-get on more than 20 user id keys.");
+
+            // As an example, we'll do the multi-get at the CQL level using an IN() clause (i.e. let Cassandra handle it).  For an example of
+            // doing it at the driver level, see the VideoReadModel.GetVideoPreviews method
 
             // Build a parameterized CQL statement with an IN clause
             var parameterList = string.Join(", ", Enumerable.Repeat("?", userIds.Count));

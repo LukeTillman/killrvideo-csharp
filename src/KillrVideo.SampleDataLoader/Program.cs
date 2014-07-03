@@ -1,9 +1,15 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
+using KillrVideo.Data.Comments;
+using KillrVideo.Data.Comments.Dtos;
 using KillrVideo.Data.Users;
 using KillrVideo.Data.Videos;
+using KillrVideo.Data.Videos.Dtos;
+using NLipsum.Core;
 
 namespace KillrVideo.SampleDataLoader
 {
@@ -43,7 +49,32 @@ namespace KillrVideo.SampleDataLoader
             var videoTasks = SampleVideos.Data.Select(videoWriteModel.AddVideo).ToList();
             await Task.WhenAll(videoTasks);
 
-            // Insert comments
+            // Insert comments for each video
+            var random = new Random();
+            var commentWriteModel = new CommentWriteModel(session);
+            var commentTasks = new List<Task>();
+            var lipsum = new LipsumGenerator(Lipsums.ChildHarold, false);
+
+            foreach (AddVideo video in SampleVideos.Data)
+            {
+                int commentsToCreate = random.Next(1, 101);
+                for (int i = 0; i < commentsToCreate; i++)
+                {
+                    Guid userId = SampleUsers.Data[random.Next(SampleUsers.Data.Length)].UserId;
+                    commentTasks.Add(commentWriteModel.CommentOnVideo(new CommentOnVideo
+                    {
+                        UserId = userId,
+                        VideoId = video.VideoId,
+                        CommentTimestamp = DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(random.Next(14))),
+                        Comment = lipsum.GenerateParagraphs(1, Paragraph.Short)[0]
+                    }));
+                }
+            }
+
+            await Task.WhenAll(commentTasks);
+
+            // Insert ratings for videos
+            
         }
     }
 }

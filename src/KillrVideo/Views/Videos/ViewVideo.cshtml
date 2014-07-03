@@ -1,4 +1,5 @@
-﻿@model KillrVideo.Models.Videos.ViewVideoViewModel
+﻿@using KillrVideo.Authentication
+@model KillrVideo.Models.Videos.ViewVideoViewModel
 
 @{
     ViewBag.Title = "View Video";
@@ -46,6 +47,7 @@
                             </span>
                         </div>
                     </div>
+
                     <!-- Video tags -->
                     <div class="col-md-6">
                         <div id="view-video-tags" class="text-right">
@@ -56,8 +58,51 @@
                         </div>
                     </div>
                 </div>
+                
                 <div data-bind="module: { name: 'app/videos/comments', data: videoId }">
-                    Comments.
+                    <!-- Add a Comment -->
+                    <h3>Add a Comment</h3>
+                    @if (User.GetCurrentUserId() != null)
+                    {
+                        <p class="bg-success uimessage" style="display: none" data-bind="visible: newCommentAdded">
+                            Comment added successfully.  <a href="" data-bind="click: resetForNewComment">Click here</a> to add another.
+                        </p>
+                        
+                        <form role="form" data-bind="submit: addComment, visible: !newCommentAdded()">
+                            <div class="form-group">
+                                <textarea data-bind="value: newComment, valueUpdate: 'input'" class="form-control" rows="3"></textarea>
+                            </div>
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-primary" data-bind="disable: addingComment">
+                                    <i class="fa fa-cog fa-spin" style="display: none" data-bind="visible: addingComment"></i> Add Comment
+                                </button>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <p>
+                            You must <a href="@Url.Action("Register", "Account")">register</a> or <a href="@Url.Action("SignIn", "Account")">sign in</a> to post comments.
+                        </p>
+                    }
+
+                    <!-- View Comments -->
+                    <h3>Latest Comments</h3>
+                    <ul data-bind="foreach: { data: comments, as: 'singleComment' }" class="video-comments list-unstyled">
+                        <li class="clearfix">
+                            <div class="pull-left text-center">
+                                <a data-bind="attr: { href: singleComment.userProfileUrl }">
+                                    <img data-bind="attr: { src: singleComment.userGravatarImageUrl }" class="img-rounded" />
+                                    <span data-bind="text: singleComment.userFirstName"></span> <span data-bind="text: singleComment.userLastName"></span>
+                                </a>
+                            </div>
+                            <span data-bind="text: singleComment.comment"></span>
+                        </li>
+                    </ul>
+                    <button type="button" data-bind="visible: morePagesAvailable, disable: loadingNextPage, click: loadNextPage" 
+                            class="btn btn-default btn-block clearfix">
+                        <i data-bind="visible: loadingNextPage" class="fa fa-cog fa-spin"></i> Load more comments
+                    </button>
                 </div>
             </div>
         </div>

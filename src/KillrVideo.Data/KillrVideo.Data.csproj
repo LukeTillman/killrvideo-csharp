@@ -54,7 +54,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncLazy.cs" />
+    <Compile Include="Comments\CommentReadModel.cs" />
+    <Compile Include="Comments\CommentWriteModel.cs" />
+    <Compile Include="Comments\Dtos\CommentOnVideo.cs" />
+    <Compile Include="Comments\Dtos\GetUserComments.cs" />
+    <Compile Include="Comments\Dtos\GetVideoComments.cs" />
+    <Compile Include="Comments\Dtos\UserComment.cs" />
+    <Compile Include="Comments\Dtos\UserComments.cs" />
+    <Compile Include="Comments\Dtos\VideoComment.cs" />
+    <Compile Include="Comments\Dtos\VideoComments.cs" />
+    <Compile Include="Comments\ICommentReadModel.cs" />
+    <Compile Include="Comments\ICommentWriteModel.cs" />
+    <Compile Include="DateTimePrecise.cs" />
+    <Compile Include="GuidGeneration.cs" />
+    <Compile Include="GuidGenerator.cs" />
+    <Compile Include="GuidVersion.cs" />
     <Compile Include="HelperExtensions.cs" />
+    <Compile Include="TimestampHelper.cs" />
     <Compile Include="Users\Dtos\CreateUser.cs" />
     <Compile Include="Users\Dtos\UserCredentials.cs" />
     <Compile Include="Users\Dtos\UserProfile.cs" />
@@ -89,9 +105,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Comments\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

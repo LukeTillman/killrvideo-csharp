@@ -91,3 +91,21 @@ CREATE TABLE tags_by_letter (
     tag text,
     PRIMARY KEY (first_letter, tag)
 );
+
+// Comments for a given video
+CREATE TABLE comments_by_video (
+    videoid uuid,
+    commentid timeuuid,
+    userid uuid,
+    comment text,
+    PRIMARY KEY (videoid, commentid)
+) WITH CLUSTERING ORDER BY (commentid DESC);
+
+// Comments for a given user
+CREATE TABLE comments_by_user (
+    userid uuid,
+    commentid timeuuid,
+    videoid uuid,
+    comment text,
+    PRIMARY KEY (userid, commentid)
+) WITH CLUSTERING ORDER BY (commentid DESC);

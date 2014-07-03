@@ -46,6 +46,9 @@ namespace KillrVideo.Controllers
             });
         }
 
+        /// <summary>
+        /// Shows the View for adding a new video.
+        /// </summary>
         [HttpGet, Authorize]
         public ActionResult Add()
         {

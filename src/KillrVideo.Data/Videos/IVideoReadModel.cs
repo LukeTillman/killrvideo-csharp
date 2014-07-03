@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using KillrVideo.Data.Videos.Dtos;
 
@@ -10,6 +12,11 @@ namespace KillrVideo.Data.Videos
         /// Gets the details of a specific video.
         /// </summary>
         Task<VideoDetails> GetVideo(Guid videoId);
+
+        /// <summary>
+        /// Gets a limited number of video preview data by video id.
+        /// </summary>
+        Task<IEnumerable<VideoPreview>> GetVideoPreviews(ISet<Guid> videoIds);
 
         /// <summary>
         /// Gets the current rating stats for the specified video.

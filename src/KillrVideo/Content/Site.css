@@ -168,3 +168,20 @@ footer h4 {
     content: "\f005";
     color: #e3cf7a;
 }
+
+/* Video comments */
+.video-comments {
+}
+
+.video-comments > li {
+    margin-left: 100px;
+    padding: 1em 0;
+}
+
+.video-comments > li > div {
+    margin-left: -100px;
+}
+
+.video-comments > li > div img {
+    display: block;
+}

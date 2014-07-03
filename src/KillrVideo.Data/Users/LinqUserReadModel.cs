@@ -46,10 +46,19 @@ namespace KillrVideo.Data.Users
         /// <summary>
         /// Gets multiple user profiles by their Ids.  
         /// </summary>
-        public Task<IEnumerable<UserProfile>> GetUserProfiles(ISet<Guid> userIds)
+        public async Task<IEnumerable<UserProfile>> GetUserProfiles(ISet<Guid> userIds)
         {
-            // TODO:  Does LINQ driver support multi-get CONTAINS type query or do we have to do it client side?
-            throw new NotImplementedException();
+            if (userIds == null || userIds.Count == 0) return Enumerable.Empty<UserProfile>();
+
+            // Since we're essentially doing a multi-get here, limit the number userIds (i.e. partition keys) to 20 in an attempt
+            // to enforce some performance sanity.  Anything larger and we might want to consider a different data model that doesn't 
+            // involve doing a multi-get
+            if (userIds.Count > 20) throw new ArgumentOutOfRangeException("userIds", "Cannot do multi-get on more than 20 user id keys.");
+
+            IEnumerable<UserProfile> results = await _session.GetTable<UserProfile>()
+                                                             .Where(up => userIds.Contains(up.UserId))
+                                                             .ExecuteAsync().ConfigureAwait(false);
+            return results;
         }
     }
 }

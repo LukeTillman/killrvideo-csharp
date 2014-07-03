@@ -31,5 +31,13 @@ namespace KillrVideo.Data
         {
             return Task<IEnumerable<T>>.Factory.FromAsync(query.BeginExecute, query.EndExecute, null);
         }
+
+        /// <summary>
+        /// Converts an IEnumerable&lt;T&gt; to a HashSet&lt;T&gt;.
+        /// </summary>
+        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> enumerable)
+        {
+            return new HashSet<T>(enumerable);
+        }
     }
 }

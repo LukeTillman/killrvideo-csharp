@@ -18,6 +18,7 @@ namespace KillrVideo.Data.Videos
         private const int RelatedVideosToReturn = 5;
 
         private readonly AsyncLazy<PreparedStatement> _getVideo;
+        private readonly AsyncLazy<PreparedStatement> _getVideoPreview; 
         private readonly AsyncLazy<PreparedStatement> _getVideoRating;
         private readonly AsyncLazy<PreparedStatement> _getVideoRatingForUser;
         private readonly AsyncLazy<PreparedStatement> _getUserVideos;
@@ -36,6 +37,9 @@ namespace KillrVideo.Data.Videos
 
             // Reusable prepared statements
             _getVideo = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync("SELECT * FROM videos WHERE videoid = ?"));
+
+            _getVideoPreview = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync(
+                "SELECT videoid, added_date, name, preview_image_location FROM videos WHERE videoid = ?"));
 
             _getVideoRating = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync("SELECT * FROM video_ratings WHERE videoid = ?"));
             _getVideoRatingForUser = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync(
@@ -68,6 +72,31 @@ namespace KillrVideo.Data.Videos
             BoundStatement boundStatement = preparedStatement.Bind(videoId);
             RowSet rows = await _session.ExecuteAsync(boundStatement);
             return MapRowToVideoDetails(rows.Single());
+        }
+
+        /// <summary>
+        /// Gets a limited number of video preview data by video id.
+        /// </summary>
+        public async Task<IEnumerable<VideoPreview>> GetVideoPreviews(ISet<Guid> videoIds)
+        {
+            if (videoIds == null || videoIds.Count == 0) return Enumerable.Empty<VideoPreview>();
+
+            // Since we're doing a multi-get here, limit the number of previews to 20 to try and enforce some
+            // performance sanity.  If we ever needed to do more than that, we might think about a different
+            // data model that doesn't involve a multi-get.
+            if (videoIds.Count > 20) throw new ArgumentOutOfRangeException("videoIds", "videoIds cannot contain more than 20 video id keys.");
+
+            // As an example, let's do the multi-get using multiple statements at the driver level.  For an example of doing this at
+            // the CQL level with an IN() clause, see UserReadModel.GetUserProfiles
+            PreparedStatement prepared = await _getVideoPreview;
+
+            // Bind multiple times to the prepared statement with each video id and execute all the gets in parallel, then await
+            // the completion of all the gets
+            RowSet[] rowSets = await Task.WhenAll(videoIds.Select(id => prepared.Bind(id))
+                                                          .Select(_session.ExecuteAsync));
+
+            // Flatten the rows in the rowsets to VideoPreview objects
+            return rowSets.SelectMany(rowSet => rowSet, (_, row) => MapRowToVideoPreview(row));
         }
 
         /// <summary>
