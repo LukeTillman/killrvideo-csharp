@@ -9,8 +9,8 @@ namespace KillrVideo.Models.Comments
     public class UserCommentViewModel
     {
         public Guid CommentId { get; set; }
-        
-        public Guid VideoId { get; set; }
+
+        public string VideoViewUrl { get; set; }
         public string VideoName { get; set; }
         public string VideoPreviewImageLocation { get; set; }
         

@@ -1,7 +1,10 @@
-﻿define(["knockout", "jquery", "knockout-validation"], function (ko, $) {
+﻿define(["knockout", "jquery", "app/comments/video-comment", "knockout-validation"], function (ko, $, videoCommentModel) {
     // Return viewModel
     return function(videoId) {
         var self = this;
+
+        // The number of comments per page to retrieve
+        var pageSize = 10;
 
         // The list of currently loaded comments
         self.comments = ko.observableArray();
@@ -24,7 +27,7 @@
 
             var ajaxData = {
                 videoId: videoId,
-                pageSize: 11,       // Going to show 10 at a time, so get an extra record
+                pageSize: pageSize + 1,       // Going to show 10 at a time, so get an extra record
                 firstCommentIdOnPage: self.firstCommentIdOnNextPage()
             };
 
@@ -39,7 +42,7 @@
                     return;
 
                 // If we got the extra record, remove it and save the comment Id for loading subsequent pages
-                if (response.data.comments.length === 11) {
+                if (response.data.comments.length === pageSize + 1) {
                     self.firstCommentIdOnNextPage(response.data.comments.pop().commentId);
                 } else {
                     self.firstCommentIdOnNextPage(null);
@@ -50,7 +53,10 @@
                     // Rather than push one-at-a-time and notifying for each push, only notify at the end of adding all comments
                     var commentsArray = self.comments();
                     self.comments.valueWillMutate();
-                    ko.utils.arrayPushAll(commentsArray, response.data.comments);
+                    for (var i = 0; i < response.data.comments.length; i++) {
+                        var commentModel = new videoCommentModel(response.data.comments[i]);
+                        commentsArray.push(commentModel);
+                    }
                     self.comments.valueHasMutated();
                 }
             }).always(function() {
@@ -95,7 +101,7 @@
                 
                 // We should get a comment returned to us on success, so add the new comment to the top of the list
                 // of comments so it shows up
-                self.comments.splice(0, 0, response.data);
+                self.comments.splice(0, 0, new videoCommentModel(response.data));
                 self.newCommentAdded(true);
 
             }).always(function () {

@@ -179,6 +179,9 @@
     <Content Include="Content\Site.css" />
     <Content Include="scripts\app\account\register.js" />
     <Content Include="scripts\app\account\signin.js" />
+    <Content Include="scripts\app\comments\user-comment.js" />
+    <Content Include="scripts\app\comments\user-comments.js" />
+    <Content Include="scripts\app\comments\video-comment.js" />
     <Content Include="scripts\app\shared\search-videos.js" />
     <Content Include="scripts\app\shared\uimessages.js" />
     <Content Include="scripts\app\shared\video-preview-list.js" />
@@ -186,7 +189,7 @@
     <Content Include="scripts\app\videos\add-sources.js" />
     <Content Include="scripts\app\videos\add-youtube.js" />
     <Content Include="scripts\app\videos\add.js" />
-    <Content Include="scripts\app\videos\comments.js" />
+    <Content Include="scripts\app\comments\video-comments.js" />
     <Content Include="scripts\app\videos\star-rating.js" />
     <Content Include="scripts\lib\knockout-extenders.js" />
     <Content Include="scripts\lib\knockout-postbox.js" />

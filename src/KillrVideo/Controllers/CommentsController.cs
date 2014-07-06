@@ -108,7 +108,7 @@ namespace KillrVideo.Controllers
                     CommentId = c.CommentId,
                     Comment = c.Comment,
                     CommentTimestamp = c.CommentTimestamp,
-                    VideoId = c.VideoId,
+                    VideoViewUrl = Url.Action("ViewVideo", "Videos", new { videoId = c.VideoId }),
                     VideoName = vp.Name,
                     VideoPreviewImageLocation = vp.PreviewImageLocation
                 }).ToList()

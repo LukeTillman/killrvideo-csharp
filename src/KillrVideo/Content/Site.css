@@ -185,3 +185,18 @@ footer h4 {
 .video-comments > li > div img {
     display: block;
 }
+
+/* User comments */
+.user-comments > li {
+    margin-left: 120px;
+    margin-bottom: 20px;
+}
+
+.user-comments > li > div {
+    margin-left: -120px;
+}
+
+.user-comments > li > div img {
+    width: 100px;
+    height: auto;
+}

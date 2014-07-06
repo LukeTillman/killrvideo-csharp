@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 
-                <div data-bind="module: { name: 'app/videos/comments', data: videoId }">
+                <div data-bind="module: { name: 'app/comments/video-comments', data: videoId }">
                     <!-- Add a Comment -->
                     <h3>Add a Comment</h3>
                     @if (User.GetCurrentUserId() != null)
@@ -93,9 +93,14 @@
                             <div class="pull-left text-center">
                                 <a data-bind="attr: { href: singleComment.userProfileUrl }">
                                     <img data-bind="attr: { src: singleComment.userGravatarImageUrl }" class="img-rounded" />
-                                    <span data-bind="text: singleComment.userFirstName"></span> <span data-bind="text: singleComment.userLastName"></span>
                                 </a>
                             </div>
+
+                            <a data-bind="attr: { href: singleComment.userProfileUrl }">
+                                <span data-bind="text: singleComment.userFirstName"></span> <span data-bind="text: singleComment.userLastName"></span>
+                            </a>
+                            <small data-bind="text: singleComment.commentTimestampAgo" class="text-muted"></small><br />
+
                             <span data-bind="text: singleComment.comment"></span>
                         </li>
                     </ul>

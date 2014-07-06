@@ -6,18 +6,21 @@
 
 @section htmlhead
 {
-    <style type="text/css">
-        h3 {
-            border-bottom: 1px solid #CCC;
-            margin-top: 40px;
-            padding: 10px 0;
+    <style>
+        #user-comments {
+            max-height: 280px;
+            overflow-y: auto;
+            border: 1px solid #EEE;
+            margin-top: -20px;
+            border-top-style: none;
+            padding: 20px;
         }
     </style>
 }
 
 <div class="row">
     <div class="col-md-5">
-        <h3>
+        <h3 class="page-header">
             <i class="fa fa-info-circle"></i> Profile
         </h3>
         <div class="row">
@@ -31,16 +34,34 @@
             </div>
         </div>
         
-        <h3>
+        <!-- User's comments -->
+        <h3 class="page-header">
             <i class="fa fa-comments"></i> Latest Comments
         </h3>
-        <div id="user-comments">
-            
+        <div id="user-comments" data-bind="module: { name: 'app/comments/user-comments', data: userId }">
+            <!-- Current page of comments by the user -->
+            <ul data-bind="foreach: { data: comments, as: 'singleComment' }" class="user-comments list-unstyled">
+                <li class="clearfix">
+                    <div class="pull-left text-center">
+                        <a data-bind="attr: { href: singleComment.videoViewUrl }" target="_blank">
+                            <img data-bind="attr: { src: singleComment.videoPreviewImageLocation }" />
+                        </a>
+                    </div>
+                    <span data-bind="text: singleComment.comment"></span><br/>
+                    <small class="text-muted">
+                        on <a data-bind="text: singleComment.videoName, attr: { href: singleComment.videoViewUrl }" target="_blank"></a> <span data-bind="text: singleComment.commentTimestampAgo"></span>
+                    </small>
+                </li>
+            </ul>
+            <button type="button" data-bind="visible: morePagesAvailable, disable: loadingNextPage, click: loadNextPage"
+                    class="btn btn-default btn-block clearfix">
+                <i data-bind="visible: loadingNextPage" class="fa fa-cog fa-spin"></i> Load more comments
+            </button>
         </div>
     </div>
     <div class="col-md-7">
-        
-        <h3>
+        <!-- User's videos -->
+        <h3 class="page-header">
             <i class="fa fa-video-camera"></i> @(Model.IsCurrentlyLoggedInUser ? "My " : "")Videos
         </h3>
         @if (Model.IsCurrentlyLoggedInUser)
@@ -51,7 +72,6 @@
                 </a>
             </p>
         }
-        
         <div id="user-videos" data-bind="module: { name: 'app/shared/video-preview-list', data: userVideosList }">
             <!-- User's videos in tabular format -->
             <table class="table table-striped">
@@ -103,6 +123,7 @@
         require(["knockout", "jquery", "knockout-amd-helpers", "text", "domReady!"], function (ko, $) {
             // Just use a simple object as the model for the page and apply bindings to page sections
             var pageModel = {
+                userId: '@Model.UserProfile.UserId',
                 userVideosList: {
                     url: '@Url.Action("ByUser", "Videos")',
                     ajaxData: {
