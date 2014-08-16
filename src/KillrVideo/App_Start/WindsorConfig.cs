@@ -1,10 +1,13 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
+using System.Linq;
 using System.Web.Mvc;
 using Cassandra;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using KillrVideo.Data;
 using KillrVideo.Data.Users;
+using Microsoft.WindowsAzure;
 
 namespace KillrVideo
 {
@@ -34,10 +37,16 @@ namespace KillrVideo
         private static void RegisterCassandra(WindsorContainer container)
         {
             // Get cluster IP/host and keyspace from .config file
-            string clusterLocation = ConfigurationManager.AppSettings[ClusterLocationAppSettingsKey];
+            string clusterLocation = CloudConfigurationManager.GetSetting(ClusterLocationAppSettingsKey);
+            if (string.IsNullOrEmpty(clusterLocation))
+                throw new ConfigurationErrorsException(string.Format("No Cassandra cluster location found in the appSettings under key {0}.",
+                                                                     ClusterLocationAppSettingsKey));
+
+            // Allow multiple comma delimited locations to be specified in the configuration
+            string[] locations = clusterLocation.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).Select(l => l.Trim()).ToArray();
 
             // Use the Cluster builder to create a cluster
-            Cluster cluster = Cluster.Builder().AddContactPoint(clusterLocation).Build();
+            Cluster cluster = Cluster.Builder().AddContactPoints(locations).Build();
 
             // Use the cluster to connect a session to the appropriate keyspace
             ISession session = cluster.Connect(Keyspace);
