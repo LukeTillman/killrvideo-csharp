@@ -1,0 +1,9 @@
+﻿<div class="form-group" data-bind="validationOptions: { insertMessages: false }">
+    <label for="addvideo-uploadfile">Select a video to upload</label><br />
+
+    <span class="btn btn-default btn-file">
+        Browse... <input type="file" name="addvideo-uploadfile" data-bind="value: uploadFile">
+    </span>
+    <span data-bind="text: uploadFileName"></span><br/>
+    <span class="validationMessage" data-bind="validationMessage: uploadFile"></span>
+</div>

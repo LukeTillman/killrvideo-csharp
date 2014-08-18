@@ -49,4 +49,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{EC94EB0B-D11C-460A-B64B-64C09596C8A3} = {7F522B93-73F2-4093-AED8-9E674CB0604D}
 	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\TransientFaultHandling.Core.5.1.1209.1\lib\NET4
+	EndGlobalSection
 EndGlobal
