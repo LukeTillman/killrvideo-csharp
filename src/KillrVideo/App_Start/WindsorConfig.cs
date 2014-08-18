@@ -7,6 +7,7 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using KillrVideo.Data;
 using KillrVideo.Data.Users;
+using log4net;
 using Microsoft.WindowsAzure;
 
 namespace KillrVideo
@@ -16,6 +17,8 @@ namespace KillrVideo
     /// </summary>
     public static class WindsorConfig
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (WindsorConfig));
+
         private const string ClusterLocationAppSettingsKey = "CassandraClusterLocation";
         private const string Keyspace = "killrvideo";
 
@@ -49,7 +52,16 @@ namespace KillrVideo
             Cluster cluster = Cluster.Builder().AddContactPoints(locations).Build();
 
             // Use the cluster to connect a session to the appropriate keyspace
-            ISession session = cluster.Connect(Keyspace);
+            ISession session;
+            try
+            {
+                session = cluster.Connect(Keyspace);
+            }
+            catch (Exception e)
+            {
+                Logger.Error(string.Format("Exception while connecting to keyspace '{0}' using hosts '{1}'", Keyspace, clusterLocation), e);
+                throw;
+            }
 
             // Register both Cluster and ISession instances with Windsor (essentially as Singletons since it will reuse the instance)
             container.Register(
