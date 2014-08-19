@@ -23,8 +23,13 @@
             return "";
         });
 
-        // Location type is always just youtube for this source
-        self.locationType = ko.observable("youtube");
+        // Gets the location and location type (used by add.js to pull this info before adding the video)
+        self.getLocationAndTypeForAdd = function() {
+            return {
+                location: self.location(),
+                locationType: "youtube"     // Always just "youtube" for this source
+            };
+        };
 
         // The image URL for a preview
         self.youTubePreviewImageUrl = ko.computed(function() {

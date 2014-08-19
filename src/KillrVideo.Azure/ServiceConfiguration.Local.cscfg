@@ -4,7 +4,7 @@
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="CassandraClusterLocation" value="127.0.0.1" />
+      <Setting name="CassandraClusterLocation" value="" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

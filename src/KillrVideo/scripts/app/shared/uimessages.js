@@ -1,4 +1,6 @@
 ﻿define(["knockout", "jquery", "knockout-postbox"], function (ko, $) {
+    var allUiMessagesQueue = "allmessages";
+
     // Just once (when this is loaded) hook some global ajax events for jQuery so we can inspect JSON responses
     // and publish any UI messages found on a queue matching the URL for the request
     $(document)
@@ -6,18 +8,21 @@
             // Publish a message on the queue indicating an empty messages array (effectively clearing any messages)
             var queueName = settings.url.toLowerCase();
             ko.postbox.publish(queueName, []);
+            ko.postbox.publish(allUiMessagesQueue, []);
         })
         .ajaxSuccess(function(event, xhr, settings) {
             // If there are any UI messages in the response, publish them to the queue for that URL
             if (xhr.responseJSON && xhr.responseJSON.messages.length > 0) {
                 var queueName = settings.url.toLowerCase();
                 ko.postbox.publish(queueName, xhr.responseJSON.messages);
+                ko.postbox.publish(allUiMessagesQueue, xhr.responseJSON.messages);
             }
         })
         .ajaxError(function(event, xhr, settings) {
             // Publish a generic error messages on the queue for the URL
             var queueName = settings.url.toLowerCase();
             ko.postbox.publish(queueName, [{ type: "error", text: "Unexpected server error while processing request.  Please try again later." }]);
+            ko.postbox.publish(allUiMessagesQueue, [{ type: "error", text: "Unexpected server error while processing request.  Please try again later." }]);
         });
     
     // Return view model, expecting that we'll get an array of queues to listen to for new messages
@@ -50,6 +55,9 @@
             $.each(queues, function(idx, val) {
                 self.messages.subscribeTo(val);
             });
+        } else {
+            // No queue was specified, so assume they want this to subscribe to the "all" queue
+            self.messages.subscribeTo(allUiMessagesQueue);
         }
     }
 });
