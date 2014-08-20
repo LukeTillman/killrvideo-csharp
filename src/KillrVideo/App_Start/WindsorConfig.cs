@@ -9,6 +9,8 @@ using KillrVideo.Data.Users;
 using KillrVideo.Utils;
 using log4net;
 using Microsoft.WindowsAzure.MediaServices.Client;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Queue;
 
 namespace KillrVideo
 {
@@ -116,12 +118,46 @@ namespace KillrVideo
                 return;
             }
             
-            // We've got all the configs we need
+            // We've got all the configs we need so start registering Azure objects
             var mediaCredentials = new MediaServicesCredentials(mediaServicesAccountName, mediaServicesAccountKey);
             container.Register(
+                // Recommended be shared by all CloudMediaContext objects so register as singleton
                 Component.For<MediaServicesCredentials>().Instance(mediaCredentials),
+
+                // Not thread-safe, so register as transient
                 Component.For<CloudMediaContext>().LifestyleTransient()
             );
+
+            // Setup queue for notifications about video encoding jobs
+            var storageAccount = CloudStorageAccount.Parse(storageConnectionString);
+            var notificationQueue = storageAccount.CreateCloudQueueClient().GetQueueReference(Constants.NotificationQueueName);
+            notificationQueue.CreateIfNotExists();
+
+            // Create a notification endpoint for Media Services attached to the queue if one doesn't exist
+            INotificationEndPoint notificationEndPoint = GetOrAddNotificationEndPoint(mediaCredentials);
+
+            container.Register(
+                // Register the queue client and get a new one each time (transient) just to be safe
+                Component.For<CloudQueueClient>().UsingFactoryMethod(storageAccount.CreateCloudQueueClient).LifestyleTransient(),
+
+                // All asset publishing can just reuse the notification endpoint
+                Component.For<INotificationEndPoint>().Instance(notificationEndPoint)
+            );
+
+        }
+
+        private static INotificationEndPoint GetOrAddNotificationEndPoint(MediaServicesCredentials mediaCredentials)
+        {
+            var cloudMediaContext = new CloudMediaContext(mediaCredentials);
+            
+            // ReSharper disable once ReplaceWithSingleCallToFirstOrDefault
+            INotificationEndPoint endpoint = cloudMediaContext.NotificationEndPoints.Where(ep => ep.Name == Constants.NotificationQueueName)
+                                                              .FirstOrDefault();
+            if (endpoint != null)
+                return endpoint;
+
+            return cloudMediaContext.NotificationEndPoints.Create(Constants.NotificationQueueName, NotificationEndPointType.AzureQueue,
+                                                                  Constants.NotificationQueueName);
         }
     }
 }

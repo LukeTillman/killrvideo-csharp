@@ -205,8 +205,10 @@ namespace KillrVideo.Data.Videos
             PreparedStatement tagsForVideoPrepared = await _getTagsForVideo;
             BoundStatement tagsForVideoBound = tagsForVideoPrepared.Bind(videoId);
             RowSet tagRows = await _session.ExecuteAsync(tagsForVideoBound);
-            List<string> tags = tagRows.Single().GetValue<IEnumerable<string>>("tags").ToList();
+            var tagsValue = tagRows.Single().GetValue<IEnumerable<string>>("tags");
 
+            var tags = tagsValue == null ? new List<string>() : tagsValue.ToList();
+            
             // If there are no tags, we can't find related videos
             if (tags.Count == 0)
                 return new RelatedVideos {VideoId = videoId, Videos = Enumerable.Empty<VideoPreview>()};
@@ -322,6 +324,7 @@ namespace KillrVideo.Data.Videos
         /// </summary>
         private static VideoDetails MapRowToVideoDetails(Row row)
         {
+            var tags = row.GetValue<IEnumerable<string>>("tags");
             return new VideoDetails
             {
                 VideoId = row.GetValue<Guid>("videoid"),
@@ -330,7 +333,7 @@ namespace KillrVideo.Data.Videos
                 Description = row.GetValue<string>("description"),
                 Location = row.GetValue<string>("location"),
                 LocationType = (VideoLocationType) row.GetValue<int>("location_type"),
-                Tags = new HashSet<string>(row.GetValue<IEnumerable<string>>("tags")),
+                Tags = tags == null ? new HashSet<string>() : new HashSet<string>(tags),
                 AddedDate = row.GetValue<DateTimeOffset>("added_date")
             };
         }

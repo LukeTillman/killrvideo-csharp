@@ -14,8 +14,18 @@ namespace KillrVideo.Models.Upload
         public string AssetId { get; set; }
 
         /// <summary>
+        /// The name of the file being uploaded.
+        /// </summary>
+        public string FileName { get; set; }
+
+        /// <summary>
         /// The storage URL in Azure Media Services where the video can be uploaded.
         /// </summary>
         public string UploadUrl { get; set; }
+
+        /// <summary>
+        /// The Id for the upload locator.
+        /// </summary>
+        public string UploadLocatorId { get; set; }
     }
 }

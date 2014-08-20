@@ -17,9 +17,6 @@
         // The URL to go and view the video once saving has been successful
         self.viewVideoUrl = ko.observable("");
 
-        // URL we'll be calling that could potentially have errors
-        self.addUrl = "/videos/addvideo";
-
         // Adds the video via an AJAX call to the server
         self.addVideo = function () {
             // Check for any validation problems
@@ -32,27 +29,21 @@
             // Indicate we're saving
             self.saving(true);
 
-            // Allow the source model to do any pre-add steps (like uploading a file for example) in the
-            // getLocationAndTypeForAdd method by returning a promise if necessary
-            $.when(self.selectedSource().model.getLocationAndTypeForAdd())
-                .then(function(locationAndType) {
-                    // Pull all data into a JS object that can be posted
-                    var postData = {
-                        name: self.name(),
-                        description: self.description(),
-                        tags: self.tags(),
-                        location: locationAndType.location,
-                        locationType: locationAndType.locationType
-                    };
+            // Pull video details into a JS object
+            var videoDetails = {
+                name: self.name(),
+                description: self.description(),
+                tags: self.tags()
+            };
 
-                    // Post to save the video
-                    return $.post(self.addUrl, postData);
-                })
-                .done(function(response) {
-                    // If successful, set the URL for viewing
-                    if (response.success) {
-                        self.viewVideoUrl(response.data.viewVideoUrl);
-                    }
+            // Delegate to each video type to decide how to save itself
+            var saved = self.selectedSource().model.saveVideo(videoDetails);
+
+            // When saving is finished, act appropriately
+            $.when(saved)
+                .done(function(viewVideoUrl) {
+                    // If saving is successful, indicate where the video can be viewed
+                    self.viewVideoUrl(viewVideoUrl);
                 })
                 .always(function() {
                     // Always toggle saving back to false

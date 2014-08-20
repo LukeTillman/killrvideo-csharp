@@ -54,41 +54,6 @@ namespace KillrVideo.Controllers
         {
             return View();
         }
-
-        /// <summary>
-        /// Saves a new video.
-        /// </summary>
-        [HttpPost, Authorize]
-        public async Task<JsonNetResult> AddVideo(NewVideoViewModel model)
-        {
-            // TODO: Add validation
-            if (ModelState.IsValid == false)
-                return JsonFailure();
-
-            VideoLocationType locationType;
-            if (Enum.TryParse(model.LocationType, true, out locationType) == false)
-                throw new InvalidOperationException(string.Format("Unknown location type {0}", model.LocationType));
-            
-            // Assign a Guid to the video and save
-            var videoId = Guid.NewGuid();
-            var addVideo = new AddVideo
-            {
-                VideoId = videoId,
-                UserId = User.GetCurrentUserId().Value,
-                Name = model.Name,
-                Description = model.Description,
-                Location = model.Location,
-                LocationType = locationType,
-                Tags = new HashSet<string>(model.Tags.Split(new []{","}, StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim()))
-            };
-            await _videoWriteModel.AddVideo(addVideo);
-
-            // Indicate success
-            return JsonSuccess(new NewVideoAddedViewModel
-            {
-                ViewVideoUrl = Url.Action("ViewVideo", "Videos", new {videoId})
-            });
-        }
         
         /// <summary>
         /// Gets related videos for the video specified in the model.

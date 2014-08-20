@@ -8,7 +8,7 @@
         // Whether or not upload is supported (must support HTML5 File APIs)
         self.uploadSupported = window.File && window.FileReader && window.FileList && window.Blob;
 
-        // The file to be uploaded and a label for it
+        // The file to be uploaded
         self.uploadFile = ko.observable().extend({
             required: true,
             validation: {
@@ -18,6 +18,8 @@
                 message: "Upload file cannot be larger than 1 GB"
             }
         });
+
+        // A display label for the selected file (i.e. the file name)
         self.uploadFileLabel = ko.computed(function() {
             var f = self.uploadFile();
             return f ? f.name : "No file selected.";
@@ -33,10 +35,10 @@
 
         // A status message for updates during an upload
         self.uploadStatus = ko.observable("");
-        
-        // Required method for all video sources, this does the actual work of uploading the file and eventually returning a location/locationType
-        // that the add.js page can use to add the video
-        self.getLocationAndTypeForAdd = function () {
+
+        // Required method for all video sources, this does the actual work of uploading the file and eventually returning a
+        // location where the video can be viewed
+        self.saveVideo = function(videoDetails) {
             var uploadFile = self.uploadFile();
 
             // Indicate an upload is about to start
@@ -53,7 +55,7 @@
                             return $.Deferred().reject().promise();
 
                         // Init some variables for file upload
-                        var defaultChunkSize = 1024 * 512,      // Upload in 512 KB chunks
+                        var defaultChunkSize = 1024 * 512, // Upload in 512 KB chunks
                             chunks = Math.ceil(uploadFile.size / defaultChunkSize),
                             currentChunk = 0,
                             blockIds = [],
@@ -81,13 +83,13 @@
                                 fr.readAsArrayBuffer(uploadFile.slice(start, end));
 
                                 return frDeferred;
-                            }).then(function (e) {
+                            }).then(function(e) {
                                 // Generate a block Id for the chunk by padding 0s before the current chunk number
                                 var blockId = "" + currentChunk;
                                 while (blockId.length < 10) {
                                     blockId = "0" + blockId;
                                 }
-                                blockId = btoa("block-" + blockId);     // Base-64 encode
+                                blockId = btoa("block-" + blockId); // Base-64 encode
                                 blockIds.push(blockId);
 
                                 self.uploadStatus("Uploading video chunk " + (currentChunk + 1) + " of " + chunks);
@@ -115,7 +117,7 @@
                         }
 
                         // Once all chunks have been uploaded, we need to make a final request to commit the block list
-                        uploadFileChunks = uploadFileChunks.then(function () {
+                        uploadFileChunks = uploadFileChunks.then(function() {
                             self.uploadStatus("Finishing upload.");
 
                             var uri = createAssetResponse.data.uploadUrl + "&comp=blocklist";
@@ -134,9 +136,9 @@
                             });
                         });
 
-                        // Lastly, return the asset Id of the successfully uploaded file (from the createasset call above)
+                        // Lastly, return the data from the create asset call above
                         uploadFileChunks = uploadFileChunks.then(function() {
-                            return createAssetResponse.data.assetId;
+                            return createAssetResponse.data;
                         });
 
                         // Create a file reader and resolve the original deferred we created with it to start the upload
@@ -146,19 +148,29 @@
                         // Return the finished upload process as a promise
                         return uploadFileChunks.promise();
 
-                        // After the file has been uploaded, start publishing to get a URL
-                    }).then(function(assetId) {
-                        return $.post("/upload/publishasset", { assetId: assetId, fileName: uploadFile.name });
-                    }).then(function(publishResponse) {
+                        // After the file has been uploaded, add the video
+                    }).then(function(createAssetData) {
+                        var addVideoData = {
+                            // Copy some data from the response of the create asset call
+                            assetId: createAssetData.assetId,
+                            fileName: createAssetData.fileName,
+                            uploadLocatorId: createAssetData.uploadLocatorId,
+
+                            // Copy some data from when save was originally called
+                            name: videoDetails.name,
+                            description: videoDetails.description,
+                            tags: videoDetails.tags
+                        };
+
+                        // Add the video
+                        return $.post("/upload/add", addVideoData);
+                    }).then(function(addResponse) {
                         // If server response indicates failure, just return a rejected promise
-                        if (!publishResponse.success)
+                        if (!addResponse.success)
                             return $.Deferred().reject().promise();
 
-                        // Return the location and locationType that getLocationAndTypeForAdd method is responsible for providing
-                        return {
-                            location: publishResponse.viewUrl,
-                            locationType: "upload"
-                        };
+                        // Return the URL where the video will be available for viewing
+                        return addResponse.data.viewVideoUrl;
                     });
 
             // If something goes wrong during upload, reset the upload progress to -1
