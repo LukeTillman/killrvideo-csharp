@@ -38,6 +38,14 @@
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KillrVideo.UploadWorker\KillrVideo.UploadWorker.csproj">
+      <Name>KillrVideo.UploadWorker</Name>
+      <Project>{ccccd9db-0c47-4f44-80a2-34326992f025}</Project>
+      <Private>True</Private>
+      <RoleType>Worker</RoleType>
+      <RoleName>KillrVideo.UploadWorker</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
     <ProjectReference Include="..\KillrVideo\KillrVideo.csproj">
       <Name>KillrVideo</Name>
       <Project>{9254d795-86d8-4c9a-9273-0836cfa171de}</Project>
@@ -48,9 +56,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="KillrVideo.UploadWorkerContent\" />
     <Folder Include="KillrVideoContent\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="KillrVideo.UploadWorkerContent\diagnostics.wadcfg">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="KillrVideoContent\diagnostics.wadcfg">
       <SubType>Content</SubType>
     </Content>

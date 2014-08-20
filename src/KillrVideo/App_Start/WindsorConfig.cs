@@ -5,6 +5,7 @@ using Cassandra;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using KillrVideo.Data;
+using KillrVideo.Data.Upload;
 using KillrVideo.Data.Users;
 using KillrVideo.Utils;
 using log4net;
@@ -130,7 +131,7 @@ namespace KillrVideo
 
             // Setup queue for notifications about video encoding jobs
             var storageAccount = CloudStorageAccount.Parse(storageConnectionString);
-            var notificationQueue = storageAccount.CreateCloudQueueClient().GetQueueReference(Constants.NotificationQueueName);
+            var notificationQueue = storageAccount.CreateCloudQueueClient().GetQueueReference(UploadConfigConstants.NotificationQueueName);
             notificationQueue.CreateIfNotExists();
 
             // Create a notification endpoint for Media Services attached to the queue if one doesn't exist
@@ -151,13 +152,14 @@ namespace KillrVideo
             var cloudMediaContext = new CloudMediaContext(mediaCredentials);
             
             // ReSharper disable once ReplaceWithSingleCallToFirstOrDefault
-            INotificationEndPoint endpoint = cloudMediaContext.NotificationEndPoints.Where(ep => ep.Name == Constants.NotificationQueueName)
+            INotificationEndPoint endpoint = cloudMediaContext.NotificationEndPoints
+                                                              .Where(ep => ep.Name == UploadConfigConstants.NotificationQueueName)
                                                               .FirstOrDefault();
             if (endpoint != null)
                 return endpoint;
 
-            return cloudMediaContext.NotificationEndPoints.Create(Constants.NotificationQueueName, NotificationEndPointType.AzureQueue,
-                                                                  Constants.NotificationQueueName);
+            return cloudMediaContext.NotificationEndPoints.Create(UploadConfigConstants.NotificationQueueName, NotificationEndPointType.AzureQueue,
+                                                                  UploadConfigConstants.NotificationQueueName);
         }
     }
 }

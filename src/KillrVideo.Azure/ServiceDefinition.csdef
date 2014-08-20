@@ -18,4 +18,12 @@
       <Setting name="CassandraClusterLocation" />
     </ConfigurationSettings>
   </WebRole>
+  <WorkerRole name="KillrVideo.UploadWorker" vmsize="Small">
+    <Imports>
+      <Import moduleName="Diagnostics" />
+    </Imports>
+    <ConfigurationSettings>
+      <Setting name="CassandraClusterLocation" />
+    </ConfigurationSettings>
+  </WorkerRole>
 </ServiceDefinition>

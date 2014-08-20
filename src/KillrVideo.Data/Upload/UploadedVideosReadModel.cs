@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Data.Videos.Dtos;
+using KillrVideo.Data.Upload.Dtos;
 
-namespace KillrVideo.Data.Videos
+namespace KillrVideo.Data.Upload
 {
     /// <summary>
     /// Reads data from Cassandra for uploaded videos.

@@ -71,6 +71,15 @@
     <Compile Include="GuidVersion.cs" />
     <Compile Include="HelperExtensions.cs" />
     <Compile Include="TimestampHelper.cs" />
+    <Compile Include="Upload\Dtos\AddEncodingJobNotification.cs" />
+    <Compile Include="Upload\Dtos\AddUploadedVideo.cs" />
+    <Compile Include="Upload\Dtos\EncodingJobProgress.cs" />
+    <Compile Include="Upload\Dtos\UploadedVideo.cs" />
+    <Compile Include="Upload\IUploadedVideosReadModel.cs" />
+    <Compile Include="Upload\IUploadedVideosWriteModel.cs" />
+    <Compile Include="Upload\UploadConfig.cs" />
+    <Compile Include="Upload\UploadedVideosReadModel.cs" />
+    <Compile Include="Upload\UploadedVideosWriteModel.cs" />
     <Compile Include="Users\Dtos\CreateUser.cs" />
     <Compile Include="Users\Dtos\UserCredentials.cs" />
     <Compile Include="Users\Dtos\UserProfile.cs" />
@@ -81,11 +90,8 @@
     <Compile Include="Users\UserReadModel.cs" />
     <Compile Include="VideoLocationType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Videos\Dtos\AddEncodingJobNotification.cs" />
-    <Compile Include="Videos\Dtos\AddUploadedVideo.cs" />
     <Compile Include="Videos\Dtos\AddVideo.cs" />
     <Compile Include="Videos\Dtos\ChangeVideoDescription.cs" />
-    <Compile Include="Videos\Dtos\EncodingJobProgress.cs" />
     <Compile Include="Videos\Dtos\GetTagsStartingWith.cs" />
     <Compile Include="Videos\Dtos\GetUserVideos.cs" />
     <Compile Include="Videos\Dtos\GetVideosByTag.cs" />
@@ -94,19 +100,14 @@
     <Compile Include="Videos\Dtos\RelatedVideos.cs" />
     <Compile Include="Videos\Dtos\RenameVideo.cs" />
     <Compile Include="Videos\Dtos\TagsStartingWith.cs" />
-    <Compile Include="Videos\Dtos\UploadedVideo.cs" />
     <Compile Include="Videos\Dtos\UserVideoRating.cs" />
     <Compile Include="Videos\Dtos\UserVideos.cs" />
     <Compile Include="Videos\Dtos\VideoDetails.cs" />
     <Compile Include="Videos\Dtos\VideoPreview.cs" />
     <Compile Include="Videos\Dtos\VideoRating.cs" />
     <Compile Include="Videos\Dtos\VideosByTag.cs" />
-    <Compile Include="Videos\IUploadedVideosReadModel.cs" />
-    <Compile Include="Videos\IUploadedVideosWriteModel.cs" />
     <Compile Include="Videos\IVideoReadModel.cs" />
     <Compile Include="Videos\IVideoWriteModel.cs" />
-    <Compile Include="Videos\UploadedVideosReadModel.cs" />
-    <Compile Include="Videos\UploadedVideosWriteModel.cs" />
     <Compile Include="Videos\VideoReadModel.cs" />
     <Compile Include="Videos\VideoWriteModel.cs" />
   </ItemGroup>

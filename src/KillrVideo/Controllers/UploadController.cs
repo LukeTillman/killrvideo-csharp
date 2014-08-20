@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using KillrVideo.ActionResults;
 using KillrVideo.Authentication;
+using KillrVideo.Data.Upload;
+using KillrVideo.Data.Upload.Dtos;
 using KillrVideo.Data.Videos;
 using KillrVideo.Data.Videos.Dtos;
 using KillrVideo.Models.Upload;

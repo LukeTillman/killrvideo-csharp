@@ -233,7 +233,6 @@
     <Compile Include="Authentication\PasswordHash.cs" />
     <Compile Include="Utils\AzureTraceAppender.cs" />
     <Compile Include="Utils\ConfigHelper.cs" />
-    <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\GravatarHasher.cs" />
   </ItemGroup>
   <ItemGroup>

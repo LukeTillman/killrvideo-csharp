@@ -1,6 +1,6 @@
 using System;
 
-namespace KillrVideo.Data.Videos.Dtos
+namespace KillrVideo.Data.Upload.Dtos
 {
     /// <summary>
     /// DTO that represents the encoding job progress for an uploaded video.

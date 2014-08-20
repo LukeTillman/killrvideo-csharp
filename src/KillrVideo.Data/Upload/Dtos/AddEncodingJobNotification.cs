@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KillrVideo.Data.Videos.Dtos
+namespace KillrVideo.Data.Upload.Dtos
 {
     /// <summary>
     /// DTO for a notification about an Azure Media Services encoding job.

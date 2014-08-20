@@ -20,6 +20,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AzureDeployment", "AzureDep
 EndProject
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "KillrVideo.Azure", "KillrVideo.Azure\KillrVideo.Azure.ccproj", "{EC94EB0B-D11C-460A-B64B-64C09596C8A3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.UploadWorker", "KillrVideo.UploadWorker\KillrVideo.UploadWorker.csproj", "{CCCCD9DB-0C47-4F44-80A2-34326992F025}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utility Apps", "Utility Apps", "{CF4D0F5E-3A5C-4577-A2FC-4D6A9A896524}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,11 +46,16 @@ Global
 		{EC94EB0B-D11C-460A-B64B-64C09596C8A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC94EB0B-D11C-460A-B64B-64C09596C8A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC94EB0B-D11C-460A-B64B-64C09596C8A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCCCD9DB-0C47-4F44-80A2-34326992F025}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCCCD9DB-0C47-4F44-80A2-34326992F025}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCCCD9DB-0C47-4F44-80A2-34326992F025}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCCCD9DB-0C47-4F44-80A2-34326992F025}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{1089C94B-D1C9-41B8-9CBB-F80C1E4212C4} = {CF4D0F5E-3A5C-4577-A2FC-4D6A9A896524}
 		{EC94EB0B-D11C-460A-B64B-64C09596C8A3} = {7F522B93-73F2-4093-AED8-9E674CB0604D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

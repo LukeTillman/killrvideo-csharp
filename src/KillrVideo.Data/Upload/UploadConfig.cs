@@ -1,9 +1,9 @@
-﻿namespace KillrVideo.Utils
+﻿namespace KillrVideo.Data.Upload
 {
     /// <summary>
-    /// Some constants used in multiple places by the code.
+    /// Constants related to video upload.
     /// </summary>
-    public static class Constants
+    public static class UploadConfigConstants
     {
         /// <summary>
         /// The queue name used for progress/completion notifications about Azure Media Services encoding jobs.

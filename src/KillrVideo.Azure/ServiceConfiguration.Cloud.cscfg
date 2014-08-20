@@ -7,11 +7,23 @@
       <Setting name="CassandraClusterLocation" value="" />
     </ConfigurationSettings>
   </Role>
+  <Role name="KillrVideo.UploadWorker">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="" />
+      <Setting name="CassandraClusterLocation" value="" />
+    </ConfigurationSettings>
+  </Role>
   <!-- When deploying to Azure, use the same virtual network as the Cassandra cluster that's in Azure -->
   <NetworkConfiguration>
     <VirtualNetworkSite name="killrvideo-vnet" />
     <AddressAssignments>
       <InstanceAddress roleName="KillrVideo">
+        <Subnets>
+          <Subnet name="Subnet-1" />
+        </Subnets>
+      </InstanceAddress>
+      <InstanceAddress roleName="KillrVideo.UploadWorker">
         <Subnets>
           <Subnet name="Subnet-1" />
         </Subnets>

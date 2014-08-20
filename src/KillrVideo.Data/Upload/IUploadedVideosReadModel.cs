@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using KillrVideo.Data.Videos.Dtos;
+using KillrVideo.Data.Upload.Dtos;
 
-namespace KillrVideo.Data.Videos
+namespace KillrVideo.Data.Upload
 {
     /// <summary>
     /// Handles read operations related to uploaded videos.
