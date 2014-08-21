@@ -16,6 +16,9 @@
     </Imports>
     <ConfigurationSettings>
       <Setting name="CassandraClusterLocation" />
+      <Setting name="AzureMediaServicesAccountName" />
+      <Setting name="AzureMediaServicesAccountKey" />
+      <Setting name="AzureStorageConnectionString" />
     </ConfigurationSettings>
   </WebRole>
   <WorkerRole name="KillrVideo.UploadWorker" vmsize="Small">
@@ -24,6 +27,9 @@
     </Imports>
     <ConfigurationSettings>
       <Setting name="CassandraClusterLocation" />
+      <Setting name="AzureMediaServicesAccountName" />
+      <Setting name="AzureMediaServicesAccountKey" />
+      <Setting name="AzureStorageConnectionString" />
     </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="KillrVideo.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2013-10.2.2">
+  <Role name="KillrVideo">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      
+      <!-- Use this key to override the location of your C* instance if not running on 127.0.0.1 -->
+      <Setting name="CassandraClusterLocation" value="127.0.0.1" />
+      
+      <!-- Your Azure Media Services account information -->
+      <Setting name="AzureMediaServicesAccountName" value="" />
+      <Setting name="AzureMediaServicesAccountKey" value="" />
+      
+      <!-- 
+        The storage connection string for the storage account used by your Azure Media Services account.  Will look like:
+          DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}
+      -->
+      <Setting name="AzureStorageConnectionString" value="" />
+    </ConfigurationSettings>
+  </Role>
+  <Role name="KillrVideo.UploadWorker">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="CassandraClusterLocation" value="127.0.0.1" />
+      <Setting name="AzureMediaServicesAccountName" value="" />
+      <Setting name="AzureMediaServicesAccountKey" value="" />
+      <Setting name="AzureStorageConnectionString" value="" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>
