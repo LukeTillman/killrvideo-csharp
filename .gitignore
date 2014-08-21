@@ -5,7 +5,7 @@
 *.suo
 *.user
 *.sln.docstates
-*.cscfg
+*.[Tt]ransform.cscfg
 
 
 # Build results

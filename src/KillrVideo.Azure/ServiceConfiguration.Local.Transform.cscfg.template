@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<sc:ServiceConfiguration serviceName="KillrVideo.Azure" xmlns:sc="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration"
+  xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+  <sc:Role name="KillrVideo" xdt:Locator="Condition(@name='KillrVideo' or @name='KillrVideo.UploadWorker')">
+    <sc:ConfigurationSettings>
+      <!-- Use this key to override the location of your C* instance if not running on 127.0.0.1 -->
+      <sc:Setting name="CassandraClusterLocation" value="127.0.0.1" xdt:Transform="SetAttributes" xdt:Locator="Match(name)" />
+      
+      <!-- Your Azure Media Services account information -->
+      <sc:Setting name="AzureMediaServicesAccountName" value="" xdt:Transform="SetAttributes" xdt:Locator="Match(name)" />
+      <sc:Setting name="AzureMediaServicesAccountKey" value="" xdt:Transform="SetAttributes" xdt:Locator="Match(name)" />
+      
+      <!-- 
+        The storage connection string for the storage account used by your Azure Media Services account.  Will look like:
+          DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}
+      -->
+      <sc:Setting name="AzureStorageConnectionString" value="" xdt:Transform="SetAttributes" xdt:Locator="Match(name)" />
+    </sc:ConfigurationSettings>
+  </sc:Role>
+</sc:ServiceConfiguration>

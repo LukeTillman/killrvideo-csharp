@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using Cassandra;
@@ -7,8 +8,8 @@ using Castle.Windsor;
 using KillrVideo.Data;
 using KillrVideo.Data.Upload;
 using KillrVideo.Data.Users;
-using KillrVideo.Utils;
 using log4net;
+using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.MediaServices.Client;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
@@ -48,7 +49,7 @@ namespace KillrVideo
         private static void RegisterCassandra(WindsorContainer container)
         {
             // Get cluster IP/host and keyspace from .config file
-            string clusterLocation = ConfigHelper.GetRequiredSetting(ClusterLocationAppSettingsKey);
+            string clusterLocation = GetRequiredSetting(ClusterLocationAppSettingsKey);
 
             // Allow multiple comma delimited locations to be specified in the configuration
             string[] locations = clusterLocation.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).Select(l => l.Trim()).ToArray();
@@ -96,28 +97,10 @@ namespace KillrVideo
 
         private static void RegisterAzureComponents(WindsorContainer container)
         {
-            // If any of the Azure configs are empty, assume we're going to run without upload capability (TODO: Create a no-op media services component?)
-            string mediaServicesAccountName = ConfigHelper.GetOptionalSetting(MediaServicesNameAppSettingsKey);
-            if (string.IsNullOrEmpty(mediaServicesAccountName))
-            {
-                Logger.WarnFormat("No media services account name found under key {0}, upload will be disabled.", MediaServicesNameAppSettingsKey);
-                return;
-            }
-
-            string mediaServicesAccountKey = ConfigHelper.GetOptionalSetting(MediaServicesKeyAppSettingsKey);
-            if (string.IsNullOrEmpty(mediaServicesAccountKey))
-            {
-                Logger.WarnFormat("No media services account key found under key {0}, upload will be disabled.", MediaServicesKeyAppSettingsKey);
-                return;
-            }
-
-            string storageConnectionString = ConfigHelper.GetOptionalSetting(StorageConnectionStringAppSettingsKey);
-            if (string.IsNullOrEmpty(storageConnectionString))
-            {
-                Logger.WarnFormat("No storage account connection string found under key {0}, upload will be disabled.",
-                                  StorageConnectionStringAppSettingsKey);
-                return;
-            }
+            // Get Azure configurations
+            string mediaServicesAccountName = GetRequiredSetting(MediaServicesNameAppSettingsKey);
+            string mediaServicesAccountKey = GetRequiredSetting(MediaServicesKeyAppSettingsKey);
+            string storageConnectionString = GetRequiredSetting(StorageConnectionStringAppSettingsKey);
             
             // We've got all the configs we need so start registering Azure objects
             var mediaCredentials = new MediaServicesCredentials(mediaServicesAccountName, mediaServicesAccountKey);
@@ -160,6 +143,18 @@ namespace KillrVideo
 
             return cloudMediaContext.NotificationEndPoints.Create(UploadConfigConstants.NotificationQueueName, NotificationEndPointType.AzureQueue,
                                                                   UploadConfigConstants.NotificationQueueName);
+        }
+
+        /// <summary>
+        /// Gets a required setting from CloudConfigurationManager and throws a ConfigurationErrorsException if setting is null/empty.
+        /// </summary>
+        private static string GetRequiredSetting(string key)
+        {
+            var value = CloudConfigurationManager.GetSetting(key);
+            if (string.IsNullOrEmpty(value))
+                throw new ConfigurationErrorsException(string.Format("No value for required setting {0} in cloud configuration", key));
+
+            return value;
         }
     }
 }

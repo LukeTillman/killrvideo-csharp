@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="KillrVideo.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2013-10.2.2">
+  <Role name="KillrVideo">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="CassandraClusterLocation" value="" />
+      <Setting name="AzureMediaServicesAccountName" value="" />
+      <Setting name="AzureMediaServicesAccountKey" value="" />
+      <Setting name="AzureStorageConnectionString" value="" />
+    </ConfigurationSettings>
+  </Role>
+  <Role name="KillrVideo.UploadWorker">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="CassandraClusterLocation" value="" />
+      <Setting name="AzureMediaServicesAccountName" value="" />
+      <Setting name="AzureMediaServicesAccountKey" value="" />
+      <Setting name="AzureStorageConnectionString" value="" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>
