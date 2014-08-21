@@ -20,7 +20,7 @@ namespace KillrVideo.UploadWorker
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly List<Task> _tasks;
 
-        private WindsorContainer _windsorContainer;
+        private IWindsorContainer _windsorContainer;
         
         public WorkerRole()
         {

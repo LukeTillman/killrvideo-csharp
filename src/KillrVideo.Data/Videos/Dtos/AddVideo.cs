@@ -16,6 +16,7 @@ namespace KillrVideo.Data.Videos.Dtos
         public string Location { get; set; }
         public VideoLocationType LocationType { get; set; }
         public ISet<string> Tags { get; set; }
+        public string PreviewImageLocation { get; set; }
         
         public AddVideo()
         {

@@ -71,7 +71,6 @@ namespace KillrVideo
 
             // Register both Cluster and ISession instances with Windsor (essentially as Singletons since it will reuse the instance)
             container.Register(
-                Component.For<Cluster>().Instance(cluster),
                 Component.For<ISession>().Instance(session)
             );
         }

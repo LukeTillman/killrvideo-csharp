@@ -2,6 +2,7 @@
 {
     public enum VideoLocationType
     {
-        YouTube
+        YouTube,
+        Upload
     }
 }

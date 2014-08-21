@@ -49,8 +49,6 @@ namespace KillrVideo.Data.Videos
             DateTimeOffset addDate = DateTimeOffset.UtcNow;
             string yyyymmdd = addDate.ToString("yyyyMMdd");
 
-            string previewImage = GetPreviewImageLocation(video);
-            
             // Use an atomic batch to send over all the inserts
             var batchStatement = new BatchStatement();
             
@@ -60,19 +58,19 @@ namespace KillrVideo.Data.Videos
 
             // INSERT INTO videos
             batchStatement.Add(preparedStatements[0].Bind(video.VideoId, video.UserId, video.Name, video.Description, video.Location,
-                                                          (int) video.LocationType, previewImage, video.Tags, addDate));
+                                                          (int) video.LocationType, video.PreviewImageLocation, video.Tags, addDate));
 
             // INSERT INTO user_videos
-            batchStatement.Add(preparedStatements[1].Bind(video.UserId, addDate, video.VideoId, video.Name, previewImage));
+            batchStatement.Add(preparedStatements[1].Bind(video.UserId, addDate, video.VideoId, video.Name, video.PreviewImageLocation));
 
             // INSERT INTO latest_videos
-            batchStatement.Add(preparedStatements[2].Bind(yyyymmdd, addDate, video.VideoId, video.Name, previewImage));
+            batchStatement.Add(preparedStatements[2].Bind(yyyymmdd, addDate, video.VideoId, video.Name, video.PreviewImageLocation));
             
             // We need to add multiple statements for each tag
             foreach (string tag in video.Tags)
             {
                 // INSERT INTO videos_by_tag
-                batchStatement.Add(preparedStatements[3].Bind(tag, video.VideoId, addDate, video.Name, previewImage, addDate));
+                batchStatement.Add(preparedStatements[3].Bind(tag, video.VideoId, addDate, video.Name, video.PreviewImageLocation, addDate));
 
                 // INSERT INTO tags_by_letter
                 string firstLetter = tag.Substring(0, 1);
@@ -185,17 +183,6 @@ namespace KillrVideo.Data.Videos
                 _session.PrepareAsync("UPDATE video_ratings SET rating_counter = rating_counter + 1, rating_total = rating_total + ? WHERE videoid = ?"),
                 _session.PrepareAsync("INSERT INTO video_ratings_by_user (videoid, userid, rating) VALUES (?, ?, ?)")
             });
-        }
-
-        private static string GetPreviewImageLocation(AddVideo video)
-        {
-            switch (video.LocationType)
-            {
-                case VideoLocationType.YouTube:
-                    return string.Format("//img.youtube.com/vi/{0}/hqdefault.jpg", video.Location);
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
         }
     }
 }

@@ -49,7 +49,8 @@ namespace KillrVideo.Controllers
                 Description = model.Description,
                 Location = model.YouTubeVideoId,
                 LocationType = VideoLocationType.YouTube,
-                Tags = tags
+                Tags = tags,
+                PreviewImageLocation = string.Format("//img.youtube.com/vi/{0}/hqdefault.jpg", model.YouTubeVideoId)
             };
             await _videoWriteModel.AddVideo(addVideo);
 
