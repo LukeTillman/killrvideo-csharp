@@ -104,7 +104,7 @@ namespace KillrVideo.UploadWorker.Startup
 
             // Setup queue for notifications about video encoding jobs
             var storageAccount = CloudStorageAccount.Parse(storageConnectionString);
-            var notificationQueue = storageAccount.CreateCloudQueueClient().GetQueueReference(UploadConfigConstants.NotificationQueueName);
+            var notificationQueue = storageAccount.CreateCloudQueueClient().GetQueueReference(UploadConfig.NotificationQueueName);
             notificationQueue.CreateIfNotExists();
 
             container.Register(

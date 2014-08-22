@@ -8,8 +8,6 @@ using KillrVideo.ActionResults;
 using KillrVideo.Authentication;
 using KillrVideo.Data.Upload;
 using KillrVideo.Data.Upload.Dtos;
-using KillrVideo.Data.Videos;
-using KillrVideo.Data.Videos.Dtos;
 using KillrVideo.Models.Upload;
 using Microsoft.WindowsAzure.MediaServices.Client;
 
@@ -97,12 +95,23 @@ namespace KillrVideo.Controllers
                 await uploadLocator.DeleteAsync();
 
             // Create a job with a single task to encode the video
-            string outputAssetName = string.Format("Encoding - {0}", model.FileName);
+            string outputAssetName = string.Format("{0}{1}", UploadConfig.EncodedVideoAssetNamePrefix, model.FileName);
             IJob job = _cloudMediaContext.Jobs.CreateWithSingleTask(MediaProcessorNames.WindowsAzureMediaEncoder,
                                                                     MediaEncoderTaskPresetStrings.H264AdaptiveBitrateMP4Set720p, asset,
                                                                     outputAssetName, AssetCreationOptions.None);
             
-            // TODO:  Thumbnail creation
+            // Get a reference to the asset for the encoded file
+            IAsset encodedAsset = job.Tasks.Single().OutputAssets.Single();
+            
+            // Add a task to create thumbnails to the encoding job (just using the default Thumbnails generation settings)
+            string taskName = string.Format("Create Thumbnails - {0}", model.FileName);
+            IMediaProcessor processor = _cloudMediaContext.MediaProcessors.GetLatestMediaProcessorByName(MediaProcessorNames.WindowsAzureMediaEncoder);
+            ITask task = job.Tasks.AddNew(taskName, processor, MediaEncoderTaskPresetStrings.Thumbnails, TaskOptions.ProtectedConfiguration);
+
+            // The task should use the encoded file from the first task as input and output thumbnails in a new asset
+            task.InputAssets.Add(encodedAsset);
+            task.OutputAssets.AddNew(string.Format("{0}{1}", UploadConfig.ThumbnailAssetNamePrefix, model.FileName), AssetCreationOptions.None);
+
 
             // Get status upades on the job's progress on Azure queue, then start the job
             job.JobNotificationSubscriptions.AddNew(NotificationJobState.All, _notificationEndPoint);

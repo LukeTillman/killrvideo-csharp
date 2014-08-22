@@ -18,12 +18,18 @@ using Newtonsoft.Json;
 
 namespace KillrVideo.UploadWorker.EncodingJobMonitor
 {
+    // ReSharper disable ReplaceWithSingleCallToSingle
+    // ReSharper disable ReplaceWithSingleCallToFirstOrDefault
+    // ReSharper disable ReplaceWithSingleCallToSingleOrDefault
+
     /// <summary>
     /// A job that listens for notifications from Azure Media Services about encoding job progress and 
     /// </summary>
     public class EncodingListenerJob : UploadWorkerJobBase
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (EncodingListenerJob));
+
+        private static readonly TimeSpan PublishedVideosGoodFor = TimeSpan.FromDays(10000);
 
         private readonly CloudMediaContext _cloudMediaContext;
         private readonly IUploadedVideosWriteModel _uploadWriteModel;
@@ -48,7 +54,7 @@ namespace KillrVideo.UploadWorker.EncodingJobMonitor
             _uploadReadModel = uploadReadModel;
             _videoWriteModel = videoWriteModel;
 
-            _queue = cloudQueueClient.GetQueueReference(UploadConfigConstants.NotificationQueueName);
+            _queue = cloudQueueClient.GetQueueReference(UploadConfig.NotificationQueueName);
         }
 
         protected override async Task ExecuteImpl(CancellationToken cancellationToken)
@@ -140,7 +146,7 @@ namespace KillrVideo.UploadWorker.EncodingJobMonitor
 
         private async Task HandleJobStateChange(EncodingJobEvent jobEvent)
         {
-            // Log the event to C*
+            // Log the event to C* (this should be idempotent in case of dupliacte tries since we're keyed by the job id, date, and etag in C*)
             string jobId = jobEvent.GetJobId();
             await _uploadWriteModel.AddEncodingJobNotification(new AddEncodingJobNotification
             {
@@ -154,22 +160,52 @@ namespace KillrVideo.UploadWorker.EncodingJobMonitor
             // If the job is completed successfully, add the video
             if (jobEvent.WasSuccessful())
             {
-                // Find the job in Azure Media Services and thus the output asset that was encoded
-                // ReSharper disable once ReplaceWithSingleCallToSingle
-                IJob job = _cloudMediaContext.Jobs.Where(j => j.Id == jobId).Single();
-                IAsset asset = job.OutputMediaAssets.Single();
-                
-                // Publish the asset by creating an on demand locator for it
-                const AccessPermissions readPermissions = AccessPermissions.Read | AccessPermissions.List;
-                ILocator locator = await _cloudMediaContext.Locators.CreateAsync(LocatorType.OnDemandOrigin, asset, readPermissions,
-                                                                                 TimeSpan.FromDays(10000));
+                // Find the job in Azure Media Services and throw if not found
+                IJob job = _cloudMediaContext.Jobs.Where(j => j.Id == jobId).SingleOrDefault();
+                if (job == null)
+                    throw new InvalidOperationException(string.Format("Could not find job {0}", jobId));
 
-                // Get the URL for streaming
+                List<IAsset> outputAssets = job.OutputMediaAssets.ToList();
+
+                // Find the encoded video asset
+                IAsset asset = outputAssets.SingleOrDefault(a => a.Name.StartsWith(UploadConfig.EncodedVideoAssetNamePrefix));
+                if (asset == null)
+                    throw new InvalidOperationException(string.Format("Could not find video output asset for job {0}", jobId));
+                
+                // Publish the asset by creating an on demand locator for it if one isn't already present (check for one already present
+                // in case of duplicate/partial failures since we're limited on how many an asset can have)
+                ILocator locator = asset.Locators.Where(l => l.Type == LocatorType.OnDemandOrigin).FirstOrDefault();
+                if (locator == null)
+                {
+                    const AccessPermissions readPermissions = AccessPermissions.Read | AccessPermissions.List;
+                    locator = await _cloudMediaContext.Locators.CreateAsync(LocatorType.OnDemandOrigin, asset, readPermissions,
+                                                                            PublishedVideosGoodFor);
+                }
+
+                // Get the URL for streaming from the locator
                 string location = locator.GetMpegDashUri().AbsoluteUri;
 
+                // Find the thumbnail asset
+                IAsset thumbnailAsset = outputAssets.SingleOrDefault(a => a.Name.StartsWith(UploadConfig.ThumbnailAssetNamePrefix));
+                if (thumbnailAsset == null)
+                    throw new InvalidOperationException(string.Format("Could not find thumbnail output asset for job {0}", jobId));
+
+                // Publish the thumbnail asset by creating a locator for it (again, check if already present)
+                ILocator thumbnailLocator = thumbnailAsset.Locators.Where(l => l.Type == LocatorType.Sas).FirstOrDefault();
+                if (thumbnailLocator == null)
+                {
+                    thumbnailLocator = await _cloudMediaContext.Locators.CreateAsync(LocatorType.Sas, thumbnailAsset, AccessPermissions.Read,
+                                                                                     PublishedVideosGoodFor);
+                }
+
+                // Get the URL for the first thumbnail file in the asset
+                List<IAssetFile> jpgFiles = thumbnailAsset.AssetFiles.ToList();
+                var thumbnailLocation = new UriBuilder(thumbnailLocator.Path);
+                thumbnailLocation.Path += "/" + jpgFiles.First(f => f.Name.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)).Name;
+                
                 UploadedVideo uploadedVideo = await _uploadReadModel.GetByJobId(jobId);
                 if (uploadedVideo == null)
-                    throw new InvalidOperationException(string.Format("Could not find uploaded video for job {0}", jobId));
+                    throw new InvalidOperationException(string.Format("Could not find uploaded video data for job {0}", jobId));
 
                 await _videoWriteModel.AddVideo(new AddVideo
                 {
@@ -178,11 +214,15 @@ namespace KillrVideo.UploadWorker.EncodingJobMonitor
                     Name = uploadedVideo.Name,
                     Description = uploadedVideo.Description,
                     Tags = uploadedVideo.Tags,
-                    Location = location, // TODO
+                    Location = location,
                     LocationType = VideoLocationType.Upload,
-                    PreviewImageLocation = string.Empty // TODO
+                    PreviewImageLocation = thumbnailLocation.Uri.AbsoluteUri
                 });
             }
         }
     }
+
+    // ReSharper enable ReplaceWithSingleCallToSingle
+    // ReSharper enable ReplaceWithSingleCallToFirstOrDefault
+    // ReSharper enable ReplaceWithSingleCallToSingleOrDefault
 }

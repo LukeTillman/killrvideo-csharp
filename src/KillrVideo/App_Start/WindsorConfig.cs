@@ -113,7 +113,7 @@ namespace KillrVideo
 
             // Setup queue for notifications about video encoding jobs
             var storageAccount = CloudStorageAccount.Parse(storageConnectionString);
-            var notificationQueue = storageAccount.CreateCloudQueueClient().GetQueueReference(UploadConfigConstants.NotificationQueueName);
+            var notificationQueue = storageAccount.CreateCloudQueueClient().GetQueueReference(UploadConfig.NotificationQueueName);
             notificationQueue.CreateIfNotExists();
 
             // Create a notification endpoint for Media Services attached to the queue if one doesn't exist
@@ -135,13 +135,13 @@ namespace KillrVideo
             
             // ReSharper disable once ReplaceWithSingleCallToFirstOrDefault
             INotificationEndPoint endpoint = cloudMediaContext.NotificationEndPoints
-                                                              .Where(ep => ep.Name == UploadConfigConstants.NotificationQueueName)
+                                                              .Where(ep => ep.Name == UploadConfig.NotificationQueueName)
                                                               .FirstOrDefault();
             if (endpoint != null)
                 return endpoint;
 
-            return cloudMediaContext.NotificationEndPoints.Create(UploadConfigConstants.NotificationQueueName, NotificationEndPointType.AzureQueue,
-                                                                  UploadConfigConstants.NotificationQueueName);
+            return cloudMediaContext.NotificationEndPoints.Create(UploadConfig.NotificationQueueName, NotificationEndPointType.AzureQueue,
+                                                                  UploadConfig.NotificationQueueName);
         }
 
         /// <summary>
