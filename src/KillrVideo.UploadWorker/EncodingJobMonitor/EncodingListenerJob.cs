@@ -35,6 +35,7 @@ namespace KillrVideo.UploadWorker.EncodingJobMonitor
         private readonly IVideoWriteModel _videoWriteModel;
         private readonly CloudQueue _queue;
         private readonly CloudQueue _poisonQueue;
+        private readonly Random _random;
 
         private const int MessagesPerGet = 10;
         private const int MaxRetries = 6;
@@ -58,6 +59,8 @@ namespace KillrVideo.UploadWorker.EncodingJobMonitor
             // Get the poison message queue and create it if it doesn't already exist
             _poisonQueue = cloudQueueClient.GetQueueReference(PoisionQueueName);
             _poisonQueue.CreateIfNotExists();
+
+            _random = new Random();
         }
 
         protected override async Task ExecuteImpl(CancellationToken cancellationToken)
@@ -177,18 +180,19 @@ namespace KillrVideo.UploadWorker.EncodingJobMonitor
                 if (asset == null)
                     throw new InvalidOperationException(string.Format("Could not find video output asset for job {0}", jobId));
                 
-                // Publish the asset by creating an on demand locator for it if one isn't already present (check for one already present
-                // in case of duplicate/partial failures since we're limited on how many an asset can have)
-                ILocator locator = asset.Locators.Where(l => l.Type == LocatorType.OnDemandOrigin).FirstOrDefault();
+                // Publish the asset for progressive downloading (HTML5) by creating an SAS locator for it and adding the file name to the path
+                ILocator locator = asset.Locators.Where(l => l.Type == LocatorType.Sas).FirstOrDefault();
                 if (locator == null)
                 {
                     const AccessPermissions readPermissions = AccessPermissions.Read | AccessPermissions.List;
-                    locator = await _cloudMediaContext.Locators.CreateAsync(LocatorType.OnDemandOrigin, asset, readPermissions,
+                    locator = await _cloudMediaContext.Locators.CreateAsync(LocatorType.Sas, asset, readPermissions,
                                                                             PublishedVideosGoodFor);
                 }
 
-                // Get the URL for streaming from the locator
-                string location = locator.GetMpegDashUri().AbsoluteUri;
+                // Get the URL for streaming from the locator (embed file name for the mp4 in locator before query string)
+                IAssetFile mp4File = asset.AssetFiles.ToList().Single(f => f.Name.EndsWith(".mp4", StringComparison.OrdinalIgnoreCase));
+                var location = new UriBuilder(locator.Path);
+                location.Path += "/" + mp4File.Name;
 
                 // Find the thumbnail asset
                 IAsset thumbnailAsset = outputAssets.SingleOrDefault(a => a.Name.StartsWith(UploadConfig.ThumbnailAssetNamePrefix));
@@ -203,10 +207,12 @@ namespace KillrVideo.UploadWorker.EncodingJobMonitor
                                                                                      PublishedVideosGoodFor);
                 }
 
-                // Get the URL for the first thumbnail file in the asset
-                List<IAssetFile> jpgFiles = thumbnailAsset.AssetFiles.ToList();
+                // Get the URL for a random thumbnail file in the asset
+                List<IAssetFile> jpgFiles =
+                    thumbnailAsset.AssetFiles.ToList().Where(f => f.Name.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)).ToList();
                 var thumbnailLocation = new UriBuilder(thumbnailLocator.Path);
-                thumbnailLocation.Path += "/" + jpgFiles.First(f => f.Name.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)).Name;
+                int randomThumbnailIndex = _random.Next(jpgFiles.Count);
+                thumbnailLocation.Path += "/" + jpgFiles[randomThumbnailIndex].Name;
                 
                 UploadedVideo uploadedVideo = await _uploadReadModel.GetByJobId(jobId);
                 if (uploadedVideo == null)
@@ -219,7 +225,7 @@ namespace KillrVideo.UploadWorker.EncodingJobMonitor
                     Name = uploadedVideo.Name,
                     Description = uploadedVideo.Description,
                     Tags = uploadedVideo.Tags,
-                    Location = location,
+                    Location = location.Uri.AbsoluteUri,
                     LocationType = VideoLocationType.Upload,
                     PreviewImageLocation = thumbnailLocation.Uri.AbsoluteUri
                 });

@@ -93,11 +93,11 @@ namespace KillrVideo.Controllers
             ILocator uploadLocator = asset.Locators.Where(l => l.Id == model.UploadLocatorId).FirstOrDefault();
             if (uploadLocator != null)
                 await uploadLocator.DeleteAsync();
-
+            
             // Create a job with a single task to encode the video
             string outputAssetName = string.Format("{0}{1}", UploadConfig.EncodedVideoAssetNamePrefix, model.FileName);
             IJob job = _cloudMediaContext.Jobs.CreateWithSingleTask(MediaProcessorNames.WindowsAzureMediaEncoder,
-                                                                    MediaEncoderTaskPresetStrings.H264AdaptiveBitrateMP4Set720p, asset,
+                                                                    MediaEncoderTaskPresetStrings.H264BroadbandSD4x3, asset,
                                                                     outputAssetName, AssetCreationOptions.None);
             
             // Get a reference to the asset for the encoded file
