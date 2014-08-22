@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using KillrVideo.Data;
@@ -28,14 +26,15 @@ namespace KillrVideo.UploadWorker.EncodingJobMonitor
     public class EncodingListenerJob : UploadWorkerJobBase
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (EncodingListenerJob));
-
         private static readonly TimeSpan PublishedVideosGoodFor = TimeSpan.FromDays(10000);
+        private const string PoisionQueueName = UploadConfig.NotificationQueueName + "-errors";
 
         private readonly CloudMediaContext _cloudMediaContext;
         private readonly IUploadedVideosWriteModel _uploadWriteModel;
         private readonly IUploadedVideosReadModel _uploadReadModel;
         private readonly IVideoWriteModel _videoWriteModel;
         private readonly CloudQueue _queue;
+        private readonly CloudQueue _poisonQueue;
 
         private const int MessagesPerGet = 10;
         private const int MaxRetries = 6;
@@ -55,6 +54,10 @@ namespace KillrVideo.UploadWorker.EncodingJobMonitor
             _videoWriteModel = videoWriteModel;
 
             _queue = cloudQueueClient.GetQueueReference(UploadConfig.NotificationQueueName);
+
+            // Get the poison message queue and create it if it doesn't already exist
+            _poisonQueue = cloudQueueClient.GetQueueReference(PoisionQueueName);
+            _poisonQueue.CreateIfNotExists();
         }
 
         protected override async Task ExecuteImpl(CancellationToken cancellationToken)
@@ -124,18 +127,20 @@ namespace KillrVideo.UploadWorker.EncodingJobMonitor
                     // If the message is over the number of retries, consider it a poison message, log it and delete it
                     if (jobEvent.RetryAttempts >= MaxRetries)
                     {
-                        // TODO: Poison message queue?
+                        // Move the message to a poison queue (NOTE: because Add + Delete aren't "transactional" it is possible
+                        // a poison message might get added more than once to the poison queue, but that's OK)
                         Logger.Fatal(string.Format("Giving up on message: {0}", message.AsString));
+                        await _poisonQueue.AddMessageAsync(message, cancellationToken);
                         await _queue.DeleteMessageAsync(message, cancellationToken);
                         continue;
                     }
-
-                    // Increment the retry attempts and then modify the message in place so it will be processed again (60 seconds from now)
-                    // TODO: Exponential backoff for retries?
+                    
+                    // Increment the retry attempts and then modify the message in place so it will be processed again
+                    int secondsUntilRetry = (2 ^ jobEvent.RetryAttempts)*10;
                     jobEvent.RetryAttempts++;
                     message.SetMessageContent(JsonConvert.SerializeObject(jobEvent));
-                    await _queue.UpdateMessageAsync(message, TimeSpan.FromSeconds(60), MessageUpdateFields.Content | MessageUpdateFields.Visibility,
-                                                    cancellationToken);
+                    await _queue.UpdateMessageAsync(message, TimeSpan.FromSeconds(secondsUntilRetry),
+                                                    MessageUpdateFields.Content | MessageUpdateFields.Visibility, cancellationToken);
                 }
 
                 // If we got some messages from the queue, keep processing until we don't get any
