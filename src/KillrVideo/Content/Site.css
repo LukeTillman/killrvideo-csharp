@@ -115,25 +115,6 @@ footer h4 {
     height: auto;
 }
 
-/* Auto size youtube video player to fit */
-#view-video-thevideo.youtube {
-    position: relative;
-    padding-bottom: 56.25%;
-    padding-top: 30px; 
-    height: 0; 
-    overflow: hidden;
-}
-
-#view-video-thevideo.youtube iframe,
-#view-video-thevideo.youtube object,
-#view-video-thevideo.youtube embed {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
 /* Video ratings and tags when viewing videos */
 #view-video-rating, #view-video-tags {
     font-size: 18px;

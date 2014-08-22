@@ -1,4 +1,5 @@
 ﻿@using KillrVideo.Authentication
+@using KillrVideo.Data
 @model KillrVideo.Models.Videos.ViewVideoViewModel
 
 @{
@@ -25,8 +26,23 @@
     <div class="row">
         <div class="col-md-9 col-md-push-3">
             <div id="main-video">
-                <div id="view-video-thevideo" class="@Model.LocationType.ToString().ToLower()">
-                    <iframe src="http://www.youtube.com/embed/@Model.Location"></iframe>
+                <div class="embed-responsive embed-responsive-16by9">
+                    @switch (Model.LocationType)
+                    {
+                        case VideoLocationType.YouTube:
+                            <!-- Add YouTube iframe embed -->
+                            <iframe src="http://www.youtube.com/embed/@Model.Location" class="embed-responsive-item"></iframe>
+                            break;
+                        case VideoLocationType.Upload:
+                            <!-- Use videojs to playback HTML5 video -->
+                            <video id="the-video" class="video-js vjs-default-skin embed-responsive-item" controls preload="auto" width="auto" height="auto" data-setup="">
+                                <source src="@Model.Location" type='video/mp4' />
+                                <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+                            </video>
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
                 </div>
                 
                 <h2>@Model.Title</h2>
@@ -128,7 +144,7 @@
 @section scripts
 {
     <script type="text/javascript">
-        require(["knockout", "jquery", "knockout-amd-helpers", "text", "domReady!"], function (ko, $) {
+        require(["knockout", "jquery", "videojs", "knockout-amd-helpers", "text", "domReady!"], function (ko, $) {
             // Just use a simple object as the model for the page and apply bindings
             ko.applyBindings({
                 videoId: '@Model.VideoId',
