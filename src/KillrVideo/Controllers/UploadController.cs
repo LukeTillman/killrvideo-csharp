@@ -25,17 +25,21 @@ namespace KillrVideo.Controllers
         private readonly CloudMediaContext _cloudMediaContext;
         private readonly INotificationEndPoint _notificationEndPoint;
         private readonly IUploadedVideosWriteModel _uploadWriteModel;
+        private readonly IUploadedVideosReadModel _uploadReadModel;
 
-        public UploadController(CloudMediaContext cloudMediaContext, INotificationEndPoint notificationEndPoint, IUploadedVideosWriteModel uploadWriteModel)
+        public UploadController(CloudMediaContext cloudMediaContext, INotificationEndPoint notificationEndPoint,
+                                IUploadedVideosWriteModel uploadWriteModel, IUploadedVideosReadModel uploadReadModel)
         {
             if (cloudMediaContext == null) throw new ArgumentNullException("cloudMediaContext");
             if (notificationEndPoint == null) throw new ArgumentNullException("notificationEndPoint");
             if (uploadWriteModel == null) throw new ArgumentNullException("uploadWriteModel");
+            if (uploadReadModel == null) throw new ArgumentNullException("uploadReadModel");
             _cloudMediaContext = cloudMediaContext;
             _notificationEndPoint = notificationEndPoint;
             _uploadWriteModel = uploadWriteModel;
+            _uploadReadModel = uploadReadModel;
         }
-        
+
         /// <summary>
         /// Creates a new video Asset in Azure Media services and returns the information necessary for the client to upload the file
         /// directly to the Azure storage account associated with Media Services.
@@ -138,6 +142,21 @@ namespace KillrVideo.Controllers
             {
                 ViewVideoUrl = Url.Action("ViewVideo", "Videos", new { videoId })
             });
+        }
+
+        /// <summary>
+        /// Gets the latest status update for an uploaded video that's being processed.
+        /// </summary>
+        [HttpPost]
+        public async Task<JsonNetResult> GetLatestStatus(GetLatestStatusViewModel model)
+        {
+            EncodingJobProgress status = await _uploadReadModel.GetStatusForJob(model.JobId);
+
+            // If there isn't a status (yet) just return queued with a timestamp from 30 seconds ago
+            if (status == null)
+                return JsonSuccess(new LatestStatusViewModel {Status = "Queued", StatusDate = DateTimeOffset.UtcNow.AddSeconds(-30)});
+
+            return JsonSuccess(new LatestStatusViewModel {StatusDate = status.StatusDate, Status = status.CurrentState});
         }
     }
 

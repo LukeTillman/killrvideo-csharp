@@ -71,7 +71,7 @@ namespace KillrVideo.Data.Videos
             PreparedStatement preparedStatement = await _getVideo;
             BoundStatement boundStatement = preparedStatement.Bind(videoId);
             RowSet rows = await _session.ExecuteAsync(boundStatement);
-            return MapRowToVideoDetails(rows.Single());
+            return MapRowToVideoDetails(rows.SingleOrDefault());
         }
 
         /// <summary>
@@ -205,8 +205,11 @@ namespace KillrVideo.Data.Videos
             PreparedStatement tagsForVideoPrepared = await _getTagsForVideo;
             BoundStatement tagsForVideoBound = tagsForVideoPrepared.Bind(videoId);
             RowSet tagRows = await _session.ExecuteAsync(tagsForVideoBound);
-            var tagsValue = tagRows.Single().GetValue<IEnumerable<string>>("tags");
+            Row tagRow = tagRows.SingleOrDefault();
+            if (tagRow == null)
+                return new RelatedVideos {VideoId = videoId, Videos = Enumerable.Empty<VideoPreview>()};
 
+            var tagsValue = tagRow.GetValue<IEnumerable<string>>("tags");
             var tags = tagsValue == null ? new List<string>() : tagsValue.ToList();
             
             // If there are no tags, we can't find related videos
@@ -324,6 +327,8 @@ namespace KillrVideo.Data.Videos
         /// </summary>
         private static VideoDetails MapRowToVideoDetails(Row row)
         {
+            if (row == null) return null;
+
             var tags = row.GetValue<IEnumerable<string>>("tags");
             return new VideoDetails
             {

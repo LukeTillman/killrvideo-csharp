@@ -17,6 +17,9 @@ namespace KillrVideo.Models.Videos
         public VideoLocationType LocationType { get; set; }
         public string Location { get; set; }
 
+        public bool InProgress { get; set; }
+        public string InProgressJobId { get; set; }
+
         public IEnumerable<string> Tags { get; set; }
     }
 }

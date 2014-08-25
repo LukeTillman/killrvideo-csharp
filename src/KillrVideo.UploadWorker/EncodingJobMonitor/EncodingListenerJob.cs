@@ -87,7 +87,8 @@ namespace KillrVideo.UploadWorker.EncodingJobMonitor
                     EncodingJobEvent jobEvent = null;
                     try
                     {
-                        jobEvent = JsonConvert.DeserializeObject<EncodingJobEvent>(message.AsString);
+                        var settings = new JsonSerializerSettings {DateTimeZoneHandling = DateTimeZoneHandling.Utc};
+                        jobEvent = JsonConvert.DeserializeObject<EncodingJobEvent>(message.AsString, settings);
                     }
                     catch (Exception e)
                     {

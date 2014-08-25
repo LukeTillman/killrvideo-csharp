@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -7,6 +6,8 @@ using KillrVideo.ActionFilters;
 using KillrVideo.ActionResults;
 using KillrVideo.Authentication;
 using KillrVideo.Data;
+using KillrVideo.Data.Upload;
+using KillrVideo.Data.Upload.Dtos;
 using KillrVideo.Data.Videos;
 using KillrVideo.Data.Videos.Dtos;
 using KillrVideo.Models.Videos;
@@ -20,11 +21,17 @@ namespace KillrVideo.Controllers
     {
         private readonly IVideoReadModel _videoReadModel;
         private readonly IVideoWriteModel _videoWriteModel;
+        private readonly IUploadedVideosReadModel _uploadReadModel;
 
-        public VideosController(IVideoReadModel videoReadModel, IVideoWriteModel videoWriteModel)
+        public VideosController(IVideoReadModel videoReadModel, IVideoWriteModel videoWriteModel, IUploadedVideosReadModel uploadReadModel)
         {
+            if (videoReadModel == null) throw new ArgumentNullException("videoReadModel");
+            if (videoWriteModel == null) throw new ArgumentNullException("videoWriteModel");
+            if (uploadReadModel == null) throw new ArgumentNullException("uploadReadModel");
+
             _videoReadModel = videoReadModel;
             _videoWriteModel = videoWriteModel;
+            _uploadReadModel = uploadReadModel;
         }
 
         /// <summary>
@@ -33,16 +40,39 @@ namespace KillrVideo.Controllers
         [HttpGet]
         public async Task<ViewResult> ViewVideo(Guid videoId)
         {
+            // Try to find the video by id
             VideoDetails videoDetails = await _videoReadModel.GetVideo(videoId);
+            if (videoDetails != null)
+            {
+                // Found the video, display it
+                return View(new ViewVideoViewModel
+                {
+                    VideoId = videoId,
+                    Title = videoDetails.Name,
+                    Description = videoDetails.Description,
+                    LocationType = videoDetails.LocationType,
+                    Location = videoDetails.Location,
+                    Tags = videoDetails.Tags,
+                    UploadDate = videoDetails.AddedDate,
+                    InProgress = false
+                });
+            }
+
+            // The video might currently be processing (i.e. if it was just uploaded), so try and find it
+            UploadedVideo uploadDetails = await _uploadReadModel.GetByVideoId(videoId);
+            if (uploadDetails == null)
+                throw new ArgumentException(string.Format("Could not find a video with id {0}", videoId));
+
             return View(new ViewVideoViewModel
             {
                 VideoId = videoId,
-                Title = videoDetails.Name,
-                Description = videoDetails.Description,
-                LocationType = videoDetails.LocationType,
-                Location = videoDetails.Location,
-                Tags = videoDetails.Tags,
-                UploadDate = videoDetails.AddedDate,
+                Title = uploadDetails.Name,
+                Description = uploadDetails.Description,
+                UploadDate = uploadDetails.AddedDate,
+                LocationType = VideoLocationType.Upload,
+                Tags = uploadDetails.Tags,
+                InProgress = true,
+                InProgressJobId = uploadDetails.JobId
             });
         }
 

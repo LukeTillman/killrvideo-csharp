@@ -27,21 +27,40 @@
         <div class="col-md-9 col-md-push-3">
             <div id="main-video">
                 <div class="embed-responsive embed-responsive-16by9">
-                    @switch (Model.LocationType)
+                    @if (Model.InProgress)
                     {
-                        case VideoLocationType.YouTube:
+                        <div data-bind="module: { name: 'app/videos/upload-status', data: inProgressJobId }">
+                            <p class="bg-info uimessage hidden" data-bind="css: { hidden: !isInProgress() }">
+                                Your video upload is currently <strong data-bind="text: status"></strong> as of <strong data-bind="text: statusDateFormatted"></strong>.  This 
+                                status will refresh automatically when there are any changes.
+                            </p>
+                            <p class="bg-success uimessage hidden" data-bind="css: { hidden: !isComplete() }">
+                                Your uploaded video was successfully processed.  <a href="javascript:location.reload(true);">Click here</a> to refresh
+                                the page and view your video.
+                            </p>
+                            <p class="bg-danger uimessage hidden" data-bind="css: { hidden: !isErrored() }">
+                                There was a problem processing your uploaded video.  Please try uploading the video again.
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                        switch (Model.LocationType)
+                        {
+                            case VideoLocationType.YouTube:
                             <!-- Add YouTube iframe embed -->
-                            <iframe src="http://www.youtube.com/embed/@Model.Location" class="embed-responsive-item"></iframe>
-                            break;
-                        case VideoLocationType.Upload:
+                                <iframe src="http://www.youtube.com/embed/@Model.Location" class="embed-responsive-item"></iframe>
+                                break;
+                            case VideoLocationType.Upload:
                             <!-- Use videojs to playback HTML5 video -->
                             <video id="the-video" class="video-js vjs-default-skin embed-responsive-item" controls preload="auto" width="auto" height="auto" data-setup="">
                                 <source src="@Model.Location" type='video/mp4' />
                                 <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
                             </video>
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
                     }
                 </div>
                 
@@ -148,6 +167,7 @@
             // Just use a simple object as the model for the page and apply bindings
             ko.applyBindings({
                 videoId: '@Model.VideoId',
+                inProgressJobId: '@Model.InProgressJobId',
                 relatedVideosList: {
                     url: '@Url.Action("Related", "Videos")',
                     ajaxData: {

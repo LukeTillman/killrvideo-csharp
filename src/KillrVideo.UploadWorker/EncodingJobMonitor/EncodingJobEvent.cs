@@ -12,7 +12,7 @@ namespace KillrVideo.UploadWorker.EncodingJobMonitor
         public string MessageVersion { get; set; }
         public string EventType { get; set; }
         public string ETag { get; set; }
-        public DateTimeOffset TimeStamp { get; set; }
+        public DateTime TimeStamp { get; set; }
         public IDictionary<string, string> Properties { get; set; }
 
         public int RetryAttempts { get; set; }
@@ -40,7 +40,7 @@ namespace KillrVideo.UploadWorker.EncodingJobMonitor
         public bool IsJobFinished()
         {
             string newState = GetNewState();
-            return newState == "Cancelled" || newState == "Error" || newState == "Finished";
+            return newState == "Canceled" || newState == "Error" || newState == "Finished";
         }
 
         public bool WasSuccessful()

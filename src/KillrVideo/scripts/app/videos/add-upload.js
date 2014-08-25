@@ -92,7 +92,7 @@
                                 blockId = btoa("block-" + blockId); // Base-64 encode
                                 blockIds.push(blockId);
 
-                                self.uploadStatus("Uploading video chunk " + (currentChunk + 1) + " of " + chunks);
+                                self.uploadStatus("Uploading (part " + (currentChunk + 1) + " of " + chunks + ")");
 
                                 // When a chunk is done being read by the FileReader, make a PUT request to Azure Storage to store it
                                 var uri = createAssetResponse.data.uploadUrl + "&comp=block&blockid=" + blockId;

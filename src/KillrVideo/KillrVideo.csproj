@@ -213,6 +213,8 @@
     <Compile Include="Models\Upload\AssetCreatedViewModel.cs" />
     <Compile Include="Models\Upload\CreateAssetViewModel.cs" />
     <Compile Include="Models\Upload\AddUploadedVideoViewModel.cs" />
+    <Compile Include="Models\Upload\GetLatestStatusViewModel.cs" />
+    <Compile Include="Models\Upload\LatestStatusViewModel.cs" />
     <Compile Include="Models\Upload\UploadedVideoAddedViewModel.cs" />
     <Compile Include="Models\Videos\GetRatingsViewModel.cs" />
     <Compile Include="Models\Videos\GetRecentVideosViewModel.cs" />
@@ -250,6 +252,7 @@
     <Content Include="scripts\app\videos\add-youtube.js" />
     <Content Include="scripts\app\videos\add.js" />
     <Content Include="scripts\app\comments\video-comments.js" />
+    <Content Include="scripts\app\videos\upload-status.js" />
     <Content Include="scripts\app\videos\star-rating.js" />
     <Content Include="scripts\lib\knockout-extenders.js" />
     <Content Include="scripts\lib\knockout-postbox.js" />

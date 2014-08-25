@@ -62,7 +62,8 @@ namespace KillrVideo.Data.Upload
                 Name = row.GetValue<string>("name"),
                 Description = row.GetValue<string>("description"),
                 Tags = tags == null ? new HashSet<string>() : new HashSet<string>(tags),
-                AddedDate = row.GetValue<DateTimeOffset>("added_date")
+                AddedDate = row.GetValue<DateTimeOffset>("added_date"),
+                JobId = row.GetValue<string>("jobid")
             };
         }
 
