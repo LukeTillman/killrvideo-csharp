@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,8 +21,6 @@ namespace KillrVideo.Controllers
     /// </summary>
     public class UploadController : ConventionControllerBase
     {
-        private static readonly TimeSpan UploadMaxTime = TimeSpan.FromHours(8);
-
         private readonly CloudMediaContext _cloudMediaContext;
         private readonly INotificationEndPoint _notificationEndPoint;
         private readonly IUploadedVideosWriteModel _uploadWriteModel;
@@ -47,9 +46,14 @@ namespace KillrVideo.Controllers
         [HttpPost, Authorize]
         public async Task<JsonNetResult> CreateAsset(CreateAssetViewModel model)
         {
-            // TODO:  Validate file type?  Sanitize file name?
-            string fileName = model.FileName;
-
+            // Validate the file extension is one supported by media services and sanitize the file name to remove any invalid characters
+            string fileName;
+            if (TryVerifyAndSanitizeFileName(model.FileName, out fileName) == false)
+            {
+                ModelState.AddModelError(string.Empty, "That file type is not currently supported.");
+                return JsonFailure();
+            }
+            
             // Create the media services asset
             string assetName = string.Format("Original - {0}", fileName);
             IAsset asset = await _cloudMediaContext.Assets.CreateAsync(assetName, AssetCreationOptions.None, CancellationToken.None);
@@ -57,7 +61,7 @@ namespace KillrVideo.Controllers
             
             // Create locator for the upload directly to storage
             ILocator uploadLocator = await _cloudMediaContext.Locators.CreateAsync(LocatorType.Sas, asset, AccessPermissions.Write,
-                                                                                   UploadMaxTime, DateTime.UtcNow.AddMinutes(-2));
+                                                                                   UploadConfig.UploadMaxTime, DateTime.UtcNow.AddMinutes(-2));
             
             var uploadUrl = new UriBuilder(uploadLocator.Path);
             uploadUrl.Path = uploadUrl.Path + "/" + fileName;
@@ -82,8 +86,6 @@ namespace KillrVideo.Controllers
             IAsset asset = _cloudMediaContext.Assets.Where(a => a.Id == model.AssetId).FirstOrDefault();
             if (asset == null)
                 throw new InvalidOperationException(string.Format("Could not find asset {0} for publishing.", model.AssetId));
-
-            // TODO:  Validate file size (type again?)
 
             // Set the file as the primary asset file
             IAssetFile assetFile = asset.AssetFiles.Where(f => f.Name == model.FileName).FirstOrDefault();
@@ -157,6 +159,28 @@ namespace KillrVideo.Controllers
                 return JsonSuccess(new LatestStatusViewModel {Status = "Queued", StatusDate = DateTimeOffset.UtcNow.AddSeconds(-30)});
 
             return JsonSuccess(new LatestStatusViewModel {StatusDate = status.StatusDate, Status = status.CurrentState});
+        }
+
+        /// <summary>
+        /// Verifies the file is an allowed file extension type and sanitizes the file name if the extension type is allowed.
+        /// </summary>
+        private static bool TryVerifyAndSanitizeFileName(string fileName, out string sanitizedFileName)
+        {
+            sanitizedFileName = null;
+
+            if (string.IsNullOrEmpty(fileName))
+                return false;
+
+            // Verify the file extension is allowed
+            string extension = Path.GetExtension(fileName);
+            if (UploadConfig.AllowedFileExtensions.Contains(extension) == false)
+                return false;
+
+            // Remove any disallowed characters in the file name (including any extra "." since only 1 for the extension is allowed)
+            sanitizedFileName = Path.GetFileNameWithoutExtension(fileName);
+            sanitizedFileName = UploadConfig.DisallowedFileNameCharacters.Replace(sanitizedFileName, string.Empty);
+            sanitizedFileName = string.Format("{0}.{1}", sanitizedFileName, extension);
+            return true;
         }
     }
 

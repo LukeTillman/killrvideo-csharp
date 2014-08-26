@@ -1,7 +1,11 @@
-﻿namespace KillrVideo.Data.Upload
+﻿using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
+namespace KillrVideo.Data.Upload
 {
     /// <summary>
-    /// Constants related to video upload.
+    /// Constants/static fields related to video upload.
     /// </summary>
     public static class UploadConfig
     {
@@ -19,5 +23,41 @@
         /// A prefix to use for the asset name containing the thumbnails. 
         /// </summary>
         public const string ThumbnailAssetNamePrefix = "Thumbnails - ";
+
+        /// <summary>
+        /// The max allowed time for a file to be uploaded.
+        /// </summary>
+        public static readonly TimeSpan UploadMaxTime = TimeSpan.FromHours(8);
+
+        /// <summary>
+        /// The set of allowed file extensions that can be uploaded.
+        /// </summary>
+        public static readonly HashSet<string> AllowedFileExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            ".3gp",
+            ".3g2",
+            ".3gp2",
+            ".asf",
+            ".mts",
+            ".m2ts",
+            ".avi",
+            ".mod",
+            ".dv",
+            ".ts",
+            ".vob",
+            ".xesc",
+            ".mp4",
+            ".mpeg",
+            ".mpg",
+            ".m2v",
+            ".ismv",
+            ".wmv"
+        };
+
+        /// <summary>
+        /// A regex for matching characters that aren't allowed in file names for uploaded files.
+        /// </summary>
+        public static readonly Regex DisallowedFileNameCharacters = new Regex(@"[\!\*'\(\);:@\&=\+\$,\/\?%#\[\]""\.]",
+                                                                              RegexOptions.Compiled | RegexOptions.IgnoreCase);
     }
 }
