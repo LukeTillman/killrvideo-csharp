@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,6 +35,8 @@ namespace KillrVideo.UploadWorker
             // Bootstrap Log4net logging
             XmlConfigurator.Configure();
 
+            Logger.Info("KillrVideo.UploadWorker is starting");
+
             try
             {
                 // Initialize the Windsor container
@@ -62,6 +63,8 @@ namespace KillrVideo.UploadWorker
         
         public override void OnStop()
         {
+            Logger.Info("KillrVideo.UploadWorker is stopping");
+
             try
             {
                 // Cancel any tasks in progress and wait for them to finish

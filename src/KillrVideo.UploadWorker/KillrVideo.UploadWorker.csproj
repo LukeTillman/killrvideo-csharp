@@ -118,6 +118,7 @@
     <Compile Include="Jobs\UploadWorkerJobBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup\WindsorBootstrapper.cs" />
+    <Compile Include="Utils\AzureTraceAppender.cs" />
     <Compile Include="WorkerRole.cs" />
   </ItemGroup>
   <ItemGroup>
