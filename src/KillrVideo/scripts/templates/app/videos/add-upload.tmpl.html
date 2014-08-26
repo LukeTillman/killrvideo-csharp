@@ -1,10 +1,13 @@
-﻿<div class="row" data-bind="validationOptions: { insertMessages: false }">
+﻿<p data-bind="visible: !uploadSupported" class="bg-danger uimessage">
+    Sorry, upload is not currently supported by this browser/device.
+</p>
+<div class="row" data-bind="validationOptions: { insertMessages: false }, visible: uploadSupported">
     <div class="col-md-6 form-group">
         <!-- File selector wrapped with a bootstrap button to make it look like everything else -->
         <label for="addvideo-uploadfile">Select a video to upload</label><br />
 
         <span class="btn btn-default btn-file">
-            Browse... <input type="file" name="addvideo-uploadfile" data-bind="event: { change: handleFileChange }">
+            Browse... <input type="file" name="addvideo-uploadfile" data-bind="event: { change: handleFileChange }, disable: percentComplete() >= 0">
         </span>
         <span data-bind="text: uploadFileLabel"></span><br />
         <span class="validationMessage" data-bind="validationMessage: uploadFile"></span>
@@ -12,10 +15,10 @@
     <div class="col-md-6">
         <!-- Show a progress bar if an upload is in progress -->
         <div data-bind="visible: percentComplete() >= 0">
-            <span data-bind="text: uploadStatus"></span><br/>
+            <span data-bind="text: uploadStatus"></span><br />
 
             <div class="progress">
-                <div class="progress-bar progress-bar-striped active" data-bind="attr: { 'aria-valuenow': percentComplete }, style: { width: percentComplete() + '%' }" 
+                <div class="progress-bar progress-bar-striped active" data-bind="attr: { 'aria-valuenow': percentComplete }, style: { width: percentComplete() + '%' }"
                      role="progressbar" aria-valuemin="0" aria-valuemax="100">
                     <span data-bind="text: percentComplete">45</span>%
                 </div>
