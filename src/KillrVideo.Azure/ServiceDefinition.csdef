@@ -13,6 +13,7 @@
     </Endpoints>
     <Imports>
       <Import moduleName="Diagnostics" />
+      <Import moduleName="RemoteAccess" />
     </Imports>
     <ConfigurationSettings>
       <Setting name="CassandraClusterLocation" />
@@ -24,6 +25,8 @@
   <WorkerRole name="KillrVideo.UploadWorker" vmsize="Small">
     <Imports>
       <Import moduleName="Diagnostics" />
+      <Import moduleName="RemoteAccess" />
+      <Import moduleName="RemoteForwarder" />
     </Imports>
     <ConfigurationSettings>
       <Setting name="CassandraClusterLocation" />

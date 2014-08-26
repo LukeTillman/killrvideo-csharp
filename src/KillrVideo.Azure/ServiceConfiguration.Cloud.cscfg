@@ -8,7 +8,14 @@
       <Setting name="AzureMediaServicesAccountName" value="" />
       <Setting name="AzureMediaServicesAccountKey" value="" />
       <Setting name="AzureStorageConnectionString" value="" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="false" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="" />
     </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="0000000000000000000000000000000000000000" thumbprintAlgorithm="sha1" />
+    </Certificates>
   </Role>
   <Role name="KillrVideo.UploadWorker">
     <Instances count="1" />
@@ -18,6 +25,14 @@
       <Setting name="AzureMediaServicesAccountName" value="" />
       <Setting name="AzureMediaServicesAccountKey" value="" />
       <Setting name="AzureStorageConnectionString" value="" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="false" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="false" />
     </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="0000000000000000000000000000000000000000" thumbprintAlgorithm="sha1" />
+    </Certificates>
   </Role>
 </ServiceConfiguration>
