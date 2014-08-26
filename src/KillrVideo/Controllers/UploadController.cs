@@ -112,7 +112,7 @@ namespace KillrVideo.Controllers
             // Add a task to create thumbnails to the encoding job (just using the default Thumbnails generation settings)
             string taskName = string.Format("Create Thumbnails - {0}", model.FileName);
             IMediaProcessor processor = _cloudMediaContext.MediaProcessors.GetLatestMediaProcessorByName(MediaProcessorNames.WindowsAzureMediaEncoder);
-            ITask task = job.Tasks.AddNew(taskName, processor, MediaEncoderTaskPresetStrings.Thumbnails, TaskOptions.ProtectedConfiguration);
+            ITask task = job.Tasks.AddNew(taskName, processor, UploadConfig.ThumbnailGenerationXml, TaskOptions.ProtectedConfiguration);
 
             // The task should use the encoded file from the first task as input and output thumbnails in a new asset
             task.InputAssets.Add(encodedAsset);

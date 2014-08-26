@@ -59,5 +59,13 @@ namespace KillrVideo.Data.Upload
         /// </summary>
         public static readonly Regex DisallowedFileNameCharacters = new Regex(@"[\!\*'\(\);:@\&=\+\$,\/\?%#\[\]""\.]",
                                                                               RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        /// <summary>
+        /// The XML task definition for generating thumbnails in Azure media services.  (Will generate multiple JPG thumbnails at 480px width).
+        /// </summary>
+        public const string ThumbnailGenerationXml = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<Thumbnail Size=""480,*"" Type=""Jpeg"" Filename=""{OriginalFilename}_{Size}_{ThumbnailTime}_{ThumbnailIndex}_{Date}_{Time}.{DefaultExtension}"">
+<Time Value=""10%"" Step=""10%"" Stop=""95%""/>
+</Thumbnail>";
     }
 }
