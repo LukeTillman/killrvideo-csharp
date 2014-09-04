@@ -20,6 +20,7 @@
       <Setting name="AzureMediaServicesAccountName" />
       <Setting name="AzureMediaServicesAccountKey" />
       <Setting name="AzureStorageConnectionString" />
+      <Setting name="AnalyticsEnabled" />
     </ConfigurationSettings>
   </WebRole>
   <WorkerRole name="KillrVideo.UploadWorker" vmsize="Small">

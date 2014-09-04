@@ -55,7 +55,7 @@ namespace KillrVideo.Data.Videos
             // Await to make sure all statements are prepared, then bind values for each statement (see the PrepareAddVideoStatements method
             // for the actual CQL and the order of the statements)
             PreparedStatement[] preparedStatements = await _addVideoStatements;
-
+            
             // INSERT INTO videos
             batchStatement.Add(preparedStatements[0].Bind(video.VideoId, video.UserId, video.Name, video.Description, video.Location,
                                                           (int) video.LocationType, video.PreviewImageLocation, video.Tags, addDate));
