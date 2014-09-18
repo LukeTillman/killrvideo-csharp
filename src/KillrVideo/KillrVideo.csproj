@@ -239,6 +239,7 @@
     <Content Include="Content\K.png" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="gulpfile.js" />
     <Content Include="scripts\app\account\register.js" />
     <Content Include="scripts\app\account\signin.js" />
     <Content Include="scripts\app\comments\user-comment.js" />
@@ -307,6 +308,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".bowerrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="package.json" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
