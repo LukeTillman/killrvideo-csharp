@@ -1,0 +1,25 @@
+{
+  "name": "knockout-amd-helpers",
+  "version": "0.7.1",
+  "main": "build/knockout-amd-helpers.min.js",
+  "ignore": [
+    "examples",
+    "ext",
+    "spec",
+    "src",
+    "Gruntfile.js",
+    "package.json",
+    ".gitignore"
+  ],
+  "homepage": "https://github.com/rniemeyer/knockout-amd-helpers",
+  "_release": "0.7.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.7.1",
+    "commit": "61b6b129b330a97b7cf71ca35122e2f4987c2129"
+  },
+  "_source": "git://github.com/rniemeyer/knockout-amd-helpers.git",
+  "_target": "~0.7.1",
+  "_originalSource": "rniemeyer/knockout-amd-helpers",
+  "_direct": true
+}

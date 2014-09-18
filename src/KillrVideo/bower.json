@@ -1,0 +1,31 @@
+{
+  "name": "KillrVideo",
+  "version": "0.0.0",
+  "homepage": "https://github.com/LukeTillman/killrvideo-csharp",
+  "authors": [
+    "Luke Tillman <luke.tillman@gmail.com>"
+  ],
+  "description": "KillrVideo",
+  "license": "Apache 2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "requirejs": "~2.1.15",
+    "knockoutjs": "~3.2.0",
+    "bootstrap": "~3.2.0",
+    "requirejs-text": "~2.0.12",
+    "requirejs-domready": "~2.0.1",
+    "moment": "~2.8.3",
+    "videojs": "~4.8.2",
+    "knockout-validation": "~1.0.2",
+    "knockout-postbox": "rniemeyer/knockout-postbox#~0.4.2",
+    "knockout-amd-helpers": "rniemeyer/knockout-amd-helpers#~0.7.1",
+    "fontawesome": "~4.2.0"
+  }
+}

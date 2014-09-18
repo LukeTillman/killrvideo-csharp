@@ -7,38 +7,16 @@
     <title>@ViewBag.Title - KillrVideo</title>
     
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto+Slab:400,700">
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap-theme.min.css" />
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css" />
-    <link rel="stylesheet" type="text/css" href="//vjs.zencdn.net/4.7/video-js.css" />
-    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Site.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/scripts/bower_components/bootstrap/dist/css/bootstrap.min.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/scripts/bower_components/bootstrap/dist/css/bootstrap-theme.min.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/scripts/bower_components/fontawesome/css/font-awesome.min.css")" />
+    
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/content/Site.css")" />
     
     <link rel="icon" type="image/png" href="@Url.Content("~/content/K.png")"/>
     
-    <script type="text/javascript">
-        // Common configuration for RequireJS
-        var require = {
-            baseUrl: "@Url.Content("~/scripts/lib")",
-            paths: {
-                "app": "../app",
-                "templates": "../templates",
-                "jquery": "//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min",
-                "knockout": "//cdnjs.cloudflare.com/ajax/libs/knockout/3.1.0/knockout-min",
-                "bootstrap": "//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min",
-                "text": "//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.10/text.min",
-                "domReady": "//cdnjs.cloudflare.com/ajax/libs/require-domReady/2.0.1/domReady.min",
-                "moment": "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.min",
-                "videojs": "//vjs.zencdn.net/4.7/video"
-            },
-            shim: {
-                "bootstrap": {
-                    deps: ["jquery"],
-                    exports: "$.fn.popover"
-                }
-            }
-        };
-    </script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.11/require.min.js"></script>
+    <script type="text/javascript" src="@Url.Content("~/scripts/requirejs-config.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/scripts/bower_components/requirejs/require.js")"></script>
     @RenderSection("htmlhead", required: false)
 </head>
 <body>

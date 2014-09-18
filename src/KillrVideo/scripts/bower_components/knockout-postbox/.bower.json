@@ -1,0 +1,29 @@
+{
+  "name": "knockout-postbox",
+  "version": "0.4.2",
+  "main": "build/knockout-postbox.min.js",
+  "dependencies": {
+    "knockout": ">= 2.0"
+  },
+  "ignore": [
+    "examples",
+    "ext",
+    "reports",
+    "spec",
+    "src",
+    "Gruntfile.js",
+    "package.json",
+    ".gitignore"
+  ],
+  "homepage": "https://github.com/rniemeyer/knockout-postbox",
+  "_release": "0.4.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.4.2",
+    "commit": "083feed0ebdb1660105e3c07fedd954163966de9"
+  },
+  "_source": "git://github.com/rniemeyer/knockout-postbox.git",
+  "_target": "~0.4.2",
+  "_originalSource": "rniemeyer/knockout-postbox",
+  "_direct": true
+}

@@ -1,4 +1,4 @@
-﻿define(["knockout", "jquery", "knockout-extenders"], function (ko, $) {
+﻿define(["knockout", "jquery", "lib/knockout-extenders"], function (ko, $) {
     // Return a view model
     return function() {
         var self = this;

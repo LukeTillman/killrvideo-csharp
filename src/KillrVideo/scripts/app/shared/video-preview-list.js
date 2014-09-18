@@ -1,4 +1,4 @@
-﻿define(["knockout", "jquery", "app/shared/video-preview", "knockout-extenders"], function (ko, $, videoPreview) {
+﻿define(["knockout", "jquery", "app/shared/video-preview", "lib/knockout-extenders"], function (ko, $, videoPreview) {
     /* 
         Return view model.  setupData should be object like this:
             {

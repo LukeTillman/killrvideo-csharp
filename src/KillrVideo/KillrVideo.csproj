@@ -256,13 +256,11 @@
     <Content Include="scripts\app\videos\upload-status.js" />
     <Content Include="scripts\app\videos\star-rating.js" />
     <Content Include="scripts\lib\knockout-extenders.js" />
-    <Content Include="scripts\lib\knockout-postbox.js" />
-    <Content Include="scripts\lib\knockout-validation.js" />
+    <Content Include="scripts\requirejs-config.js" />
     <Content Include="scripts\templates\app\shared\uimessages.tmpl.html" />
     <Content Include="scripts\templates\app\shared\video-preview.tmpl.html" />
     <Content Include="scripts\templates\app\videos\add-upload.tmpl.html" />
     <Content Include="scripts\templates\app\videos\add-youtube.tmpl.html" />
-    <Content Include="scripts\lib\knockout-amd-helpers.js" />
     <Content Include="scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Views\Web.config" />
@@ -303,6 +301,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Account\Info.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bower.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".bowerrc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
