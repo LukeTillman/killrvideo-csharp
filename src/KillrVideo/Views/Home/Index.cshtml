@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Home Page";
+    ViewBag.RequireJsMain = "app/index";
 }
 
 @section htmlhead
@@ -11,69 +12,17 @@
     </style>
 }
 
-<div id="recent-videos" data-bind="module: { name: 'app/shared/video-preview-list', data: recentVideosList }">
+<div id="recent-videos">
     <h2>Recently Added Videos</h2>
     
-    <!-- Loading Icon -->
-    <h4 data-bind="visible: videos.inProgress">
-        <i class="fa fa-spinner fa-spin"></i> Loading...
-    </h4>
-    
-    <!-- Video Grid of Results -->
-    <div data-bind="visible: !videos.inProgress(), foreach: { data: videosGrouped, as: 'group' }">
-        <div class="row" data-bind="foreach: { data: group, as: 'videopreview' }">
-            <div class="col-md-3" data-bind="template: { name: 'app/shared/video-preview', data: videopreview }">
-            </div>
-        </div>
-    </div>
+    <video-preview-list params="url: '/videos/recent', pageSize: 8"></video-preview-list>
 </div>
 
 @if (User.Identity.IsAuthenticated)
 {
-    <div id="my-videos" data-bind="module: { name: 'app/shared/video-preview-list', data: myVideosList }">
+    <div id="my-videos">
         <h2>My Videos</h2>
         
-        <!-- Loading Icon -->
-        <h4 data-bind="visible: videos.inProgress">
-            <i class="fa fa-spinner fa-spin"></i> Loading...
-        </h4>
-        
-        <!-- Video Grid of Results -->
-        <div data-bind="visible: !videos.inProgress(), foreach: { data: videosGrouped, as: 'group' }">
-            <div class="row" data-bind="foreach: { data: group, as: 'videopreview' }">
-                <div class="col-md-3" data-bind="template: { name: 'app/shared/video-preview', data: videopreview }">
-                </div>
-            </div>
-        </div>
-
+        <video-preview-list params="url: '/videos/byuser', pageSize: 4"></video-preview-list>
     </div>
-    
-}
-
-
-@section scripts
-{
-    <script type="text/javascript">
-        require(["knockout", "jquery", "knockout-amd-helpers", "text", "domReady!"], function(ko, $) {
-            // Just use a simple object as the model for the page and apply bindings to page sections
-            var pageModel = {
-                // Videos by user can be paged, but we are just showing a single page of 4 records here
-                myVideosList: {
-                    url: '@Url.Action("ByUser", "Videos")',
-                    pageSize: 4,
-                    groupSize: 4
-                },
-                // Recent videos we need to tell it how many recent videos to retrieve
-                recentVideosList: {
-                    url: '@Url.Action("Recent", "Videos")',
-                    pageSize: 8,
-                    groupSize: 4
-                }
-            };
-
-            $("#my-videos, #recent-videos").each(function(idx, el) {
-                ko.applyBindings(pageModel, el);
-            });
-        });
-    </script>
 }

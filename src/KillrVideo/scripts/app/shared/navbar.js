@@ -1,6 +1,7 @@
-﻿define(["knockout", "jquery", "lib/knockout-extenders"], function (ko, $) {
-    // Return a view model
-    return function() {
+﻿// The navbar functionality on all pages (requires bootstrap for the logged in user dropdown which may be present)
+define(["knockout", "jquery", "lib/knockout-extenders", "bootstrap"], function (ko, $) {
+    // A view model for the video search in the navbar
+    function searchVideosViewModel() {
         var self = this;
 
         // The value in the search box, throttled so that we don't constantly update as they are typing
@@ -21,4 +22,9 @@
             });
         }).extend({ async: [] });
     }
+
+    // Bind the search box when dom is ready
+    $(function() {
+        ko.applyBindings({ searchVideos: new searchVideosViewModel() }, $("#navbar-search").get(0));
+    });
 });

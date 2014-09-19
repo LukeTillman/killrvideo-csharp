@@ -1,10 +1,28 @@
-﻿define(["knockout", "jquery", "app/comments/video-comment", "knockout-validation"], function (ko, $, videoCommentModel) {
-    // Return viewModel
-    return function(videoId) {
+﻿define(["knockout", "jquery", "moment", "text!./video-comments.tmpl.html", "knockout-validation"], function(ko, $, moment, htmlString) {
+    // ViewModel for individual comment on video
+    function singleCommentViewModel(data) {
+        var self = this;
+
+        // Most properties are just copies of the data from the server
+        self.userProfileUrl = data.userProfileUrl;
+        self.userFirstName = data.userFirstName;
+        self.userLastName = data.userLastName;
+        self.userGravatarImageUrl = data.userGravatarImageUrl;
+        self.comment = data.comment;
+
+        // Create a "X hours/days/etc. ago" property from the timestamp of the comment
+        self.commentTimestampAgo = moment(data.commentTimestamp).fromNow();
+    }
+
+    // View model for video comments
+    function videoCommentsViewModel(params) {
         var self = this;
 
         // The number of comments per page to retrieve
         var pageSize = 10;
+
+        // Whether a user is logged in
+        self.isLoggedIn = params.isLoggedIn;
 
         // The list of currently loaded comments
         self.comments = ko.observableArray();
@@ -26,7 +44,7 @@
             self.loadingNextPage(true);
 
             var ajaxData = {
-                videoId: videoId,
+                videoId: params.videoId,
                 pageSize: pageSize + 1,       // Going to show 10 at a time, so get an extra record
                 firstCommentIdOnPage: self.firstCommentIdOnNextPage()
             };
@@ -54,7 +72,7 @@
                     var commentsArray = self.comments();
                     self.comments.valueWillMutate();
                     for (var i = 0; i < response.data.comments.length; i++) {
-                        var commentModel = new videoCommentModel(response.data.comments[i]);
+                        var commentModel = new singleCommentViewModel(response.data.comments[i]);
                         commentsArray.push(commentModel);
                     }
                     self.comments.valueHasMutated();
@@ -85,7 +103,7 @@
             self.addingComment(true);
 
             var ajaxData = {
-                videoId: videoId,
+                videoId: params.videoId,
                 comment: self.newComment()
             };
 
@@ -101,7 +119,7 @@
                 
                 // We should get a comment returned to us on success, so add the new comment to the top of the list
                 // of comments so it shows up
-                self.comments.splice(0, 0, new videoCommentModel(response.data));
+                self.comments.splice(0, 0, new singleCommentViewModel(response.data));
                 self.newCommentAdded(true);
 
             }).always(function () {
@@ -122,4 +140,7 @@
         // Load the initial page of comments
         self.loadNextPage();
     };
+
+    // Return KO component definition
+    return { viewModel: videoCommentsViewModel, template: htmlString };
 });

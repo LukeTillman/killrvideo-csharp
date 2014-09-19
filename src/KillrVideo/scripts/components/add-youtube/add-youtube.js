@@ -1,6 +1,6 @@
-﻿define(["knockout", "knockout-validation"], function (ko) {
-    // Review ViewModel for adding YouTube video
-    return function () {
+﻿define(["knockout", "text!./add-youtube.tmpl.html", "knockout-validation"], function (ko, htmlString) {
+    // ViewModel for adding YouTube video
+    function addYouTubeViewModel(params) {
         var self = this;
 
         // The URL of the YouTube video
@@ -52,5 +52,11 @@
             var match = RegExp('[?&]' + name + '=([^&]*)').exec(url);
             return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
         }
+
+        // Pass self back to parent
+        params.selectedSourceModel(self);
     };
+
+    // Return KO component definition
+    return { viewModel: addYouTubeViewModel, template: htmlString };
 });

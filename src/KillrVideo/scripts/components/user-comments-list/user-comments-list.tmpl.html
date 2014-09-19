@@ -1,0 +1,18 @@
+﻿<!-- Current page of comments by the user -->
+<ul data-bind="foreach: { data: comments, as: 'singleComment' }" class="user-comments list-unstyled">
+    <li class="clearfix">
+        <div class="pull-left text-center">
+            <a data-bind="attr: { href: singleComment.videoViewUrl }" target="_blank">
+                <img data-bind="attr: { src: singleComment.videoPreviewImageLocation }" />
+            </a>
+        </div>
+        <span data-bind="text: singleComment.comment"></span><br />
+        <small class="text-muted">
+            on <a data-bind="text: singleComment.videoName, attr: { href: singleComment.videoViewUrl }" target="_blank"></a> <span data-bind="text: singleComment.commentTimestampAgo"></span>
+        </small>
+    </li>
+</ul>
+<button type="button" data-bind="visible: morePagesAvailable, disable: loadingNextPage, click: loadNextPage"
+        class="btn btn-default btn-block clearfix">
+    <i data-bind="visible: loadingNextPage" class="fa fa-cog fa-spin"></i> Load more comments
+</button>

@@ -2,12 +2,14 @@
 
 @{
     ViewBag.Title = string.Format("{0} {1} - User Info", Model.UserProfile.FirstName, Model.UserProfile.LastName);
+    ViewBag.RequireJsMain = "app/account/info";
 }
 
 @section htmlhead
 {
     <style>
         #user-comments {
+            display: block;
             max-height: 280px;
             overflow-y: auto;
             border: 1px solid #EEE;
@@ -38,26 +40,7 @@
         <h3 class="page-header">
             <i class="fa fa-comments"></i> Latest Comments
         </h3>
-        <div id="user-comments" data-bind="module: { name: 'app/comments/user-comments', data: userId }">
-            <!-- Current page of comments by the user -->
-            <ul data-bind="foreach: { data: comments, as: 'singleComment' }" class="user-comments list-unstyled">
-                <li class="clearfix">
-                    <div class="pull-left text-center">
-                        <a data-bind="attr: { href: singleComment.videoViewUrl }" target="_blank">
-                            <img data-bind="attr: { src: singleComment.videoPreviewImageLocation }" />
-                        </a>
-                    </div>
-                    <span data-bind="text: singleComment.comment"></span><br/>
-                    <small class="text-muted">
-                        on <a data-bind="text: singleComment.videoName, attr: { href: singleComment.videoViewUrl }" target="_blank"></a> <span data-bind="text: singleComment.commentTimestampAgo"></span>
-                    </small>
-                </li>
-            </ul>
-            <button type="button" data-bind="visible: morePagesAvailable, disable: loadingNextPage, click: loadNextPage"
-                    class="btn btn-default btn-block clearfix">
-                <i data-bind="visible: loadingNextPage" class="fa fa-cog fa-spin"></i> Load more comments
-            </button>
-        </div>
+        <user-comments-list id="user-comments" params="userid: '@Model.UserProfile.UserId'"></user-comments-list>
     </div>
     <div class="col-md-7">
         <!-- User's videos -->
@@ -72,71 +55,7 @@
                 </a>
             </p>
         }
-        <div id="user-videos" data-bind="module: { name: 'app/shared/video-preview-list', data: userVideosList }">
-            <!-- User's videos in tabular format -->
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Added Date</th>
-                    </tr>
-                </thead>
-                <tbody data-bind="foreach: { data: videos, as: 'video' }, visible: !videos.inProgress()">
-                    <tr>
-                        <td>
-                            <a data-bind="text: video.name, attr: { href: video.videoUrl }" target="_blank"></a>
-                        </td>
-                        <td data-bind="text: video.addedDatePretty"></td>
-                    </tr>
-                </tbody>
-                <!-- Loading Icon -->
-                <tfoot data-bind="visible: videos.inProgress">
-                    <tr>
-                        <td colspan="2">
-                            <h4>
-                                <i class="fa fa-spinner fa-spin"></i> Loading...
-                            </h4>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-            <!-- Paging of the table -->
-            <div class="row">
-                <div class="col-md-6">
-                    <button type="button" class="btn btn-default navbar-btn" data-bind="visible: previousPageAvailable, click: previousPage">
-                        <i class="fa fa-chevron-circle-left"></i> Previous Page
-                    </button>
-                </div>
-                <div class="col-md-6 text-right">
-                    <button type="button" class="btn btn-default navbar-btn" data-bind="visible: nextPageAvailable, click: nextPage">
-                        Next Page <i class="fa fa-chevron-circle-right"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
+        <user-videos-table params="userId: '@Model.UserProfile.UserId'"></user-videos-table>
     </div>
 </div>
-
-@section scripts
-{
-    <script type="text/javascript">
-        require(["knockout", "jquery", "knockout-amd-helpers", "text", "domReady!"], function (ko, $) {
-            // Just use a simple object as the model for the page and apply bindings to page sections
-            var pageModel = {
-                userId: '@Model.UserProfile.UserId',
-                userVideosList: {
-                    url: '@Url.Action("ByUser", "Videos")',
-                    ajaxData: {
-                        userId: '@Model.UserProfile.UserId'
-                    },
-                    pageSize: 10
-                }
-            };
-
-            $("#user-videos, #user-comments").each(function (idx, el) {
-                ko.applyBindings(pageModel, el);
-            });
-        });
-    </script>
-}
 

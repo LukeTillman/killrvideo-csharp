@@ -1,0 +1,9 @@
+﻿<div id="view-video-rating">
+    <span class="video-rating" data-bind="foreach: availableRatings, css: { 'video-rating-enabled': ratingEnabled }">
+        <span class="star" data-bind="css: { filled: $parent.displayRating() >= $data, highlighted: $parent.proposedRating() >= $data }, event: { click: $parent.rateVideo, mouseover: $parent.trackProposedRating, mouseout: $parent.resetProposedRating }"></span>
+    </span>
+    <span class="label label-info">
+        <span data-bind="visible: currentUserRating() > 0">You: <span data-bind="text: currentUserRating"></span> stars, </span>
+        Average: <span data-bind="text: averageRating"></span> (<span data-bind="text: ratingsCount"></span> ratings)
+    </span>
+</div>

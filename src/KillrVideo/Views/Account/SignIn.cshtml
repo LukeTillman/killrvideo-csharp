@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "Sign In";
     ViewBag.ShowSignIn = false;
+    ViewBag.RequireJsMain = "app/account/signin";
 }
 
 <div class="row">
@@ -15,8 +16,8 @@
                     If you've already got an account, sign in with your username and password below.
                 </p>
                 
-                <div data-bind="module: { name: 'app/shared/uimessages', data: signInUrl }"></div>
-
+                <uimessages params="queues: signInUrl"></uimessages>
+                
                 <form role="form" data-bind="submit: signIn">
                     <div class="form-group">
                         <label for="signin-email">Email address</label>
@@ -35,13 +36,3 @@
         </div>
     </div>
 </div>
-
-@section scripts {
-    <script type="text/javascript">
-        // Apply bindings when DOM is ready
-        require(["knockout", "jquery", "app/account/signin", "knockout-amd-helpers", "text", "domReady!"], function(ko, $, signInModel) {
-            var model = new signInModel();
-            ko.applyBindings(model, $("#signin-account").get(0));
-        });
-    </script>
-}

@@ -1,16 +1,15 @@
-﻿define(["knockout", "moment"], function(ko, moment) {
-    // Return viewModel
-    return function (jobId) {
+﻿define(["knockout", "jquery", "moment", "text!./video-upload-status.tmpl.html"], function(ko, $, moment, htmlString) {
+    function uploadStatusViewModel(params) {
         var self = this;
 
         self.status = ko.observable("");
         self.statusDateFormatted = ko.observable("");
 
-        self.isComplete = ko.computed(function() {
+        self.isComplete = ko.computed(function () {
             return self.status() == "Finished";
         });
 
-        self.isErrored = ko.computed(function() {
+        self.isErrored = ko.computed(function () {
             var s = self.status();
             return s == "Canceled" || s == "Error";
         });
@@ -24,13 +23,13 @@
             $.ajax({
                 type: "POST",
                 url: "/upload/getlateststatus",
-                data: JSON.stringify({ jobId: jobId }),
+                data: JSON.stringify({ jobId: params.jobId }),
                 contentType: "application/json",
                 dataType: "json"
-            }).done(function(response) {
+            }).done(function (response) {
                 if (!response.success)
                     return;
-                
+
                 // Update view model with latest data
                 self.status(response.data.status);
                 self.statusDateFormatted(moment(response.data.statusDate).fromNow());
@@ -44,5 +43,8 @@
 
         // Load the latest status for the job
         loadLatestStatus();
-    };
+    }
+
+    // Return KO component definition
+    return { viewModel: uploadStatusViewModel, template: htmlString };
 });

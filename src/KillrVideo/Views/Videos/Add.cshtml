@@ -1,12 +1,13 @@
 ﻿@{
     ViewBag.Title = "Add Video";
+    ViewBag.RequireJsMain = "app/videos/add";
 }
 
 <div id="video-add" class="row">
     <div class="col-md-8 col-md-push-2">
         <h2>Add Video</h2>
         
-        <div data-bind="module: { name: 'app/shared/uimessages', data: null }"></div>
+        <uimessages></uimessages>
         
         <p class="bg-success uimessage" style="display: none" data-bind="visible: viewVideoUrl()">
             Your video has successfully been added.  <a data-bind="attr: { href: viewVideoUrl }">Click here</a> to view it.
@@ -31,9 +32,8 @@
                     <select class="form-control" data-bind="options: availableSources, optionsText: 'label', optionsCaption: 'Choose a source...', value: selectedSource"></select>
                 </div>
             </div>
-            
-            <!-- ko foreach: { data: availableSources, as: 'source' } -->
-            <div data-bind="template: { name: source.template, data: source.model }, visible: $parent.selectedSource() === source" style="display: none">
+            <!-- ko if: selectedSource -->
+            <div data-bind="component: { name: selectedSource().component, params: { selectedSourceModel: selectedSourceModel } }">
             </div>
             <!-- /ko -->
             
@@ -43,14 +43,3 @@
         </form>
     </div>
 </div>
-
-@section scripts
-{
-    <script type="text/javascript">
-        // Apply bindings when DOM is ready
-        require(["knockout", "jquery", "app/videos/add", "knockout-amd-helpers", "text", "domReady!"], function (ko, $, addVideoModel) {
-            var model = new addVideoModel();
-            ko.applyBindings(model, $("#video-add").get(0));
-        });
-    </script>
-}

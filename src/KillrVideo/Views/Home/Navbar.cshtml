@@ -60,7 +60,7 @@
             </div>
             
             <form class="navbar-form" role="search" id="navbar-search" method="GET" action="@Url.Action("Results", "Search")" 
-                  data-bind="module: 'app/shared/search-videos'">
+                  data-bind="with: searchVideos">
                 <div class="form-group">
                     <input type="text" class="form-control" name="tag" placeholder="Find videos by tag (ex: cassandra, cats)" 
                            list="navbar-search-suggestions" data-bind="value: searchValue, valueUpdate: 'input'" />
@@ -75,11 +75,3 @@
         </div>
     </div>
 </nav>
-
-<script type="text/javascript">
-    // Requires bootstrap for the current user button dropdown
-    require(["knockout", "jquery", "knockout-amd-helpers", "bootstrap", "text", "domReady!"], function (ko, $) {
-        // Bind the search box
-        ko.applyBindings({}, $("#navbar-search").get(0));
-    });
-</script>

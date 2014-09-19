@@ -17,7 +17,12 @@
     <link rel="icon" type="image/png" href="@Url.Content("~/content/K.png")"/>
     
     <script type="text/javascript" src="@Url.Content("~/scripts/requirejs-config.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/scripts/bower_components/requirejs/require.js")"></script>
+
+    @if (ViewBag.RequireJsMain != null)
+    {
+        <script type="text/javascript" data-main="@ViewBag.RequireJsMain" src="@Url.Content("~/scripts/bower_components/requirejs/require.js")"></script>
+    }
+    
     @RenderSection("htmlhead", required: false)
 </head>
 <body>

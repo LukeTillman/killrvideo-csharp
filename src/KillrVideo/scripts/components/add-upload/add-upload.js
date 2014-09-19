@@ -1,6 +1,6 @@
-﻿define(["knockout", "knockout-validation"], function(ko) {
-    // Review ViewModel for adding an uploaded video
-    return function() {
+﻿define(["knockout", "text!./add-upload.tmpl.html", "knockout-validation"], function(ko, htmlString) {
+    // ViewModel for adding an uploaded video
+    function addUploadViewModel(params) {
         var self = this;
 
         var maxFileSize = 1073741824; // Max upload size of 1 GB
@@ -180,5 +180,11 @@
 
             return promise;
         };
+
+        // Pass self back to parent
+        params.selectedSourceModel(self);
     };
+
+    // Return KO component definition
+    return { viewModel: addUploadViewModel, template: htmlString };
 });

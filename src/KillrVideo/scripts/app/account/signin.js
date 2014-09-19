@@ -1,6 +1,6 @@
-﻿define(["knockout", "knockout-validation"], function (ko) {
+﻿require(["knockout", "jquery", "knockout-validation", "app/common", "app/shared/navbar"], function (ko, $) {
     // Return view model
-    return function() {
+    function signInViewModel() {
         var self = this;
 
         self.emailAddress = ko.observable("").extend({ required: true, email: true });
@@ -40,4 +40,9 @@
                 });
         };
     }
+
+    // Bind the main content area when DOM is ready
+    $(function () {
+        ko.applyBindings(new signInViewModel(), $("#body-wrapper").get(0));
+    });
 });

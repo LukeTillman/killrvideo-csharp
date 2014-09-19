@@ -1,4 +1,4 @@
-﻿define(["knockout", "jquery", "knockout-postbox"], function (ko, $) {
+﻿define(["knockout", "jquery", "text!./uimessages.tmpl.html", "knockout-postbox"], function (ko, $, htmlString) {
     var allUiMessagesQueue = "allmessages";
 
     // Just once (when this is loaded) hook some global ajax events for jQuery so we can inspect JSON responses
@@ -26,7 +26,7 @@
         });
     
     // Return view model, expecting that we'll get an array of queues to listen to for new messages
-    return function(queues) {
+    function uiMessagesViewModel(params) {
         var self = this;
 
         // All messages
@@ -40,7 +40,8 @@
             });
             return byType;
         });
-        
+
+        var queues = params.queues;
         if (queues) {
             // If queues is just a single queue name, convert it to an array, otherwise make sure all queue name are lowercase
             if ($.isArray(queues) === false) {
@@ -60,4 +61,7 @@
             self.messages.subscribeTo(allUiMessagesQueue);
         }
     }
+
+    // Return KO component definition
+    return { viewModel: uiMessagesViewModel, template: htmlString };
 });

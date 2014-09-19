@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = string.Format("Search Results for '{0}'", Model.Tag);
+    ViewBag.RequireJsMain = "app/search/results";
 }
 
 @if (string.IsNullOrWhiteSpace(Model.Tag))
@@ -13,15 +14,23 @@
 }
 else
 {
+    <input type="hidden" id="tag-searched-for" value="@Model.Tag"/>
+    
     <h2>Search Results for '@Model.Tag'</h2>
-    <div id="search-results" data-bind="module: { name: 'app/shared/video-preview-list', data: searchResultsList }">
+    <div id="search-results" data-bind="with: searchResultsList">
         <h4 data-bind="visible: videos.inProgress">
             <i class="fa fa-spinner fa-spin"></i> Searching...
         </h4>
         
         <div data-bind="visible: !videos.inProgress(), foreach: { data: videosGrouped, as: 'group' }">
             <div class="row" data-bind="foreach: { data: group, as: 'videopreview' }">
-                <div class="col-md-3" data-bind="template: { name: 'app/shared/video-preview', data: videopreview }">
+                <div class="col-md-3">
+                    <div class="video-preview">
+                        <h4 data-bind="text: videopreview.name"></h4>
+                        <a data-bind="attr: { href: videopreview.videoUrl }">
+                            <img data-bind="attr: { src: videopreview.videoPreviewImageUrl }" />
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -43,25 +52,4 @@ else
             </div>
         </div>
     </div>
-}
-
-
-
-@section scripts
-{
-    <script type="text/javascript">
-        require(["knockout", "jquery", "knockout-amd-helpers", "text", "domReady!"], function (ko, $) {
-            // Just use a simple object as the model for the page and apply bindings
-            ko.applyBindings({
-                searchResultsList: {
-                    url: '@Url.Action("Videos", "Search")',
-                    ajaxData: {
-                        tag: '@Model.Tag'
-                    },
-                    pageSize: 8,
-                    groupSize: 4
-                }
-            }, $("#search-results").get(0));
-        });
-    </script>
 }

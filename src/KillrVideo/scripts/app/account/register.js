@@ -1,6 +1,6 @@
-﻿define(["knockout", "knockout-validation"], function (ko) {
-    // Return the view model for registration
-    return function() {
+﻿require(["knockout", "jquery", "knockout-validation", "app/common", "app/shared/navbar"], function (ko, $) {
+    // ViewModel for registration page
+    function registerViewModel() {
         var self = this;
 
         // Information about the new user
@@ -63,4 +63,9 @@
                 });
         };
     }
+
+    // Bind the main content area when DOM is ready
+    $(function () {
+        ko.applyBindings(new registerViewModel(), $("#body-wrapper").get(0));
+    });
 });

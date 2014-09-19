@@ -240,28 +240,38 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="gulpfile.js" />
+    <Content Include="scripts\app\account\info.js" />
     <Content Include="scripts\app\account\register.js" />
     <Content Include="scripts\app\account\signin.js" />
-    <Content Include="scripts\app\comments\user-comment.js" />
-    <Content Include="scripts\app\comments\user-comments.js" />
-    <Content Include="scripts\app\comments\video-comment.js" />
-    <Content Include="scripts\app\shared\search-videos.js" />
-    <Content Include="scripts\app\shared\uimessages.js" />
-    <Content Include="scripts\app\shared\video-preview-list.js" />
-    <Content Include="scripts\app\shared\video-preview.js" />
-    <Content Include="scripts\app\videos\add-sources.js" />
-    <Content Include="scripts\app\videos\add-upload.js" />
-    <Content Include="scripts\app\videos\add-youtube.js" />
+    <Content Include="scripts\app\common.js" />
+    <Content Include="scripts\app\search\results.js" />
+    <Content Include="scripts\app\shared\navbar.js" />
+    <Content Include="scripts\app\videos\view.js" />
+    <Content Include="scripts\components\related-videos\related-videos.js" />
+    <Content Include="scripts\components\related-videos\related-videos.tmpl.html" />
+    <Content Include="scripts\components\uimessages\uimessages.js" />
+    <Content Include="scripts\app\shared\video-preview-pager.js" />
+    <Content Include="scripts\components\add-upload\add-upload.js" />
+    <Content Include="scripts\components\add-youtube\add-youtube.js" />
     <Content Include="scripts\app\videos\add.js" />
-    <Content Include="scripts\app\comments\video-comments.js" />
-    <Content Include="scripts\app\videos\upload-status.js" />
-    <Content Include="scripts\app\videos\star-rating.js" />
+    <Content Include="scripts\app\index.js" />
+    <Content Include="scripts\components\user-comments-list\user-comments-list.js" />
+    <Content Include="scripts\components\user-comments-list\user-comments-list.tmpl.html" />
+    <Content Include="scripts\components\user-videos-table\user-videos-table.js" />
+    <Content Include="scripts\components\user-videos-table\user-videos-table.tmpl.html" />
+    <Content Include="scripts\components\video-comments\video-comments.js" />
+    <Content Include="scripts\components\video-comments\video-comments.tmpl.html" />
+    <Content Include="scripts\components\video-preview-list\video-preview-list.js" />
+    <Content Include="scripts\components\video-preview-list\video-preview-list.tmpl.html" />
+    <Content Include="scripts\components\video-star-rating\video-star-rating.js" />
+    <Content Include="scripts\components\video-star-rating\video-star-rating.tmpl.html" />
+    <Content Include="scripts\components\video-upload-status\video-upload-status.js" />
+    <Content Include="scripts\components\video-upload-status\video-upload-status.tmpl.html" />
     <Content Include="scripts\lib\knockout-extenders.js" />
     <Content Include="scripts\requirejs-config.js" />
-    <Content Include="scripts\templates\app\shared\uimessages.tmpl.html" />
-    <Content Include="scripts\templates\app\shared\video-preview.tmpl.html" />
-    <Content Include="scripts\templates\app\videos\add-upload.tmpl.html" />
-    <Content Include="scripts\templates\app\videos\add-youtube.tmpl.html" />
+    <Content Include="scripts\components\uimessages\uimessages.tmpl.html" />
+    <Content Include="scripts\components\add-upload\add-upload.tmpl.html" />
+    <Content Include="scripts\components\add-youtube\add-youtube.tmpl.html" />
     <Content Include="scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Views\Web.config" />
@@ -281,9 +291,6 @@
       <Project>{5C6E3BC7-5341-4F57-A310-8559D14A0B20}</Project>
       <Name>KillrVideo.Data</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="scripts\templates\Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Videos\Add.cshtml" />

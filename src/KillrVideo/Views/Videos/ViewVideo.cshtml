@@ -1,9 +1,9 @@
-﻿@using KillrVideo.Authentication
-@using KillrVideo.Data
+﻿@using KillrVideo.Data
 @model KillrVideo.Models.Videos.ViewVideoViewModel
 
 @{
     ViewBag.Title = "View Video";
+    ViewBag.RequireJsMain = "app/videos/view";
 }
 
 @section htmlhead
@@ -29,19 +29,7 @@
                 <div class="embed-responsive embed-responsive-16by9">
                     @if (Model.InProgress)
                     {
-                        <div data-bind="module: { name: 'app/videos/upload-status', data: inProgressJobId }">
-                            <p class="bg-info uimessage hidden" data-bind="css: { hidden: !isInProgress() }">
-                                Your video upload is currently <strong data-bind="text: status"></strong> as of <strong data-bind="text: statusDateFormatted"></strong>.  This 
-                                status will refresh automatically when there are any changes.
-                            </p>
-                            <p class="bg-success uimessage hidden" data-bind="css: { hidden: !isComplete() }">
-                                Your uploaded video was successfully processed.  <a href="javascript:location.reload(true);">Click here</a> to refresh
-                                the page and view your video.
-                            </p>
-                            <p class="bg-danger uimessage hidden" data-bind="css: { hidden: !isErrored() }">
-                                There was a problem processing your uploaded video.  Please try uploading the video again.
-                            </p>
-                        </div>
+                        <video-upload-status params="jobId: '@Model.InProgressJobId'"></video-upload-status>
                     }
                     else
                     {
@@ -72,15 +60,7 @@
                 <div class="row">
                     <!-- Video star ratings -->
                     <div class="col-md-6">
-                        <div id="view-video-rating" data-bind="module : { name: 'app/videos/star-rating', data: videoId }">
-                            <span class="video-rating" data-bind="foreach: availableRatings, css: { 'video-rating-enabled': ratingEnabled }">
-                                <span class="star" data-bind="css: { filled: $parent.displayRating() >= $data, highlighted: $parent.proposedRating() >= $data }, event: { click: $parent.rateVideo, mouseover: $parent.trackProposedRating, mouseout: $parent.resetProposedRating }"></span>
-                            </span>
-                            <span class="label label-info">
-                                <span data-bind="visible: currentUserRating() > 0">You: <span data-bind="text: currentUserRating"></span> stars, </span>
-                                Average: <span data-bind="text: averageRating"></span> (<span data-bind="text: ratingsCount"></span> ratings)
-                            </span>
-                        </div>
+                        <video-star-rating params="videoId: '@Model.VideoId'"></video-star-rating>
                     </div>
 
                     <!-- Video tags -->
@@ -94,87 +74,14 @@
                     </div>
                 </div>
                 
-                <div data-bind="module: { name: 'app/comments/video-comments', data: videoId }">
-                    <!-- Add a Comment -->
-                    <h3>Add a Comment</h3>
-                    @if (User.GetCurrentUserId() != null)
-                    {
-                        <p class="bg-success uimessage" style="display: none" data-bind="visible: newCommentAdded">
-                            Comment added successfully.  <a href="" data-bind="click: resetForNewComment">Click here</a> to add another.
-                        </p>
-                        
-                        <form role="form" data-bind="submit: addComment, visible: !newCommentAdded()">
-                            <div class="form-group">
-                                <textarea data-bind="value: newComment, valueUpdate: 'input'" class="form-control" rows="3"></textarea>
-                            </div>
-                            <div class="text-right">
-                                <button type="submit" class="btn btn-primary" data-bind="disable: addingComment">
-                                    <i class="fa fa-cog fa-spin" style="display: none" data-bind="visible: addingComment"></i> Add Comment
-                                </button>
-                            </div>
-                        </form>
-                    }
-                    else
-                    {
-                        <p>
-                            You must <a href="@Url.Action("Register", "Account")">register</a> or <a href="@Url.Action("SignIn", "Account")">sign in</a> to post comments.
-                        </p>
-                    }
-
-                    <!-- View Comments -->
-                    <h3>Latest Comments</h3>
-                    <ul data-bind="foreach: { data: comments, as: 'singleComment' }" class="video-comments list-unstyled">
-                        <li class="clearfix">
-                            <div class="pull-left text-center">
-                                <a data-bind="attr: { href: singleComment.userProfileUrl }">
-                                    <img data-bind="attr: { src: singleComment.userGravatarImageUrl }" class="img-rounded" />
-                                </a>
-                            </div>
-
-                            <a data-bind="attr: { href: singleComment.userProfileUrl }">
-                                <span data-bind="text: singleComment.userFirstName"></span> <span data-bind="text: singleComment.userLastName"></span>
-                            </a>
-                            <small data-bind="text: singleComment.commentTimestampAgo" class="text-muted"></small><br />
-
-                            <span data-bind="text: singleComment.comment"></span>
-                        </li>
-                    </ul>
-                    <button type="button" data-bind="visible: morePagesAvailable, disable: loadingNextPage, click: loadNextPage" 
-                            class="btn btn-default btn-block clearfix">
-                        <i data-bind="visible: loadingNextPage" class="fa fa-cog fa-spin"></i> Load more comments
-                    </button>
-                </div>
+                <video-comments params="videoId: '@Model.VideoId', isLoggedIn: @(User.Identity.IsAuthenticated.ToString().ToLowerInvariant())"></video-comments>
             </div>
         </div>
         <!-- Related videos -->
-        <div class="col-md-3 col-md-pull-9" id="related-videos" data-bind="module: { name: 'app/shared/video-preview-list', data: relatedVideosList }">
+        <div class="col-md-3 col-md-pull-9" id="related-videos">
             <h3>Related Videos</h3>
-
-            <h4 data-bind="visible: videos.inProgress">
-                <i class="fa fa-spinner fa-spin"></i> Loading...
-            </h4>
-
-            <div data-bind="visible: !videos.inProgress(), template: { name: 'app/shared/video-preview', foreach: videos }">
-            </div>
+            
+            <related-videos params="videoId: '@Model.VideoId'"></related-videos>
         </div>
     </div>
 </div>
-
-@section scripts
-{
-    <script type="text/javascript">
-        require(["knockout", "jquery", "videojs", "knockout-amd-helpers", "text", "domReady!"], function (ko, $) {
-            // Just use a simple object as the model for the page and apply bindings
-            ko.applyBindings({
-                videoId: '@Model.VideoId',
-                inProgressJobId: '@Model.InProgressJobId',
-                relatedVideosList: {
-                    url: '@Url.Action("Related", "Videos")',
-                    ajaxData: {
-                        videoId: '@Model.VideoId'
-                    }
-                }
-            }, $("#view-video").get(0));
-        });
-    </script>
-}

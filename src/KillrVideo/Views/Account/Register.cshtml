@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "Register for an account";
     ViewBag.ShowRegister = false;
+    ViewBag.RequireJsMain = "app/account/register";
 }
 
 <div class="row" id="register-account">
@@ -11,7 +12,7 @@
             Register for an account to upload and comment on videos.
         </p>
         
-        <div data-bind="module: { name: 'app/shared/uimessages', data: registerUrl }"></div>
+        <uimessages params="queues: registerUrl"></uimessages>
         
         <p class="bg-success uimessage" style="display: none" data-bind="visible: registeredUserId()">
             Your account has been created successfully.  <a href="/">Click here</a> to return to the home page.
@@ -47,13 +48,3 @@
         </form>
     </div>
 </div>
-
-@section scripts {
-    <script type="text/javascript">
-        // Apply bindings when DOM is ready
-        require(["knockout", "jquery", "app/account/register", "knockout-amd-helpers", "text", "domReady!"], function(ko, $, registerModel) {
-            var model = new registerModel();
-            ko.applyBindings(model, $("#register-account").get(0));
-        });
-    </script>
-}

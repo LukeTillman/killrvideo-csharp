@@ -1,6 +1,20 @@
-﻿define(["knockout", "jquery", "app/comments/user-comment"], function (ko, $, userCommentModel) {
-    // Return viewModel
-    return function (userId) {
+﻿define(["knockout", "jquery", "moment", "text!./user-comments-list.tmpl.html"], function(ko, $, moment, htmlString) {
+    // A view model for an individual user comment
+    function singleCommentViewModel(data) {
+        var self = this;
+
+        // Most properties are just copies of the data from the server
+        self.videoViewUrl = data.videoViewUrl;
+        self.videoName = data.videoName;
+        self.videoPreviewImageLocation = data.videoPreviewImageLocation;
+        self.comment = data.comment;
+
+        // Create a "X hours/days/etc. ago" property from the timestamp of the comment
+        self.commentTimestampAgo = moment(data.commentTimestamp).fromNow();
+    }
+
+    // A view model for user comments
+    function userCommentsViewModel(userId) {
         var self = this;
 
         // Number of records per page to show
@@ -13,7 +27,7 @@
         self.firstCommentIdOnNextPage = ko.observable(null);
 
         // Whether or not the user has more comments available
-        self.morePagesAvailable = ko.computed(function () {
+        self.morePagesAvailable = ko.computed(function() {
             return self.firstCommentIdOnNextPage() !== null;
         });
 
@@ -21,7 +35,7 @@
         self.loadingNextPage = ko.observable(false);
 
         // Loads the next page of comments for the user
-        self.loadNextPage = function () {
+        self.loadNextPage = function() {
             // Indicate we're loading the next page
             self.loadingNextPage(true);
 
@@ -37,7 +51,7 @@
                 data: JSON.stringify(ajaxData),
                 contentType: "application/json",
                 dataType: "json"
-            }).done(function (response) {
+            }).done(function(response) {
                 if (!response.success)
                     return [];
 
@@ -54,7 +68,7 @@
                     var commentsArray = self.comments();
                     self.comments.valueWillMutate();
                     for (var i = 0; i < response.data.comments.length; i++) {
-                        var commentModel = new userCommentModel(response.data.comments[i]);
+                        var commentModel = new singleCommentViewModel(response.data.comments[i]);
                         commentsArray.push(commentModel);
                     }
                     self.comments.valueHasMutated();
@@ -67,4 +81,7 @@
         // Load the first page of comments
         self.loadNextPage();
     }
+
+    // Return a KO component definition
+    return { viewModel: userCommentsViewModel, template: htmlString };
 });

@@ -1,9 +1,8 @@
-﻿define(["knockout", "jquery"], function (ko, $) {
-    // Return a view model
-    return function(videoId) {
+﻿define(["knockout", "jquery", "text!./video-star-rating.tmpl.html"], function(ko, $, htmlString) {
+    function starRatingViewModel(params) {
         var self = this;
 
-        self.videoId = videoId;
+        self.videoId = params.videoId;
 
         // The available ratings (1-5 stars)
         self.availableRatings = [1, 2, 3, 4, 5];
@@ -68,13 +67,13 @@
             self.ratingsSum(sum + ratingClicked);
             
             // Post the rating to the server
-            $.post("/videos/rate", { videoId: videoId, rating: ratingClicked }).done(function(response) {
+            $.post("/videos/rate", { videoId: params.videoId, rating: ratingClicked }).done(function(response) {
                 // TODO: Handle failures?
             });
         };
 
         // Load rating data from the server
-        $.getJSON("/videos/getratings", { videoId: videoId }).done(function (response) {
+        $.getJSON("/videos/getratings", { videoId: params.videoId }).done(function (response) {
             // If for some reason we failed, just bail
             if (response.data.success === false)
                 return;
@@ -87,7 +86,9 @@
             // If the current user is logged in but has not yet rated the video, enable rating
             if (response.data.currentUserRating === 0 && response.data.currentUserLoggedIn === true)
                 self.ratingEnabled(true);
-
         });
     };
+
+    // Return KO component defintion
+    return { viewModel: starRatingViewModel, template: htmlString };
 });

@@ -1,0 +1,42 @@
+﻿<!-- User's videos in tabular format -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Added Date</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: videos, visible: !videos.inProgress()">
+        <tr>
+            <td>
+                <a data-bind="text: name, attr: { href: videoUrl }" target="_blank"></a>
+            </td>
+            <td data-bind="text: addedDatePretty"></td>
+        </tr>
+    </tbody>
+    <!-- Loading Icon -->
+    <tfoot data-bind="visible: videos.inProgress">
+        <tr>
+            <td colspan="2">
+                <h4>
+                    <i class="fa fa-spinner fa-spin"></i> Loading...
+                </h4>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<!-- Paging of the table -->
+<div class="row">
+    <div class="col-md-6">
+        <button type="button" class="btn btn-default navbar-btn" data-bind="visible: previousPageAvailable, click: previousPage">
+            <i class="fa fa-chevron-circle-left"></i> Previous Page
+        </button>
+    </div>
+    <div class="col-md-6 text-right">
+        <button type="button" class="btn btn-default navbar-btn" data-bind="visible: nextPageAvailable, click: nextPage">
+            Next Page <i class="fa fa-chevron-circle-right"></i>
+        </button>
+    </div>
+</div>
+

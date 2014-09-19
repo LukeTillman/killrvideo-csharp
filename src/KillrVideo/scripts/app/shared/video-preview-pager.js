@@ -1,4 +1,4 @@
-﻿define(["knockout", "jquery", "app/shared/video-preview", "lib/knockout-extenders"], function (ko, $, videoPreview) {
+﻿define(["knockout", "jquery", "lib/knockout-extenders"], function (ko, $) {
     /* 
         Return view model.  setupData should be object like this:
             {
@@ -7,7 +7,8 @@
                     'url': 'parameters' 
                 },
                 pageSize: videosPerPage,
-                groupSize: videosPerGroup
+                groupSize: videosPerGroup,
+                videoModelConstructor: someFunction
             }
     */
     return function (setupData) {
@@ -67,7 +68,11 @@
 
                 // Create video preview for each piece of data and add to the allVideos collection
                 for (var i = 0; i < response.data.videos.length; i++) {
-                    self.allVideos.push(new videoPreview(response.data.videos[i]));
+                    var video = response.data.videos[i];
+                    if (setupData.videoModelConstructor) {
+                        video = new setupData.videoModelConstructor(video);
+                    }
+                    self.allVideos.push(video);
                 }
 
                 // Return the slice of the allVideos collection
