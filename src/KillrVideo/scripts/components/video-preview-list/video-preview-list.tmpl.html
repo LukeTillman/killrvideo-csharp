@@ -1,17 +1,19 @@
-﻿<!-- Loading Icon -->
-<h4 data-bind="visible: videos.inProgress">
-    <i class="fa fa-spinner fa-spin"></i> Loading...
-</h4>
+﻿<div class="video-preview-list">
+    <!-- Loading Icon -->
+    <h4 data-bind="visible: videos.inProgress">
+        <i class="fa fa-spinner fa-spin"></i> Loading...
+    </h4>
 
-<!-- Video Grid of Results -->
-<div data-bind="visible: !videos.inProgress(), foreach: { data: videosGrouped, as: 'group' }">
-    <div class="row" data-bind="foreach: { data: group, as: 'videopreview' }">
-        <div class="col-md-3">
-            <div class="video-preview">
-                <h4 data-bind="text: videopreview.name"></h4>
-                <a data-bind="attr: { href: videopreview.videoUrl }">
-                    <img data-bind="attr: { src: videopreview.videoPreviewImageUrl }" />
-                </a>
+    <!-- Video Grid of Results -->
+    <div data-bind="visible: !videos.inProgress(), foreach: { data: videosGrouped, as: 'group' }">
+        <div class="row" data-bind="foreach: { data: group, as: 'videopreview' }">
+            <div class="col-md-3">
+                <div class="video-preview">
+                    <h4 data-bind="text: videopreview.name"></h4>
+                    <a data-bind="attr: { href: videopreview.videoUrl }">
+                        <img data-bind="attr: { src: videopreview.videoPreviewImageUrl }" />
+                    </a>
+                </div>
             </div>
         </div>
     </div>

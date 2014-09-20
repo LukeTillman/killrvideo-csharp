@@ -3,26 +3,17 @@
     ViewBag.RequireJsMain = "app/index";
 }
 
-@section htmlhead
-{
-    <style type="text/css">
-        #recent-videos > h2, #my-videos > h2 {
-            font-weight: bold;
-        }
-    </style>
-}
+<h3 class="section-divider">
+    <span><em>Recent</em> Videos</span>
+</h3>
 
-<div id="recent-videos">
-    <h2>Recently Added Videos</h2>
-    
-    <video-preview-list params="url: '/videos/recent', pageSize: 8"></video-preview-list>
-</div>
+<video-preview-list params="url: '/videos/recent', pageSize: 8"></video-preview-list>
 
 @if (User.Identity.IsAuthenticated)
 {
-    <div id="my-videos">
-        <h2>My Videos</h2>
-        
-        <video-preview-list params="url: '/videos/byuser', pageSize: 4"></video-preview-list>
-    </div>
+    <h3 class="section-divider">
+        <span><em>My</em> Videos</span>
+    </h3>
+
+    <video-preview-list params="url: '/videos/byuser', pageSize: 4"></video-preview-list>
 }

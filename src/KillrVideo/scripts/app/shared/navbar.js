@@ -25,6 +25,6 @@ define(["knockout", "jquery", "lib/knockout-extenders", "bootstrap"], function (
 
     // Bind the search box when dom is ready
     $(function() {
-        ko.applyBindings({ searchVideos: new searchVideosViewModel() }, $("#navbar-search").get(0));
+        ko.applyBindings({ searchVideos: new searchVideosViewModel() }, $("#navbar-main").get(0));
     });
 });

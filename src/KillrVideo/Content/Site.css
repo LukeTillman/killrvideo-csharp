@@ -1,10 +1,36 @@
-﻿body {
-    font-family: 'Roboto Slab', serif;
+﻿/* Typography overrides */
+body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: "Open Sans", Calibri, Candara, Arial, sans-serif;
 }
 
+/* Common styles */
 .body-content {
     padding: 70px 0;
 }
+
+h1.section-divider, h2.section-divider, h3.section-divider,
+.h1.section-divider, .h2.section-divider, .h3.section-divider {
+    border-top: 1px solid #dedede;
+    text-transform: uppercase;
+    margin-top: 31.5px;
+    margin-bottom: 0;
+}
+
+    h1.section-divider > span, h2.section-divider > span, h3.section-divider > span,
+    .h1.section-divider > span, .h2.section-divider > span, .h3.section-divider > span {
+        position: relative;
+        top: -0.6em;
+        background-color: #FFF;
+        margin: 0 0 0 0.5em;
+        padding: 0 0.25em;
+    }
+
+        h1.section-divider > span > em, h2.section-divider > span > em, h3.section-divider > span > em,
+        .h1.section-divider > span > em, .h2.section-divider > span > em, .h3.section-divider > span > em {
+            color: #da3610;
+            font-style: normal;
+        }
+
 
 /* Validation Messages */
 ul.uimessage {
@@ -22,39 +48,58 @@ ul.uimessage > li, p.uimessage {
 }
 
 /* Main Navbar */
-.navbar-default {
-    background-image: linear-gradient(to bottom, #EEEEEE 0px, #E8E8E8 100%);
-    border-color: #CCC;
+#navbar-main {
+    border-bottom: none;
 }
 
-.navbar > .container .navbar-brand {
-    padding: 4px 15px 0 0;
+#navbar-main > .container .navbar-brand {
+    padding: 12px 15px 0 0;
 }
 
-.navbar > .container .navbar-brand img {
-    height: 80px;
-    width: auto;
+#navbar-main form {
+    margin: 0;
 }
 
-@media (min-width: 768px) {
-    .navbar > .container .navbar-brand {
-        margin-left: -24px;
+#navbar-main form > .input-group > .form-control,
+#navbar-main form > .input-group > .input-group-btn,
+#navbar-main form > .input-group > .input-group-btn > button {
+    background-color: #444;
+    border: none;
+    color: #888;
+    height: 50px;
+}
+
+#navbar-main form > .input-group > .form-control {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+#navbar-main ul.navbar-nav {
+    border-right: 1px solid #333;
+}
+
+#navbar-main ul.navbar-nav > li {
+    border-left: 1px solid #333;
+}
+
+    #navbar-main ul.navbar-nav > li > a {
+        color: #888;
     }
-}
 
-#navbar-search > .form-group {
-    width: 50%;
-}
+        #navbar-main ul.navbar-nav > li > a.bg-success {
+            color: #222;
+        }
 
-#navbar-search > .form-group > input {
-    width: 100%;
-}
+            #navbar-main ul.navbar-nav > li > a.bg-success:hover {
+                background-color: #2f8912;
+            }
 
-img.navbar-gravatar {
-    height: 24px;
-    width: 24px;
-    margin: -10px 4px -6px 0;
-}
+            /* Gravatar for logged in users */
+            #navbar-main ul.navbar-nav > li > a > img {
+                width: 24px;
+                height: auto;
+                margin-top: -6px;
+            }
 
 /* Footer */
 footer {
