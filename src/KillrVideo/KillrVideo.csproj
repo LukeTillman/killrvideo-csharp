@@ -247,7 +247,7 @@
     <Content Include="scripts\app\account\signin.js" />
     <Content Include="scripts\app\common.js" />
     <Content Include="scripts\app\search\results.js" />
-    <Content Include="scripts\app\shared\navbar.js" />
+    <Content Include="scripts\app\shared\header.js" />
     <Content Include="scripts\app\videos\view.js" />
     <Content Include="scripts\components\related-videos\related-videos.js" />
     <Content Include="scripts\components\related-videos\related-videos.tmpl.html" />
@@ -304,7 +304,7 @@
     <Content Include="Views\Account\SignIn.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Home\Navbar.cshtml" />
+    <Content Include="Views\Home\Header.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Search\Results.cshtml" />

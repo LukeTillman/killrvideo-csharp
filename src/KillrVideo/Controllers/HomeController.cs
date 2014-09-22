@@ -30,10 +30,10 @@ namespace KillrVideo.Controllers
         }
 
         /// <summary>
-        /// Renders the navbar used by the shared Razor layout.
+        /// Renders the header used by the shared Razor layout.
         /// </summary>
         [ChildActionOnly]
-        public ActionResult Navbar()
+        public ActionResult Header()
         {
             var model = new ViewNavbarViewModel();
 

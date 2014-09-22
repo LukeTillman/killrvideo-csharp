@@ -5,13 +5,22 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 /* Common styles */
 .body-content {
-    padding: 70px 0;
+    padding: 60px 0;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    text-transform: uppercase;
+}
+
+h1 em, h2 em, h3 em, h4 em, h5 em, h6 em,
+.h1 em, .h2 em, .h3 em, .h4 em, .h5 em, .h6 em {
+    color: #da3610;
+    font-style: normal;
 }
 
 h1.section-divider, h2.section-divider, h3.section-divider,
 .h1.section-divider, .h2.section-divider, .h3.section-divider {
     border-top: 1px solid #dedede;
-    text-transform: uppercase;
     margin-top: 31.5px;
     margin-bottom: 0;
 }
@@ -25,13 +34,6 @@ h1.section-divider, h2.section-divider, h3.section-divider,
         padding: 0 0.25em;
     }
 
-        h1.section-divider > span > em, h2.section-divider > span > em, h3.section-divider > span > em,
-        .h1.section-divider > span > em, .h2.section-divider > span > em, .h3.section-divider > span > em {
-            color: #da3610;
-            font-style: normal;
-        }
-
-
 /* Validation Messages */
 ul.uimessage {
     list-style-type: none;
@@ -39,7 +41,7 @@ ul.uimessage {
     margin: 0 0 10px 0;
 }
 
-ul.uimessage > li, p.uimessage {
+ul.uimessage > li {
     padding: 1em;
 }
 
@@ -47,7 +49,7 @@ ul.uimessage > li, p.uimessage {
     color: #A94442;
 }
 
-/* Main Navbar */
+/* Site Header */
 #navbar-main {
     border-bottom: none;
 }
@@ -101,47 +103,40 @@ ul.uimessage > li, p.uimessage {
                 margin-top: -6px;
             }
 
+#what-is-this {
+    padding-top: 60px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #dedede;
+}
+
 /* Footer */
 footer {
-    border-top: 1px solid #EFEFEF;
-    background-color: #333;
-    color: #FFF;
+    background-color: #1e1e1e;
+    color: #888;
+    height: 50px;
 }
 
 #footer-main {
-    padding-top: 50px;
-    padding-bottom: 50px;
+    background-color: #222;
+    padding: 0.5em 0;
 }
 
-footer h4 {
-    font-weight: bold;
-    color: #428BCA;
+    #footer-main a {
+        color: #888;
+    }
+
+/* This will push the footer to the bottom */
+html, body {
+    height: 100%;
 }
 
-#copyright {
-    color: #333;
-    background-color: #CCC;
-    padding: 20px 0;
+#body-wrapper {
+    min-height: 100%;
+    margin-bottom: -50px;
 }
 
-/* This will push the footer to the bottom on non-mobile devices */
-@media (min-width: 992px) {
-    html, body {
-        height: 100%;
-    }
-
-    #body-wrapper {
-        min-height: 100%;
-        margin-bottom: -360px;
-    }
-
-    #push-footer {
-        height: 360px;
-    }
-
-    footer {
-        height: 360px;
-    }
+#push-footer {
+    height: 50px;
 }
 
 /* Video Previews */

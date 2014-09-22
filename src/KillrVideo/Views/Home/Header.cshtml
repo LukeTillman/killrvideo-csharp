@@ -1,0 +1,113 @@
+﻿@model KillrVideo.Models.Home.ViewNavbarViewModel
+
+@{
+    Layout = null;  // Since this will be used by the shared layout, it shouldn't use one
+}
+<div id="header">
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="navbar-main">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="@Url.Action("Index", "Home")" class="navbar-brand" title="KillrVideo.com">
+                    <img src="@Url.Content("~/content/killrvideo.png")" alt="KillrVideo.com Logo"/>
+                </a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <form class="navbar-form navbar-left" role="search" method="GET" action="@Url.Action("Results", "Search")">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <span class="glyphicon glyphicon-search" title="Search"></span><span class="hidden">Search</span>
+                            </button>
+                        </span>
+                        <input type="text" class="form-control" name="tag" placeholder="Search"
+                               list="navbar-search-suggestions" data-bind="value: searchValue, valueUpdate: 'input'" />
+                        <datalist id="navbar-search-suggestions" data-bind="foreach: tagSuggestions">
+                            <option data-bind="value: $data"></option>
+                        </datalist>
+                    </div>
+                </form>
+            
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" data-bind="click: toggleWhatIsThis, css: { dropup: showWhatIsThis }" data-toggle="collapse" 
+                           data-target=".navbar-collapse.in, #what-is-this">What is this?  <span class="caret"></span></a>
+                    </li>
+                    @if (Model.LoggedInUser == null)
+                    {
+                        <li><a href="@Url.Action("SignIn", "Account")" class="text-uppercase">Sign in</a></li>
+                        <li><a href="@Url.Action("Register", "Account")" class="bg-success text-uppercase">Register</a></li>
+                    }
+                    else
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                @Model.LoggedInUser.FirstName @Model.LoggedInUser.LastName 
+                                <img src="https://secure.gravatar.com/avatar/@Model.LoggedInUser.GravatarHash"
+                                     alt="Gravatar for @Model.LoggedInUser.EmailAddress" class="img-circle" />
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="@Url.Action("Info", "Account")"><i class="fa fa-cog fa-fw"></i> My Account</a></li>
+                                <li><a href="@Url.Action("Add", "Videos")"><i class="fa fa-video-camera fa-fw"></i> Add a video</a></li>
+                                <li class="divider"></li>
+                                <li><a href="@Url.Action("SignOut", "Account")"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
+                            </ul>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="what-is-this" class="collapse">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h4><em>What</em> is KillrVideo?</h4>
+                    <p>
+                        KillrVideo is a demo web application built with Apache Cassandra and C#.  The site was built by
+                        <a href="http://www.luketillman.com" target="_blank">Luke Tillman</a>, based on an idea and sample schema used by
+                        <a href="https://twitter.com/PatrickMcFadin" target="_blank">Patrick McFadin</a> to demonstrate some of the techniques involved in
+                        Cassandra data modeling.  It uses the <a href="https://github.com/datastax/csharp-driver" target="_blank">DataStax C# Driver</a> for
+                        interacting with Cassandra.
+                    </p>
+                    <hr class="visible-xs-block" />
+                </div>
+                <div class="col-sm-4">
+                    <h4><em>Get</em> the code!</h4>
+                    <p>
+                        All the code, including the CQL used to create the schema for the site is available on GitHub.  Pull requests
+                        for any bugs, improvements, etc. are accepted (and greatly appreciated).
+                    </p>
+                    <br />
+                    <a href="https://github.com/luketillman/killrvideo-csharp" class="btn btn-success" target="_blank">
+                        <i class="fa fa-github"></i> Get the code
+                    </a>
+                    <hr class="visible-xs-block" />
+                </div>
+                <div class="col-sm-4">
+                    <h4><em>Learn more</em> about Cassandra</h4>
+                    <p>
+                        There are tons of great resources available on the web to help getting started with Cassandra.  Below are
+                        a few to get you started.
+                    </p>
+                    <ul>
+                        <li><a href="http://planetcassandra.org/" target="_blank">Planet Cassandra</a></li>
+                        <li><a href="https://wiki.apache.org/cassandra/DataModel" target="_blank">Data Modeling</a> on the Cassandra Wiki</li>
+                        <li>DataStax Docs for <a href="http://www.datastax.com/documentation/developer/csharp-driver/2.0/csharp-driver/whatsNew2.html" target="_blank">.NET Driver</a> | <a href="http://www.datastax.com/documentation/cql/3.1/cql/cql_intro_c.html" target="_blank">CQL</a></li>
+                    </ul>
+                    
+                    <!-- On mobile, add a link to hide the what is this UI -->
+                    <br/>
+                    <a href="#" class="visible-xs-block text-muted small dropup" data-bind="click: toggleWhatIsThis" data-toggle="collapse" data-target="#what-is-this">
+                        <span class="caret"></span> Hide 'What is This?'
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

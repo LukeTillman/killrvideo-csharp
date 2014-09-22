@@ -1,4 +1,4 @@
-﻿require(["knockout", "jquery", "knockout-validation", "app/common", "app/shared/navbar"], function (ko, $) {
+﻿require(["knockout", "jquery", "knockout-validation", "app/common", "app/shared/header"], function (ko, $) {
     // Return view model
     function signInViewModel() {
         var self = this;

@@ -8,13 +8,13 @@
     <div class="col-md-6 col-md-offset-3">
         <h2>Register</h2>
 
-        <p class="bg-info uimessage" data-bind="visible: !registeredUserId()">
+        <p class="alert alert-info" data-bind="visible: !registeredUserId()">
             Register for an account to upload and comment on videos.
         </p>
         
         <uimessages params="queues: registerUrl"></uimessages>
         
-        <p class="bg-success uimessage" style="display: none" data-bind="visible: registeredUserId()">
+        <p class="alert alert-success" style="display: none" data-bind="visible: registeredUserId()">
             Your account has been created successfully.  <a href="/">Click here</a> to return to the home page.
         </p>
 

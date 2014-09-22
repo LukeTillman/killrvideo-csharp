@@ -1,7 +1,7 @@
-﻿// The navbar functionality on all pages (requires bootstrap for the logged in user dropdown which may be present)
-define(["knockout", "jquery", "lib/knockout-extenders", "bootstrap"], function (ko, $) {
-    // A view model for the video search in the navbar
-    function searchVideosViewModel() {
+﻿// The header functionality on all pages (requires bootstrap for the logged in user dropdown which may be present)
+define(["knockout", "jquery", "lib/knockout-extenders", "bootstrap", "app/common"], function (ko, $) {
+    // A view model for the header/navbar
+    function headerViewModel() {
         var self = this;
 
         // The value in the search box, throttled so that we don't constantly update as they are typing
@@ -21,10 +21,19 @@ define(["knockout", "jquery", "lib/knockout-extenders", "bootstrap"], function (
                 return response.data.tags;
             });
         }).extend({ async: [] });
+
+        // Whether or not to show the "What is this?" section
+        self.showWhatIsThis = ko.observable(false);
+
+        // Toggle the what is this section
+        self.toggleWhatIsThis = function() {
+            self.showWhatIsThis(!self.showWhatIsThis());
+        };
     }
 
+
     // Bind the search box when dom is ready
-    $(function() {
-        ko.applyBindings({ searchVideos: new searchVideosViewModel() }, $("#navbar-main").get(0));
+    $(function () {
+        ko.applyBindings(new headerViewModel(), $("#header").get(0));
     });
 });

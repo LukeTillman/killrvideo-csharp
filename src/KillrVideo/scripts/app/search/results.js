@@ -1,4 +1,4 @@
-﻿require(["knockout", "jquery", "app/shared/video-preview-pager", "app/common", "app/shared/navbar"], function (ko, $, videoPreviewPagerModel) {
+﻿require(["knockout", "jquery", "app/shared/video-preview-pager", "app/common", "app/shared/header"], function (ko, $, videoPreviewPagerModel) {
     // Model for a single search result
     function searchResultVideo(data) {
         var self = this;

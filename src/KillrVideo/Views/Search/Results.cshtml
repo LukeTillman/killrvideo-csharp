@@ -8,7 +8,7 @@
 @if (string.IsNullOrWhiteSpace(Model.Tag))
 {
     <h2>No search term entered</h2>
-    <p class="bg-warning uimessage">
+    <p class="alert alert-warning">
         Enter a tag to search for in the search box to get results.
     </p>
 }
@@ -35,7 +35,7 @@ else
             </div>
         </div>
         
-        <p class="bg-info uimessage" data-bind="visible: !videos.inProgress() && videos().length === 0">
+        <p class="alert alert-info" data-bind="visible: !videos.inProgress() && videos().length === 0">
             There are currently no videos for the tag <strong>@Model.Tag</strong>.  Why don't you <a href="@Url.Action("Add", "Videos")">add one</a>?
         </p>
         
