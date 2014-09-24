@@ -13,7 +13,7 @@ namespace KillrVideo
             routes.MapRoute(
                 name: "ViewVideo",
                 url: "view/{videoId}",
-                defaults: new { controller = "Videos", action = "ViewVideo" }
+                defaults: new { controller = "Videos", action = "View" }
             );
 
             // Default catch-all route

@@ -38,7 +38,7 @@ namespace KillrVideo.Controllers
         /// Shows the View for viewing a specific video.
         /// </summary>
         [HttpGet]
-        public async Task<ViewResult> ViewVideo(Guid videoId)
+        public async Task<ViewResult> View(Guid videoId)
         {
             // Try to find the video by id
             VideoDetails videoDetails = await _videoReadModel.GetVideo(videoId);
