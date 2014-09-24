@@ -1,4 +1,5 @@
-﻿@using KillrVideo.Data
+﻿@using System
+@using KillrVideo.Data
 @model KillrVideo.Models.Videos.ViewVideoViewModel
 
 @{
@@ -6,82 +7,59 @@
     ViewBag.RequireJsMain = "app/videos/view";
 }
 
-@section htmlhead
-{
-    <style type="text/css">
-        #main-video {
-            padding-left: 30px;
-            padding-top: 20px;
-            -webkit-box-shadow: -15px 0 15px -15px #CCCCCC;
-            box-shadow: -15px 0 15px -15px #CCCCCC;
-        }
-
-        #related-videos > h3 {
-            font-weight: bold;
-        }
-    </style>
-}
-
-<div id="view-video">
-    <div class="row">
-        <div class="col-md-9 col-md-push-3">
-            <div id="main-video">
-                <div class="embed-responsive embed-responsive-16by9">
-                    @if (Model.InProgress)
-                    {
-                        <video-upload-status params="jobId: '@Model.InProgressJobId'"></video-upload-status>
-                    }
-                    else
-                    {
-                        switch (Model.LocationType)
-                        {
-                            case VideoLocationType.YouTube:
-                            <!-- Add YouTube iframe embed -->
-                                <iframe src="http://www.youtube.com/embed/@Model.Location" class="embed-responsive-item"></iframe>
-                                break;
-                            case VideoLocationType.Upload:
-                            <!-- Use videojs to playback HTML5 video -->
-                            <video id="the-video" class="video-js vjs-default-skin embed-responsive-item" controls preload="auto" width="auto" height="auto" data-setup="">
-                                <source src="@Model.Location" type='video/mp4' />
-                                <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
-                            </video>
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
-                    }
-                </div>
-                
-                <h2>@Model.Title</h2>
-                <p>
-                    @Model.Description
-                </p>
-
-                <div class="row">
-                    <!-- Video star ratings -->
-                    <div class="col-md-6">
-                        <video-star-rating params="videoId: '@Model.VideoId'"></video-star-rating>
-                    </div>
-
-                    <!-- Video tags -->
-                    <div class="col-md-6">
-                        <div id="view-video-tags" class="text-right">
-                            @foreach (var tag in Model.Tags)
-                            {
-                                <a class="label label-default" href="@Url.Action("Results", "Search", new { tag })">@tag</a>
-                            }
-                        </div>
-                    </div>
-                </div>
-                
-                <video-comments params="videoId: '@Model.VideoId', isLoggedIn: @(User.Identity.IsAuthenticated.ToString().ToLowerInvariant())"></video-comments>
-            </div>
-        </div>
-        <!-- Related videos -->
-        <div class="col-md-3 col-md-pull-9" id="related-videos">
-            <h3>Related Videos</h3>
-            
-            <related-videos params="videoId: '@Model.VideoId'"></related-videos>
+<div class="row">
+    <div class="col-sm-8 col-xs-12">
+        <!-- The video -->
+        <div class="embed-responsive embed-responsive-16by9">
+            @if (Model.InProgress)
+            {
+                <video-upload-status params="jobId: '@Model.InProgressJobId'"></video-upload-status>
+            }
+            else
+            {
+                switch (Model.LocationType)
+                {
+                    case VideoLocationType.YouTube:
+                        <!-- Add YouTube iframe embed -->
+                        <iframe src="http://www.youtube.com/embed/@Model.Location" class="embed-responsive-item"></iframe>
+                        break;
+                    case VideoLocationType.Upload:
+                        <!-- Use videojs to playback HTML5 video -->
+                        <video id="the-video" class="video-js vjs-default-skin embed-responsive-item" controls preload="auto" width="auto" height="auto" data-setup="">
+                            <source src="@Model.Location" type='video/mp4' />
+                            <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+                        </video>
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
         </div>
     </div>
+    <div class="col-sm-4 col-xs-12">
+        <h3 id="view-video-title">@Model.Title</h3>
+        
+        <!-- Star ratings and sharing -->
+        <video-star-rating params="videoId: '@Model.VideoId'"></video-star-rating>
+        
+        <!-- Author and tags -->
+        <div id="view-video-tags" class="text-right">
+            @foreach (var tag in Model.Tags)
+            {
+                <a class="label label-default" href="@Url.Action("Results", "Search", new { tag })">@tag</a>
+            }
+        </div>
+
+        <p>
+            @Model.Description
+        </p>
+        
+        <!-- Video Comments -->
+        <video-comments params="videoId: '@Model.VideoId', isLoggedIn: @(User.Identity.IsAuthenticated.ToString().ToLowerInvariant())"></video-comments>
+    </div>
 </div>
+
+<br/>
+
+<!-- Related videos -->
+<video-preview-list params="url: '/videos/related', ajaxData: { videoId: '@Model.VideoId' }"></video-preview-list>

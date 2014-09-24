@@ -3,7 +3,9 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     font-family: "Open Sans", Calibri, Candara, Arial, sans-serif;
 }
 
-/* Common styles */
+/* ------------------------------------------------------------
+    Common styles 
+   ------------------------------------------------------------ */
 .body-content {
     padding-top: 60px;
     padding-bottom: 30px;
@@ -50,9 +52,37 @@ ul.uimessage > li {
     color: #da3610;
 }
 
-/* Site Header */
+/* Styles to make file inputs use Bootstrap */
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+/* ------------------------------------------------------------
+    Site Header
+   ------------------------------------------------------------ */
 #navbar-main {
     border-bottom: none;
+}
+
+#navbar-main .navbar-brand {
+    padding-top: 13px;
 }
 
 #navbar-main form {
@@ -106,7 +136,9 @@ ul.uimessage > li {
     border-bottom: 1px solid #dedede;
 }
 
-/* Footer */
+/* ------------------------------------------------------------
+    Site Footer
+   ------------------------------------------------------------ */
 footer {
     background-color: #1e1e1e;
     color: #888;
@@ -136,7 +168,9 @@ html, body {
     height: 50px;
 }
 
-/* Video Previews */
+/* ------------------------------------------------------------
+    Video Preview List
+   ------------------------------------------------------------ */
 .video-preview-list {
     position: relative;
     border: 1px solid #dedede;
@@ -333,6 +367,14 @@ html, body {
     }
 }
 
+/* ------------------------------------------------------------
+    View Video Page
+   ------------------------------------------------------------ */
+#view-video-title {
+    font-weight: 400;
+    margin-top: 0;
+}
+
 /* Video ratings and tags when viewing videos */
 #view-video-rating, #view-video-tags {
     font-size: 18px;
@@ -398,26 +440,4 @@ html, body {
 .user-comments > li > div img {
     width: 100px;
     height: auto;
-}
-
-/* Styles to make file inputs use Bootstrap */
-.btn-file {
-    position: relative;
-    overflow: hidden;
-}
-
-.btn-file input[type=file] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    font-size: 100px;
-    text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
-    outline: none;
-    background: white;
-    cursor: inherit;
-    display: block;
 }

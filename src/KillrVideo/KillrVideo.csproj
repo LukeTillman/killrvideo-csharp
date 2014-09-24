@@ -249,8 +249,6 @@
     <Content Include="scripts\app\search\results.js" />
     <Content Include="scripts\app\shared\header.js" />
     <Content Include="scripts\app\videos\view.js" />
-    <Content Include="scripts\components\related-videos\related-videos.js" />
-    <Content Include="scripts\components\related-videos\related-videos.tmpl.html" />
     <Content Include="scripts\components\uimessages\uimessages.js" />
     <Content Include="scripts\app\shared\video-preview-pager.js" />
     <Content Include="scripts\components\add-upload\add-upload.js" />

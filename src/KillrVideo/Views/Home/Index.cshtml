@@ -7,7 +7,7 @@
     <span><em>Recent</em> Videos</span>
 </h3>
 
-<video-preview-list params="url: '/videos/recent', pageSize: 8"></video-preview-list>
+<video-preview-list params="url: '/videos/recent'"></video-preview-list>
 
 @if (User.Identity.IsAuthenticated)
 {
@@ -15,5 +15,5 @@
         <span><em>My</em> Videos</span>
     </h3>
 
-    <video-preview-list params="url: '/videos/byuser', pageSize: 4"></video-preview-list>
+    <video-preview-list params="url: '/videos/byuser'"></video-preview-list>
 }
