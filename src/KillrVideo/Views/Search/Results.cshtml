@@ -18,24 +18,22 @@ else
     
     <h2>Search Results for '@Model.Tag'</h2>
     <div id="search-results" data-bind="with: searchResultsList">
-        <h4 data-bind="visible: videos.inProgress">
+        <h4 data-bind="visible: isLoading">
             <i class="fa fa-spinner fa-spin"></i> Searching...
         </h4>
         
-        <div data-bind="visible: !videos.inProgress(), foreach: { data: videosGrouped, as: 'group' }">
-            <div class="row" data-bind="foreach: { data: group, as: 'videopreview' }">
-                <div class="col-md-3">
-                    <div class="video-preview">
-                        <h4 data-bind="text: videopreview.name"></h4>
-                        <a data-bind="attr: { href: videopreview.videoUrl }">
-                            <img data-bind="attr: { src: videopreview.videoPreviewImageUrl }" />
-                        </a>
-                    </div>
+        <div class="row" data-bind="visible: !isLoading(), foreach: { data: videos, as: 'videopreview' }">
+            <div class="col-md-3">
+                <div class="video-preview">
+                    <h4 data-bind="text: videopreview.name"></h4>
+                    <a data-bind="attr: { href: videopreview.videoUrl }">
+                        <img data-bind="attr: { src: videopreview.videoPreviewImageUrl }" />
+                    </a>
                 </div>
             </div>
         </div>
         
-        <p class="alert alert-info" data-bind="visible: !videos.inProgress() && videos().length === 0">
+        <p class="alert alert-info" data-bind="visible: !isLoading() && videos().length === 0">
             There are currently no videos for the tag <strong>@Model.Tag</strong>.  Why don't you <a href="@Url.Action("Add", "Videos")">add one</a>?
         </p>
         

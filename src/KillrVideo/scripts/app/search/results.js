@@ -26,7 +26,6 @@
                     tag: tag
                 },
                 pageSize: 8,
-                groupSize: 4,
                 videoModelConstructor: searchResultVideo
             })
         };

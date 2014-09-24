@@ -1,20 +1,58 @@
 ﻿<div class="video-preview-list">
     <!-- Loading Icon -->
-    <h4 data-bind="visible: videos.inProgress">
-        <i class="fa fa-spinner fa-spin"></i> Loading...
-    </h4>
+    <div class="video-preview-list-loading" data-bind="visible: isLoading">
+        <h4>
+            <i class="fa fa-spinner fa-spin"></i> Loading...
+        </h4>
+    </div>
+    
+    <ul class="list-unstyled">
+        <!-- ko foreach: { data: videos, as: 'videopreview' } -->
+        <li>
+            <div class="video-preview popout-on-hover" data-bind="click: goToVideo">
+                <div data-bind="attr: { href: videopreview.videoUrl }, style: { backgroundImage: 'url(\'' + videopreview.videoPreviewImageUrl + '\')' }" class="video-preview-image">
+                </div>
 
-    <!-- Video Grid of Results -->
-    <div data-bind="visible: !videos.inProgress(), foreach: { data: videosGrouped, as: 'group' }">
-        <div class="row" data-bind="foreach: { data: group, as: 'videopreview' }">
-            <div class="col-md-3">
-                <div class="video-preview">
-                    <h4 data-bind="text: videopreview.name"></h4>
-                    <a data-bind="attr: { href: videopreview.videoUrl }">
-                        <img data-bind="attr: { src: videopreview.videoPreviewImageUrl }" />
-                    </a>
+                <div class="video-preview-info">
+                    <strong data-bind="text: videopreview.name"></strong>
+
+                    <span class="video-preview-uploadedby">Uploaded by: Blah</span>
+                    <span class="video-preview-date">3 days ago</span>
+                    <span class="video-preview-views">12345 views</span>
+                </div>
+
+                <div class="clearfix visible-xs-block"></div>
+            </div>
+            
+            <!-- Shim for holding the width of the li when the video preview is "popped out" on hover in larger viewports -->
+            <div class="hidden-xs video-preview-shim"></div>
+        </li>
+        <!-- /ko -->
+        <!-- ko if: nextPageAvailable -->
+        <li data-bind="with: firstVideoOfNextPage" class="hidden-xs">
+            <div class="video-preview" data-bind="click: $parent.nextPage">
+                <div data-bind="attr: { href: videoUrl }, style: { backgroundImage: 'url(\'' + videoPreviewImageUrl + '\')' }" class="video-preview-image">
+                </div>
+
+                <div class="video-preview-info">
+                    <strong data-bind="text: name"></strong>
+
+                    <span class="video-preview-date">3 days ago</span>
+                    <span class="video-preview-views">12345 views</span>
                 </div>
             </div>
-        </div>
+        </li>
+        <!-- /ko -->
+    </ul>
+    
+    <div class="video-preview-list-nav">
+        <button type="button" class="btn btn-primary" title="Next Page" data-bind="enable: nextPageAvailable, click: nextPage">
+            <i class="fa fa-caret-down fa-lg visible-xs-inline"></i>
+            <i class="fa fa-caret-right fa-lg hidden-xs"></i>
+        </button>
+        <button type="button" class="btn btn-default" title="Previous Page" data-bind="enable: previousPageAvailable, click: previousPage">
+            <i class="fa fa-caret-up fa-lg visible-xs-inline"></i>
+            <i class="fa fa-caret-left fa-lg hidden-xs"></i>
+        </button>
     </div>
 </div>

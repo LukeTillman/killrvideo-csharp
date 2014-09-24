@@ -6,7 +6,7 @@
             <th>Added Date</th>
         </tr>
     </thead>
-    <tbody data-bind="foreach: videos, visible: !videos.inProgress()">
+    <tbody data-bind="foreach: videos, visible: !isLoading()">
         <tr>
             <td>
                 <a data-bind="text: name, attr: { href: videoUrl }" target="_blank"></a>
@@ -15,7 +15,7 @@
         </tr>
     </tbody>
     <!-- Loading Icon -->
-    <tfoot data-bind="visible: videos.inProgress">
+    <tfoot data-bind="visible: isLoading">
         <tr>
             <td colspan="2">
                 <h4>
