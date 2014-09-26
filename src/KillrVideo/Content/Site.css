@@ -7,7 +7,7 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     Common styles 
    ------------------------------------------------------------ */
 .body-content {
-    padding-top: 60px;
+    padding-top: 70px;
     padding-bottom: 30px;
 }
 
@@ -74,6 +74,139 @@ ul.uimessage > li {
     display: block;
 }
 
+.user-gravatar {
+    width: 24px;
+    height: auto;
+}
+
+/* Perfect scrollbar plugin styles */
+.ps-container .ps-scrollbar-x-rail {
+    position: absolute; /* please don't change 'position' */
+    bottom: 3px; /* there must be 'bottom' for ps-scrollbar-x-rail */
+    height: 8px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    opacity: 0.4;
+    filter: alpha(opacity=40);
+    -o-transition: background-color .2s linear, opacity .2s linear;
+    -webkit-transition: background-color .2s linear, opacity .2s linear;
+    -moz-transition: background-color .2s linear, opacity .2s linear;
+    transition: background-color .2s linear, opacity .2s linear;
+}
+
+.ps-container:hover .ps-scrollbar-x-rail,
+.ps-container.hover .ps-scrollbar-x-rail {
+    opacity: 0.6;
+    filter: alpha(opacity=60);
+}
+
+.ps-container .ps-scrollbar-x-rail:hover,
+.ps-container .ps-scrollbar-x-rail.hover {
+    background-color: #eee;
+    opacity: 0.9;
+    filter: alpha(opacity=90);
+}
+
+.ps-container .ps-scrollbar-x-rail.in-scrolling {
+    background-color: #eee;
+    opacity: 0.9;
+    filter: alpha(opacity=90);
+}
+
+.ps-container .ps-scrollbar-y-rail {
+    position: absolute; /* please don't change 'position' */
+    right: 3px; /* there must be 'right' for ps-scrollbar-y-rail */
+    width: 8px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    opacity: 0.4;
+    filter: alpha(opacity = 40);
+    -o-transition: background-color .2s linear, opacity .2s linear;
+    -webkit-transition: background-color .2s linear, opacity .2s linear;
+    -moz-transition: background-color .2s linear, opacity .2s linear;
+    transition: background-color .2s linear, opacity .2s linear;
+}
+
+.ps-container:hover .ps-scrollbar-y-rail,
+.ps-container.hover .ps-scrollbar-y-rail {
+    opacity: 0.6;
+    filter: alpha(opacity=60);
+}
+
+.ps-container .ps-scrollbar-y-rail:hover,
+.ps-container .ps-scrollbar-y-rail.hover {
+    background-color: #eee;
+    opacity: 0.9;
+    filter: alpha(opacity=90);
+}
+
+.ps-container .ps-scrollbar-y-rail.in-scrolling {
+    background-color: #eee;
+    opacity: 0.9;
+    filter: alpha(opacity=90);
+}
+
+.ps-container .ps-scrollbar-x {
+    position: absolute; /* please don't change 'position' */
+    bottom: 0; /* there must be 'bottom' for ps-scrollbar-x */
+    height: 8px;
+    background-color: #da3610;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -o-transition: background-color .2s linear;
+    -webkit-transition: background-color.2s linear;
+    -moz-transition: background-color .2s linear;
+    transition: background-color .2s linear;
+}
+
+.ps-container.ie6 .ps-scrollbar-x {
+    font-size: 0; /* fixed scrollbar height in xp sp3 ie6 */
+}
+
+.ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
+.ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
+    background-color: #da3610;
+}
+
+.ps-container .ps-scrollbar-y {
+    position: absolute; /* please don't change 'position' */
+    right: 0; /* there must be 'right' for ps-scrollbar-y */
+    width: 8px;
+    background-color: #da3610;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -o-transition: background-color .2s linear;
+    -webkit-transition: background-color.2s linear;
+    -moz-transition: background-color .2s linear;
+    transition: background-color .2s linear;
+}
+
+.ps-container.ie6 .ps-scrollbar-y {
+    font-size: 0; /* fixed scrollbar height in xp sp3 ie6 */
+}
+
+.ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
+.ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
+    background-color: #da3610;
+}
+
+.ps-container.ie .ps-scrollbar-x,
+.ps-container.ie .ps-scrollbar-y {
+    visibility: hidden;
+}
+
+.ps-container.ie:hover .ps-scrollbar-x,
+.ps-container.ie:hover .ps-scrollbar-y,
+.ps-container.ie.hover .ps-scrollbar-x,
+.ps-container.ie.hover .ps-scrollbar-y {
+    visibility: visible;
+}
+
+
 /* ------------------------------------------------------------
     Site Header
    ------------------------------------------------------------ */
@@ -125,8 +258,7 @@ ul.uimessage > li {
 
             /* Gravatar for logged in users */
             #navbar-main ul.navbar-nav > li > a > img {
-                width: 24px;
-                height: auto;
+                
                 margin-top: -6px;
             }
 
@@ -375,13 +507,66 @@ html, body {
     margin-top: 0;
 }
 
-/* Video ratings and tags when viewing videos */
-#view-video-rating, #view-video-tags {
-    font-size: 18px;
+.view-video-embed, .view-video-details {
+    margin-bottom: 2em;
 }
 
-#view-video-rating .label, #view-video-tags .label {
-    font-weight: normal;
+.view-video-details {
+    position: relative;
+    height: 301px;
+    overflow: hidden;
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .view-video-details {
+        height: 367px;
+    }
+}
+
+/* Video ratings when viewing videos */
+.video-rating-and-sharing {
+    margin-bottom: 1em;
+}
+
+.video-rating-average, .video-rating-stars, .video-rating-share {
+    border: 1px solid #dedede;
+    height: 43px;
+}
+
+.video-rating-average {
+    margin-right: -15px;
+    padding: 7px 0;
+    border-right: none;
+    font-size: 86%;
+    color: #888;
+    text-align: center;
+}
+
+.video-rating-average > div {
+    display: inline-block;
+    text-align: left;
+    line-height: 1;
+}
+
+.video-rating-average > div > h4 {
+    float: left;
+    font-weight: bold;
+    color: #ffc000;
+    margin-top: 3px;
+    margin-bottom: 0;
+}
+
+.video-rating-average > div > span {
+    padding-left: 0.5em;
+}
+
+.video-rating-stars {
+    margin-left: -15px;
+    margin-right: -15px;
+    padding: 9px 0;
+    text-align: center;
+    font-size: 18px;
 }
 
 .video-rating span.star {
@@ -407,7 +592,28 @@ html, body {
 
 .video-rating span.star.highlighted:before {
     content: "\f005";
-    color: #e3cf7a;
+    color: #ffc000;
+}
+
+.video-rating-share {
+    margin-left: -15px;
+    border-left: none;
+}
+
+/* Video author and tags */
+.video-author {
+    font-size: 86%;
+    line-height: 1;
+}
+
+.video-author > a > img {
+    display: block;
+    float: left;
+    margin-right: 10px;
+}
+
+.video-tags {
+    line-height: 175%;
 }
 
 /* Video comments */

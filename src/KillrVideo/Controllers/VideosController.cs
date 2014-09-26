@@ -8,9 +8,13 @@ using KillrVideo.Authentication;
 using KillrVideo.Data;
 using KillrVideo.Data.Upload;
 using KillrVideo.Data.Upload.Dtos;
+using KillrVideo.Data.Users;
+using KillrVideo.Data.Users.Dtos;
 using KillrVideo.Data.Videos;
 using KillrVideo.Data.Videos.Dtos;
+using KillrVideo.Models.Shared;
 using KillrVideo.Models.Videos;
+using KillrVideo.Utils;
 
 namespace KillrVideo.Controllers
 {
@@ -22,16 +26,20 @@ namespace KillrVideo.Controllers
         private readonly IVideoReadModel _videoReadModel;
         private readonly IVideoWriteModel _videoWriteModel;
         private readonly IUploadedVideosReadModel _uploadReadModel;
+        private readonly IUserReadModel _userReadModel;
 
-        public VideosController(IVideoReadModel videoReadModel, IVideoWriteModel videoWriteModel, IUploadedVideosReadModel uploadReadModel)
+        public VideosController(IVideoReadModel videoReadModel, IVideoWriteModel videoWriteModel, 
+                                IUploadedVideosReadModel uploadReadModel, IUserReadModel userReadModel)
         {
             if (videoReadModel == null) throw new ArgumentNullException("videoReadModel");
             if (videoWriteModel == null) throw new ArgumentNullException("videoWriteModel");
             if (uploadReadModel == null) throw new ArgumentNullException("uploadReadModel");
+            if (userReadModel == null) throw new ArgumentNullException("userReadModel");
 
             _videoReadModel = videoReadModel;
             _videoWriteModel = videoWriteModel;
             _uploadReadModel = uploadReadModel;
+            _userReadModel = userReadModel;
         }
 
         /// <summary>
@@ -42,8 +50,11 @@ namespace KillrVideo.Controllers
         {
             // Try to find the video by id
             VideoDetails videoDetails = await _videoReadModel.GetVideo(videoId);
+            UserProfileViewModel profile;
             if (videoDetails != null)
             {
+                profile = await GetUserProfile(videoDetails.UserId);
+
                 // Found the video, display it
                 return View(new ViewVideoViewModel
                 {
@@ -54,7 +65,8 @@ namespace KillrVideo.Controllers
                     Location = videoDetails.Location,
                     Tags = videoDetails.Tags,
                     UploadDate = videoDetails.AddedDate,
-                    InProgress = false
+                    InProgress = false,
+                    Author = profile
                 });
             }
 
@@ -62,6 +74,8 @@ namespace KillrVideo.Controllers
             UploadedVideo uploadDetails = await _uploadReadModel.GetByVideoId(videoId);
             if (uploadDetails == null)
                 throw new ArgumentException(string.Format("Could not find a video with id {0}", videoId));
+
+            profile = await GetUserProfile(uploadDetails.UserId);
 
             return View(new ViewVideoViewModel
             {
@@ -72,7 +86,8 @@ namespace KillrVideo.Controllers
                 LocationType = VideoLocationType.Upload,
                 Tags = uploadDetails.Tags,
                 InProgress = true,
-                InProgressJobId = uploadDetails.JobId
+                InProgressJobId = uploadDetails.JobId,
+                Author = profile
             });
         }
 
@@ -184,6 +199,20 @@ namespace KillrVideo.Controllers
                 Rating = model.Rating
             });
             return JsonSuccess();
+        }
+
+        private async Task<UserProfileViewModel> GetUserProfile(Guid userId)
+        {
+            UserProfile profile = await _userReadModel.GetUserProfile(userId);
+
+            return new UserProfileViewModel
+            {
+                UserId = profile.UserId,
+                EmailAddress = profile.EmailAddress,
+                FirstName = profile.FirstName,
+                LastName = profile.LastName,
+                GravatarHash = GravatarHasher.GetHashForEmailAddress(profile.EmailAddress)
+            };
         }
 	}
 }

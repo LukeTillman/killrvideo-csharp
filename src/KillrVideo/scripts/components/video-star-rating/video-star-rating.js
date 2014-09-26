@@ -16,10 +16,10 @@
         self.ratingsSum = ko.observable(0);
         self.averageRating = ko.computed(function() {
             var count = self.ratingsCount();
-            if (count <= 0)
-                return 0;
+            var avg = 0;
+            if (count > 0)
+                avg = self.ratingsSum() / count;
 
-            var avg = self.ratingsSum() / count;
             return avg.toFixed(1);
         });
 

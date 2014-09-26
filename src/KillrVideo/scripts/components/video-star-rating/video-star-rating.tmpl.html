@@ -1,9 +1,24 @@
-﻿<div id="view-video-rating">
-    <span class="video-rating" data-bind="foreach: availableRatings, css: { 'video-rating-enabled': ratingEnabled }">
-        <span class="star" data-bind="css: { filled: $parent.displayRating() >= $data, highlighted: $parent.proposedRating() >= $data }, event: { click: $parent.rateVideo, mouseover: $parent.trackProposedRating, mouseout: $parent.resetProposedRating }"></span>
-    </span>
-    <span class="label label-info">
-        <span data-bind="visible: currentUserRating() > 0">You: <span data-bind="text: currentUserRating"></span> stars, </span>
-        Average: <span data-bind="text: averageRating"></span> (<span data-bind="text: ratingsCount"></span> ratings)
-    </span>
+﻿<div class="row video-rating-and-sharing">
+    <div class="col-xs-2 col-sm-4">
+        <div class="video-rating-average">
+            <div>
+                <h4 class="h4" data-bind="text: averageRating"></h4>
+                <span class="hidden-xs">overall</span><br class="hidden-xs" /><span class="hidden-xs">rating</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-5">
+        <div class="video-rating-stars">
+            <span class="video-rating" data-bind="foreach: availableRatings, css: { 'video-rating-enabled': ratingEnabled }">
+                <span class="star" data-bind="css: { filled: $parent.displayRating() >= $data, highlighted: $parent.proposedRating() >= $data }, event: { click: $parent.rateVideo, mouseover: $parent.trackProposedRating, mouseout: $parent.resetProposedRating }"></span>
+            </span>
+        </div>
+    </div>
+    <div class="col-xs-4 col-sm-3">
+        <div class="video-rating-share">
+            <a class="btn btn-block">
+                Share <span class="caret"></span>
+            </a>
+        </div>
+    </div>
 </div>

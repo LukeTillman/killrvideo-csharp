@@ -25,14 +25,15 @@
 
         // The number of video previews per page
         self.pageSize = setupData.pageSize;
-
+        
         // The first video of the next page from the server (will be null initially)
         self.firstVideoOfNextPage = ko.pureComputed(function () {
             // Figure out the array index of the first video on the next page
             var idx = (self.currentPage() + 1) * setupData.pageSize;
 
             // If that index exists in the all videos array, return the video, otherwise return null
-            return idx < allVideos.length ? allVideos[idx] : null;
+            var video = idx < allVideos.length ? allVideos[idx] : null;
+            return video !== null && setupData.videoModelConstructor ? new setupData.videoModelConstructor(video) : video;
         });
 
         // The list of videos on the current page
@@ -42,9 +43,16 @@
             var endIdx = startIdx + setupData.pageSize;
             if (endIdx > allVideos.length)
                 endIdx = allVideos.length;
-            
-            // Return the slice of records
-            return allVideos.slice(startIdx, endIdx);
+
+            // Get the slice of records
+            var videos = allVideos.slice(startIdx, endIdx);
+            if (!setupData.videoModelConstructor)
+                return videos;
+
+            // A view model constructor for individual videos was present, so return an array of those objects
+            return ko.utils.arrayMap(videos, function(data) {
+                return new setupData.videoModelConstructor(data);
+            });
         });
 
         // Whether or not we're currently loading data from the server
@@ -57,17 +65,19 @@
 
         // Goes to the next page if available
         self.nextPage = function () {
-            var firstVideoOnNextPage = self.firstVideoOfNextPage();
             var currentPage = self.currentPage();
 
             // If there isn't a next page available, just bail
-            if (currentPage >= 0 && firstVideoOnNextPage == null)
+            var firstVideoOfNextPageIndex = (currentPage + 1) * setupData.pageSize;
+            if (currentPage >= 0 && allVideos.length < firstVideoOfNextPageIndex)
                 return;
             
             // See if we've already loaded the videos we need for the next page from the server
             var pageToLoad = currentPage + 1;
-            if (pageToLoad <= lastPageIndexLoaded)
+            if (pageToLoad <= lastPageIndexLoaded) {
                 self.currentPage(pageToLoad);
+                return;
+            }
 
             // We haven't gone to the server for that page yet, so go get the page
             self.isLoading(true);
@@ -76,7 +86,7 @@
             // in the setupData.ajaxData object
             var ajaxData = $.extend({
                 pageSize: setupData.pageSize + 1,       // Always get one more record than we actually need to tell whether there is a next page
-                firstVideoOnPage: firstVideoOnNextPage
+                firstVideoOnPage: allVideos[firstVideoOfNextPageIndex]
             }, setupData.ajaxData);
             
             $.ajax({
@@ -92,10 +102,6 @@
                 // Create video preview for each piece of data and add to the allVideos collection
                 for (var i = 0; i < response.data.videos.length; i++) {
                     var video = response.data.videos[i];
-                    if (setupData.videoModelConstructor) {
-                        video = new setupData.videoModelConstructor(video);
-                    }
-
                     if (i === 0 && allVideos.length > 0) {
                         // After the initial load, the first record should always replace the last record since they should be the same video preview
                         allVideos[allVideos.length - 1] = video;

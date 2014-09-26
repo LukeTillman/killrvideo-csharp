@@ -11,7 +11,8 @@ var require = {
         "videojs": "bower_components/videojs/dist/video-js/video",
         "knockout-amd-helpers": "bower_components/knockout-amd-helpers/build/knockout-amd-helpers.min",
         "knockout-postbox": "bower_components/knockout-postbox/build/knockout-postbox.min",
-        "knockout-validation": "bower_components/knockout-validation/Dist/knockout.validation.min"
+        "knockout-validation": "bower_components/knockout-validation/Dist/knockout.validation.min",
+        "perfect-scrollbar": "bower_components/perfect-scrollbar/src/perfect-scrollbar"
     },
     shim: {
         "bootstrap": {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using KillrVideo.Data;
+using KillrVideo.Models.Shared;
 
 namespace KillrVideo.Models.Videos
 {
@@ -21,5 +22,7 @@ namespace KillrVideo.Models.Videos
         public string InProgressJobId { get; set; }
 
         public IEnumerable<string> Tags { get; set; }
+
+        public UserProfileViewModel Author { get; set; }
     }
 }
