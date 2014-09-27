@@ -1,5 +1,5 @@
-﻿define(["knockout", "jquery", "text!./video-star-rating.tmpl.html"], function(ko, $, htmlString) {
-    function starRatingViewModel(params) {
+﻿define(["knockout", "jquery"], function(ko, $) {
+    return function(params) {
         var self = this;
 
         self.videoId = params.videoId;
@@ -88,7 +88,4 @@
                 self.ratingEnabled(true);
         });
     };
-
-    // Return KO component defintion
-    return { viewModel: starRatingViewModel, template: htmlString };
 });

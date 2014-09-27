@@ -3,7 +3,7 @@ define(["knockout"], function (ko) {
     // Register some KO components
     var components = [
         'uimessages', 'video-preview-list', 'user-videos-table', 'user-comments-list', 'add-upload', 'add-youtube', 'related-videos',
-        'video-comments', 'video-star-rating', 'video-upload-status'
+        'video-upload-status'
     ];
 
     for (var i = 0; i < components.length; i++) {

@@ -34,7 +34,7 @@ else
         </div>
         
         <p class="alert alert-info" data-bind="visible: !isLoading() && videos().length === 0">
-            There are currently no videos for the tag <strong>@Model.Tag</strong>.  Why don't you <a href="@Url.Action("Add", "Videos")">add one</a>?
+            There are currently no videos for the tag <strong>@Model.Tag</strong>.  Why don't you <a class="alert-link" href="@Url.Action("Add", "Videos")">add one</a>?
         </p>
         
         <div class="row">

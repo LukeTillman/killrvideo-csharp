@@ -1,4 +1,4 @@
-﻿define(["knockout", "jquery", "moment", "text!./video-comments.tmpl.html", "knockout-validation"], function(ko, $, moment, htmlString) {
+﻿define(["knockout", "jquery", "moment", "knockout-postbox"], function(ko, $, moment) {
     // ViewModel for individual comment on video
     function singleCommentViewModel(data) {
         var self = this;
@@ -15,14 +15,11 @@
     }
 
     // View model for video comments
-    function videoCommentsViewModel(params) {
+    return function(params) {
         var self = this;
 
         // The number of comments per page to retrieve
         var pageSize = 10;
-
-        // Whether a user is logged in
-        self.isLoggedIn = params.isLoggedIn;
 
         // The list of currently loaded comments
         self.comments = ko.observableArray();
@@ -82,65 +79,15 @@
             });
         };
 
-        // The text of the new comment
-        self.newComment = ko.observable("").extend({ required: true });
-
-        // Any validation errors
-        self.validationErrors = ko.validation.group(self);
-
-        // Whether or not we're in the process of adding a new comment
-        self.addingComment = ko.observable(false);
-
-        // Adds a new comment from the currently logged in user
-        self.addComment = function () {
-            // Check for any validation problems
-            if (self.validationErrors().length > 0) {
-                self.validationErrors.showAllMessages();
-                return;
+        // Listen for new comments being added
+        ko.postbox.subscribe("latestNewComment" + params.videoId, function (newValue) {
+            // Add the new comment to the top of the list of comments
+            if (newValue) {
+                self.comments.splice(0, 0, new singleCommentViewModel(newValue));
             }
-
-            // Add the comment
-            self.addingComment(true);
-
-            var ajaxData = {
-                videoId: params.videoId,
-                comment: self.newComment()
-            };
-
-            $.ajax({
-                type: "POST",
-                url: "/Comments/Add",
-                data: JSON.stringify(ajaxData),
-                contentType: "application/json",
-                dataType: "json"
-            }).done(function (response) {
-                if (!response.success)
-                    return;
-                
-                // We should get a comment returned to us on success, so add the new comment to the top of the list
-                // of comments so it shows up
-                self.comments.splice(0, 0, new singleCommentViewModel(response.data));
-                self.newCommentAdded(true);
-
-            }).always(function () {
-                self.addingComment(false);
-            });
-        };
-
-        // Whether or not a new comment was successfully added
-        self.newCommentAdded = ko.observable(false);
-
-        // Resets the view model for a new comment
-        self.resetForNewComment = function() {
-            self.newComment("");
-            self.validationErrors.showAllMessages(false);
-            self.newCommentAdded(false);
-        };
+        });
 
         // Load the initial page of comments
         self.loadNextPage();
     };
-
-    // Return KO component definition
-    return { viewModel: videoCommentsViewModel, template: htmlString };
 });

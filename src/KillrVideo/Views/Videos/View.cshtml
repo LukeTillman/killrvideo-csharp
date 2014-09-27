@@ -7,8 +7,11 @@
     ViewBag.RequireJsMain = "app/videos/view";
 }
 
+<input type="hidden" id="video-id" value="@Model.VideoId"/>
+<input type="hidden" id="is-logged-in" value="@(User.Identity.IsAuthenticated.ToString().ToLowerInvariant())" />
+
 <div class="row">
-    <div class="col-md-7 col-xs-12 view-video-embed">
+    <div class="col-md-7 col-xs-12" id="view-video-embed">
         <!-- The video -->
         <div class="embed-responsive embed-responsive-16by9">
             @if (Model.InProgress)
@@ -25,10 +28,10 @@
                         break;
                     case VideoLocationType.Upload:
                         <!-- Use videojs to playback HTML5 video -->
-                        <video id="the-video" class="video-js vjs-default-skin embed-responsive-item" controls preload="auto" width="auto" height="auto" data-setup="">
-                            <source src="@Model.Location" type='video/mp4' />
-                            <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
-                        </video>
+                    <video id="the-video" class="video-js vjs-default-skin embed-responsive-item" controls preload="auto" width="auto" height="auto" data-setup="">
+                        <source src="@Model.Location" type='video/mp4' />
+                        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+                    </video>
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -36,46 +39,115 @@
             }
         </div>
     </div>
-    <div class="col-md-5 col-xs-12 view-video-details" data-bind="perfectScrollbar: { includePadding: true }">
-        <h3 class="video-title">@Model.Title</h3>
+    <div class="col-md-5 col-xs-12" id="view-video-details">
+        <!-- Scrollable video details -->
+        <div data-bind="perfectScrollbar: { includePadding: true, suppressScrollX: true }">
+            <h3 id="view-video-title">@Model.Title</h3>
 
-        <!-- Star ratings and sharing -->
-        <video-star-rating params="videoId: '@Model.VideoId'"></video-star-rating>
-
-        <!-- Author and tags -->
-        <div class="row">
-            <div class="col-xs-5 video-author">
-                <a href="@Url.Action("Info", "Account", new { userId = Model.Author.UserId })">
-                    <img src="https://secure.gravatar.com/avatar/@Model.Author.GravatarHash"
-                         alt="Gravatar for @Model.Author.EmailAddress" class="user-gravatar" />
-                </a>
-                by:<br />
-                <a href="@Url.Action("Info", "Account", new { userId = Model.Author.UserId })">@Model.Author.FirstName @Model.Author.LastName</a>
-            </div>
-            <div class="col-xs-7 video-tags">
-                <div class="text-right">
-                    @foreach (var tag in Model.Tags)
-                    {
-                        <a class="label label-default" href="@Url.Action("Results", "Search", new { tag })">@tag</a>
-                    }
+            <!-- Star ratings and sharing -->
+            <div class="row video-rating-and-sharing" data-bind="with: ratingsModel">
+                <div class="col-xs-2 col-sm-4">
+                    <div class="video-rating-average">
+                        <div>
+                            <h4 class="h4" data-bind="text: averageRating"></h4>
+                            <span class="hidden-xs">overall</span><br class="hidden-xs" /><span class="hidden-xs">rating</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-5">
+                    <div class="video-rating-stars">
+                        <span class="video-rating" data-bind="foreach: availableRatings, css: { 'video-rating-enabled': ratingEnabled }">
+                            <span class="star" data-bind="css: { filled: $parent.displayRating() >= $data, highlighted: $parent.proposedRating() >= $data }, event: { click: $parent.rateVideo, mouseover: $parent.trackProposedRating, mouseout: $parent.resetProposedRating }"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-4 col-sm-3">
+                    <div class="video-rating-share">
+                        <a class="btn btn-block">
+                            Share <span class="caret"></span>
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <p class="video-date">
-            <em>Added on @Model.UploadDate.ToString("d")</em>
-        </p>
-        
-        <div class ="video-description" data-bind="expander: { expandPrefix: '', expandText: 'Show More', userCollapseText: 'Show Less', userCollapsePrefix: '' }">
-            <p>
-                @Model.Description
-            </p>
-        </div>
-        
 
-        <!-- Video Comments -->
-        <video-comments params="videoId: '@Model.VideoId', isLoggedIn: @(User.Identity.IsAuthenticated.ToString().ToLowerInvariant())"></video-comments>
+            <!-- Author and tags -->
+            <div class="row">
+                <div class="col-xs-5" id="view-video-author">
+                    <a href="@Url.Action("Info", "Account", new { userId = Model.Author.UserId })">
+                        <img src="https://secure.gravatar.com/avatar/@Model.Author.GravatarHash"
+                             alt="Gravatar for @Model.Author.EmailAddress" class="user-gravatar" />
+                    </a>
+                    by:<br />
+                    <a href="@Url.Action("Info", "Account", new { userId = Model.Author.UserId })">@Model.Author.FirstName @Model.Author.LastName</a>
+                </div>
+                <div class="col-xs-7" id="view-video-tags">
+                    <div class="text-right">
+                        @foreach (var tag in Model.Tags)
+                        {
+                            <a class="label label-default" href="@Url.Action("Results", "Search", new { tag })">@tag</a>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <p id="view-video-date">
+                <em>Added on @Model.UploadDate.ToString("d")</em>
+            </p>
+
+            <div id="view-video-description" data-bind="expander: { slicePoint: 70, expandPrefix: '', expandText: 'Show More', userCollapseText: 'Show Less', userCollapsePrefix: '' }">
+                <p>
+                    @Model.Description
+                </p>
+            </div>
+
+            <!-- View Video Comments -->
+            <div data-bind="with: videoCommentsModel">
+                <h5>Latest Comments</h5>
+                <ul data-bind="foreach: { data: comments, as: 'singleComment' }" class="video-comments list-unstyled">
+                    <li class="clearfix">
+                        <div class="pull-left text-center">
+                            <a data-bind="attr: { href: singleComment.userProfileUrl }">
+                                <img data-bind="attr: { src: singleComment.userGravatarImageUrl }" class="img-rounded" />
+                            </a>
+                        </div>
+
+                        <a data-bind="attr: { href: singleComment.userProfileUrl }">
+                            <span data-bind="text: singleComment.userFirstName"></span> <span data-bind="text: singleComment.userLastName"></span>
+                        </a>
+                        <small data-bind="text: singleComment.commentTimestampAgo" class="text-muted"></small><br />
+
+                        <span data-bind="text: singleComment.comment"></span>
+                    </li>
+                </ul>
+                <button type="button" data-bind="visible: morePagesAvailable, disable: loadingNextPage, click: loadNextPage"
+                        class="btn btn-default btn-block clearfix">
+                    <i data-bind="visible: loadingNextPage" class="fa fa-cog fa-spin"></i> Load more comments
+                </button>
+            </div>
+        </div>
         
+        <!-- Add a comment -->
+        <div class="video-add-comment" data-bind="with: addCommentModel">
+            <div class="alert alert-success small" style="display: none" data-bind="visible: newCommentAdded">
+                Comment added successfully.  <a class="alert-link" href="" data-bind="click: resetForNewComment">Click here</a> to add another.
+            </div>
+
+            <div class="alert alert-warning small" style="display: none" data-bind="visible: !isLoggedIn">
+                You must <a class="alert-link" href="/account/register">register</a> or <a class="alert-link" href="/account/signin">sign in</a> first to post comments.
+            </div>
+
+            <form role="form" data-bind="submit: addComment, visible: isLoggedIn && !newCommentAdded(), css: { inProgress: editingComment() || addingComment() || newComment() }">
+                <div class="form-group">
+                    <textarea data-bind="value: newComment, valueUpdate: 'input', hasFocus: editingComment"
+                              class="form-control small" placeholder="Leave a comment"></textarea>
+                </div>
+                <div class="text-right">
+                    <button type="submit" class="btn btn-primary" data-bind="disable: !newComment()">
+                        <i class="fa fa-cog fa-spin" style="display: none" data-bind="visible: addingComment"></i> Add Comment
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

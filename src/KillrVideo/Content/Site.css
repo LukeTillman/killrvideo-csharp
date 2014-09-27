@@ -501,25 +501,27 @@ html, body {
 /* ------------------------------------------------------------
     View Video Page
    ------------------------------------------------------------ */
-.video-title {
+#view-video-title {
     font-weight: 400;
     margin-top: 0;
 }
 
-.view-video-embed, .view-video-details {
+#view-video-embed, #view-video-details {
     margin-bottom: 2em;
 }
 
-.view-video-details {
+#view-video-details > div:first-child {
     position: relative;
-    height: 301px;
+    height: 238px;
     overflow: hidden;
+    padding-right: 15px;    /* Leave room for scrollbar */
+    margin-bottom: 15px;
 }
 
 /* Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-    .view-video-details {
-        height: 367px;
+    #view-video-details > div:first-child {
+        height: 304px;
     }
 }
 
@@ -601,35 +603,35 @@ html, body {
 }
 
 /* Video author and tags */
-.video-author {
+#view-video-author {
     font-size: 86%;
     line-height: 1;
     margin-bottom: 1em;
 }
 
-.video-author > a > img {
+#view-video-author > a > img {
     display: block;
     float: left;
     margin-right: 10px;
 }
 
-.video-tags {
+#view-video-tags {
     line-height: 175%;
     margin-bottom: 1em;
 }
 
 /* Video date description */
-.video-date {
+#view-video-date {
     font-size: 86%;
     margin-bottom: 0.5em;
 }
 
-.video-description {
+#view-video-description {
     font-size: 86%;
 }
 
-    .video-description span.read-more,
-    .video-description div.details > span.read-less {
+    #view-video-description span.read-more,
+    #view-video-description div.details > span.read-less {
         display: block;
         border-top: 1px solid #dedede;
         text-align: center;
@@ -637,8 +639,8 @@ html, body {
         margin-top: 1em;
     }
 
-        .video-description span.read-more > a,
-        .video-description div.details > span.read-less > a {
+        #view-video-description span.read-more > a,
+        #view-video-description div.details > span.read-less > a {
             position: relative;
             display: inline-block;
             top: -1em;
@@ -678,4 +680,22 @@ html, body {
 .user-comments > li > div img {
     width: 100px;
     height: auto;
+}
+
+/* Add comment */
+.video-add-comment form textarea {
+    height: 47px;
+}
+
+.video-add-comment form button {
+    display: none;
+}
+
+.video-add-comment form.inProgress textarea {
+    height: 74px;
+}
+
+.video-add-comment form.inProgress button,
+.video-add-comment form button:active {
+    display: inline-block;
 }

@@ -25,7 +25,6 @@
     "videojs": "~4.8.2",
     "knockout-validation": "~1.0.2",
     "knockout-postbox": "rniemeyer/knockout-postbox#~0.4.2",
-    "knockout-amd-helpers": "rniemeyer/knockout-amd-helpers#~0.7.1",
     "fontawesome": "~4.2.0",
     "perfect-scrollbar": "~0.5.1",
     "jquery-expander": "~1.4.11"
