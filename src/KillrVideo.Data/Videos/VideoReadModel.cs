@@ -14,7 +14,7 @@ namespace KillrVideo.Data.Videos
     {
         private readonly ISession _session;
 
-        private const int MaxDaysInPastForLatestVideos = 7;
+        internal const int MaxDaysInPastForLatestVideos = 7;
         private const int RelatedVideosToReturn = 5;
 
         private readonly AsyncLazy<PreparedStatement> _getVideo;

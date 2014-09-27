@@ -267,6 +267,7 @@
     <Content Include="scripts\components\video-star-rating\video-star-rating.tmpl.html" />
     <Content Include="scripts\components\video-upload-status\video-upload-status.js" />
     <Content Include="scripts\components\video-upload-status\video-upload-status.tmpl.html" />
+    <Content Include="scripts\lib\knockout-perfect-scrollbar.js" />
     <Content Include="scripts\lib\knockout-extenders.js" />
     <Content Include="scripts\requirejs-config.js" />
     <Content Include="scripts\components\uimessages\uimessages.tmpl.html" />

@@ -154,9 +154,9 @@ namespace KillrVideo.Data.Videos
                 _session.PrepareAsync("INSERT INTO user_videos (userid, added_date, videoid, name, preview_image_location) " +
                                       "VALUES (?, ?, ?, ?, ?)"),
 
-                // Use TTL of 7 days since we won't every query back any further than that
-                _session.PrepareAsync("INSERT INTO latest_videos (yyyymmdd, added_date, videoid, name, preview_image_location) " +
-                                      "VALUES (?, ?, ?, ?, ?) USING TTL 604800"),
+                // Use TTL based on how far back we'll be querying for latest videos
+                _session.PrepareAsync(string.Format("INSERT INTO latest_videos (yyyymmdd, added_date, videoid, name, preview_image_location) " +
+                                      "VALUES (?, ?, ?, ?, ?) USING TTL {0}", Convert.ToInt32(TimeSpan.FromDays(VideoReadModel.MaxDaysInPastForLatestVideos).TotalSeconds))),
 
                 _session.PrepareAsync("INSERT INTO videos_by_tag (tag, videoid, added_date, name, preview_image_location, tagged_date) " +
                                       "VALUES (?, ?, ?, ?, ?, ?)"),
