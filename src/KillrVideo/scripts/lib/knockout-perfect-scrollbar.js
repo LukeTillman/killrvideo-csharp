@@ -1,8 +1,9 @@
-﻿define(["knockout", "jquery", "perfect-scrollbar"], function (ko, $) {
+﻿// Knockout binding for the perfect-scrollbar plugin
+define(["knockout", "jquery", "perfect-scrollbar"], function (ko, $) {
     // Add a custom binding for applying the plugin to a DOM element
     ko.bindingHandlers.perfectScrollbar = {
         init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-            // Just pass any values through to the jQuery slim scroll plugin
+            // Just pass any values through to the jQuery plugin
             var val = ko.unwrap(valueAccessor());
             $(element).perfectScrollbar(val);
 

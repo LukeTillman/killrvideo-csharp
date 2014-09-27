@@ -12,7 +12,8 @@ var require = {
         "knockout-amd-helpers": "bower_components/knockout-amd-helpers/build/knockout-amd-helpers.min",
         "knockout-postbox": "bower_components/knockout-postbox/build/knockout-postbox.min",
         "knockout-validation": "bower_components/knockout-validation/Dist/knockout.validation.min",
-        "perfect-scrollbar": "bower_components/perfect-scrollbar/src/perfect-scrollbar"
+        "perfect-scrollbar": "bower_components/perfect-scrollbar/src/perfect-scrollbar",
+        "jquery-expander" : "bower_components/jquery-expander/jquery.expander"
     },
     shim: {
         "bootstrap": {

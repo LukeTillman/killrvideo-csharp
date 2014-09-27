@@ -37,7 +37,7 @@
         </div>
     </div>
     <div class="col-md-5 col-xs-12 view-video-details" data-bind="perfectScrollbar: { includePadding: true }">
-        <h3 id="view-video-title">@Model.Title</h3>
+        <h3 class="video-title">@Model.Title</h3>
 
         <!-- Star ratings and sharing -->
         <video-star-rating params="videoId: '@Model.VideoId'"></video-star-rating>
@@ -61,10 +61,17 @@
                 </div>
             </div>
         </div>
-
-        <p>
-            @Model.Description
+        
+        <p class="video-date">
+            <em>Added on @Model.UploadDate.ToString("d")</em>
         </p>
+        
+        <div class ="video-description" data-bind="expander: { expandPrefix: '', expandText: 'Show More', userCollapseText: 'Show Less', userCollapsePrefix: '' }">
+            <p>
+                @Model.Description
+            </p>
+        </div>
+        
 
         <!-- Video Comments -->
         <video-comments params="videoId: '@Model.VideoId', isLoggedIn: @(User.Identity.IsAuthenticated.ToString().ToLowerInvariant())"></video-comments>

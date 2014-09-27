@@ -258,7 +258,6 @@ ul.uimessage > li {
 
             /* Gravatar for logged in users */
             #navbar-main ul.navbar-nav > li > a > img {
-                
                 margin-top: -6px;
             }
 
@@ -502,7 +501,7 @@ html, body {
 /* ------------------------------------------------------------
     View Video Page
    ------------------------------------------------------------ */
-#view-video-title {
+.video-title {
     font-weight: 400;
     margin-top: 0;
 }
@@ -581,13 +580,14 @@ html, body {
 }
 
 .video-rating span.star:before {
-    color: #999;
+    color: #888;
     content: "\f006";
     padding-right: 5px;
 }
 
 .video-rating span.star.filled:before {
     content: "\f005";
+    color: #ffc000;
 }
 
 .video-rating span.star.highlighted:before {
@@ -604,6 +604,7 @@ html, body {
 .video-author {
     font-size: 86%;
     line-height: 1;
+    margin-bottom: 1em;
 }
 
 .video-author > a > img {
@@ -614,7 +615,38 @@ html, body {
 
 .video-tags {
     line-height: 175%;
+    margin-bottom: 1em;
 }
+
+/* Video date description */
+.video-date {
+    font-size: 86%;
+    margin-bottom: 0.5em;
+}
+
+.video-description {
+    font-size: 86%;
+}
+
+    .video-description span.read-more,
+    .video-description div.details > span.read-less {
+        display: block;
+        border-top: 1px solid #dedede;
+        text-align: center;
+        font-size: 86%;
+        margin-top: 1em;
+    }
+
+        .video-description span.read-more > a,
+        .video-description div.details > span.read-less > a {
+            position: relative;
+            display: inline-block;
+            top: -1em;
+            padding: 0.25em 0.5em;
+            border: 1px solid #dedede;
+            background-color: #fff;
+            color: #888;
+        }
 
 /* Video comments */
 .video-comments {

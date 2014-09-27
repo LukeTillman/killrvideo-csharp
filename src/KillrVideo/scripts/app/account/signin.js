@@ -32,10 +32,12 @@
                         // Default to home page if no redirect Url is specified
                         var redirectUrl = response.data.afterLoginUrl ? response.data.afterLoginUrl : "/";
                         window.location.href = redirectUrl;
+                    } else {
+                        self.inProgress(false);
                     }
                 })
-                .always(function() {
-                    // Always toggle in progress back to false
+                .fail(function() {
+                    // Always toggle in progress back to false on failure
                     self.inProgress(false);
                 });
         };
