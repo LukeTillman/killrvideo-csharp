@@ -37,6 +37,15 @@ h1.section-divider, h2.section-divider, h3.section-divider,
         padding: 0 0.25em;
     }
 
+a {
+    color: #da3610;
+}
+
+a:hover {
+    color: #b22c0d;
+    text-decoration: underline;
+}
+
 /* Validation Messages */
 ul.uimessage {
     list-style-type: none;
@@ -235,6 +244,10 @@ ul.uimessage > li {
     padding-left: 5px;
     padding-right: 5px;
 }
+
+    #navbar-main form > .input-group > .form-control:focus {
+        box-shadow: none;
+    }
 
 #navbar-main ul.navbar-nav {
     border-right: 1px solid #333;
@@ -602,6 +615,14 @@ html, body {
     border-left: none;
 }
 
+.video-rating-share > a {
+    color: #888;
+}
+
+.video-rating-share > a:hover {
+    color: #666;
+}
+
 /* Video author and tags */
 #view-video-author {
     font-size: 86%;
@@ -650,17 +671,25 @@ html, body {
             color: #888;
         }
 
+        #view-video-description span.read-more > a:hover,
+        #view-video-description div.details > span.read-less > a:hover {
+            color: #666;
+        }
+
 /* Video comments */
 .video-comments {
+    font-size: 86%;
 }
 
 .video-comments > li {
-    margin-left: 100px;
-    padding: 1em 0;
+    margin-left: 30px;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 
-.video-comments > li > div {
-    margin-left: -100px;
+.video-comments > li > a.pull-left {
+    margin-left: -30px;
+    margin-top: 0.5em;
 }
 
 .video-comments > li > div img {

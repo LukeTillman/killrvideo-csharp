@@ -63,7 +63,7 @@
                 </div>
                 <div class="col-xs-4 col-sm-3">
                     <div class="video-rating-share">
-                        <a class="btn btn-block">
+                        <a class="btn btn-block btn-link">
                             Share <span class="caret"></span>
                         </a>
                     </div>
@@ -105,16 +105,14 @@
                 <h5>Latest Comments</h5>
                 <ul data-bind="foreach: { data: comments, as: 'singleComment' }" class="video-comments list-unstyled">
                     <li class="clearfix">
-                        <div class="pull-left text-center">
-                            <a data-bind="attr: { href: singleComment.userProfileUrl }">
-                                <img data-bind="attr: { src: singleComment.userGravatarImageUrl }" class="img-rounded" />
-                            </a>
-                        </div>
-
+                        <a data-bind="attr: { href: singleComment.userProfileUrl }" class="pull-left">
+                                <img data-bind="attr: { src: singleComment.userGravatarImageUrl }" class="img-circle user-gravatar" />
+                        </a>
+                        
                         <a data-bind="attr: { href: singleComment.userProfileUrl }">
                             <span data-bind="text: singleComment.userFirstName"></span> <span data-bind="text: singleComment.userLastName"></span>
                         </a>
-                        <small data-bind="text: singleComment.commentTimestampAgo" class="text-muted"></small><br />
+                        <span data-bind="text: singleComment.commentTimestampAgo" class="text-muted"></span><br />
 
                         <span data-bind="text: singleComment.comment"></span>
                     </li>
