@@ -8,39 +8,16 @@
     
     <ul class="list-unstyled">
         <!-- ko foreach: { data: videos, as: 'videopreview' } -->
-        <li>
-            <div class="video-preview popout-on-hover" data-bind="click: goToVideo">
-                <div data-bind="attr: { href: videopreview.videoUrl }, style: { backgroundImage: 'url(\'' + videopreview.videoPreviewImageUrl + '\')' }" class="video-preview-image">
-                </div>
-
-                <div class="video-preview-info">
-                    <strong data-bind="text: videopreview.name"></strong>
-
-                    <span class="video-preview-uploadedby">Uploaded by: Blah</span>
-                    <span class="video-preview-date">3 days ago</span>
-                    <span class="video-preview-views">12345 views</span>
-                </div>
-
-                <div class="clearfix visible-xs-block"></div>
-            </div>
+        <li class="popout-on-hover">
+            <video-preview params="data: videopreview"></video-preview>
             
             <!-- Shim for holding the width of the li when the video preview is "popped out" on hover in larger viewports -->
             <div class="hidden-xs video-preview-shim"></div>
         </li>
         <!-- /ko -->
         <!-- ko if: nextPageAvailable -->
-        <li data-bind="with: firstVideoOfNextPage" class="hidden-xs">
-            <div class="video-preview" data-bind="click: $parent.nextPage">
-                <div data-bind="attr: { href: videoUrl }, style: { backgroundImage: 'url(\'' + videoPreviewImageUrl + '\')' }" class="video-preview-image">
-                </div>
-
-                <div class="video-preview-info">
-                    <strong data-bind="text: name"></strong>
-
-                    <span class="video-preview-date">3 days ago</span>
-                    <span class="video-preview-views">12345 views</span>
-                </div>
-            </div>
+        <li class="hidden-xs" data-bind="with: firstVideoOfNextPage">
+            <video-preview params="data: $data, onPreviewClick: $parent.nextPage"></video-preview>
         </li>
         <!-- /ko -->
     </ul>

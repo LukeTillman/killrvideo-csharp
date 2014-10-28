@@ -264,6 +264,8 @@
     <Content Include="scripts\components\video-preview-list\video-preview-list.js" />
     <Content Include="scripts\components\video-preview-list\video-preview-list.tmpl.html" />
     <Content Include="scripts\app\videos\view-star-rating.js" />
+    <Content Include="scripts\components\video-preview\video-preview.js" />
+    <Content Include="scripts\components\video-preview\video-preview.tmpl.html" />
     <Content Include="scripts\components\video-upload-status\video-upload-status.js" />
     <Content Include="scripts\components\video-upload-status\video-upload-status.tmpl.html" />
     <Content Include="scripts\lib\knockout-expander.js" />

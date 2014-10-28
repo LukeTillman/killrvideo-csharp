@@ -7,7 +7,7 @@
 
 @if (string.IsNullOrWhiteSpace(Model.Tag))
 {
-    <h2>No search term entered</h2>
+    <h3>No search term entered</h3>
     <p class="alert alert-warning">
         Enter a tag to search for in the search box to get results.
     </p>
@@ -15,21 +15,19 @@
 else
 {
     <input type="hidden" id="tag-searched-for" value="@Model.Tag"/>
+
+    <h3 class="section-divider">
+        <span><em>@Model.Tag</em> Videos</span>
+    </h3>
     
-    <h2>Search Results for '@Model.Tag'</h2>
     <div id="search-results" data-bind="with: searchResultsList">
         <h4 data-bind="visible: isLoading">
             <i class="fa fa-spinner fa-spin"></i> Searching...
         </h4>
         
         <div class="row" data-bind="visible: !isLoading(), foreach: { data: videos, as: 'videopreview' }">
-            <div class="col-md-3">
-                <div class="video-preview">
-                    <h4 data-bind="text: videopreview.name"></h4>
-                    <a data-bind="attr: { href: videopreview.videoUrl }">
-                        <img data-bind="attr: { src: videopreview.videoPreviewImageUrl }" />
-                    </a>
-                </div>
+            <div class="col-sm-3">
+                <video-preview params="data: videopreview"></video-preview>
             </div>
         </div>
         
@@ -38,12 +36,12 @@ else
         </p>
         
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-sm-6">
                 <button type="button" class="btn btn-default navbar-btn" data-bind="visible: previousPageAvailable, click: previousPage">
                     <i class="fa fa-chevron-circle-left"></i> Previous Page
                 </button>
             </div>
-            <div class="col-md-6 text-right">
+            <div class="col-sm-6 text-right">
                 <button type="button" class="btn btn-default navbar-btn" data-bind="visible: nextPageAvailable, click: nextPage">
                     Next Page <i class="fa fa-chevron-circle-right"></i>
                 </button>

@@ -313,7 +313,7 @@ html, body {
 }
 
 /* ------------------------------------------------------------
-    Video Preview List
+    Video Preview List and Video Preview
    ------------------------------------------------------------ */
 .video-preview-list {
     position: relative;
@@ -383,11 +383,11 @@ html, body {
     padding-right: 1em;
 }
 
-.video-preview.popout-on-hover:hover {
+.video-preview:hover {
     background-color: #222222;
 }
 
-    .video-preview.popout-on-hover:hover .video-preview-info > strong {
+    .video-preview:hover > .video-preview-info > strong {
         color: #ffffff;
     }
 
@@ -455,7 +455,7 @@ html, body {
         background-color: #f6f6f6;
     }
 
-    .video-preview.popout-on-hover:hover {
+    .video-preview-list > ul > li.popout-on-hover .video-preview:hover {
         position: absolute;
         left: -25%;
         top: 0;
@@ -463,11 +463,11 @@ html, body {
         z-index: 15;
     }
 
-    .video-preview-list > ul > li:first-child .video-preview.popout-on-hover:hover {
+    .video-preview-list > ul > li.popout-on-hover:first-child .video-preview:hover {
         left: 0;
     }
-    
-    .video-preview.popout-on-hover:hover .video-preview-uploadedby {
+
+    .video-preview-list > ul > li.popout-on-hover .video-preview:hover .video-preview-uploadedby {
         display: inline;
     }
 
@@ -509,6 +509,14 @@ html, body {
     .video-preview-image {
         height: 203px;
     }
+}
+
+/* ------------------------------------------------------------
+    Search Results Page
+   ------------------------------------------------------------ */
+#search-results .video-preview {
+    margin-bottom: 1em;
+    border: 1px solid #dedede;
 }
 
 /* ------------------------------------------------------------
