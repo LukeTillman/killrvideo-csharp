@@ -1,39 +1,37 @@
-﻿require(["knockout", "jquery", "knockout-validation", "app/common", "app/shared/header"], function (ko, $) {
+﻿require(["knockout", "jquery", "knockout-validation", "knockout-postbox", "lib/knockout-bootstrap-select", "app/common", "app/shared/header"], function (ko, $) {
     // ViewModel for the add video page
     function addVideoViewModel() {
         var self = this;
 
-        self.name = ko.observable("").extend({ required: true });
-        self.description = ko.observable("");
-        self.tags = ko.observable("");      // TODO:  Array with select2 binding?
+        // Common video details
+        self.name = ko.observable("").extend({ required: true }).subscribeTo("add-video-name");
+        self.description = ko.observable("").subscribeTo("add-video-description");
+        self.tags = ko.observable("").subscribeTo("add-video-tags");      // TODO:  Array with select2 binding?
 
-        // The available video sources and the currently selected source
-        self.availableSources = [
-            { label: "Upload a Video", component: "add-upload" },
-            { label: "YouTube", component: "add-youtube" }
-        ];
+        // The currently selected video source
         self.selectedSource = ko.observable().extend({ required: true });
 
-        // A property that will hold the model for the selected source
-        self.selectedSourceModel = ko.observable();
-
+        // Whether to show the common details entry fields
+        self.showCommonDetails = ko.observable(false).syncWith("add-video-showCommonDetails");
+        
         // Whether or not we're saving
-        self.saving = ko.observable(false);
+        self.saving = ko.observable(false).syncWith("add-video-saving");
 
         // The URL to go and view the video once saving has been successful
-        self.viewVideoUrl = ko.observable("");
+        self.viewVideoUrl = ko.observable("").subscribeTo("add-video-viewVideoUrl");
 
         // Adds the video via an AJAX call to the server
         self.addVideo = function () {
-            // Check for any validation problems
-            var validationErrors = ko.validation.group([self.name, self.description, self.tags, self.selectedSource, self.selectedSourceModel], { deep: true });
-            if (validationErrors().length > 0) {
-                validationErrors.showAllMessages();
-                return;
-            }
-
             // Indicate we're saving
             self.saving(true);
+
+            // Check for any validation problems
+            var validationErrors = ko.validation.group([self.name, self.description, self.tags, self.selectedSource]);
+            if (validationErrors().length > 0) {
+                validationErrors.showAllMessages();
+                self.saving(false);
+                return;
+            }
 
             // Pull video details into a JS object
             var videoDetails = {
@@ -42,19 +40,9 @@
                 tags: self.tags()
             };
 
-            // Delegate to each video type to decide how to save itself
-            var saved = self.selectedSourceModel().saveVideo(videoDetails);
-
-            // When saving is finished, act appropriately
-            $.when(saved)
-                .done(function(viewVideoUrl) {
-                    // If saving is successful, indicate where the video can be viewed
-                    self.viewVideoUrl(viewVideoUrl);
-                })
-                .always(function() {
-                    // Always toggle saving back to false
-                    self.saving(false);
-                });
+            // Publish a message so the child component (YouTube, Upload, etc.) can do the actual saving
+            var queueName = self.selectedSource() + "-save-clicked";
+            ko.postbox.publish(queueName, videoDetails);
         };
     };
 

@@ -57,7 +57,7 @@ namespace KillrVideo.Controllers
             // Indicate success
             return JsonSuccess(new YouTubeVideoAddedViewModel
             {
-                ViewVideoUrl = Url.Action("ViewVideo", "Videos", new { videoId })
+                ViewVideoUrl = Url.Action("View", "Videos", new { videoId })
             });
         }
     }

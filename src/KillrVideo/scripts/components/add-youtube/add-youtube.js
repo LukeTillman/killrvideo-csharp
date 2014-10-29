@@ -1,4 +1,4 @@
-﻿define(["knockout", "text!./add-youtube.tmpl.html", "knockout-validation"], function (ko, htmlString) {
+﻿define(["knockout", "text!./add-youtube.tmpl.html", "knockout-validation", "knockout-postbox"], function (ko, htmlString) {
     // ViewModel for adding YouTube video
     function addYouTubeViewModel(params) {
         var self = this;
@@ -23,38 +23,93 @@
             return "";
         });
 
+        // The video Id currently selected
+        self.selectedYouTubeVideoId = ko.observable("");
+
         // The image URL for a preview
         self.youTubePreviewImageUrl = ko.computed(function() {
-            var videoId = self.youTubeVideoId();
+            var videoId = self.selectedYouTubeVideoId();
             if (videoId)
                 return "//img.youtube.com/vi/" + videoId + "/hqdefault.jpg";
             return "";
         });
 
-        // Saves the video and returns a promise for the URL where it can be viewed
-        self.saveVideo = function (videoDetails) {
+        // Whether it's OK to show the rest of the common details form entry
+        self.showCommonDetails = ko.observable(false).syncWith("add-video-showCommonDetails", false, false);
+
+        // Any validation errors
+        self.validationErrors = ko.validation.group([self.youTubeUrl]);
+
+        // Looks for enter key presses and if found, attempts to set the YouTube video selection
+        self.setSelectionOnEnter = function(data, event) {
+            if (event.keyCode === 13) {
+                self.setSelection();
+                return false;
+            }
+            return true;
+        };
+
+        // Gets the information for the selected YouTube video and sets the selection
+        self.setSelection = function() {
+            // Check for any validation problems
+            if (self.validationErrors().length > 0) {
+                self.validationErrors.showAllMessages();
+                return;
+            }
+
+            // Set the selection and indicate it's OK to show the common details entry
+            self.selectedYouTubeVideoId(self.youTubeVideoId());
+            self.showCommonDetails(true);
+        };
+
+        // Clears the selected YouTube video
+        self.clearSelection = function() {
+            self.youTubeUrl("");
+            self.selectedYouTubeVideoId("");
+            self.validationErrors.showAllMessages(false);
+            self.showCommonDetails(false);
+        };
+
+        // Whether or not we're saving
+        self.saving = ko.observable(false).syncWith("add-video-saving");
+
+        // The URL where the newly added video can be viewed
+        self.viewVideoUrl = ko.observable("").publishOn("add-video-viewVideoUrl");
+
+        // Subscribe to the save video click on the parent and save the video
+        ko.postbox.subscribe("add-youtube-save-clicked", function (videoDetails) {
+            // Make sure we've indicated we're saving
+            self.saving(true);
+
+            // Make sure we're valid
+            if (self.validationErrors().length > 0) {
+                self.validationErrors.showAllMessages();
+                self.saving(false);
+                return;
+            }
+
             // Add the YouTube video id and then save
             videoDetails.youTubeVideoId = self.youTubeVideoId();
 
-            return $.post("/youtube/add", videoDetails)
-                .then(function (response) {
-                    // If there was some problem, return a rejected deferred so failure can run
+            $.post("/youtube/add", videoDetails)
+                .then(function(response) {
+                    // If there was some problem, just bail
                     if (!response.success)
-                        return $.Deferred().reject().promise();
+                        return;
 
-                    // Otherwise, the addvideo method should return the URL where the video can be viewed
-                    return response.data.viewVideoUrl;
+                    // Indicate the URL where the video can be viewed
+                    self.viewVideoUrl(response.data.viewVideoUrl);
+                })
+                .always(function() {
+                    self.saving(false);
                 });
-        };
-
+        });
+        
         // Gets a query string parameter by name (from http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript)
         function getParameterByName(name, url) {
             var match = RegExp('[?&]' + name + '=([^&]*)').exec(url);
             return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
         }
-
-        // Pass self back to parent
-        params.selectedSourceModel(self);
     };
 
     // Return KO component definition

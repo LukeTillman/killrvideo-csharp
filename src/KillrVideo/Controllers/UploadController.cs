@@ -142,7 +142,7 @@ namespace KillrVideo.Controllers
             // Return a URL where the video can be viewed (after the encoding task is finished)
             return JsonSuccess(new UploadedVideoAddedViewModel
             {
-                ViewVideoUrl = Url.Action("ViewVideo", "Videos", new { videoId })
+                ViewVideoUrl = Url.Action("View", "Videos", new { videoId })
             });
         }
 

@@ -1,4 +1,4 @@
-﻿define(["knockout", "text!./add-upload.tmpl.html", "knockout-validation"], function(ko, htmlString) {
+﻿define(["knockout", "text!./add-upload.tmpl.html", "knockout-validation", "knockout-postbox"], function(ko, htmlString) {
     // ViewModel for adding an uploaded video
     function addUploadViewModel(params) {
         var self = this;
@@ -180,9 +180,6 @@
 
             return promise;
         };
-
-        // Pass self back to parent
-        params.selectedSourceModel(self);
     };
 
     // Return KO component definition

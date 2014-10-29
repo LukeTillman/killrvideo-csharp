@@ -88,6 +88,20 @@ ul.uimessage > li {
     height: auto;
 }
 
+.btn-inverse {
+    border-color: #ccc;
+    background-color: #fff;
+}
+
+.btn-inverse:hover {
+    border-color: #adadad;
+    background-color: #e6e6e6;
+}
+
+.btn-inverse, .btn-inverse:focus, .btn-inverse:hover {
+    color: #333;
+}
+
 /* Perfect scrollbar plugin styles */
 .ps-container .ps-scrollbar-x-rail {
     position: absolute; /* please don't change 'position' */
@@ -735,4 +749,13 @@ html, body {
 .video-add-comment form.inProgress button,
 .video-add-comment form button:active {
     display: inline-block;
+}
+
+/* ------------------------------------------------------------
+    Add Video Page
+   ------------------------------------------------------------ */
+.add-video-source .btn,
+.add-video-source .dropdown-menu {
+    font-size: 19px;        /* Matches h4 */
+    text-transform: uppercase;
 }
