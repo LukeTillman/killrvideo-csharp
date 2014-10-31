@@ -60,6 +60,7 @@
             // Set the selection and indicate it's OK to show the common details entry
             self.selectedYouTubeVideoId(self.youTubeVideoId());
             self.showCommonDetails(true);
+            self.savingAvailable(true);
         };
 
         // Clears the selected YouTube video
@@ -72,6 +73,9 @@
 
         // Whether or not we're saving
         self.saving = ko.observable(false).syncWith("add-video-saving");
+
+        // Whether or not saving is available
+        self.savingAvailable = ko.observable(false).syncWith("add-video-savingAvailable");
 
         // The URL where the newly added video can be viewed
         self.viewVideoUrl = ko.observable("").publishOn("add-video-viewVideoUrl");

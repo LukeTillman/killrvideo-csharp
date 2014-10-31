@@ -1,27 +1,35 @@
 ﻿<p data-bind="visible: !uploadSupported" class="bg-danger uimessage">
     Sorry, upload is not currently supported by this browser/device.
 </p>
-<div class="row" data-bind="validationOptions: { insertMessages: false }, visible: uploadSupported">
-    <div class="col-md-6 form-group">
-        <!-- File selector wrapped with a bootstrap button to make it look like everything else -->
-        <label for="addvideo-uploadfile">Select a video to upload</label><br />
-
-        <span class="btn btn-default btn-file">
-            Browse... <input type="file" name="addvideo-uploadfile" data-bind="event: { change: handleFileChange }, disable: percentComplete() >= 0">
-        </span>
-        <span data-bind="text: uploadFileLabel"></span><br />
-        <span class="validationMessage" data-bind="validationMessage: uploadFile"></span>
+<div data-bind="validationOptions: { insertMessages: false }, visible: uploadSupported">
+    <div class="add-video-upload-drop" data-bind="fileDrop: uploadFile, visible: percentComplete() < 0">
+        <i class="fa fa-file-video-o fa-4x"></i><br />
+        Drag and drop a file to upload<br />
+        <span class="text-muted">Or click to choose a file</span>
     </div>
-    <div class="col-md-6">
-        <!-- Show a progress bar if an upload is in progress -->
-        <div data-bind="visible: percentComplete() >= 0">
-            <span data-bind="text: uploadStatus"></span><br />
+    <span class="validationMessage" data-bind="validationMessage: uploadFile"></span>
 
-            <div class="progress">
-                <div class="progress-bar progress-bar-striped active" data-bind="attr: { 'aria-valuenow': percentComplete }, style: { width: percentComplete() + '%' }"
-                     role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                    <span data-bind="text: percentComplete">45</span>%
+    <!-- Show file and progress if an upload is in progress -->
+    <div data-bind="visible: percentComplete() >= 0">
+        File: <span data-bind="text: uploadFileLabel"></span><br />
+        
+        <div class="row">
+            <div class="col-xs-8">
+                <span data-bind="text: uploadStatus, css: { 'text-success': savingAvailable, 'text-danger': uploadRetryAvailable }" 
+                      class="text-muted text-uppercase small"></span><br />
+                <div class="progress">
+                    <div class="progress-bar" data-bind="attr: { 'aria-valuenow': percentComplete }, style: { width: percentComplete() + '%' }"
+                         role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    </div>
                 </div>
+            </div>
+            <div class="col-xs-2 add-video-upload-progress">
+                <span data-bind="text: percentComplete">45</span>%
+            </div>
+            <div class="col-xs-2 text-right add-video-upload-buttons">
+                <i class="fa fa-refresh" data-bind="click: doUpload, visible: uploadRetryAvailable" title="Retry upload"></i>
+                <i class="fa fa-stop" data-bind="click: cancelUpload, visible: !savingAvailable() && !uploadRetryAvailable()" title="Cancel upload"></i>
+                <i class="fa fa-times-circle-o" data-bind="click: resetFile, visible: savingAvailable() || uploadRetryAvailable()" title="Reset file selection"></i>
             </div>
         </div>
     </div>

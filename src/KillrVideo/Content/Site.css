@@ -759,3 +759,23 @@ html, body {
     font-size: 19px;        /* Matches h4 */
     text-transform: uppercase;
 }
+
+.add-video-upload-drop {
+    border: 3px dashed #ccc;
+    text-align: center;
+    padding: 3em 0;
+    cursor: pointer;
+}
+
+.add-video-upload-drop.file-drop-draghover {
+    border-color: #adadad;
+    background-color: #e6e6e6;
+}
+
+.add-video-upload-progress, .add-video-upload-buttons {
+    padding-top: 0.5em;
+}
+
+.add-video-upload-buttons i.fa {
+    cursor: pointer;
+}

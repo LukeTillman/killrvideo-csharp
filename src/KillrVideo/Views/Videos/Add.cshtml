@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 
-                <button type="submit" class="btn btn-primary" data-bind="disable: saving">
+                <button type="submit" class="btn btn-primary" data-bind="disable: saving() || !savingAvailable()">
                     <i class="fa fa-cog fa-spin" style="display: none" data-bind="visible: saving"></i> Add Video
                 </button>
             </div>

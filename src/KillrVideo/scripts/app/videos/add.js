@@ -13,7 +13,10 @@
 
         // Whether to show the common details entry fields
         self.showCommonDetails = ko.observable(false).syncWith("add-video-showCommonDetails");
-        
+
+        // Whether or not saving is available
+        self.savingAvailable = ko.observable(false).syncWith("add-video-savingAvailable");
+
         // Whether or not we're saving
         self.saving = ko.observable(false).syncWith("add-video-saving");
 
