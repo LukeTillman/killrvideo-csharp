@@ -14,6 +14,7 @@ var require = {
         "perfect-scrollbar": "bower_components/perfect-scrollbar/src/perfect-scrollbar",
         "jquery-expander": "bower_components/jquery-expander/jquery.expander",
         "bootstrap-select": "bower_components/bootstrap-select/dist/js/bootstrap-select",
+        "bootstrap-tagsinput": "bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput",
     },
     shim: {
         "bootstrap": {

@@ -13,8 +13,8 @@
         string Description { get; set; }
 
         /// <summary>
-        /// Any tags for the video, as a comma-delimited string.
+        /// Any tags for the video.
         /// </summary>
-        string Tags { get; set; }
+        string[] Tags { get; set; }
     }
 }

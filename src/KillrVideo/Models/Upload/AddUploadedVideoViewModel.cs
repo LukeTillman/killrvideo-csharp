@@ -35,8 +35,8 @@ namespace KillrVideo.Models.Upload
         public string Description { get; set; }
 
         /// <summary>
-        /// Any tags for the video, as a comma-delimited string.
+        /// Any tags for the video.
         /// </summary>
-        public string Tags { get; set; }
+        public string[] Tags { get; set; }
     }
 }

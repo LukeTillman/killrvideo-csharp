@@ -127,7 +127,7 @@ namespace KillrVideo.Controllers
             var videoId = Guid.NewGuid();
             var tags = model.Tags == null
                            ? new HashSet<string>()
-                           : new HashSet<string>(model.Tags.Split(new[] {","}, StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim()));
+                           : new HashSet<string>(model.Tags.Select(t => t.Trim()));
 
             await _uploadWriteModel.AddVideo(new AddUploadedVideo
             {

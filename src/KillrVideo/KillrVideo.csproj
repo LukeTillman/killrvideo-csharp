@@ -269,6 +269,7 @@
     <Content Include="scripts\components\video-upload-status\video-upload-status.js" />
     <Content Include="scripts\components\video-upload-status\video-upload-status.tmpl.html" />
     <Content Include="scripts\lib\knockout-bootstrap-select.js" />
+    <Content Include="scripts\lib\knockout-bootstrap-tagsinput.js" />
     <Content Include="scripts\lib\knockout-file-drop.js" />
     <Content Include="scripts\lib\knockout-expander.js" />
     <Content Include="scripts\lib\knockout-perfect-scrollbar.js" />

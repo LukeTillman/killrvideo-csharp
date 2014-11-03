@@ -1,4 +1,4 @@
-﻿require(["knockout", "jquery", "knockout-validation", "knockout-postbox", "lib/knockout-bootstrap-select", "app/common", "app/shared/header"], function (ko, $) {
+﻿require(["knockout", "jquery", "knockout-validation", "knockout-postbox", "lib/knockout-bootstrap-select", "lib/knockout-bootstrap-tagsinput", "app/common", "app/shared/header"], function (ko, $) {
     // ViewModel for the add video page
     function addVideoViewModel() {
         var self = this;
@@ -6,13 +6,16 @@
         // Common video details
         self.name = ko.observable("").extend({ required: true }).subscribeTo("add-video-name");
         self.description = ko.observable("").subscribeTo("add-video-description");
-        self.tags = ko.observable("").subscribeTo("add-video-tags");      // TODO:  Array with select2 binding?
+        self.tags = ko.observableArray().subscribeTo("add-video-tags");
 
         // The currently selected video source
         self.selectedSource = ko.observable().extend({ required: true });
 
         // Whether to show the common details entry fields
         self.showCommonDetails = ko.observable(false).syncWith("add-video-showCommonDetails");
+
+        // Whether or not the common details entry has focus
+        self.focusCommonDetails = ko.observable(false).subscribeTo("add-video-showCommonDetails");
 
         // Whether or not saving is available
         self.savingAvailable = ko.observable(false).syncWith("add-video-savingAvailable");

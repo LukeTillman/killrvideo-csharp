@@ -140,8 +140,13 @@
             };
 
             // Add the video
-            $.post("/upload/add", addVideoData)
-                .then(function(response) {
+            $.ajax({
+                    type: "POST",
+                    url: "/upload/add",
+                    data: JSON.stringify(addVideoData),
+                    contentType: "application/json",
+                    dataType: "json"
+                }).then(function(response) {
                     // If there was some problem, just bail
                     if (!response.success)
                         return;

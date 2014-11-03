@@ -43,6 +43,10 @@
         // Looks for enter key presses and if found, attempts to set the YouTube video selection
         self.setSelectionOnEnter = function(data, event) {
             if (event.keyCode === 13) {
+                // Need blur or else validator will not have received the newest value yet
+                $(event.target).blur();
+
+                // Set the selection
                 self.setSelection();
                 return false;
             }
@@ -95,8 +99,13 @@
             // Add the YouTube video id and then save
             videoDetails.youTubeVideoId = self.youTubeVideoId();
 
-            $.post("/youtube/add", videoDetails)
-                .then(function(response) {
+            $.ajax({
+                    type: "POST",
+                    url: "/youtube/add",
+                    data: JSON.stringify(videoDetails),
+                    contentType: "application/json",
+                    dataType: "json"
+                }).then(function(response) {
                     // If there was some problem, just bail
                     if (!response.success)
                         return;
