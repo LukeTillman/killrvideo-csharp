@@ -370,6 +370,7 @@ html, body {
 
 .video-preview-uploadedby, .video-preview-date, .video-preview-views {
     font-size: 86%;
+    padding-right: 1em;
 }
 
 .video-preview-uploadedby {
@@ -377,7 +378,7 @@ html, body {
 }
 
 .video-preview-date {
-    padding-right: 1em;
+    padding-right: 0;
 }
 
 .video-preview:hover {
@@ -444,7 +445,6 @@ html, body {
 
     .video-preview-uploadedby {
         display: none;
-        padding-right: 1em;
     }
 
     .video-preview-shim {

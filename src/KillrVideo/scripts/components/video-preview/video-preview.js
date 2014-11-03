@@ -1,4 +1,4 @@
-﻿define(["jquery", "knockout", "text!./video-preview.tmpl.html"], function ($, ko, htmlString) {
+﻿define(["jquery", "knockout", "moment", "text!./video-preview.tmpl.html"], function ($, ko, moment, htmlString) {
     // A view model for an individual video preview
     function videoPreviewViewModel(params) {
         var self = this;
@@ -12,6 +12,9 @@
 
         // The preview image for the video
         self.videoPreviewImageUrl = data.previewImageLocation;
+
+        // How long ago the video was added
+        self.addedAgo = moment(data.addedDate).fromNow();
 
         // Handles clicks on the video preview
         self.doClick = function () {
