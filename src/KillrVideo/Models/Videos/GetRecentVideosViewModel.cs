@@ -1,4 +1,5 @@
 using System;
+using KillrVideo.Models.Shared;
 
 namespace KillrVideo.Models.Videos
 {
@@ -12,5 +13,10 @@ namespace KillrVideo.Models.Videos
         /// The number of latest videos to get.
         /// </summary>
         public int PageSize { get; set; }
+
+        /// <summary>
+        /// The first video on the page of records to show.
+        /// </summary>
+        public VideoPreviewViewModel FirstVideoOnPage { get; set; }
     }
 }

@@ -92,6 +92,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Videos\Dtos\AddVideo.cs" />
     <Compile Include="Videos\Dtos\ChangeVideoDescription.cs" />
+    <Compile Include="Videos\Dtos\GetLatestVideos.cs" />
     <Compile Include="Videos\Dtos\GetTagsStartingWith.cs" />
     <Compile Include="Videos\Dtos\GetUserVideos.cs" />
     <Compile Include="Videos\Dtos\GetVideosByTag.cs" />

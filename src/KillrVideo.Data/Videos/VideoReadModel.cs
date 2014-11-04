@@ -24,11 +24,13 @@ namespace KillrVideo.Data.Videos
         private readonly AsyncLazy<PreparedStatement> _getUserVideos;
         private readonly AsyncLazy<PreparedStatement> _getUserVideosPage;
         private readonly AsyncLazy<PreparedStatement> _getLatestBucket;
+        private readonly AsyncLazy<PreparedStatement> _getLatestBucketPage;
         private readonly AsyncLazy<PreparedStatement> _getTagsForVideo;
         private readonly AsyncLazy<PreparedStatement> _getVideosForTag;
         private readonly AsyncLazy<PreparedStatement> _getVideosForTagPage;
         private readonly AsyncLazy<PreparedStatement> _getTagsStartingWith;
         
+
 
         public VideoReadModel(ISession session)
         {
@@ -52,6 +54,8 @@ namespace KillrVideo.Data.Videos
                 "SELECT * FROM user_videos WHERE userid = ? AND (added_date, videoid) <= (?, ?) LIMIT ?"));
 
             _getLatestBucket = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync("SELECT * FROM latest_videos WHERE yyyymmdd = ? LIMIT ?"));
+            _getLatestBucketPage = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync(
+                "SELECT * FROM latest_videos WHERE yyyymmdd = ? AND (added_date, videoid) <= (?, ?) LIMIT ?"));
             _getTagsForVideo = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync("SELECT tags FROM videos WHERE videoid = ?"));
 
             // One for getting the first page, one for getting subsequent pages
@@ -134,22 +138,41 @@ namespace KillrVideo.Data.Videos
         /// <summary>
         /// Gets the X latest videos added to the site where X is the number of videos specified.
         /// </summary>
-        public async Task<LatestVideos> GetLastestVideos(int numberOfVideos)
+        public async Task<LatestVideos> GetLastestVideos(GetLatestVideos getVideos)
         {
-            PreparedStatement preparedStatement = await _getLatestBucket;
-
             // We may need multiple queries to fill the quota
             var results = new List<VideoPreview>();
-            int daysInPast = 0;
             DateTimeOffset now = DateTimeOffset.UtcNow;
+            int? firstVideoOnPageDaysInPast = getVideos.FirstVideoOnPageDate.HasValue && getVideos.FirstVideoOnPageVideoId.HasValue
+                                                  ? Convert.ToInt32(Math.Floor(now.Subtract(getVideos.FirstVideoOnPageDate.Value).TotalDays))
+                                                  : (int?) null;
 
+            int daysInPast = firstVideoOnPageDaysInPast.HasValue ? firstVideoOnPageDaysInPast.Value : 0;
+            int numberOfVideos = getVideos.PageSize;
+            
+            // TODO: Run queries in parallel instead of sequentially?
             while (daysInPast <= MaxDaysInPastForLatestVideos)
             {
                 int recordsStillNeeded = numberOfVideos - results.Count;
 
                 // Get the bucket for the current number of days back we're processing
                 string bucket = now.Subtract(TimeSpan.FromDays(daysInPast)).ToString("yyyyMMdd");
-                IStatement boundStatement = preparedStatement.Bind(bucket, recordsStillNeeded);
+
+                // If we're processing a paged request, use the appropriate statement
+                PreparedStatement preparedStatement;
+                IStatement boundStatement;
+                if (firstVideoOnPageDaysInPast.HasValue && firstVideoOnPageDaysInPast.Value == daysInPast)
+                {
+                    preparedStatement = await _getLatestBucketPage;
+                    boundStatement = preparedStatement.Bind(bucket, getVideos.FirstVideoOnPageDate.Value, getVideos.FirstVideoOnPageVideoId.Value,
+                                                            recordsStillNeeded);
+                }
+                else
+                {
+                    preparedStatement = await _getLatestBucket;
+                    boundStatement = preparedStatement.Bind(bucket, recordsStillNeeded);
+                }
+
                 RowSet rows = await _session.ExecuteAsync(boundStatement);
 
                 results.AddRange(rows.Select(MapRowToVideoPreview));

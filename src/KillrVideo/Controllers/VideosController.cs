@@ -158,7 +158,12 @@ namespace KillrVideo.Controllers
         [HttpPost]
         public async Task<JsonNetResult> Recent(GetRecentVideosViewModel model)
         {
-            LatestVideos recentVideos = await _videoReadModel.GetLastestVideos(model.PageSize);
+            LatestVideos recentVideos = await _videoReadModel.GetLastestVideos(new GetLatestVideos
+            {
+                PageSize = model.PageSize,
+                FirstVideoOnPageDate = model.FirstVideoOnPage == null ? (DateTimeOffset?) null : model.FirstVideoOnPage.AddedDate,
+                FirstVideoOnPageVideoId = model.FirstVideoOnPage == null ? (Guid?) null : model.FirstVideoOnPage.VideoId
+            });
 
             // TODO:  Better solution than client-side JOIN?
             var authorIds = new HashSet<Guid>(recentVideos.Videos.Select(v => v.UserId));

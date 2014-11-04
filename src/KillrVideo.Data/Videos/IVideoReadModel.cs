@@ -29,9 +29,9 @@ namespace KillrVideo.Data.Videos
         Task<UserVideoRating> GetRatingFromUser(Guid videoId, Guid userId);
 
         /// <summary>
-        /// Gets the X latest videos added to the site where X is the number of videos specified.
+        /// Gets the latest videos added to the site.
         /// </summary>
-        Task<LatestVideos> GetLastestVideos(int numberOfVideos);
+        Task<LatestVideos> GetLastestVideos(GetLatestVideos getVideos);
 
         /// <summary>
         /// Gets a page of videos for a particular user.
