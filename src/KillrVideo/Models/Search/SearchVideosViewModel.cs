@@ -1,4 +1,5 @@
 ﻿using System;
+using KillrVideo.Models.Shared;
 using KillrVideo.Models.Videos;
 
 namespace KillrVideo.Models.Search

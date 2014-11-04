@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -53,6 +54,7 @@ namespace KillrVideo.Controllers
             UserProfileViewModel profile;
             if (videoDetails != null)
             {
+                // TODO: Better way than client-side JOIN?
                 profile = await GetUserProfile(videoDetails.UserId);
 
                 // Found the video, display it
@@ -75,6 +77,7 @@ namespace KillrVideo.Controllers
             if (uploadDetails == null)
                 throw new ArgumentException(string.Format("Could not find a video with id {0}", videoId));
 
+            // TODO: Better way than client-side JOIN?
             profile = await GetUserProfile(uploadDetails.UserId);
 
             return View(new ViewVideoViewModel
@@ -107,9 +110,16 @@ namespace KillrVideo.Controllers
         public async Task<JsonNetResult> Related(GetRelatedVideosViewModel model)
         {
             RelatedVideos relatedVideos = await _videoReadModel.GetRelatedVideos(model.VideoId);
+
+            // TODO:  Better solution than client-side JOIN?
+            var authorIds = new HashSet<Guid>(relatedVideos.Videos.Select(v => v.UserId));
+            IEnumerable<UserProfile> authors = await _userReadModel.GetUserProfiles(authorIds);
+
             return JsonSuccess(new RelatedVideosViewModel
             {
-                Videos = relatedVideos.Videos.Select(VideoPreviewViewModel.FromDataModel).ToList()
+                Videos = relatedVideos.Videos.Join(authors, vp => vp.UserId, a => a.UserId,
+                                                   (vp, a) => VideoPreviewViewModel.FromDataModel(vp, a, Url))
+                                      .ToList()
             });
         }
 
@@ -138,7 +148,7 @@ namespace KillrVideo.Controllers
             return JsonSuccess(new UserVideosViewModel
             {
                 UserId = userVideos.UserId,
-                Videos = userVideos.Videos.Select(VideoPreviewViewModel.FromDataModel).ToList()
+                Videos = userVideos.Videos.Select(UserVideoViewModel.FromDataModel).ToList()
             });
         }
 
@@ -149,9 +159,16 @@ namespace KillrVideo.Controllers
         public async Task<JsonNetResult> Recent(GetRecentVideosViewModel model)
         {
             LatestVideos recentVideos = await _videoReadModel.GetLastestVideos(model.PageSize);
+
+            // TODO:  Better solution than client-side JOIN?
+            var authorIds = new HashSet<Guid>(recentVideos.Videos.Select(v => v.UserId));
+            IEnumerable<UserProfile> authors = await _userReadModel.GetUserProfiles(authorIds);
+
             return JsonSuccess(new RecentVideosViewModel
             {
-                Videos = recentVideos.Videos.Select(VideoPreviewViewModel.FromDataModel).ToList()
+                Videos = recentVideos.Videos.Join(authors, vp => vp.UserId, a => a.UserId,
+                                                  (vp, a) => VideoPreviewViewModel.FromDataModel(vp, a, Url))
+                                     .ToList()
             });
         }
 
@@ -204,15 +221,7 @@ namespace KillrVideo.Controllers
         private async Task<UserProfileViewModel> GetUserProfile(Guid userId)
         {
             UserProfile profile = await _userReadModel.GetUserProfile(userId);
-
-            return new UserProfileViewModel
-            {
-                UserId = profile.UserId,
-                EmailAddress = profile.EmailAddress,
-                FirstName = profile.FirstName,
-                LastName = profile.LastName,
-                GravatarHash = GravatarHasher.GetHashForEmailAddress(profile.EmailAddress)
-            };
+            return UserProfileViewModel.FromDataModel(profile);
         }
 	}
 }

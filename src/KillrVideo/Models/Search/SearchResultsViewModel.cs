@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using KillrVideo.Models.Shared;
 using KillrVideo.Models.Videos;
 
 namespace KillrVideo.Models.Search

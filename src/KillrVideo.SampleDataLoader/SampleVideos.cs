@@ -20,7 +20,8 @@ namespace KillrVideo.SampleDataLoader
                 Description = "",
                 Location = "wN10QltBBtE",
                 LocationType = VideoLocationType.YouTube,
-                Tags = new HashSet<string> { "comic books", "marvel", "movie", "trailer" }
+                Tags = new HashSet<string> { "comic books", "marvel", "movie", "trailer" },
+                PreviewImageLocation = "//img.youtube.com/vi/wN10QltBBtE/hqdefault.jpg",
             },
             new AddVideo
             {
@@ -30,7 +31,8 @@ namespace KillrVideo.SampleDataLoader
                 Description = "",
                 Location = "XCawU6BE8P8",
                 LocationType = VideoLocationType.YouTube,
-                Tags = new HashSet<string> { "comedy", "music", "snl" }
+                Tags = new HashSet<string> { "comedy", "music", "snl" },
+                PreviewImageLocation = "//img.youtube.com/vi/XCawU6BE8P8/hqdefault.jpg",
             },
             new AddVideo
             {
@@ -40,7 +42,8 @@ namespace KillrVideo.SampleDataLoader
                 Description = "",
                 Location = "A9HV5O8Un6k",
                 LocationType = VideoLocationType.YouTube,
-                Tags = new HashSet<string> { "animal", "bunny", "food", "funny" }
+                Tags = new HashSet<string> { "animal", "bunny", "food", "funny" },
+                PreviewImageLocation = "//img.youtube.com/vi/A9HV5O8Un6k/hqdefault.jpg",
             },
             new AddVideo
             {
@@ -50,7 +53,8 @@ namespace KillrVideo.SampleDataLoader
                 Description = "",
                 Location = "FNf-IGmxElI",
                 LocationType = VideoLocationType.YouTube,
-                Tags = new HashSet<string> { "animal", "food", "funny", "hamster" }
+                Tags = new HashSet<string> { "animal", "food", "funny", "hamster" },
+                PreviewImageLocation = "//img.youtube.com/vi/FNf-IGmxElI/hqdefault.jpg",
             },
             new AddVideo
             {
@@ -60,7 +64,8 @@ namespace KillrVideo.SampleDataLoader
                 Description = "",
                 Location = "fpbOEoRrHyU",
                 LocationType = VideoLocationType.YouTube,
-                Tags = new HashSet<string> { "comedy", "hbo", "net neutrality" }
+                Tags = new HashSet<string> { "comedy", "hbo", "net neutrality" },
+                PreviewImageLocation = "//img.youtube.com/vi/fpbOEoRrHyU/hqdefault.jpg",
             },
             new AddVideo
             {
@@ -70,7 +75,8 @@ namespace KillrVideo.SampleDataLoader
                 Description = "",
                 Location = "rct8l4_ezJs",
                 LocationType = VideoLocationType.YouTube,
-                Tags = new HashSet<string> { "got", "grrm", "hbo" }
+                Tags = new HashSet<string> { "got", "grrm", "hbo" },
+                PreviewImageLocation = "//img.youtube.com/vi/rct8l4_ezJs/hqdefault.jpg",
             },
         };
     }

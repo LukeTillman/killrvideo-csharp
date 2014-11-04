@@ -16,6 +16,9 @@
         // How long ago the video was added
         self.addedAgo = moment(data.addedDate).fromNow();
 
+        // The name of the video author
+        self.authorName = data.authorFirstName + " " + data.authorLastName;
+
         // Handles clicks on the video preview
         self.doClick = function () {
             // If user specified a click function, do it

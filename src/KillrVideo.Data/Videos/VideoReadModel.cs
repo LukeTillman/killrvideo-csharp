@@ -39,7 +39,7 @@ namespace KillrVideo.Data.Videos
             _getVideo = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync("SELECT * FROM videos WHERE videoid = ?"));
 
             _getVideoPreview = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync(
-                "SELECT videoid, added_date, name, preview_image_location FROM videos WHERE videoid = ?"));
+                "SELECT videoid, userid, added_date, name, preview_image_location FROM videos WHERE videoid = ?"));
 
             _getVideoRating = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync("SELECT * FROM video_ratings WHERE videoid = ?"));
             _getVideoRatingForUser = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync(
@@ -353,7 +353,8 @@ namespace KillrVideo.Data.Videos
                 VideoId = row.GetValue<Guid>("videoid"),
                 AddedDate = row.GetValue<DateTimeOffset>("added_date"),
                 Name = row.GetValue<string>("name"),
-                PreviewImageLocation = row.GetValue<string>("preview_image_location")
+                PreviewImageLocation = row.GetValue<string>("preview_image_location"),
+                UserId = row.GetValue<Guid>("userid")
             };
         }
 

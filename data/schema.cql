@@ -53,6 +53,7 @@ CREATE TABLE latest_videos (
     yyyymmdd text,
     added_date timestamp,
     videoid uuid,
+    userid uuid,
     name text,
     preview_image_location text,
     PRIMARY KEY (yyyymmdd, added_date, videoid)
@@ -79,6 +80,7 @@ CREATE TABLE videos_by_tag (
     tag text,
     videoid uuid,
     added_date timestamp,
+    userid uuid,
     name text,
     preview_image_location text,
     tagged_date timestamp,

@@ -12,6 +12,9 @@ namespace KillrVideo.Data.Videos
     /// </summary>
     public class VideoWriteModel : IVideoWriteModel
     {
+        private static readonly int LatestVideosTtlSeconds =
+            Convert.ToInt32(TimeSpan.FromDays(VideoReadModel.MaxDaysInPastForLatestVideos).TotalSeconds);
+
         private readonly ISession _session;
 
         private readonly AsyncLazy<PreparedStatement[]> _addVideoStatements;
@@ -64,13 +67,13 @@ namespace KillrVideo.Data.Videos
             batchStatement.Add(preparedStatements[1].Bind(video.UserId, addDate, video.VideoId, video.Name, video.PreviewImageLocation));
 
             // INSERT INTO latest_videos
-            batchStatement.Add(preparedStatements[2].Bind(yyyymmdd, addDate, video.VideoId, video.Name, video.PreviewImageLocation));
+            batchStatement.Add(preparedStatements[2].Bind(yyyymmdd, addDate, video.VideoId, video.UserId, video.Name, video.PreviewImageLocation));
             
             // We need to add multiple statements for each tag
             foreach (string tag in video.Tags)
             {
                 // INSERT INTO videos_by_tag
-                batchStatement.Add(preparedStatements[3].Bind(tag, video.VideoId, addDate, video.Name, video.PreviewImageLocation, addDate));
+                batchStatement.Add(preparedStatements[3].Bind(tag, video.VideoId, addDate, video.UserId, video.Name, video.PreviewImageLocation, addDate));
 
                 // INSERT INTO tags_by_letter
                 string firstLetter = tag.Substring(0, 1);
@@ -155,11 +158,11 @@ namespace KillrVideo.Data.Videos
                                       "VALUES (?, ?, ?, ?, ?)"),
 
                 // Use TTL based on how far back we'll be querying for latest videos
-                _session.PrepareAsync(string.Format("INSERT INTO latest_videos (yyyymmdd, added_date, videoid, name, preview_image_location) " +
-                                      "VALUES (?, ?, ?, ?, ?) USING TTL {0}", Convert.ToInt32(TimeSpan.FromDays(VideoReadModel.MaxDaysInPastForLatestVideos).TotalSeconds))),
+                _session.PrepareAsync(string.Format("INSERT INTO latest_videos (yyyymmdd, added_date, videoid, userid, name, preview_image_location) " +
+                                      "VALUES (?, ?, ?, ?, ?, ?) USING TTL {0}", LatestVideosTtlSeconds)),
 
-                _session.PrepareAsync("INSERT INTO videos_by_tag (tag, videoid, added_date, name, preview_image_location, tagged_date) " +
-                                      "VALUES (?, ?, ?, ?, ?, ?)"),
+                _session.PrepareAsync("INSERT INTO videos_by_tag (tag, videoid, added_date, userid, name, preview_image_location, tagged_date) " +
+                                      "VALUES (?, ?, ?, ?, ?, ?, ?)"),
 
                 _session.PrepareAsync("INSERT INTO tags_by_letter (first_letter, tag) VALUES (?, ?)")
             });

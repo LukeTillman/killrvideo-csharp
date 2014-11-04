@@ -21,6 +21,6 @@ namespace KillrVideo.Models.Videos
         /// <summary>
         /// The first video on the page to retrieve (will be null when requesting the first page).
         /// </summary>
-        public VideoPreviewViewModel FirstVideoOnPage { get; set; }
+        public UserVideoViewModel FirstVideoOnPage { get; set; }
     }
 }

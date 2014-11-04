@@ -12,5 +12,6 @@ namespace KillrVideo.Data.Videos.Dtos
         public DateTimeOffset AddedDate { get; set; }
         public string Name { get; set; }
         public string PreviewImageLocation { get; set; }
+        public Guid UserId { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using KillrVideo.Models.Shared;
 
 namespace KillrVideo.Models.Videos
 {
@@ -14,6 +15,6 @@ namespace KillrVideo.Models.Videos
         /// <summary>
         /// The page of videos for the user.
         /// </summary>
-        public IEnumerable<VideoPreviewViewModel> Videos { get; set; }
+        public IEnumerable<UserVideoViewModel> Videos { get; set; }
     }
 }
