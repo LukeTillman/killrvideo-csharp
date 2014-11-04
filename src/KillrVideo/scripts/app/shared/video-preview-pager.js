@@ -82,10 +82,13 @@
             // We haven't gone to the server for that page yet, so go get the page
             self.isLoading(true);
 
-            // Always send over the page size + 1 and the first video of the page if present, combined with any additional data specified
-            // in the setupData.ajaxData object
+            // If paging is disabled ask for the page size specified, otherwise ask for one more record than the page size to
+            // be able to tell if there is a next page
+            var pageSize = setupData.pagingDisabled === true ? setupData.pageSize : setupData.pageSize + 1;
+
+            // Add any extra AJAX data from setup
             var ajaxData = $.extend({
-                pageSize: setupData.pageSize + 1,       // Always get one more record than we actually need to tell whether there is a next page
+                pageSize: pageSize,
                 firstVideoOnPage: allVideos[firstVideoOfNextPageIndex]
             }, setupData.ajaxData);
             
