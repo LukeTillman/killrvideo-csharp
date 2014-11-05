@@ -142,26 +142,35 @@ namespace KillrVideo.Data.Videos
         {
             // We may need multiple queries to fill the quota
             var results = new List<VideoPreview>();
-            DateTimeOffset now = DateTimeOffset.UtcNow;
-            int? firstVideoOnPageDaysInPast = getVideos.FirstVideoOnPageDate.HasValue && getVideos.FirstVideoOnPageVideoId.HasValue
-                                                  ? Convert.ToInt32(Math.Floor(now.Subtract(getVideos.FirstVideoOnPageDate.Value).TotalDays))
-                                                  : (int?) null;
 
-            int daysInPast = firstVideoOnPageDaysInPast.HasValue ? firstVideoOnPageDaysInPast.Value : 0;
-            int numberOfVideos = getVideos.PageSize;
-            
-            // TODO: Run queries in parallel instead of sequentially?
-            while (daysInPast <= MaxDaysInPastForLatestVideos)
+            // Generate a list of all the possibly bucket dates by truncating now to the day, then subtracting days from that day
+            // going back as many days as we're allowed to query back
+            DateTimeOffset nowToTheDay = DateTimeOffset.UtcNow.Truncate(TimeSpan.TicksPerDay);
+            var bucketDates = Enumerable.Range(0, MaxDaysInPastForLatestVideos + 1)
+                                        .Select(day => nowToTheDay.Subtract(TimeSpan.FromDays(day)));
+
+            // If we're going to include paging parameters for the first query, filter out any bucket dates that are more recent
+            // than the first video on the page
+            bool pageFirstQuery = getVideos.FirstVideoOnPageDate.HasValue && getVideos.FirstVideoOnPageVideoId.HasValue;
+            if (pageFirstQuery)
             {
-                int recordsStillNeeded = numberOfVideos - results.Count;
+                DateTimeOffset maxBucketToTheDay = getVideos.FirstVideoOnPageDate.Value.Truncate(TimeSpan.TicksPerDay);
+                bucketDates = bucketDates.Where(bucketToTheDay => bucketToTheDay <= maxBucketToTheDay);
+            }
 
-                // Get the bucket for the current number of days back we're processing
-                string bucket = now.Subtract(TimeSpan.FromDays(daysInPast)).ToString("yyyyMMdd");
+            DateTimeOffset[] bucketDatesArray = bucketDates.ToArray();
+
+            // TODO: Run queries in parallel instead of sequentially?
+            for (var i = 0; i < bucketDatesArray.Length; i++)
+            {
+                int recordsStillNeeded = getVideos.PageSize - results.Count;
+
+                string bucket = bucketDatesArray[i].ToString("yyyyMMdd");
 
                 // If we're processing a paged request, use the appropriate statement
                 PreparedStatement preparedStatement;
                 IStatement boundStatement;
-                if (firstVideoOnPageDaysInPast.HasValue && firstVideoOnPageDaysInPast.Value == daysInPast)
+                if (pageFirstQuery && i == 0)
                 {
                     preparedStatement = await _getLatestBucketPage;
                     boundStatement = preparedStatement.Bind(bucket, getVideos.FirstVideoOnPageDate.Value, getVideos.FirstVideoOnPageVideoId.Value,
@@ -178,11 +187,8 @@ namespace KillrVideo.Data.Videos
                 results.AddRange(rows.Select(MapRowToVideoPreview));
 
                 // If we've got all the records we need, we can quit querying
-                if (results.Count >= numberOfVideos)
+                if (results.Count >= getVideos.PageSize)
                     break;
-
-                // Try another day back
-                daysInPast++;
             }
 
             return new LatestVideos
