@@ -1,7 +1,7 @@
 ﻿<div class="form-group">
     <label for="addvideo-youtubeurl">YouTube URL</label>
     <div class="input-group" data-bind="validationOptions: { insertMessages: false }">
-        <input type="text" id="addvideo-youtubeurl" class="form-control" placeholder="Enter the URL for the video on YouTube (i.e. http://www.youtube.com/watch?v=XXXXXXXX)"
+        <input type="url" id="addvideo-youtubeurl" class="form-control" placeholder="Enter the URL for the video on YouTube (i.e. http://www.youtube.com/watch?v=XXXXXXXX)"
                data-bind="value: youTubeUrl, disable: selectedYouTubeVideoId, event: { keypress: setSelectionOnEnter }" />
         <span class="input-group-btn">
             <button class="btn btn-default" type="button" data-bind="click: setSelection, visible: !selectedYouTubeVideoId(), disable: saving">Get it</button>
