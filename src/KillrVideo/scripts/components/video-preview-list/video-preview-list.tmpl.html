@@ -1,6 +1,6 @@
 ﻿<div class="video-preview-list">
     <!-- Loading Icon -->
-    <div class="video-preview-list-loading" data-bind="visible: isLoading">
+    <div class="video-preview-list-loading" data-bind="visible: isLoading, css: { 'overlay': videos().length > 0 }">
         <h4>
             <i class="fa fa-spinner fa-spin"></i> Loading...
         </h4>
