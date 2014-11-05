@@ -15,6 +15,6 @@ namespace KillrVideo.Models.Videos
         /// <summary>
         /// The page of videos for the user.
         /// </summary>
-        public IEnumerable<UserVideoViewModel> Videos { get; set; }
+        public IEnumerable<VideoPreviewViewModel> Videos { get; set; }
     }
 }

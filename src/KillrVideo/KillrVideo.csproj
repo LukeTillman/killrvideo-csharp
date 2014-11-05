@@ -228,7 +228,6 @@
     <Compile Include="Models\Videos\RelatedVideosViewModel.cs" />
     <Compile Include="Models\Videos\UserVideosViewModel.cs" />
     <Compile Include="Models\Shared\VideoPreviewViewModel.cs" />
-    <Compile Include="Models\Videos\UserVideoViewModel.cs" />
     <Compile Include="Models\Videos\ViewVideoViewModel.cs" />
     <Compile Include="Models\YouTube\AddYouTubeVideoViewModel.cs" />
     <Compile Include="Models\YouTube\YouTubeVideoAddedViewModel.cs" />

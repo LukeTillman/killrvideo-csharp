@@ -165,10 +165,20 @@ namespace KillrVideo.Controllers
                 FirstVideoOnPageVideoId = model.FirstVideoOnPage == null ? (Guid?) null : model.FirstVideoOnPage.VideoId
             });
 
+            // TODO:  Better solution than client-side JOINs
+            Task<UserProfile> authorTask = _userReadModel.GetUserProfile(userId.Value);
+            
+            var videoIds = new HashSet<Guid>(userVideos.Videos.Select(v => v.VideoId));
+            Task<IEnumerable<PlayStats>> statsTask = _statsReadModel.GetNumberOfPlays(videoIds);
+
+            await Task.WhenAll(authorTask, statsTask);
+
             return JsonSuccess(new UserVideosViewModel
             {
                 UserId = userVideos.UserId,
-                Videos = userVideos.Videos.Select(UserVideoViewModel.FromDataModel).ToList()
+                Videos = userVideos.Videos.Join(statsTask.Result, v => v.VideoId, s => s.VideoId,
+                                                (v, s) => VideoPreviewViewModel.FromDataModel(v, authorTask.Result, s, Url))
+                                   .ToList()
             });
         }
 
