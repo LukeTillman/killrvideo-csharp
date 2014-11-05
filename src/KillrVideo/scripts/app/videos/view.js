@@ -1,6 +1,6 @@
 ﻿require([
         "knockout", "jquery", "app/videos/view-star-rating", "app/videos/view-video-comments", "app/videos/view-add-comment",
-        "videojs", "lib/knockout-perfect-scrollbar", "lib/knockout-expander", "app/common", "app/shared/header"
+        "lib/knockout-perfect-scrollbar", "lib/knockout-expander", "app/common", "app/shared/header"
     ],
     function(ko, $, ratingsModel, videoCommentsModel, addCommentModel) {
         // Bind the main content area when DOM is ready

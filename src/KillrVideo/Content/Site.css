@@ -57,7 +57,7 @@ ul.uimessage > li {
     padding: 1em;
 }
 
-.validationMessage {
+.validationMessage, .text-red {
     color: #da3610;
 }
 

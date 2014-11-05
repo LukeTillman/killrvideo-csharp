@@ -24,5 +24,7 @@ namespace KillrVideo.Models.Videos
         public IEnumerable<string> Tags { get; set; }
 
         public UserProfileViewModel Author { get; set; }
+
+        public long Views { get; set; }
     }
 }

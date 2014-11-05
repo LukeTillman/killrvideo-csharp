@@ -70,6 +70,10 @@
     <Compile Include="GuidGenerator.cs" />
     <Compile Include="GuidVersion.cs" />
     <Compile Include="HelperExtensions.cs" />
+    <Compile Include="PlaybackStats\IPlaybackStatsReadModel.cs" />
+    <Compile Include="PlaybackStats\IPlaybackStatsWriteModel.cs" />
+    <Compile Include="PlaybackStats\PlaybackStatsReadModel.cs" />
+    <Compile Include="PlaybackStats\PlaybackStatsWriteModel.cs" />
     <Compile Include="TimestampHelper.cs" />
     <Compile Include="Upload\Dtos\AddEncodingJobNotification.cs" />
     <Compile Include="Upload\Dtos\AddUploadedVideo.cs" />

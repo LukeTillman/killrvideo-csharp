@@ -24,14 +24,11 @@
                 {
                     case VideoLocationType.YouTube:
                         <!-- Add YouTube iframe embed -->
-                        <iframe src="http://www.youtube.com/embed/@Model.Location" class="embed-responsive-item"></iframe>
+                        <view-youtube params="location: '@Model.Location', videoId: '@Model.VideoId'"></view-youtube>
                         break;
                     case VideoLocationType.Upload:
                         <!-- Use videojs to playback HTML5 video -->
-                    <video id="the-video" class="video-js vjs-default-skin embed-responsive-item" controls preload="auto" width="auto" height="auto" data-setup="">
-                        <source src="@Model.Location" type='video/mp4' />
-                        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
-                    </video>
+                        <view-upload params="location: '@Model.Location', videoId: '@Model.VideoId'"></view-upload>
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -42,7 +39,15 @@
     <div class="col-md-5 col-xs-12" id="view-video-details">
         <!-- Scrollable video details -->
         <div data-bind="perfectScrollbar: { includePadding: true, suppressScrollX: true }">
-            <h3 id="view-video-title">@Model.Title</h3>
+            <div class="row">
+                <div class="col-xs-8">
+                    <h4 id="view-video-title">@Model.Title</h4>
+                </div>
+                <div class="col-xs-4 text-red text-right">
+                    @Model.Views <span class="small text-muted">views</span>
+                </div>
+            </div>
+            
 
             <!-- Star ratings and sharing -->
             <div class="row video-rating-and-sharing" data-bind="with: ratingsModel">
@@ -106,7 +111,7 @@
                 <ul data-bind="foreach: { data: comments, as: 'singleComment' }" class="video-comments list-unstyled">
                     <li class="clearfix">
                         <a data-bind="attr: { href: singleComment.userProfileUrl }" class="pull-left">
-                                <img data-bind="attr: { src: singleComment.userGravatarImageUrl }" class="img-circle user-gravatar" />
+                            <img data-bind="attr: { src: singleComment.userGravatarImageUrl }" class="img-circle user-gravatar" />
                         </a>
                         
                         <a data-bind="attr: { href: singleComment.userProfileUrl }">

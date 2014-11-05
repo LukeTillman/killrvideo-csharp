@@ -75,6 +75,13 @@ CREATE TABLE video_ratings_by_user (
     PRIMARY KEY (videoid, userid)
 );
 
+// Records the number of views/playbacks of a video
+CREATE TABLE video_playback_stats (
+    videoid uuid,
+    views counter,
+    PRIMARY KEY (videoid)
+);
+
 // Index for tag keywords
 CREATE TABLE videos_by_tag (
     tag text,

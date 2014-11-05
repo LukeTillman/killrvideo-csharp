@@ -166,12 +166,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\PlaybackStats\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionFilters\NoCacheAttribute.cs" />
     <Compile Include="ActionResults\JsonNetResult.cs" />
     <Compile Include="Authentication\PrincipalExtensions.cs" />
     <Compile Include="Controllers\ConventionControllerBase.cs" />
+    <Compile Include="Controllers\PlaybackStatsController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\YouTubeController.cs" />
@@ -186,6 +188,7 @@
     <Compile Include="Models\Comments\VideoCommentsViewModel.cs" />
     <Compile Include="Models\Comments\VideoCommentViewModel.cs" />
     <Compile Include="Models\Home\ViewNavbarViewModel.cs" />
+    <Compile Include="Models\PlaybackStats\StartedViewModel.cs" />
     <Compile Include="Models\Search\SearchResultsViewModel.cs" />
     <Compile Include="Models\Search\SearchVideosViewModel.cs" />
     <Compile Include="Models\Search\ShowSearchResultsViewModel.cs" />
@@ -269,6 +272,10 @@
     <Content Include="scripts\components\video-preview\video-preview.tmpl.html" />
     <Content Include="scripts\components\video-upload-status\video-upload-status.js" />
     <Content Include="scripts\components\video-upload-status\video-upload-status.tmpl.html" />
+    <Content Include="scripts\components\view-upload\view-upload.js" />
+    <Content Include="scripts\components\view-upload\view-upload.tmpl.html" />
+    <Content Include="scripts\components\view-youtube\view-youtube.js" />
+    <Content Include="scripts\components\view-youtube\view-youtube.tmpl.html" />
     <Content Include="scripts\lib\knockout-bootstrap-select.js" />
     <Content Include="scripts\lib\knockout-bootstrap-tagsinput.js" />
     <Content Include="scripts\lib\knockout-file-drop.js" />
