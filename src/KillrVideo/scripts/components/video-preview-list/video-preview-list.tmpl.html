@@ -17,7 +17,10 @@
         <!-- /ko -->
         <!-- ko if: nextPageAvailable -->
         <li class="hidden-xs" data-bind="with: firstVideoOfNextPage">
-            <video-preview params="data: $data, onPreviewClick: $parent.nextPage"></video-preview>
+            <video-preview params="data: $data"></video-preview>
+            <div class="video-preview-list-nextpageoverlay" data-bind="click: $parent.nextPage">
+                <i class="fa fa-chevron-circle-right fa-4x"></i>
+            </div>
         </li>
         <!-- /ko -->
     </ul>

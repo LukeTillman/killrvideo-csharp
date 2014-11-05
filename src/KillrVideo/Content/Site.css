@@ -319,10 +319,6 @@ html, body {
     overflow: hidden;
 }
 
-.video-preview-list-loading {
-    
-}
-
 .video-preview-list-loading.overlay {
     position: absolute;
     left: 0;
@@ -343,6 +339,33 @@ html, body {
     margin-bottom: 0.5em;
     border: 1px solid #dedede;
 }
+
+.video-preview-list > ul > li > .video-preview-list-nextpageoverlay {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.5;
+    color: #fff;
+    text-align: center;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+}
+
+    .video-preview-list > ul > li > .video-preview-list-nextpageoverlay > i.fa {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .video-preview-list > ul > li:hover > .video-preview-list-nextpageoverlay {
+        display: block;
+        cursor: pointer;
+    }
 
 .video-preview {
     font-size: 86%;
