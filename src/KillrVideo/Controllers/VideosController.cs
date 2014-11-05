@@ -8,6 +8,7 @@ using KillrVideo.ActionResults;
 using KillrVideo.Authentication;
 using KillrVideo.Data;
 using KillrVideo.Data.PlaybackStats;
+using KillrVideo.Data.PlaybackStats.Dtos;
 using KillrVideo.Data.Upload;
 using KillrVideo.Data.Upload.Dtos;
 using KillrVideo.Data.Users;
@@ -16,7 +17,6 @@ using KillrVideo.Data.Videos;
 using KillrVideo.Data.Videos.Dtos;
 using KillrVideo.Models.Shared;
 using KillrVideo.Models.Videos;
-using KillrVideo.Utils;
 
 namespace KillrVideo.Controllers
 {
@@ -55,7 +55,7 @@ namespace KillrVideo.Controllers
         public async Task<ViewResult> View(Guid videoId)
         {
             // Get the views for the video and try to find the video by id (in parallel)
-            Task<long> videoViewsTask = _statsReadModel.GetNumberOfPlays(videoId);
+            Task<PlayStats> videoViewsTask = _statsReadModel.GetNumberOfPlays(videoId);
             Task<VideoDetails> videoDetailsTask = _videoReadModel.GetVideo(videoId);
 
             await Task.WhenAll(videoViewsTask, videoDetailsTask);
@@ -79,7 +79,7 @@ namespace KillrVideo.Controllers
                     UploadDate = videoDetails.AddedDate,
                     InProgress = false,
                     Author = profile,
-                    Views = videoViewsTask.Result
+                    Views = videoViewsTask.Result.Views
                 });
             }
 
@@ -123,15 +123,23 @@ namespace KillrVideo.Controllers
         {
             RelatedVideos relatedVideos = await _videoReadModel.GetRelatedVideos(model.VideoId);
 
-            // TODO:  Better solution than client-side JOIN?
+            // TODO:  Better solution than client-side JOINs
             var authorIds = new HashSet<Guid>(relatedVideos.Videos.Select(v => v.UserId));
-            IEnumerable<UserProfile> authors = await _userReadModel.GetUserProfiles(authorIds);
+            Task<IEnumerable<UserProfile>> authorsTask = _userReadModel.GetUserProfiles(authorIds);
+
+            var videoIds = new HashSet<Guid>(relatedVideos.Videos.Select(v => v.VideoId));
+            Task<IEnumerable<PlayStats>> statsTask = _statsReadModel.GetNumberOfPlays(videoIds);
+
+            await Task.WhenAll(authorsTask, statsTask);
 
             return JsonSuccess(new RelatedVideosViewModel
             {
-                Videos = relatedVideos.Videos.Join(authors, vp => vp.UserId, a => a.UserId,
-                                                   (vp, a) => VideoPreviewViewModel.FromDataModel(vp, a, Url))
-                                      .ToList()
+                Videos = relatedVideos.Videos
+                                     .Join(authorsTask.Result, vp => vp.UserId, a => a.UserId,
+                                           (vp, a) => new { VideoPreview = vp, Author = a })
+                                     .Join(statsTask.Result, vpa => vpa.VideoPreview.VideoId, s => s.VideoId,
+                                           (vpa, s) => VideoPreviewViewModel.FromDataModel(vpa.VideoPreview, vpa.Author, s, Url))
+                                     .ToList()
             });
         }
 
@@ -177,14 +185,22 @@ namespace KillrVideo.Controllers
                 FirstVideoOnPageVideoId = model.FirstVideoOnPage == null ? (Guid?) null : model.FirstVideoOnPage.VideoId
             });
 
-            // TODO:  Better solution than client-side JOIN?
+            // TODO:  Better solution than client-side JOINs
             var authorIds = new HashSet<Guid>(recentVideos.Videos.Select(v => v.UserId));
-            IEnumerable<UserProfile> authors = await _userReadModel.GetUserProfiles(authorIds);
+            Task<IEnumerable<UserProfile>> authorsTask = _userReadModel.GetUserProfiles(authorIds);
+
+            var videoIds = new HashSet<Guid>(recentVideos.Videos.Select(v => v.VideoId));
+            Task<IEnumerable<PlayStats>> statsTask = _statsReadModel.GetNumberOfPlays(videoIds);
+
+            await Task.WhenAll(authorsTask, statsTask);
 
             return JsonSuccess(new RecentVideosViewModel
             {
-                Videos = recentVideos.Videos.Join(authors, vp => vp.UserId, a => a.UserId,
-                                                  (vp, a) => VideoPreviewViewModel.FromDataModel(vp, a, Url))
+                Videos = recentVideos.Videos
+                                     .Join(authorsTask.Result, vp => vp.UserId, a => a.UserId,
+                                           (vp, a) => new { VideoPreview = vp, Author = a })
+                                     .Join(statsTask.Result, vpa => vpa.VideoPreview.VideoId, s => s.VideoId,
+                                           (vpa, s) => VideoPreviewViewModel.FromDataModel(vpa.VideoPreview, vpa.Author, s, Url))
                                      .ToList()
             });
         }

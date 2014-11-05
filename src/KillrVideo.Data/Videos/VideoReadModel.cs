@@ -96,8 +96,7 @@ namespace KillrVideo.Data.Videos
 
             // Bind multiple times to the prepared statement with each video id and execute all the gets in parallel, then await
             // the completion of all the gets
-            RowSet[] rowSets = await Task.WhenAll(videoIds.Select(id => prepared.Bind(id))
-                                                          .Select(_session.ExecuteAsync));
+            RowSet[] rowSets = await Task.WhenAll(videoIds.Select(id => _session.ExecuteAsync(prepared.Bind(id))));
 
             // Flatten the rows in the rowsets to VideoPreview objects
             return rowSets.SelectMany(rowSet => rowSet, (_, row) => MapRowToVideoPreview(row));

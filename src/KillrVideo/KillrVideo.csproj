@@ -166,7 +166,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\PlaybackStats\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionFilters\NoCacheAttribute.cs" />

@@ -13,7 +13,7 @@ namespace KillrVideo.Models.Videos
         public string Name { get; set; }
         public DateTimeOffset AddedDate { get; set; }
         public string PreviewImageLocation { get; set; }
-
+        
         public static UserVideoViewModel FromDataModel(VideoPreview preview)
         {
             if (preview == null) return null;

@@ -19,6 +19,9 @@
         // The name of the video author
         self.authorName = data.authorFirstName + " " + data.authorLastName;
 
+        // The number of times the video has been viewed
+        self.views = data.views;
+
         // Handles clicks on the video preview
         self.doClick = function () {
             // If user specified a click function, do it

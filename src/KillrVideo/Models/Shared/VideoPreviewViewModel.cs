@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using KillrVideo.Data.PlaybackStats.Dtos;
 using KillrVideo.Data.Users.Dtos;
 using KillrVideo.Data.Videos.Dtos;
 
@@ -18,11 +19,12 @@ namespace KillrVideo.Models.Shared
         public string AuthorFirstName { get; set; }
         public string AuthorLastName { get; set; }
         public string AuthorProfileUrl { get; set; }
+        public long Views { get; set; }
 
         /// <summary>
         /// A static mapper function for mapping from the data model to this ViewModel object.
         /// </summary>
-        public static VideoPreviewViewModel FromDataModel(VideoPreview preview, UserProfile author, UrlHelper urlHelper)
+        public static VideoPreviewViewModel FromDataModel(VideoPreview preview, UserProfile author, PlayStats stats, UrlHelper urlHelper)
         {
             if (preview == null) return null;
 
@@ -34,7 +36,8 @@ namespace KillrVideo.Models.Shared
                 PreviewImageLocation = preview.PreviewImageLocation,
                 AuthorFirstName = author.FirstName,
                 AuthorLastName = author.LastName,
-                AuthorProfileUrl = urlHelper.Action("Info", "Account", new { userId = author.UserId })
+                AuthorProfileUrl = urlHelper.Action("Info", "Account", new { userId = author.UserId }),
+                Views = stats.Views
             };
         }
     }
