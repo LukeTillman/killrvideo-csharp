@@ -14,7 +14,7 @@
     }
 
     // A view model for user comments
-    function userCommentsViewModel(userId) {
+    function userCommentsViewModel(params) {
         var self = this;
 
         // Number of records per page to show
@@ -40,7 +40,7 @@
             self.loadingNextPage(true);
 
             var ajaxData = {
-                userId: userId,
+                userId: params.userId,
                 pageSize: pageSize + 1, // Always get one more record than we actually need to tell whether there is a next page
                 firstCommentIdOnPage: self.firstCommentIdOnNextPage()
             };
