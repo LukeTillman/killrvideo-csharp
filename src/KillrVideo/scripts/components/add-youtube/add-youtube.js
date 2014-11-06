@@ -1,18 +1,79 @@
 ﻿define(["knockout", "text!./add-youtube.tmpl.html", "knockout-validation", "knockout-postbox"], function (ko, htmlString) {
+    // Construct a promise that will be resolved when the Google API is loaded
+    var googleApiLoaded = $.Deferred();
+    if (typeof (gapi) == "undefined" || typeof (gapi.client) == "undefined" || typeof (gapi.client.request) == "undefined") {
+        window.handleGoogleApiLoaded = function () {
+            googleApiLoaded.resolve();
+        };
+
+        $.getScript("//apis.google.com/js/client.js?onload=handleGoogleApiLoaded");
+    } else {
+        googleApiLoaded.resolve();
+    }
+
+    // Set API key once loaded and then load the YouTube API
+    var youTubeDataApiReady = googleApiLoaded.then(function() {
+        gapi.client.setApiKey("AIzaSyCGJBnK-sW0Y5IDGdFt8EAVqStNnZ7ZDNw");
+
+        var defer = $.Deferred();
+        gapi.client.load("youtube", "v3", function() {
+            defer.resolve();
+        });
+        return defer;
+    });
+
     // ViewModel for adding YouTube video
     function addYouTubeViewModel(params) {
         var self = this;
+
+        // Whether or not the YouTube data API is loaded
+        self.youTubeDataApiLoaded = false;
+
+        // When the promise for the page is finished loading, set our view model property to true
+        youTubeDataApiReady.done(function () {
+            self.youTubeDataApiLoaded = true;
+        });
 
         // The URL of the YouTube video
         self.youTubeUrl = ko.observable("").extend({
             required: true,
             // Custom validator to make sure the YouTube URL gave us a valid location (i.e. has the v= parameter)
-            validation: {
+            validation: [{
                 validator: function(val) {
                     return self.youTubeVideoId();
                 },
                 message: "Provide a valid YouTube video URL"
-            }
+            },
+            {
+                async: true,
+                validator: function (val, p, callback) {
+                    // If the YouTube API isn't available, just assume OK
+                    if (self.youTubeDataApiLoaded === false) {
+                        callback(true);
+                        return;
+                    }
+                    
+                    // Since this is called whenever the value changes, setup a new deferred each time that can be resolved once
+                    // the selection is actually made
+                    self.youTubeCallDeferred = $.Deferred();
+
+                    // When the YouTube API call finishes, inspect it to see if we got a valid video
+                    self.youTubeCallDeferred.done(function (response) {
+                        if (!response || !response.items) {
+                            callback({ isValid: false, message: "Unable to validate YouTube video URL" });
+                            return;
+                        }
+
+                        if (response.items.length !== 1) {
+                            callback({ isValid: false, message: "Could not find a YouTube video with that URL" });
+                            return;
+                        }
+
+                        // Valid
+                        callback(true);
+                    });
+                }
+            }]
         });
 
         // Parse just the video Id from the YouTube URL
@@ -25,6 +86,12 @@
 
         // The video Id currently selected
         self.selectedYouTubeVideoId = ko.observable("");
+
+        // The name of the selected YouTube video
+        self.youTubeName = ko.observable("").publishOn("add-video-name");
+
+        // The description of the selected YouTube video
+        self.youTubeDescription = ko.observable("").publishOn("add-video-description");
 
         // The image URL for a preview
         self.youTubePreviewImageUrl = ko.computed(function() {
@@ -40,6 +107,12 @@
         // Any validation errors
         self.validationErrors = ko.validation.group([self.youTubeUrl]);
 
+        // Whether or not we're waiting on data from YouTube while setting a selection
+        self.selectionInProgress = ko.observable(false);
+
+        // The call to the YouTube API when the selection is set
+        self.youTubeCallDeferred = null;
+
         // Looks for enter key presses and if found, attempts to set the YouTube video selection
         self.setSelectionOnEnter = function(data, event) {
             if (event.keyCode === 13) {
@@ -54,22 +127,52 @@
         };
 
         // Gets the information for the selected YouTube video and sets the selection
-        self.setSelection = function() {
+        self.setSelection = function () {
             // Check for any validation problems
             if (self.validationErrors().length > 0) {
                 self.validationErrors.showAllMessages();
                 return;
             }
 
-            // Set the selection and indicate it's OK to show the common details entry
-            self.selectedYouTubeVideoId(self.youTubeVideoId());
-            self.showCommonDetails(true);
-            self.savingAvailable(true);
+            var youTubeId = self.youTubeVideoId();
+
+            // If no API is available, just go ahead and assume it's a good URL
+            if (self.youTubeDataApiLoaded === false) {
+                // Set the selection and indicate it's OK to show the common details entry
+                self.selectedYouTubeVideoId(youTubeId);
+                self.showCommonDetails(true);
+                self.savingAvailable(true);
+                return;
+            }
+
+            // If the YouTube Data API is available, use it to validate the selection and retrieve some details for the video
+            self.selectionInProgress(true);
+            gapi.client.youtube.videos.list({
+                part: "snippet",
+                id: youTubeId
+            }).execute(function(response) {
+                if (response && response.items && response.items.length === 1) {
+                    // Use the info from the API to populate name and description
+                    self.youTubeName(response.items[0].snippet.title);
+                    self.youTubeDescription(response.items[0].snippet.description);
+
+                    // Set the selection, show the rest of the information, and allow saving
+                    self.selectedYouTubeVideoId(youTubeId);
+                    self.showCommonDetails(true);
+                    self.savingAvailable(true);
+                }
+
+                // Always resolve the deferred and indicate selection is no longer in progress
+                self.youTubeCallDeferred.resolve(response);
+                self.selectionInProgress(false);
+            });
         };
 
         // Clears the selected YouTube video
         self.clearSelection = function() {
             self.youTubeUrl("");
+            self.youTubeName("");
+            self.youTubeDescription("");
             self.selectedYouTubeVideoId("");
             self.validationErrors.showAllMessages(false);
             self.showCommonDetails(false);
