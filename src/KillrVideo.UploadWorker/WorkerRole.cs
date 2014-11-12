@@ -9,6 +9,7 @@ using KillrVideo.UploadWorker.Startup;
 using log4net;
 using log4net.Config;
 using Microsoft.WindowsAzure.ServiceRuntime;
+using Rebus;
 
 namespace KillrVideo.UploadWorker
 {
@@ -42,9 +43,12 @@ namespace KillrVideo.UploadWorker
                 // Initialize the Windsor container
                 _windsorContainer = WindsorBootstrapper.CreateContainer();
 
-                CancellationToken token = _cancellationTokenSource.Token;
+                // Start the message bus
+                var bus = _windsorContainer.Resolve<IStartableBus>();
+                bus.Start();
 
                 // Use the container to get any jobs to run and execute them as Tasks
+                CancellationToken token = _cancellationTokenSource.Token;
                 IUploadWorkerJob[] jobs = _windsorContainer.ResolveAll<IUploadWorkerJob>();
                 foreach (IUploadWorkerJob job in jobs)
                 {

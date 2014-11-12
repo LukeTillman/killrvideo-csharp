@@ -1,5 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using KillrVideo.Statistics.Messages.Commands;
 
 namespace KillrVideo.Statistics
 {
@@ -8,6 +8,6 @@ namespace KillrVideo.Statistics
         /// <summary>
         /// Records that video playback was started for the given video Id.
         /// </summary>
-        Task RecordPlaybackStarted(Guid videoId);
+        Task RecordPlaybackStarted(RecordPlaybackStarted playback);
     }
 }

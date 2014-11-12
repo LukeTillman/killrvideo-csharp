@@ -2,7 +2,7 @@
 using KillrVideo.VideoCatalog.Api.Commands;
 using Rebus;
 
-namespace KillrVideo.VideoCatalog.Handlers
+namespace KillrVideo.VideoCatalog.Worker.Handlers
 {
     /// <summary>
     /// Adds a video to the catalog.

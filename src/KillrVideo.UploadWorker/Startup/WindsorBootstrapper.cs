@@ -4,15 +4,17 @@ using System.Linq;
 using Cassandra;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
-using KillrVideo.Data;
-using KillrVideo.Data.Upload;
-using KillrVideo.Data.Users;
 using KillrVideo.UploadWorker.Jobs;
 using log4net;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.MediaServices.Client;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
+using Rebus;
+using Rebus.AzureServiceBus;
+using Rebus.Castle.Windsor;
+using Rebus.Configuration;
+using Rebus.Log4Net;
 
 namespace KillrVideo.UploadWorker.Startup
 {
@@ -41,7 +43,7 @@ namespace KillrVideo.UploadWorker.Startup
             RegisterCassandra(container);
             RegisterDataComponents(container);
             RegisterAzureComponents(container);
-            RegisterJobs(container);
+            RegisterMessageBus(container);
 
             return container;
         }
@@ -111,15 +113,16 @@ namespace KillrVideo.UploadWorker.Startup
                 // Register the queue client and get a new one each time (transient) just to be safe
                 Component.For<CloudQueueClient>().UsingFactoryMethod(storageAccount.CreateCloudQueueClient).LifestyleTransient()
             );
-
         }
-
-        private static void RegisterJobs(WindsorContainer container)
+        
+        private static void RegisterMessageBus(WindsorContainer container)
         {
-            // Register all IUploadWorkerJobs in this assembly
-            container.Register(
-                Classes.FromThisAssembly().BasedOn<IUploadWorkerJob>().WithServiceBase().LifestyleTransient()
-            );
+            // Register the bus itself
+            IStartableBus startableBus = Configure.With(new WindsorContainerAdapter(container))
+                                                  .Logging(l => l.Log4Net())
+                                                  .Transport(t => t.UseAzureServiceBus())
+                                                  .CreateBus();
+            container.Register(Component.For<IStartableBus>().Instance(startableBus));
         }
         
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cassandra;
+using KillrVideo.Statistics.Messages.Commands;
 using KillrVideo.Utils;
 
 namespace KillrVideo.Statistics
@@ -27,10 +28,10 @@ namespace KillrVideo.Statistics
         /// <summary>
         /// Records that video playback was started for the given video Id.
         /// </summary>
-        public async Task RecordPlaybackStarted(Guid videoId)
+        public async Task RecordPlaybackStarted(RecordPlaybackStarted playback)
         {
             PreparedStatement prepared = await _recordPlaybackStarted;
-            BoundStatement bound = prepared.Bind(videoId);
+            BoundStatement bound = prepared.Bind(playback.VideoId);
             await _session.ExecuteAsync(bound);
         }
     }
