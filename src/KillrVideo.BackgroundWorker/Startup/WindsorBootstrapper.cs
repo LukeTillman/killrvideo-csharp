@@ -4,7 +4,6 @@ using System.Linq;
 using Cassandra;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
-using KillrVideo.UploadWorker.Jobs;
 using log4net;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.MediaServices.Client;
@@ -16,7 +15,7 @@ using Rebus.Castle.Windsor;
 using Rebus.Configuration;
 using Rebus.Log4Net;
 
-namespace KillrVideo.UploadWorker.Startup
+namespace KillrVideo.BackgroundWorker.Startup
 {
     /// <summary>
     /// Bootstrapping class for Castle Windsor IoC container.
@@ -26,10 +25,6 @@ namespace KillrVideo.UploadWorker.Startup
         private static readonly ILog Logger = LogManager.GetLogger(typeof (WindsorBootstrapper));
 
         private const string ClusterLocationAppSettingsKey = "CassandraClusterLocation";
-        private const string MediaServicesNameAppSettingsKey = "AzureMediaServicesAccountName";
-        private const string MediaServicesKeyAppSettingsKey = "AzureMediaServicesAccountKey";
-        private const string StorageConnectionStringAppSettingsKey = "AzureStorageConnectionString";
-
         private const string Keyspace = "killrvideo";
 
         /// <summary>
@@ -41,8 +36,6 @@ namespace KillrVideo.UploadWorker.Startup
 
             // Do container registrations (these would normally be organized as Windsor installers, but for brevity they are inline here)
             RegisterCassandra(container);
-            RegisterDataComponents(container);
-            RegisterAzureComponents(container);
             RegisterMessageBus(container);
 
             return container;
@@ -76,44 +69,8 @@ namespace KillrVideo.UploadWorker.Startup
                 Component.For<ISession>().Instance(session)
             );
         }
-
-        private static void RegisterDataComponents(WindsorContainer container)
-        {
-            container.Register(
-                // Register all the read/write model objects in the KillrVideo.Data project and register them as Singletons since
-                // we want the state in them (reusable prepared statements) to actually be reused.
-                Classes.FromAssemblyContaining<VideoLocationType>().Pick()
-                       .WithServiceFirstInterface().LifestyleSingleton()
-                       .ConfigureFor<LinqUserReadModel>(c => c.IsDefault())     // Change the Type here to use other IUserReadModel implementations (i.e. ADO.NET or core)
-            );
-        }
         
-        private static void RegisterAzureComponents(WindsorContainer container)
-        {
-            // Get Azure configurations
-            string mediaServicesAccountName = GetRequiredSetting(MediaServicesNameAppSettingsKey);
-            string mediaServicesAccountKey = GetRequiredSetting(MediaServicesKeyAppSettingsKey);
-            string storageConnectionString = GetRequiredSetting(StorageConnectionStringAppSettingsKey);
-
-            var mediaCredentials = new MediaServicesCredentials(mediaServicesAccountName, mediaServicesAccountKey);
-            container.Register(
-                // Recommended be shared by all CloudMediaContext objects so register as singleton
-                Component.For<MediaServicesCredentials>().Instance(mediaCredentials),
-
-                // Not thread-safe, so register as transient
-                Component.For<CloudMediaContext>().LifestyleTransient()
-            );
-
-            // Setup queue for notifications about video encoding jobs
-            var storageAccount = CloudStorageAccount.Parse(storageConnectionString);
-            var notificationQueue = storageAccount.CreateCloudQueueClient().GetQueueReference(UploadConfig.NotificationQueueName);
-            notificationQueue.CreateIfNotExists();
-
-            container.Register(
-                // Register the queue client and get a new one each time (transient) just to be safe
-                Component.For<CloudQueueClient>().UsingFactoryMethod(storageAccount.CreateCloudQueueClient).LifestyleTransient()
-            );
-        }
+        
         
         private static void RegisterMessageBus(WindsorContainer container)
         {

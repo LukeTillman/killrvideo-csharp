@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using KillrVideo.Data;
-using KillrVideo.Data.Upload;
-using KillrVideo.Data.Upload.Dtos;
-using KillrVideo.Data.Videos;
-using KillrVideo.Data.Videos.Dtos;
+using KillrVideo.Uploads;
+using KillrVideo.Uploads.Dtos;
 using KillrVideo.UploadWorker.Jobs;
 using log4net;
 using Microsoft.WindowsAzure.MediaServices.Client;
@@ -33,9 +30,12 @@ namespace KillrVideo.UploadWorker.EncodingJobMonitor
         private readonly IUploadedVideosWriteModel _uploadWriteModel;
         private readonly IUploadedVideosReadModel _uploadReadModel;
         private readonly IVideoWriteModel _videoWriteModel;
-        private readonly CloudQueue _queue;
-        private readonly CloudQueue _poisonQueue;
+        private readonly CloudQueueClient _cloudQueueClient;
         private readonly Random _random;
+
+        private CloudQueue _queue;
+        private CloudQueue _poisonQueue;
+        private bool _initialized;
 
         private const int MessagesPerGet = 10;
         private const int MaxRetries = 6;
@@ -49,24 +49,32 @@ namespace KillrVideo.UploadWorker.EncodingJobMonitor
             if (uploadWriteModel == null) throw new ArgumentNullException("uploadWriteModel");
             if (uploadReadModel == null) throw new ArgumentNullException("uploadReadModel");
             if (videoWriteModel == null) throw new ArgumentNullException("videoWriteModel");
+            _cloudQueueClient = cloudQueueClient;
             _cloudMediaContext = cloudMediaContext;
             _uploadWriteModel = uploadWriteModel;
             _uploadReadModel = uploadReadModel;
             _videoWriteModel = videoWriteModel;
 
-            _queue = cloudQueueClient.GetQueueReference(UploadConfig.NotificationQueueName);
-
-            // Get the poison message queue and create it if it doesn't already exist
-            _poisonQueue = cloudQueueClient.GetQueueReference(PoisionQueueName);
-            _poisonQueue.CreateIfNotExists();
-
             _random = new Random();
+            _initialized = false;
+        }
+
+        private async Task Initialize()
+        {
+            // Create the queues if they don't exist
+            _queue = _cloudQueueClient.GetQueueReference(UploadConfig.NotificationQueueName);
+            _poisonQueue = _cloudQueueClient.GetQueueReference(PoisionQueueName);
+            await Task.WhenAll(_queue.CreateIfNotExistsAsync(), _poisonQueue.CreateIfNotExistsAsync());
+            _initialized = true;
         }
 
         protected override async Task ExecuteImpl(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
+            if (_initialized == false)
+                await Initialize();
+            
             bool gotSomeMessages;
             do
             {

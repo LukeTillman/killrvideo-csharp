@@ -4,14 +4,13 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Castle.Windsor;
-using KillrVideo.UploadWorker.Jobs;
-using KillrVideo.UploadWorker.Startup;
+using KillrVideo.BackgroundWorker.Startup;
 using log4net;
 using log4net.Config;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Rebus;
 
-namespace KillrVideo.UploadWorker
+namespace KillrVideo.BackgroundWorker
 {
     public class WorkerRole : RoleEntryPoint
     {

@@ -2,7 +2,7 @@
 using log4net.Appender;
 using log4net.Core;
 
-namespace KillrVideo.UploadWorker.Utils
+namespace KillrVideo.BackgroundWorker.Utils
 {
     /// <summary>
     /// Log4net appender that logs using trace at the appropriate level.
