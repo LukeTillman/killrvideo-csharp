@@ -311,12 +311,6 @@
     <Content Include="Views\Videos\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KillrVideo.Data\KillrVideo.Data.csproj">
-      <Project>{5C6E3BC7-5341-4F57-A310-8559D14A0B20}</Project>
-      <Name>KillrVideo.Data</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Videos\Add.cshtml" />
   </ItemGroup>
   <ItemGroup>

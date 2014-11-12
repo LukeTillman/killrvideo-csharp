@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Data.Comments;
-using KillrVideo.Data.Comments.Dtos;
-using KillrVideo.Data.Users;
-using KillrVideo.Data.Videos;
-using KillrVideo.Data.Videos.Dtos;
+using KillrVideo.Comments.Api.Commands;
+using KillrVideo.VideoCatalog.Api.Commands;
 using NLipsum.Core;
 
 namespace KillrVideo.SampleDataLoader

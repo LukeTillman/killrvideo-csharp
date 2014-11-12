@@ -59,72 +59,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsyncLazy.cs" />
-    <Compile Include="Comments\CommentReadModel.cs" />
-    <Compile Include="Comments\CommentWriteModel.cs" />
-    <Compile Include="Comments\Dtos\CommentOnVideo.cs" />
-    <Compile Include="Comments\Dtos\GetUserComments.cs" />
-    <Compile Include="Comments\Dtos\GetVideoComments.cs" />
-    <Compile Include="Comments\Dtos\UserComment.cs" />
-    <Compile Include="Comments\Dtos\UserComments.cs" />
-    <Compile Include="Comments\Dtos\VideoComment.cs" />
-    <Compile Include="Comments\Dtos\VideoComments.cs" />
-    <Compile Include="Comments\ICommentReadModel.cs" />
-    <Compile Include="Comments\ICommentWriteModel.cs" />
-    <Compile Include="DateTimePrecise.cs" />
-    <Compile Include="GuidGeneration.cs" />
-    <Compile Include="GuidGenerator.cs" />
-    <Compile Include="GuidVersion.cs" />
-    <Compile Include="HelperExtensions.cs" />
-    <Compile Include="PlaybackStats\Dtos\PlaybackStats.cs" />
-    <Compile Include="PlaybackStats\IPlaybackStatsReadModel.cs" />
-    <Compile Include="PlaybackStats\IPlaybackStatsWriteModel.cs" />
-    <Compile Include="PlaybackStats\PlaybackStatsReadModel.cs" />
-    <Compile Include="PlaybackStats\PlaybackStatsWriteModel.cs" />
-    <Compile Include="TimestampHelper.cs" />
-    <Compile Include="Upload\Dtos\AddEncodingJobNotification.cs" />
-    <Compile Include="Upload\Dtos\AddUploadedVideo.cs" />
-    <Compile Include="Upload\Dtos\EncodingJobProgress.cs" />
-    <Compile Include="Upload\Dtos\UploadedVideo.cs" />
-    <Compile Include="Upload\IUploadedVideosReadModel.cs" />
-    <Compile Include="Upload\IUploadedVideosWriteModel.cs" />
-    <Compile Include="Upload\UploadConfig.cs" />
-    <Compile Include="Upload\UploadedVideosReadModel.cs" />
-    <Compile Include="Upload\UploadedVideosWriteModel.cs" />
-    <Compile Include="Users\Dtos\CreateUser.cs" />
-    <Compile Include="Users\Dtos\UserCredentials.cs" />
-    <Compile Include="Users\Dtos\UserProfile.cs" />
-    <Compile Include="Users\IUserReadModel.cs" />
-    <Compile Include="Users\IUserWriteModel.cs" />
-    <Compile Include="Users\LinqUserReadModel.cs" />
-    <Compile Include="Users\UserWriteModel.cs" />
-    <Compile Include="Users\UserReadModel.cs" />
-    <Compile Include="VideoLocationType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Videos\Dtos\AddVideo.cs" />
-    <Compile Include="Videos\Dtos\ChangeVideoDescription.cs" />
-    <Compile Include="Videos\Dtos\GetLatestVideos.cs" />
-    <Compile Include="Videos\Dtos\GetTagsStartingWith.cs" />
-    <Compile Include="Videos\Dtos\GetUserVideos.cs" />
-    <Compile Include="Videos\Dtos\GetVideosByTag.cs" />
-    <Compile Include="Videos\Dtos\LatestVideos.cs" />
-    <Compile Include="Videos\Dtos\RateVideo.cs" />
-    <Compile Include="Videos\Dtos\RelatedVideos.cs" />
-    <Compile Include="Videos\Dtos\RenameVideo.cs" />
-    <Compile Include="Videos\Dtos\TagsStartingWith.cs" />
-    <Compile Include="Videos\Dtos\UserVideoRating.cs" />
-    <Compile Include="Videos\Dtos\UserVideos.cs" />
-    <Compile Include="Videos\Dtos\VideoDetails.cs" />
-    <Compile Include="Videos\Dtos\VideoPreview.cs" />
-    <Compile Include="Videos\Dtos\VideoRating.cs" />
-    <Compile Include="Videos\Dtos\VideosByTag.cs" />
-    <Compile Include="Videos\IVideoReadModel.cs" />
-    <Compile Include="Videos\IVideoWriteModel.cs" />
-    <Compile Include="Videos\VideoReadModel.cs" />
-    <Compile Include="Videos\VideoWriteModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
+      <Project>{9516b3f3-89b7-4343-9f88-ffee6d74fffc}</Project>
+      <Name>KillrVideo.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

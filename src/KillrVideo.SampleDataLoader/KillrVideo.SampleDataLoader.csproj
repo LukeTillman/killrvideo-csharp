@@ -78,9 +78,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KillrVideo.Data\KillrVideo.Data.csproj">
-      <Project>{5c6e3bc7-5341-4f57-a310-8559d14a0b20}</Project>
-      <Name>KillrVideo.Data</Name>
+    <ProjectReference Include="..\KillrVideo.UserManagement.Messages\KillrVideo.UserManagement.Messages.csproj">
+      <Project>{5b9a5088-45fc-44cb-8dae-678cdfa82405}</Project>
+      <Name>KillrVideo.UserManagement.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.VideoCatalog.Messages\KillrVideo.VideoCatalog.Messages.csproj">
+      <Project>{a8dabf0a-03fe-4ea2-a1b3-fb5720a0b878}</Project>
+      <Name>KillrVideo.VideoCatalog.Messages</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,5 +1,5 @@
 ﻿using System;
-using KillrVideo.Data.Users.Dtos;
+using KillrVideo.UserManagement.Api.Commands;
 
 namespace KillrVideo.SampleDataLoader
 {
