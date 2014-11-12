@@ -8,8 +8,8 @@
     <ProjectGuid>{CCCCD9DB-0C47-4F44-80A2-34326992F025}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KillrVideo.UploadWorker</RootNamespace>
-    <AssemblyName>KillrVideo.UploadWorker</AssemblyName>
+    <RootNamespace>KillrVideo.BackgroundWorker</RootNamespace>
+    <AssemblyName>KillrVideo.BackgroundWorker</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <RoleType>Worker</RoleType>

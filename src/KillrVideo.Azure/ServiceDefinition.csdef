@@ -23,7 +23,7 @@
       <Setting name="AnalyticsEnabled" />
     </ConfigurationSettings>
   </WebRole>
-  <WorkerRole name="KillrVideo.UploadWorker" vmsize="Small">
+  <WorkerRole name="KillrVideo.BackgroundWorker" vmsize="Small">
     <Imports>
       <Import moduleName="Diagnostics" />
       <Import moduleName="RemoteAccess" />

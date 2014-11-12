@@ -18,7 +18,7 @@
       <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="0000000000000000000000000000000000000000" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
-  <Role name="KillrVideo.UploadWorker">
+  <Role name="KillrVideo.BackgroundWorker">
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
