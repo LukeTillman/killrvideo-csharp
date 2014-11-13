@@ -7,6 +7,7 @@ using KillrVideo.Authentication;
 using KillrVideo.Models.Account;
 using KillrVideo.Models.Shared;
 using KillrVideo.UserManagement;
+using KillrVideo.UserManagement.Api.Commands;
 using KillrVideo.Utils;
 
 namespace KillrVideo.Controllers
@@ -14,14 +15,11 @@ namespace KillrVideo.Controllers
     public class AccountController : ConventionControllerBase
     {
         private readonly IUserReadModel _userReadModel;
-        private readonly IUserWriteModel _userWriteModel;
-
-        public AccountController(IUserReadModel userReadModel, IUserWriteModel userWriteModel)
+        
+        public AccountController(IUserReadModel userReadModel)
         {
             if (userReadModel == null) throw new ArgumentNullException("userReadModel");
-            if (userWriteModel == null) throw new ArgumentNullException("userWriteModel");
             _userReadModel = userReadModel;
-            _userWriteModel = userWriteModel;
         }
 
         /// <summary>
@@ -52,7 +50,7 @@ namespace KillrVideo.Controllers
                 Password = PasswordHash.CreateHash(model.Password),
                 UserId = userId
             };
-
+            
             if (await _userWriteModel.CreateUser(createUser) == false)
             {
                 ModelState.AddModelError(string.Empty, "A user with that email address already exists.");
