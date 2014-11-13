@@ -66,7 +66,7 @@
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="LZ4">
-      <HintPath>..\packages\lz4net.1.0.3.93\lib\net40-client\LZ4.dll</HintPath>
+      <HintPath>..\packages\lz4net.1.0.5.93\lib\net40-client\LZ4.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Data.Edm">
@@ -358,6 +358,64 @@
     <Content Include="Content\bootstrap-cosmo\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-cosmo\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\bootstrap-cosmo\fonts\glyphicons-halflings-regular.woff" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KillrVideo.Comments.Messages\KillrVideo.Comments.Messages.csproj">
+      <Project>{92b7eb7e-890c-4f34-87fe-8f3b15c77241}</Project>
+      <Name>KillrVideo.Comments.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Comments\KillrVideo.Comments.csproj">
+      <Project>{37bb374e-2e30-4f9d-8f1d-6982116a07b0}</Project>
+      <Name>KillrVideo.Comments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Ratings.Messages\KillrVideo.Ratings.Messages.csproj">
+      <Project>{2d0aee43-129e-448b-96d1-9b68d0311584}</Project>
+      <Name>KillrVideo.Ratings.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Ratings\KillrVideo.Ratings.csproj">
+      <Project>{c054a489-a037-49e5-8461-546cd61817eb}</Project>
+      <Name>KillrVideo.Ratings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Search\KillrVideo.Search.csproj">
+      <Project>{3da30c11-33c7-4ee8-aa9e-c18a9483efca}</Project>
+      <Name>KillrVideo.Search</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Statistics.Messages\KillrVideo.Statistics.Messages.csproj">
+      <Project>{194dc607-2a7c-4802-80e8-8d351dbf32ca}</Project>
+      <Name>KillrVideo.Statistics.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Statistics\KillrVideo.Statistics.csproj">
+      <Project>{d7e26bcf-316d-431e-b448-dbc54cb17b4f}</Project>
+      <Name>KillrVideo.Statistics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.SuggestedVideos\KillrVideo.SuggestedVideos.csproj">
+      <Project>{33a7f88f-189d-435c-aadb-6d270e6bf3c5}</Project>
+      <Name>KillrVideo.SuggestedVideos</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Uploads.Messages\KillrVideo.Uploads.Messages.csproj">
+      <Project>{c51cf234-ece1-4edc-93e2-844e88999825}</Project>
+      <Name>KillrVideo.Uploads.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Uploads\KillrVideo.Uploads.csproj">
+      <Project>{249ac1eb-7035-4e88-a311-c683e049a0ea}</Project>
+      <Name>KillrVideo.Uploads</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.UserManagement.Messages\KillrVideo.UserManagement.Messages.csproj">
+      <Project>{5b9a5088-45fc-44cb-8dae-678cdfa82405}</Project>
+      <Name>KillrVideo.UserManagement.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.UserManagement\KillrVideo.UserManagement.csproj">
+      <Project>{5fcf1c36-ed2a-4bf0-b231-b12506210f6d}</Project>
+      <Name>KillrVideo.UserManagement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.VideoCatalog.Messages\KillrVideo.VideoCatalog.Messages.csproj">
+      <Project>{a8dabf0a-03fe-4ea2-a1b3-fb5720a0b878}</Project>
+      <Name>KillrVideo.VideoCatalog.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.VideoCatalog\KillrVideo.VideoCatalog.csproj">
+      <Project>{89ce1d0d-12d7-42ce-a407-1c92c8ff4645}</Project>
+      <Name>KillrVideo.VideoCatalog</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

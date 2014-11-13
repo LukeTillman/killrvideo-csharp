@@ -4,10 +4,9 @@ using System.Web.Mvc;
 using System.Web.Security;
 using KillrVideo.ActionResults;
 using KillrVideo.Authentication;
-using KillrVideo.Data.Users;
-using KillrVideo.Data.Users.Dtos;
 using KillrVideo.Models.Account;
 using KillrVideo.Models.Shared;
+using KillrVideo.UserManagement;
 using KillrVideo.Utils;
 
 namespace KillrVideo.Controllers
