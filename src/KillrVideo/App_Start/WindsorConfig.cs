@@ -3,18 +3,27 @@ using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using Cassandra;
+using Castle.Facilities.Startable;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
+using KillrVideo.Comments.Messages.Commands;
+using KillrVideo.Ratings.Messages.Commands;
 using KillrVideo.Search;
+using KillrVideo.Statistics.Messages.Commands;
 using KillrVideo.SuggestedVideos;
 using KillrVideo.Uploads;
+using KillrVideo.Uploads.Messages.Commands;
 using KillrVideo.UserManagement;
-using KillrVideo.VideoCatalog.Messages;
+using KillrVideo.UserManagement.Messages.Commands;
+using KillrVideo.VideoCatalog.Messages.Commands;
 using log4net;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.MediaServices.Client;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
+using Nimbus;
+using Nimbus.Configuration;
+using Nimbus.Infrastructure;
 
 namespace KillrVideo
 {
@@ -29,6 +38,8 @@ namespace KillrVideo
         private const string MediaServicesNameAppSettingsKey = "AzureMediaServicesAccountName";
         private const string MediaServicesKeyAppSettingsKey = "AzureMediaServicesAccountKey";
         private const string StorageConnectionStringAppSettingsKey = "AzureStorageConnectionString";
+        private const string AzureServiceBusConnectionStringKey = "AzureServiceBusConnectionString";
+        private const string AzureServiceBusNamePrefixKey = "AzureServiceBusNamePrefix";
 
         private const string Keyspace = "killrvideo";
 
@@ -44,6 +55,7 @@ namespace KillrVideo
             RegisterReadModels(container);
             RegisterMvcControllers(container);
             RegisterAzureComponents(container);
+            RegisterMessageBus(container);
 
             return container;
         }
@@ -133,6 +145,39 @@ namespace KillrVideo
                 Component.For<INotificationEndPoint>().Instance(notificationEndPoint)
             );
 
+        }
+
+        private static void RegisterMessageBus(WindsorContainer container)
+        {
+            // Get the Azure Service Bus connection string and prefix for names
+            string connectionString = GetRequiredSetting(AzureServiceBusConnectionStringKey);
+            string namePrefix = GetRequiredSetting(AzureServiceBusNamePrefixKey);
+
+            // Create a type provider with all our message assemblies (there shouldn't be any handlers here since the web app only sends commands)
+            var typeProvider = new AssemblyScanningTypeProvider(typeof (CommentOnVideo).Assembly, typeof (RateVideo).Assembly,
+                                                                typeof (RecordPlaybackStarted).Assembly, typeof (AddUploadedVideo).Assembly,
+                                                                typeof (CreateUser).Assembly, typeof (AddVideo).Assembly);
+            container.RegisterNimbus(typeProvider);
+
+            // Get app name and unique name
+            string appName = string.Format("{0}KillrVideo.Web", namePrefix);
+            string uniqueName = string.Format("{0}{1}", namePrefix, Environment.MachineName);
+
+            // Register the bus itself and start it when it's resolved for the first time
+            container.Register(
+                Component.For<IBus>()
+                         .ImplementedBy<Bus>()
+                         .UsingFactoryMethod(
+                             () =>
+                             new BusBuilder().Configure()
+                                             .WithConnectionString(connectionString)
+                                             .WithNames(appName, uniqueName)
+                                             .WithTypesFrom(typeProvider)
+                                             .WithWindsorDefaults(container)
+                                             .Build())
+                         .LifestyleSingleton()
+                         .StartUsingMethod("Start")
+                );
         }
 
         private static INotificationEndPoint GetOrAddNotificationEndPoint(MediaServicesCredentials mediaCredentials)
