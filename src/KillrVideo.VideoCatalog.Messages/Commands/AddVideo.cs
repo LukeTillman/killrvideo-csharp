@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Nimbus.MessageContracts;
 
-namespace KillrVideo.VideoCatalog.Api.Commands
+namespace KillrVideo.VideoCatalog.Messages.Commands
 {
     /// <summary>
     /// DTO for adding a new video.
     /// </summary>
     [Serializable]
-    public class AddVideo
+    public class AddVideo : IBusCommand
     {
         public Guid VideoId { get; set; }
         public Guid UserId { get; set; }

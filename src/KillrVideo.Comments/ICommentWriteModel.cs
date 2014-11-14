@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using KillrVideo.Comments.Api.Commands;
+using KillrVideo.Comments.Messages.Commands;
 
 namespace KillrVideo.Comments
 {

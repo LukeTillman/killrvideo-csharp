@@ -45,6 +45,7 @@
     <Compile Include="GuidGenerator.cs" />
     <Compile Include="GuidVersion.cs" />
     <Compile Include="HelperExtensions.cs" />
+    <Compile Include="Nimbus\NimbusAssemblyConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimestampHelper.cs" />
   </ItemGroup>

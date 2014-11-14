@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 
-namespace KillrVideo.UploadWorker.Jobs
+namespace KillrVideo.Uploads.Worker.Jobs
 {
     /// <summary>
     /// A base class for UploadWorker jobs that runs code in a loop with a configurable (in the constructor) delay

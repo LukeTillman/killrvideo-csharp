@@ -1,13 +1,14 @@
 ﻿using System;
-using KillrVideo.Comments.Api.Commands;
-using Rebus;
+using System.Threading.Tasks;
+using KillrVideo.Comments.Messages.Commands;
+using Nimbus.Handlers;
 
 namespace KillrVideo.Comments.Worker.Handlers
 {
     /// <summary>
     /// Handles recording user comments on videos.
     /// </summary>
-    public class CommentOnVideoHandler : IHandleMessages<CommentOnVideo>
+    public class CommentOnVideoHandler : IHandleCommand<CommentOnVideo>
     {
         private readonly ICommentWriteModel _commentWriteModel;
 
@@ -17,9 +18,9 @@ namespace KillrVideo.Comments.Worker.Handlers
             _commentWriteModel = commentWriteModel;
         }
 
-        public void Handle(CommentOnVideo message)
+        public Task Handle(CommentOnVideo message)
         {
-            _commentWriteModel.CommentOnVideo(message);
+            return _commentWriteModel.CommentOnVideo(message);
         }
     }
 }

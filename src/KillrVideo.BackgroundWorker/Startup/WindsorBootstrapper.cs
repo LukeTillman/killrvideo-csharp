@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Configuration;
 using System.Linq;
+using System.Reflection;
 using Cassandra;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
+using KillrVideo.Comments.Worker;
+using KillrVideo.Ratings.Worker;
+using KillrVideo.Statistics.Worker;
+using KillrVideo.Uploads.Worker;
+using KillrVideo.UserManagement.Worker;
+using KillrVideo.Utils.Nimbus;
+using KillrVideo.VideoCatalog.Worker;
 using log4net;
 using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.MediaServices.Client;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Queue;
-using Rebus;
-using Rebus.AzureServiceBus;
-using Rebus.Castle.Windsor;
-using Rebus.Configuration;
-using Rebus.Log4Net;
+using Nimbus;
+using Nimbus.Configuration;
+using Nimbus.Infrastructure;
 
 namespace KillrVideo.BackgroundWorker.Startup
 {
@@ -27,12 +30,19 @@ namespace KillrVideo.BackgroundWorker.Startup
         private const string ClusterLocationAppSettingsKey = "CassandraClusterLocation";
         private const string Keyspace = "killrvideo";
 
+        private const string AzureServiceBusConnectionStringKey = "AzureServiceBusConnectionString";
+        private const string AzureServiceBusNamePrefixKey = "AzureServiceBusNamePrefix";
+
         /// <summary>
         /// Creates the Windsor container and does all necessary registrations for the KillrVideo.UploadWorker role.
         /// </summary>
         public static IWindsorContainer CreateContainer()
         {
             var container = new WindsorContainer();
+
+            // Install all the components from the service workers we're composing here in this endpoint
+            container.Install(new CommentsWindsorInstaller(), new RatingsWindsorInstaller(), new StatisticsWindsorInstaller(),
+                              new UploadsWindsorInstaller(), new UserManagementWindsorInstaller(), new VideoCatalogWindsorInstaller());
 
             // Do container registrations (these would normally be organized as Windsor installers, but for brevity they are inline here)
             RegisterCassandra(container);
@@ -70,16 +80,38 @@ namespace KillrVideo.BackgroundWorker.Startup
             );
         }
         
-        
-        
         private static void RegisterMessageBus(WindsorContainer container)
         {
+            // Get the Azure Service Bus connection string and prefix for names
+            string connectionString = GetRequiredSetting(AzureServiceBusConnectionStringKey);
+            string namePrefix = GetRequiredSetting(AzureServiceBusNamePrefixKey);
+
+            // Ask the container for any assembly config that's been registered
+            NimbusAssemblyConfig[] nimbusAssemblyConfigs = container.ResolveAll<NimbusAssemblyConfig>();
+            Assembly[] assemblies = nimbusAssemblyConfigs.SelectMany(ac => ac.AssembliesToScan).ToArray();
+            
+            // Create the Nimbus type provider to scan those assemblies and register with container
+            var typeProvider = new AssemblyScanningTypeProvider(assemblies);
+            container.RegisterNimbus(typeProvider);
+
+            // Get app name and unique name
+            string appName = string.Format("{0}KillrVideo.BackgroundWorker", namePrefix);
+            string uniqueName = string.Format("{0}{1}", namePrefix, Environment.MachineName);
+
             // Register the bus itself
-            IStartableBus startableBus = Configure.With(new WindsorContainerAdapter(container))
-                                                  .Logging(l => l.Log4Net())
-                                                  .Transport(t => t.UseAzureServiceBus())
-                                                  .CreateBus();
-            container.Register(Component.For<IStartableBus>().Instance(startableBus));
+            container.Register(
+                Component.For<IBus, Bus>()
+                         .ImplementedBy<Bus>()
+                         .UsingFactoryMethod(
+                             () =>
+                             new BusBuilder().Configure()
+                                             .WithConnectionString(connectionString)
+                                             .WithNames(appName, uniqueName)
+                                             .WithTypesFrom(typeProvider)
+                                             .WithWindsorDefaults(container)
+                                             .Build())
+                         .LifestyleSingleton()
+                );
         }
         
         /// <summary>

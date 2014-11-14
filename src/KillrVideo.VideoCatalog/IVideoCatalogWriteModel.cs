@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using KillrVideo.VideoCatalog.Api.Commands;
+using KillrVideo.VideoCatalog.Messages.Commands;
 
 namespace KillrVideo.VideoCatalog
 {

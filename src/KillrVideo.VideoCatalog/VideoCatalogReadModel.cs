@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
 using KillrVideo.Utils;
-using KillrVideo.VideoCatalog.Api;
 using KillrVideo.VideoCatalog.Dtos;
+using KillrVideo.VideoCatalog.Messages;
 
 namespace KillrVideo.VideoCatalog
 {

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Comments.Api.Commands;
-using KillrVideo.VideoCatalog.Api.Commands;
+using KillrVideo.Comments.Messages.Commands;
+using KillrVideo.VideoCatalog.Messages.Commands;
 using NLipsum.Core;
 
 namespace KillrVideo.SampleDataLoader

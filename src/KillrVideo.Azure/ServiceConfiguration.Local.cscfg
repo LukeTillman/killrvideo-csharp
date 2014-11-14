@@ -8,6 +8,8 @@
       <Setting name="AzureMediaServicesAccountName" value="" />
       <Setting name="AzureMediaServicesAccountKey" value="" />
       <Setting name="AzureStorageConnectionString" value="" />
+      <Setting name="AzureServiceBusConnectionString" value="" />
+      <Setting name="AzureServiceBusNamePrefix" value="DEV-" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="false" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="" />
@@ -26,6 +28,8 @@
       <Setting name="AzureMediaServicesAccountName" value="" />
       <Setting name="AzureMediaServicesAccountKey" value="" />
       <Setting name="AzureStorageConnectionString" value="" />
+      <Setting name="AzureServiceBusConnectionString" value="" />
+      <Setting name="AzureServiceBusNamePrefix" value="DEV-" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="false" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="" />

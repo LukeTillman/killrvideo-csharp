@@ -1,11 +1,12 @@
 ﻿using System;
+using Nimbus.MessageContracts;
 
-namespace KillrVideo.UserManagement.Api.Commands
+namespace KillrVideo.UserManagement.Messages.Commands
 {
     /// <summary>
     /// DTO for creating a new user account.
     /// </summary>
-    public class CreateUser
+    public class CreateUser : IBusCommand
     {
         public Guid UserId { get; set; }
         public string FirstName { get; set; }

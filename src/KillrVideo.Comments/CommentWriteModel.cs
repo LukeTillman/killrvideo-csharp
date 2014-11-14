@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Comments.Api.Commands;
+using KillrVideo.Comments.Messages.Commands;
 using KillrVideo.Utils;
 
 namespace KillrVideo.Comments

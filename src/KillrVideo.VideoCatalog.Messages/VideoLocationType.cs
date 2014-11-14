@@ -1,4 +1,4 @@
-﻿namespace KillrVideo.VideoCatalog.Api
+﻿namespace KillrVideo.VideoCatalog.Messages
 {
     public enum VideoLocationType
     {

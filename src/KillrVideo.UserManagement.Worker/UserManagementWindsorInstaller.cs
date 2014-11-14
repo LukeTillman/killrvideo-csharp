@@ -1,7 +1,8 @@
 ﻿using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using Rebus;
+using KillrVideo.UserManagement.Messages.Commands;
+using KillrVideo.Utils.Nimbus;
 
 namespace KillrVideo.UserManagement.Worker
 {
@@ -12,8 +13,9 @@ namespace KillrVideo.UserManagement.Worker
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            // Register all message bus handlers in this assembly
-            container.Register(Classes.FromThisAssembly().BasedOn<IHandleMessages>().WithServiceAllInterfaces().LifestyleTransient());
+            container.Register(
+                Component.For<NimbusAssemblyConfig>()
+                         .Instance(NimbusAssemblyConfig.FromTypes(typeof(UserManagementWindsorInstaller), typeof(CreateUser))));
 
             // Register the UserManagement components as singletons so their state can be reused (prepared statements)
             container.Register(

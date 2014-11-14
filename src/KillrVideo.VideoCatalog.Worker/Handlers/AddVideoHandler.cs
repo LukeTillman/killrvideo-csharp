@@ -1,13 +1,14 @@
 ﻿using System;
-using KillrVideo.VideoCatalog.Api.Commands;
-using Rebus;
+using System.Threading.Tasks;
+using KillrVideo.VideoCatalog.Messages.Commands;
+using Nimbus.Handlers;
 
 namespace KillrVideo.VideoCatalog.Worker.Handlers
 {
     /// <summary>
     /// Adds a video to the catalog.
     /// </summary>
-    public class AddVideoHandler : IHandleMessages<AddVideo>
+    public class AddVideoHandler : IHandleCommand<AddVideo>
     {
         private readonly IVideoCatalogWriteModel _videoCatalog;
 
@@ -17,9 +18,9 @@ namespace KillrVideo.VideoCatalog.Worker.Handlers
             _videoCatalog = videoCatalog;
         }
 
-        public void Handle(AddVideo message)
+        public Task Handle(AddVideo message)
         {
-            _videoCatalog.AddVideo(message);
+            return _videoCatalog.AddVideo(message);
         }
     }
 }

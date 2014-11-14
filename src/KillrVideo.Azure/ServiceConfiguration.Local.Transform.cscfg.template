@@ -10,6 +10,9 @@
       <sc:Setting name="AzureMediaServicesAccountName" value="" xdt:Transform="SetAttributes" xdt:Locator="Match(name)" />
       <sc:Setting name="AzureMediaServicesAccountKey" value="" xdt:Transform="SetAttributes" xdt:Locator="Match(name)" />
       
+      <!-- Your Azure Service bus account information -->
+      <sc:Setting name="AzureServiceBusConnectionString" value="" xdt:Transform="SetAttributes" xdt:Locator="Match(name)" />
+      
       <!-- 
         The storage connection string for the storage account used by your Azure Media Services account.  Will look like:
           DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}

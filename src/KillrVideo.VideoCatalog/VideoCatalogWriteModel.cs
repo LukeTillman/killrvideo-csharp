@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Cassandra;
 using KillrVideo.Utils;
-using KillrVideo.VideoCatalog.Api.Commands;
+using KillrVideo.VideoCatalog.Messages.Commands;
 
 namespace KillrVideo.VideoCatalog
 {

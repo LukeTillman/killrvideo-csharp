@@ -1,7 +1,8 @@
 ﻿using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using Rebus;
+using KillrVideo.Comments.Messages.Commands;
+using KillrVideo.Utils.Nimbus;
 
 namespace KillrVideo.Comments.Worker
 {
@@ -12,8 +13,10 @@ namespace KillrVideo.Comments.Worker
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            // Register all message bus handlers in this assembly
-            container.Register(Classes.FromThisAssembly().BasedOn<IHandleMessages>().WithServiceAllInterfaces().LifestyleTransient());
+            // Tell Nimbus to scan this assembly and the corresponsing messages assembly
+            container.Register(
+                Component.For<NimbusAssemblyConfig>()
+                         .Instance(NimbusAssemblyConfig.FromTypes(typeof (CommentsWindsorInstaller), typeof (CommentOnVideo))));
 
             // Register the Comments components as singletons so their state can be reused (prepared statements)
             container.Register(

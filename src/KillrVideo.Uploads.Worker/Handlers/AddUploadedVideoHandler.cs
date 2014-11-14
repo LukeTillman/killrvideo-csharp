@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Threading.Tasks;
 using KillrVideo.Uploads.Messages.Commands;
-using Rebus;
+using Nimbus.Handlers;
 
 namespace KillrVideo.Uploads.Worker.Handlers
 {
     /// <summary>
     /// Adds an uploaded video.
     /// </summary>
-    public class AddUploadedVideoHandler : IHandleMessages<AddUploadedVideo>
+    public class AddUploadedVideoHandler : IHandleCommand<AddUploadedVideo>
     {
         private readonly IUploadedVideosWriteModel _uploadWriteModel;
 
@@ -17,9 +18,9 @@ namespace KillrVideo.Uploads.Worker.Handlers
             _uploadWriteModel = uploadWriteModel;
         }
 
-        public void Handle(AddUploadedVideo message)
+        public Task Handle(AddUploadedVideo message)
         {
-            _uploadWriteModel.AddVideo(message);
+            return _uploadWriteModel.AddVideo(message);
         }
     }
 }

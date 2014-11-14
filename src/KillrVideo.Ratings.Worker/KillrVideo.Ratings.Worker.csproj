@@ -38,6 +38,12 @@
     <Reference Include="Castle.Windsor">
       <HintPath>..\packages\Castle.Windsor.3.3.0\lib\net45\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="Nimbus.InfrastructureContracts">
+      <HintPath>..\packages\Nimbus.InfrastructureContracts.1.3.0.2\lib\net45\Nimbus.InfrastructureContracts.dll</HintPath>
+    </Reference>
+    <Reference Include="Nimbus.MessageContracts">
+      <HintPath>..\packages\Nimbus.MessageContracts.1.3.0.2\lib\net45\Nimbus.MessageContracts.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -62,6 +68,10 @@
     <ProjectReference Include="..\KillrVideo.Ratings\KillrVideo.Ratings.csproj">
       <Project>{c054a489-a037-49e5-8461-546cd61817eb}</Project>
       <Name>KillrVideo.Ratings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
+      <Project>{9516b3f3-89b7-4343-9f88-ffee6d74fffc}</Project>
+      <Name>KillrVideo.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

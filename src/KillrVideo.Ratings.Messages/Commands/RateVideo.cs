@@ -1,12 +1,13 @@
 ﻿using System;
+using Nimbus.MessageContracts;
 
-namespace KillrVideo.Ratings.Api.Commands
+namespace KillrVideo.Ratings.Messages.Commands
 {
     /// <summary>
     /// DTO for rating a video.
     /// </summary>
     [Serializable]
-    public class RateVideo
+    public class RateVideo : IBusCommand
     {
         public Guid VideoId { get; set; }
         public Guid UserId { get; set; }

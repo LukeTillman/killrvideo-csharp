@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using KillrVideo.Ratings.Api.Commands;
+using KillrVideo.Ratings.Messages.Commands;
 
 namespace KillrVideo.Ratings
 {

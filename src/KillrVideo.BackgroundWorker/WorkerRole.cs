@@ -5,10 +5,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Castle.Windsor;
 using KillrVideo.BackgroundWorker.Startup;
+using KillrVideo.Uploads.Worker.Jobs;
 using log4net;
 using log4net.Config;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using Rebus;
+using Nimbus;
 
 namespace KillrVideo.BackgroundWorker
 {
@@ -43,7 +44,7 @@ namespace KillrVideo.BackgroundWorker
                 _windsorContainer = WindsorBootstrapper.CreateContainer();
 
                 // Start the message bus
-                var bus = _windsorContainer.Resolve<IStartableBus>();
+                var bus = _windsorContainer.Resolve<Bus>();
                 bus.Start();
 
                 // Use the container to get any jobs to run and execute them as Tasks

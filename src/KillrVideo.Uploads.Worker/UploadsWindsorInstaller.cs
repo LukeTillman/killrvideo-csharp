@@ -2,12 +2,13 @@
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using KillrVideo.UploadWorker.Jobs;
+using KillrVideo.Uploads.Messages.Commands;
+using KillrVideo.Uploads.Worker.Jobs;
+using KillrVideo.Utils.Nimbus;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.MediaServices.Client;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
-using Rebus;
 
 namespace KillrVideo.Uploads.Worker
 {
@@ -22,8 +23,9 @@ namespace KillrVideo.Uploads.Worker
 
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            // Register all message bus handlers in this assembly
-            container.Register(Classes.FromThisAssembly().BasedOn<IHandleMessages>().WithServiceAllInterfaces().LifestyleTransient());
+            container.Register(
+                Component.For<NimbusAssemblyConfig>()
+                         .Instance(NimbusAssemblyConfig.FromTypes(typeof(UploadsWindsorInstaller), typeof(AddUploadedVideo))));
 
             // Register the Uploads components as singletons so their state can be reused (prepared statements)
             container.Register(

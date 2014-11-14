@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Nimbus.MessageContracts;
 
 namespace KillrVideo.Uploads.Messages.Commands
 {
@@ -7,7 +8,7 @@ namespace KillrVideo.Uploads.Messages.Commands
     /// DTO for adding a new uploaded video.
     /// </summary>
     [Serializable]
-    public class AddUploadedVideo
+    public class AddUploadedVideo : IBusCommand
     {
         public Guid VideoId { get; set; }
         public Guid UserId { get; set; }

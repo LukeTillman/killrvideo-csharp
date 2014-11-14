@@ -20,6 +20,8 @@
       <Setting name="AzureMediaServicesAccountName" />
       <Setting name="AzureMediaServicesAccountKey" />
       <Setting name="AzureStorageConnectionString" />
+      <Setting name="AzureServiceBusConnectionString" />
+      <Setting name="AzureServiceBusNamePrefix" />
       <Setting name="AnalyticsEnabled" />
     </ConfigurationSettings>
   </WebRole>
@@ -34,6 +36,8 @@
       <Setting name="AzureMediaServicesAccountName" />
       <Setting name="AzureMediaServicesAccountKey" />
       <Setting name="AzureStorageConnectionString" />
+      <Setting name="AzureServiceBusConnectionString" />
+      <Setting name="AzureServiceBusNamePrefix" />
     </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>

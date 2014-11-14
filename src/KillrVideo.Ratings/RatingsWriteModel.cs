@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Ratings.Api.Commands;
+using KillrVideo.Ratings.Messages.Commands;
 using KillrVideo.Utils;
 
 namespace KillrVideo.Ratings

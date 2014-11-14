@@ -7,7 +7,7 @@ using KillrVideo.Authentication;
 using KillrVideo.Models.Account;
 using KillrVideo.Models.Shared;
 using KillrVideo.UserManagement;
-using KillrVideo.UserManagement.Api.Commands;
+using KillrVideo.UserManagement.Messages.Commands;
 using KillrVideo.Utils;
 
 namespace KillrVideo.Controllers

@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Threading.Tasks;
 using KillrVideo.Statistics.Messages.Commands;
-using Rebus;
+using Nimbus.Handlers;
 
 namespace KillrVideo.Statistics.Worker.Handlers
 {
     /// <summary>
     /// Records video playback statistics.
     /// </summary>
-    public class RecordPlaybackStartedHandler : IHandleMessages<RecordPlaybackStarted>
+    public class RecordPlaybackStartedHandler : IHandleCommand<RecordPlaybackStarted>
     {
         private readonly IPlaybackStatsWriteModel _statsWriteModel;
 
@@ -17,9 +18,9 @@ namespace KillrVideo.Statistics.Worker.Handlers
             _statsWriteModel = statsWriteModel;
         }
 
-        public void Handle(RecordPlaybackStarted message)
+        public Task Handle(RecordPlaybackStarted message)
         {
-            _statsWriteModel.RecordPlaybackStarted(message);
+            return _statsWriteModel.RecordPlaybackStarted(message);
         }
     }
 }

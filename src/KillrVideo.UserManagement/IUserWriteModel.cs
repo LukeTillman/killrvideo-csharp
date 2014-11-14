@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
-using KillrVideo.UserManagement.Api.Commands;
 using KillrVideo.UserManagement.Dtos;
+using KillrVideo.UserManagement.Messages.Commands;
 
 namespace KillrVideo.UserManagement
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using KillrVideo.VideoCatalog.Api;
+using KillrVideo.VideoCatalog.Messages;
 
 namespace KillrVideo.VideoCatalog.Dtos
 {

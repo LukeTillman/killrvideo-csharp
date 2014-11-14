@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace KillrVideo.UploadWorker.Jobs
+namespace KillrVideo.Uploads.Worker.Jobs
 {
     /// <summary>
     /// Interface for a "job" that should be run in this upload worker.

@@ -1,13 +1,14 @@
 ﻿using System;
-using KillrVideo.UserManagement.Api.Commands;
-using Rebus;
+using System.Threading.Tasks;
+using KillrVideo.UserManagement.Messages.Commands;
+using Nimbus.Handlers;
 
 namespace KillrVideo.UserManagement.Worker.Handlers
 {
     /// <summary>
     /// Creates new users.
     /// </summary>
-    public class CreateUserHandler : IHandleMessages<CreateUser>
+    public class CreateUserHandler : IHandleCommand<CreateUser>
     {
         private readonly IUserWriteModel _userWriteModel;
 
@@ -17,9 +18,9 @@ namespace KillrVideo.UserManagement.Worker.Handlers
             _userWriteModel = userWriteModel;
         }
 
-        public void Handle(CreateUser message)
+        public Task Handle(CreateUser message)
         {
-            _userWriteModel.CreateUser(message);
+            return _userWriteModel.CreateUser(message);
         }
     }
 }

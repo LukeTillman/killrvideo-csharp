@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using KillrVideo.VideoCatalog.Api;
-using KillrVideo.VideoCatalog.Api.Commands;
+using KillrVideo.VideoCatalog.Messages;
+using KillrVideo.VideoCatalog.Messages.Commands;
 
 namespace KillrVideo.SampleDataLoader
 {

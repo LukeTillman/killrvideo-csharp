@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using KillrVideo.Uploads;
 using KillrVideo.Uploads.Dtos;
-using KillrVideo.UploadWorker.Jobs;
+using KillrVideo.Uploads.Worker.Jobs;
 using log4net;
 using Microsoft.WindowsAzure.MediaServices.Client;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
 
-namespace KillrVideo.UploadWorker.EncodingJobMonitor
+namespace KillrVideo.Uploads.Worker.EncodingJobMonitor
 {
     // ReSharper disable ReplaceWithSingleCallToSingle
     // ReSharper disable ReplaceWithSingleCallToFirstOrDefault

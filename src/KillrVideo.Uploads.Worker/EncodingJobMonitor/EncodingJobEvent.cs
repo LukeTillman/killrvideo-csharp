@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace KillrVideo.UploadWorker.EncodingJobMonitor
+namespace KillrVideo.Uploads.Worker.EncodingJobMonitor
 {
     /// <summary>
     /// Represents an event message pulled down from a notificaiton queue.

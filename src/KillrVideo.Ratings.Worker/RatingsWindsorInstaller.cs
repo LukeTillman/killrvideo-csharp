@@ -1,7 +1,8 @@
 ﻿using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using Rebus;
+using KillrVideo.Ratings.Messages.Commands;
+using KillrVideo.Utils.Nimbus;
 
 namespace KillrVideo.Ratings.Worker
 {
@@ -12,8 +13,9 @@ namespace KillrVideo.Ratings.Worker
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            // Register all message bus handlers in this assembly
-            container.Register(Classes.FromThisAssembly().BasedOn<IHandleMessages>().WithServiceAllInterfaces().LifestyleTransient());
+            container.Register(
+                Component.For<NimbusAssemblyConfig>()
+                         .Instance(NimbusAssemblyConfig.FromTypes(typeof(RatingsWindsorInstaller), typeof(RateVideo))));
 
             // Register the Ratings components as singletons so their state can be reused (prepared statements)
             container.Register(

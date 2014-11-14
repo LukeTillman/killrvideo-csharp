@@ -56,6 +56,9 @@
     <Reference Include="Crc32C.NET">
       <HintPath>..\packages\Crc32C.NET.1.0.5.0\lib\net20\Crc32C.NET.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="LZ4, Version=1.0.5.93, Culture=neutral, PublicKeyToken=fd2bda0a70c5a705, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\lz4net.1.0.5.93\lib\net40-client\LZ4.dll</HintPath>
@@ -119,7 +122,36 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\KillrVideo.Comments.Worker\KillrVideo.Comments.Worker.csproj">
+      <Project>{cbabb146-7a7a-4449-8238-376aab8ef1a8}</Project>
+      <Name>KillrVideo.Comments.Worker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Ratings.Worker\KillrVideo.Ratings.Worker.csproj">
+      <Project>{77485df3-70fe-423d-9a9e-42fddc195b30}</Project>
+      <Name>KillrVideo.Ratings.Worker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Statistics.Worker\KillrVideo.Statistics.Worker.csproj">
+      <Project>{1163c400-55b9-46c8-aade-e5e7feaaa550}</Project>
+      <Name>KillrVideo.Statistics.Worker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Uploads.Worker\KillrVideo.Uploads.Worker.csproj">
+      <Project>{24d2ae50-8f3a-4601-b808-054e0fb9a7a4}</Project>
+      <Name>KillrVideo.Uploads.Worker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.UserManagement.Worker\KillrVideo.UserManagement.Worker.csproj">
+      <Project>{21238b1a-4ace-4b59-b2a7-2a59f08bfbfe}</Project>
+      <Name>KillrVideo.UserManagement.Worker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
+      <Project>{9516b3f3-89b7-4343-9f88-ffee6d74fffc}</Project>
+      <Name>KillrVideo.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.VideoCatalog.Worker\KillrVideo.VideoCatalog.Worker.csproj">
+      <Project>{759e48db-da83-4d4b-9476-ac3020fae853}</Project>
+      <Name>KillrVideo.VideoCatalog.Worker</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

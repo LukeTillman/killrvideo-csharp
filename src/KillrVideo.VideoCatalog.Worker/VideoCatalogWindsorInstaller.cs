@@ -1,7 +1,8 @@
 ﻿using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using Rebus;
+using KillrVideo.Utils.Nimbus;
+using KillrVideo.VideoCatalog.Messages.Commands;
 
 namespace KillrVideo.VideoCatalog.Worker
 {
@@ -12,8 +13,9 @@ namespace KillrVideo.VideoCatalog.Worker
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            // Register all message bus handlers in this assembly
-            container.Register(Classes.FromThisAssembly().BasedOn<IHandleMessages>().WithServiceAllInterfaces().LifestyleTransient());
+            container.Register(
+                Component.For<NimbusAssemblyConfig>()
+                         .Instance(NimbusAssemblyConfig.FromTypes(typeof(VideoCatalogWindsorInstaller), typeof(AddVideo))));
 
             // Register the VideoCatalog components as singletons so their state can be reused (prepared statements)
             container.Register(

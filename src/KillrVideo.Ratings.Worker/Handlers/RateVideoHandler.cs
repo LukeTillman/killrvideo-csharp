@@ -1,13 +1,14 @@
 ﻿using System;
-using KillrVideo.Ratings.Api.Commands;
-using Rebus;
+using System.Threading.Tasks;
+using KillrVideo.Ratings.Messages.Commands;
+using Nimbus.Handlers;
 
 namespace KillrVideo.Ratings.Worker.Handlers
 {
     /// <summary>
     /// Records a user rating a video.
     /// </summary>
-    public class RateVideoHandler : IHandleMessages<RateVideo>
+    public class RateVideoHandler : IHandleCommand<RateVideo>
     {
         private readonly IRatingsWriteModel _ratingsWriteModel;
 
@@ -17,9 +18,9 @@ namespace KillrVideo.Ratings.Worker.Handlers
             _ratingsWriteModel = ratingsWriteModel;
         }
 
-        public void Handle(RateVideo message)
+        public Task Handle(RateVideo message)
         {
-            _ratingsWriteModel.RateVideo(message);
+            return _ratingsWriteModel.RateVideo(message);
         }
     }
 }

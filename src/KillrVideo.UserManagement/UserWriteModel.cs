@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.UserManagement.Api.Commands;
+using KillrVideo.UserManagement.Messages.Commands;
 using KillrVideo.Utils;
 
 namespace KillrVideo.UserManagement
