@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
-using KillrVideo.Data.PlaybackStats.Dtos;
-using KillrVideo.Data.Users.Dtos;
-using KillrVideo.Data.Videos.Dtos;
+using KillrVideo.Statistics.Dtos;
+using KillrVideo.UserManagement.Dtos;
 
 namespace KillrVideo.Models.Shared
 {
@@ -24,7 +23,47 @@ namespace KillrVideo.Models.Shared
         /// <summary>
         /// A static mapper function for mapping from the data model to this ViewModel object.
         /// </summary>
-        public static VideoPreviewViewModel FromDataModel(VideoPreview preview, UserProfile author, PlayStats stats, UrlHelper urlHelper)
+        public static VideoPreviewViewModel FromDataModel(VideoCatalog.Dtos.VideoPreview preview, UserProfile author, PlayStats stats, UrlHelper urlHelper)
+        {
+            if (preview == null) return null;
+
+            return new VideoPreviewViewModel
+            {
+                VideoId = preview.VideoId,
+                Name = preview.Name,
+                AddedDate = preview.AddedDate,
+                PreviewImageLocation = preview.PreviewImageLocation,
+                AuthorFirstName = author.FirstName,
+                AuthorLastName = author.LastName,
+                AuthorProfileUrl = urlHelper.Action("Info", "Account", new { userId = author.UserId }),
+                Views = stats.Views
+            };
+        }
+
+        /// <summary>
+        /// A static mapper function for mapping from the data model to this ViewModel object.
+        /// </summary>
+        public static VideoPreviewViewModel FromDataModel(KillrVideo.Search.Dtos.VideoPreview preview, UserProfile author, PlayStats stats, UrlHelper urlHelper)
+        {
+            if (preview == null) return null;
+
+            return new VideoPreviewViewModel
+            {
+                VideoId = preview.VideoId,
+                Name = preview.Name,
+                AddedDate = preview.AddedDate,
+                PreviewImageLocation = preview.PreviewImageLocation,
+                AuthorFirstName = author.FirstName,
+                AuthorLastName = author.LastName,
+                AuthorProfileUrl = urlHelper.Action("Info", "Account", new { userId = author.UserId }),
+                Views = stats.Views
+            };
+        }
+
+        /// <summary>
+        /// A static mapper function for mapping from the data model to this ViewModel object.
+        /// </summary>
+        public static VideoPreviewViewModel FromDataModel(SuggestedVideos.Dtos.VideoPreview preview, UserProfile author, PlayStats stats, UrlHelper urlHelper)
         {
             if (preview == null) return null;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using KillrVideo.Data;
 using KillrVideo.Models.Shared;
+using KillrVideo.VideoCatalog.Messages;
 
 namespace KillrVideo.Models.Videos
 {

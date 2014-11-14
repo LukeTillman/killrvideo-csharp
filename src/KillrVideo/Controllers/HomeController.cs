@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Security.Cryptography;
-using System.Text;
 using System.Web.Mvc;
 using KillrVideo.Authentication;
-using KillrVideo.Data.Users;
-using KillrVideo.Data.Users.Dtos;
 using KillrVideo.Models.Home;
 using KillrVideo.Models.Shared;
+using KillrVideo.UserManagement;
+using KillrVideo.UserManagement.Dtos;
 using KillrVideo.Utils;
 
 namespace KillrVideo.Controllers

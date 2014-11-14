@@ -5,36 +5,37 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using KillrVideo.ActionResults;
 using KillrVideo.Authentication;
-using KillrVideo.Data;
-using KillrVideo.Data.Comments;
-using KillrVideo.Data.Comments.Dtos;
-using KillrVideo.Data.Users;
-using KillrVideo.Data.Users.Dtos;
-using KillrVideo.Data.Videos;
-using KillrVideo.Data.Videos.Dtos;
+using KillrVideo.Comments;
+using KillrVideo.Comments.Dtos;
+using KillrVideo.Comments.Messages.Commands;
 using KillrVideo.Models.Comments;
+using KillrVideo.UserManagement;
+using KillrVideo.UserManagement.Dtos;
 using KillrVideo.Utils;
+using KillrVideo.VideoCatalog;
+using KillrVideo.VideoCatalog.Dtos;
+using Nimbus;
 
 namespace KillrVideo.Controllers
 {
     public class CommentsController : ConventionControllerBase
     {
         private readonly ICommentReadModel _commentReadModel;
-        private readonly ICommentWriteModel _commentWriteModel;
-        private readonly IVideoReadModel _videoReadModel;
+        private readonly IVideoCatalogReadModel _videoReadModel;
         private readonly IUserReadModel _userReadModel;
+        private readonly IBus _bus;
 
-        public CommentsController(ICommentReadModel commentReadModel, ICommentWriteModel commentWriteModel,
-                                  IVideoReadModel videoReadModel, IUserReadModel userReadModel)
+        public CommentsController(ICommentReadModel commentReadModel, IVideoCatalogReadModel videoReadModel, IUserReadModel userReadModel,
+                                  IBus bus)
         {
             if (commentReadModel == null) throw new ArgumentNullException("commentReadModel");
-            if (commentWriteModel == null) throw new ArgumentNullException("commentWriteModel");
             if (videoReadModel == null) throw new ArgumentNullException("videoReadModel");
             if (userReadModel == null) throw new ArgumentNullException("userReadModel");
+            if (bus == null) throw new ArgumentNullException("bus");
             _commentReadModel = commentReadModel;
-            _commentWriteModel = commentWriteModel;
             _videoReadModel = videoReadModel;
             _userReadModel = userReadModel;
+            _bus = bus;
         }
 
         /// <summary>
@@ -126,25 +127,27 @@ namespace KillrVideo.Controllers
             // Shouldn't throw because of the Authorize attribute
             Guid userId = User.GetCurrentUserId().Value;
 
+            var commentTimestamp = DateTimeOffset.UtcNow;
+
             // Add the new comment
             var commentOnVideo = new CommentOnVideo
             {
                 UserId = userId,
                 VideoId = model.VideoId,
-                Comment = model.Comment,
-                CommentTimestamp = DateTimeOffset.UtcNow
+                CommentId = GuidGenerator.GenerateTimeBasedGuid(commentTimestamp),
+                Comment = model.Comment
             };
 
-            Guid commentId = await _commentWriteModel.CommentOnVideo(commentOnVideo);
+            await _bus.Send(commentOnVideo);
 
             // Lookup the current user's information to include in the return data
             UserProfile userInfo = await _userReadModel.GetUserProfile(userId);
 
             return JsonSuccess(new VideoCommentViewModel
             {
-                CommentId = commentId,
+                CommentId = commentOnVideo.CommentId,
                 Comment = commentOnVideo.Comment,
-                CommentTimestamp = commentOnVideo.CommentTimestamp,
+                CommentTimestamp = commentTimestamp,
                 UserProfileUrl = Url.Action("Info", "Account", new { userId }),
                 UserFirstName = userInfo.FirstName,
                 UserLastName = userInfo.LastName,

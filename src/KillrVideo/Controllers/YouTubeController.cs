@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using KillrVideo.ActionResults;
 using KillrVideo.Authentication;
-using KillrVideo.Data;
-using KillrVideo.Data.Videos;
-using KillrVideo.Data.Videos.Dtos;
 using KillrVideo.Models.YouTube;
+using KillrVideo.VideoCatalog.Messages;
+using KillrVideo.VideoCatalog.Messages.Commands;
+using Nimbus;
 
 namespace KillrVideo.Controllers
 {
@@ -17,12 +17,12 @@ namespace KillrVideo.Controllers
     /// </summary>
     public class YouTubeController : ConventionControllerBase
     {
-        private readonly IVideoWriteModel _videoWriteModel;
+        private readonly IBus _bus;
 
-        public YouTubeController(IVideoWriteModel videoWriteModel)
+        public YouTubeController(IBus bus)
         {
-            if (videoWriteModel == null) throw new ArgumentNullException("videoWriteModel");
-            _videoWriteModel = videoWriteModel;
+            if (bus == null) throw new ArgumentNullException("bus");
+            _bus = bus;
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace KillrVideo.Controllers
                 Tags = tags,
                 PreviewImageLocation = string.Format("//img.youtube.com/vi/{0}/hqdefault.jpg", model.YouTubeVideoId)
             };
-            await _videoWriteModel.AddVideo(addVideo);
+            await _bus.Send(addVideo);
 
             // Indicate success
             return JsonSuccess(new YouTubeVideoAddedViewModel

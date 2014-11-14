@@ -5,31 +5,30 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using KillrVideo.ActionFilters;
 using KillrVideo.ActionResults;
-using KillrVideo.Data.PlaybackStats;
-using KillrVideo.Data.PlaybackStats.Dtos;
-using KillrVideo.Data.Users;
-using KillrVideo.Data.Users.Dtos;
-using KillrVideo.Data.Videos;
-using KillrVideo.Data.Videos.Dtos;
 using KillrVideo.Models.Search;
 using KillrVideo.Models.Shared;
-using KillrVideo.Models.Videos;
+using KillrVideo.Search;
+using KillrVideo.Search.Dtos;
+using KillrVideo.Statistics;
+using KillrVideo.Statistics.Dtos;
+using KillrVideo.UserManagement;
+using KillrVideo.UserManagement.Dtos;
 
 namespace KillrVideo.Controllers
 {
     public class SearchController : ConventionControllerBase
     {
-        private readonly IVideoReadModel _videoReadModel;
+        private readonly ISearchVideosByTag _searchService;
         private readonly IUserReadModel _userReadModel;
         private readonly IPlaybackStatsReadModel _statsReadModel;
 
-        public SearchController(IVideoReadModel videoReadModel, IUserReadModel userReadModel,
+        public SearchController(ISearchVideosByTag searchService, IUserReadModel userReadModel,
                                 IPlaybackStatsReadModel statsReadModel)
         {
-            if (videoReadModel == null) throw new ArgumentNullException("videoReadModel");
+            if (searchService == null) throw new ArgumentNullException("searchService");
             if (userReadModel == null) throw new ArgumentNullException("userReadModel");
             if (statsReadModel == null) throw new ArgumentNullException("statsReadModel");
-            _videoReadModel = videoReadModel;
+            _searchService = searchService;
             _userReadModel = userReadModel;
             _statsReadModel = statsReadModel;
         }
@@ -49,7 +48,7 @@ namespace KillrVideo.Controllers
         [HttpPost]
         public async Task<JsonNetResult> Videos(SearchVideosViewModel model)
         {
-            VideosByTag videos = await _videoReadModel.GetVideosByTag(new GetVideosByTag
+            VideosByTag videos = await _searchService.GetVideosByTag(new GetVideosByTag
             {
                 Tag = model.Tag,
                 PageSize = model.PageSize,
@@ -83,7 +82,7 @@ namespace KillrVideo.Controllers
         [HttpGet, NoCache]
         public async Task<JsonNetResult> SuggestTags(SuggestTagsViewModel model)
         {
-            TagsStartingWith tagsStartingWith = await _videoReadModel.GetTagsStartingWith(new GetTagsStartingWith
+            TagsStartingWith tagsStartingWith = await _searchService.GetTagsStartingWith(new GetTagsStartingWith
             {
                 TagStartsWith = model.TagStart,
                 PageSize = model.PageSize

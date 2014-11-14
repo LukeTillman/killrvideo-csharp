@@ -7,19 +7,24 @@ using KillrVideo.Authentication;
 using KillrVideo.Models.Account;
 using KillrVideo.Models.Shared;
 using KillrVideo.UserManagement;
+using KillrVideo.UserManagement.Dtos;
 using KillrVideo.UserManagement.Messages.Commands;
 using KillrVideo.Utils;
+using Nimbus;
 
 namespace KillrVideo.Controllers
 {
     public class AccountController : ConventionControllerBase
     {
         private readonly IUserReadModel _userReadModel;
-        
-        public AccountController(IUserReadModel userReadModel)
+        private readonly IBus _bus;
+
+        public AccountController(IUserReadModel userReadModel, IBus bus)
         {
             if (userReadModel == null) throw new ArgumentNullException("userReadModel");
+            if (bus == null) throw new ArgumentNullException("bus");
             _userReadModel = userReadModel;
+            _bus = bus;
         }
 
         /// <summary>
@@ -40,6 +45,8 @@ namespace KillrVideo.Controllers
             if (ModelState.IsValid == false)
                 return JsonFailure();
 
+            // TODO: Password hashing as part of the user management service
+
             // Generate a user Id and try to register the user account (map from view model first)
             Guid userId = Guid.NewGuid();
             var createUser = new CreateUser
@@ -50,13 +57,17 @@ namespace KillrVideo.Controllers
                 Password = PasswordHash.CreateHash(model.Password),
                 UserId = userId
             };
-            
-            if (await _userWriteModel.CreateUser(createUser) == false)
-            {
-                ModelState.AddModelError(string.Empty, "A user with that email address already exists.");
-                return JsonFailure();
-            }
 
+            // TODO: Validation to try and minimize chance of duplicate users
+            // if (await _userWriteModel.CreateUser(createUser) == false)
+            // {
+            //    ModelState.AddModelError(string.Empty, "A user with that email address already exists.");
+            //    return JsonFailure();
+            //}
+
+            await _bus.Send(createUser);
+
+            // Assume creation successful so sign the user in
             SignTheUserIn(userId);
 
             // Return success

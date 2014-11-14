@@ -414,6 +414,10 @@
       <Project>{5fcf1c36-ed2a-4bf0-b231-b12506210f6d}</Project>
       <Name>KillrVideo.UserManagement</Name>
     </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
+      <Project>{9516b3f3-89b7-4343-9f88-ffee6d74fffc}</Project>
+      <Name>KillrVideo.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.VideoCatalog.Messages\KillrVideo.VideoCatalog.Messages.csproj">
       <Project>{a8dabf0a-03fe-4ea2-a1b3-fb5720a0b878}</Project>
       <Name>KillrVideo.VideoCatalog.Messages</Name>

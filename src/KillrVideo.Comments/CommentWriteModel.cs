@@ -27,24 +27,20 @@ namespace KillrVideo.Comments
         /// <summary>
         /// Adds a comment on a video.  Returns an unique Id for the comment.
         /// </summary>
-        public async Task<Guid> CommentOnVideo(CommentOnVideo comment)
+        public async Task CommentOnVideo(CommentOnVideo comment)
         {
             PreparedStatement[] preparedStatements = await _addCommentStatements;
-
-            // Generate a TimeUUID for the comment Id
-            Guid commentId = GuidGenerator.GenerateTimeBasedGuid(comment.CommentTimestamp);
 
             // Use a batch to insert into all tables
             var batch = new BatchStatement();
 
             // INSERT INTO comments_by_video
-            batch.Add(preparedStatements[0].Bind(comment.VideoId, commentId, comment.UserId, comment.Comment));
+            batch.Add(preparedStatements[0].Bind(comment.VideoId, comment.CommentId, comment.UserId, comment.Comment));
 
             // INSERT INTO comments_by_user
-            batch.Add(preparedStatements[1].Bind(comment.UserId, commentId, comment.VideoId, comment.Comment));
+            batch.Add(preparedStatements[1].Bind(comment.UserId, comment.CommentId, comment.VideoId, comment.Comment));
 
             await _session.ExecuteAsync(batch);
-            return commentId;
         }
 
         private Task<PreparedStatement[]> PrepareAddCommentStatements()

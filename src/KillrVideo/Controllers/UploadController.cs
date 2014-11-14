@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using KillrVideo.ActionResults;
 using KillrVideo.Authentication;
-using KillrVideo.Data.Upload;
-using KillrVideo.Data.Upload.Dtos;
 using KillrVideo.Models.Upload;
+using KillrVideo.Uploads;
+using KillrVideo.Uploads.Dtos;
+using KillrVideo.Uploads.Messages.Commands;
 using Microsoft.WindowsAzure.MediaServices.Client;
+using Nimbus;
 
 namespace KillrVideo.Controllers
 {
@@ -23,20 +25,20 @@ namespace KillrVideo.Controllers
     {
         private readonly CloudMediaContext _cloudMediaContext;
         private readonly INotificationEndPoint _notificationEndPoint;
-        private readonly IUploadedVideosWriteModel _uploadWriteModel;
         private readonly IUploadedVideosReadModel _uploadReadModel;
+        private readonly IBus _bus;
 
         public UploadController(CloudMediaContext cloudMediaContext, INotificationEndPoint notificationEndPoint,
-                                IUploadedVideosWriteModel uploadWriteModel, IUploadedVideosReadModel uploadReadModel)
+                                IUploadedVideosReadModel uploadReadModel, IBus bus)
         {
             if (cloudMediaContext == null) throw new ArgumentNullException("cloudMediaContext");
             if (notificationEndPoint == null) throw new ArgumentNullException("notificationEndPoint");
-            if (uploadWriteModel == null) throw new ArgumentNullException("uploadWriteModel");
             if (uploadReadModel == null) throw new ArgumentNullException("uploadReadModel");
+            if (bus == null) throw new ArgumentNullException("bus");
             _cloudMediaContext = cloudMediaContext;
             _notificationEndPoint = notificationEndPoint;
-            _uploadWriteModel = uploadWriteModel;
             _uploadReadModel = uploadReadModel;
+            _bus = bus;
         }
 
         /// <summary>
@@ -129,7 +131,7 @@ namespace KillrVideo.Controllers
                            ? new HashSet<string>()
                            : new HashSet<string>(model.Tags.Select(t => t.Trim()));
 
-            await _uploadWriteModel.AddVideo(new AddUploadedVideo
+            await _bus.Send(new AddUploadedVideo
             {
                 VideoId = videoId,
                 UserId = User.GetCurrentUserId().Value,

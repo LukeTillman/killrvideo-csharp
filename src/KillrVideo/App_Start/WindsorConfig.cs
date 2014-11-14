@@ -5,9 +5,11 @@ using System.Web.Mvc;
 using Cassandra;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
-using KillrVideo.Data;
-using KillrVideo.Data.Upload;
-using KillrVideo.Data.Users;
+using KillrVideo.Search;
+using KillrVideo.SuggestedVideos;
+using KillrVideo.Uploads;
+using KillrVideo.UserManagement;
+using KillrVideo.VideoCatalog.Messages;
 using log4net;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.MediaServices.Client;
@@ -39,7 +41,7 @@ namespace KillrVideo
 
             // Do container registrations (these would normally be organized as Windsor installers, but for brevity they are inline here)
             RegisterCassandra(container);
-            RegisterDataComponents(container);
+            RegisterReadModels(container);
             RegisterMvcControllers(container);
             RegisterAzureComponents(container);
 
@@ -75,14 +77,18 @@ namespace KillrVideo
             );
         }
 
-        private static void RegisterDataComponents(WindsorContainer container)
+        private static void RegisterReadModels(WindsorContainer container)
         {
             container.Register(
-                // Register all the read/write model objects in the KillrVideo.Data project and register them as Singletons since
-                // we want the state in them (reusable prepared statements) to actually be reused.
-                Classes.FromAssemblyContaining<VideoLocationType>().Pick()
+                // Register all the read model objects in the KillrVideo.XXXX projects and register them as Singletons since
+                // we want the state in them (reusable prepared statements) to actually be reused
+                Classes.FromAssemblyInThisApplication().Where(t => t.Name.EndsWith("ReadModel"))
                        .WithServiceFirstInterface().LifestyleSingleton()
-                       .ConfigureFor<LinqUserReadModel>(c => c.IsDefault())     // Change the Type here to use other IUserReadModel implementations (i.e. ADO.NET or core)
+                       .ConfigureFor<LinqUserReadModel>(c => c.IsDefault()),     // Change the Type here to use other IUserReadModel implementations (i.e. ADO.NET or core)
+                
+                // Register read-only services that don't follow the ReadModel naming convention
+                Component.For<ISearchVideosByTag>().ImplementedBy<SearchVideosByTag>().LifestyleSingleton(),
+                Component.For<ISuggestVideos>().ImplementedBy<SuggestVideos>().LifestyleSingleton()
             );
         }
 

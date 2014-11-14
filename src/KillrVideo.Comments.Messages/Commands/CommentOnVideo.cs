@@ -11,7 +11,7 @@ namespace KillrVideo.Comments.Messages.Commands
     {
         public Guid VideoId { get; set; }
         public Guid UserId { get; set; }
+        public Guid CommentId { get; set; }
         public string Comment { get; set; }
-        public DateTimeOffset CommentTimestamp { get; set; }
     }
 }
