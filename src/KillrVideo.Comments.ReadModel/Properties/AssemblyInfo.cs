@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("KillrVideo.Comments.Worker")]
+[assembly: AssemblyTitle("KillrVideo.Comments.ReadModel")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("KillrVideo.Comments.Worker")]
+[assembly: AssemblyProduct("KillrVideo.Comments.ReadModel")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("1b1daee5-5e5b-45b1-b062-cb07d7b4ede6")]
+[assembly: Guid("40da6b67-2370-4806-9b01-45e9cf4a3fa4")]
 
 // Version information for an assembly consists of the following four values:
 //

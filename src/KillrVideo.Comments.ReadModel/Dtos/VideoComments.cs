@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace KillrVideo.Comments.Dtos
+namespace KillrVideo.Comments.ReadModel.Dtos
 {
     /// <summary>
     /// Represents a page of comments for a video.

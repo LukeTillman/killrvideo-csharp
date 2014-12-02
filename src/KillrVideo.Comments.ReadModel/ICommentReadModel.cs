@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using KillrVideo.Comments.Dtos;
+using KillrVideo.Comments.ReadModel.Dtos;
 
-namespace KillrVideo.Comments
+namespace KillrVideo.Comments.ReadModel
 {
     public interface ICommentReadModel
     {

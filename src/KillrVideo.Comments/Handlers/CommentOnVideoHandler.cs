@@ -5,40 +5,34 @@ using KillrVideo.Comments.Messages.Commands;
 using KillrVideo.Comments.Messages.Events;
 using KillrVideo.Utils;
 using Nimbus;
+using Nimbus.Handlers;
 
-namespace KillrVideo.Comments
+namespace KillrVideo.Comments.Handlers
 {
     /// <summary>
-    /// Handles writes/updates for comments.
+    /// Handles recording user comments on videos.
     /// </summary>
-    public class CommentWriteModel : ICommentWriteModel
+    public class CommentOnVideoHandler : IHandleCommand<CommentOnVideo>
     {
         private readonly ISession _session;
+        private readonly TaskCache<string, PreparedStatement> _statementCache;
         private readonly IBus _bus;
-
-        private readonly AsyncLazy<PreparedStatement[]> _addCommentStatements;
-
-        public CommentWriteModel(ISession session, IBus bus)
+        
+        public CommentOnVideoHandler(ISession session, TaskCache<string, PreparedStatement> statementCache, IBus bus)
         {
             if (session == null) throw new ArgumentNullException("session");
+            if (statementCache == null) throw new ArgumentNullException("statementCache");
             if (bus == null) throw new ArgumentNullException("bus");
             _session = session;
+            _statementCache = statementCache;
             _bus = bus;
-
-            // Some reusable prepared statements
-            _addCommentStatements = new AsyncLazy<PreparedStatement[]>(() => Task.WhenAll(new[]
-            {
-                _session.PrepareAsync("INSERT INTO comments_by_video (videoid, commentid, userid, comment) VALUES (?, ?, ?, ?)"),
-                _session.PrepareAsync("INSERT INTO comments_by_user (userid, commentid, videoid, comment) VALUES (?, ?, ?, ?)")
-            }));
         }
 
-        /// <summary>
-        /// Adds a comment on a video.  Returns an unique Id for the comment.
-        /// </summary>
-        public async Task CommentOnVideo(CommentOnVideo comment)
+        public async Task Handle(CommentOnVideo comment)
         {
-            PreparedStatement[] preparedStatements = await _addCommentStatements;
+            PreparedStatement[] preparedStatements = await _statementCache.NoContext.GetOrAddAllAsync(
+                "INSERT INTO comments_by_video (videoid, commentid, userid, comment) VALUES (?, ?, ?, ?)",
+                "INSERT INTO comments_by_user (userid, commentid, videoid, comment) VALUES (?, ?, ?, ?)");
 
             // Use a batch to insert into all tables
             var batch = new BatchStatement();

@@ -4,7 +4,7 @@ using Castle.Windsor;
 using KillrVideo.Comments.Messages.Commands;
 using KillrVideo.Utils.Nimbus;
 
-namespace KillrVideo.Comments.Worker
+namespace KillrVideo.Comments
 {
     /// <summary>
     /// Castle Windsor installer for installing all the components needed by the Comments worker.
@@ -17,11 +17,6 @@ namespace KillrVideo.Comments.Worker
             container.Register(
                 Component.For<NimbusAssemblyConfig>()
                          .Instance(NimbusAssemblyConfig.FromTypes(typeof (CommentsWindsorInstaller), typeof (CommentOnVideo))));
-
-            // Register the Comments components as singletons so their state can be reused (prepared statements)
-            container.Register(
-                Classes.FromAssemblyContaining<CommentWriteModel>().Pick()
-                       .WithServiceFirstInterface().LifestyleSingleton());
         }
     }
 }

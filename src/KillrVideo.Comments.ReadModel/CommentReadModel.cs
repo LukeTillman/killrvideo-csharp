@@ -1,11 +1,8 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Cassandra;
-using KillrVideo.Comments.Dtos;
-using KillrVideo.Utils;
+using KillrVideo.Comments.ReadModel.Dtos;
 
-namespace KillrVideo.Comments
+namespace KillrVideo.Comments.ReadModel
 {
     /// <summary>
     /// Handles reading data from Cassandra for comments.

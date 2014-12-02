@@ -1,15 +1,15 @@
-using System;
+﻿using System;
 
-namespace KillrVideo.Comments.Dtos
+namespace KillrVideo.Comments.ReadModel.Dtos
 {
     /// <summary>
-    /// A comment by a user.
+    /// A comment on a video.
     /// </summary>
     [Serializable]
-    public class UserComment
+    public class VideoComment
     {
         public Guid CommentId { get; set; }
-        public Guid VideoId { get; set; }
+        public Guid UserId { get; set; }
         public string Comment { get; set; }
         public DateTimeOffset CommentTimestamp { get; set; }
     }

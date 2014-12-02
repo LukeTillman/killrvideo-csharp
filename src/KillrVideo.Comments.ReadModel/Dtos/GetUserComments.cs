@@ -1,14 +1,14 @@
 ﻿using System;
 
-namespace KillrVideo.Comments.Dtos
+namespace KillrVideo.Comments.ReadModel.Dtos
 {
     /// <summary>
-    /// Parameters for getting a page of comments by video.
+    /// Parameters for getting a page of comments by a user.
     /// </summary>
     [Serializable]
-    public class GetVideoComments
+    public class GetUserComments
     {
-        public Guid VideoId { get; set; }
+        public Guid UserId { get; set; }
         public int PageSize { get; set; }
 
         /// <summary>
