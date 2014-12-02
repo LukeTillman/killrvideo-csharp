@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using KillrVideo.Search.Dtos;
+using KillrVideo.Search.ReadModel.Dtos;
 
-namespace KillrVideo.Search
+namespace KillrVideo.Search.ReadModel
 {
     /// <summary>
     /// Component for searching videos by tag.

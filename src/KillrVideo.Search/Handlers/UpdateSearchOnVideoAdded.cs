@@ -5,7 +5,7 @@ using KillrVideo.Utils;
 using KillrVideo.VideoCatalog.Messages.Events;
 using Nimbus.Handlers;
 
-namespace KillrVideo.Search.Worker.Handlers
+namespace KillrVideo.Search.Handlers
 {
     /// <summary>
     /// Updates the search by tags data when new videos are added to the video catalog.

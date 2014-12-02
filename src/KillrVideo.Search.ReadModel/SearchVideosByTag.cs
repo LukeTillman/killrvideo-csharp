@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Search.Dtos;
+using KillrVideo.Search.ReadModel.Dtos;
 using KillrVideo.Utils;
 
-namespace KillrVideo.Search
+namespace KillrVideo.Search.ReadModel
 {
     /// <summary>
     /// Searches for videos by tag in Cassandra.
@@ -13,23 +13,14 @@ namespace KillrVideo.Search
     public class SearchVideosByTag : ISearchVideosByTag
     {
         private readonly ISession _session;
-        
-        private readonly AsyncLazy<PreparedStatement> _getVideosForTag;
-        private readonly AsyncLazy<PreparedStatement> _getVideosForTagPage;
-        private readonly AsyncLazy<PreparedStatement> _getTagsStartingWith;
+        private readonly TaskCache<string, PreparedStatement> _statementCache;
 
-        public SearchVideosByTag(ISession session)
+        public SearchVideosByTag(ISession session, TaskCache<string, PreparedStatement> statementCache)
         {
             if (session == null) throw new ArgumentNullException("session");
+            if (statementCache == null) throw new ArgumentNullException("statementCache");
             _session = session;
-
-            // One for getting the first page, one for getting subsequent pages
-            _getVideosForTag = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync("SELECT * FROM videos_by_tag WHERE tag = ? LIMIT ?"));
-            _getVideosForTagPage =
-                new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync("SELECT * FROM videos_by_tag WHERE tag = ? AND videoid >= ? LIMIT ?"));
-
-            _getTagsStartingWith =
-                new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync("SELECT tag FROM tags_by_letter WHERE first_letter = ? AND tag >= ? LIMIT ?"));
+            _statementCache = statementCache;
         }
 
         /// <summary>
@@ -42,12 +33,12 @@ namespace KillrVideo.Search
             IStatement boundStatement;
             if (getVideos.FirstVideoOnPageVideoId == null)
             {
-                preparedStatement = await _getVideosForTag;
+                preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM videos_by_tag WHERE tag = ? LIMIT ?");
                 boundStatement = preparedStatement.Bind(getVideos.Tag, getVideos.PageSize);
             }
             else
             {
-                preparedStatement = await _getVideosForTagPage;
+                preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM videos_by_tag WHERE tag = ? AND videoid >= ? LIMIT ?");
                 boundStatement = preparedStatement.Bind(getVideos.Tag, getVideos.FirstVideoOnPageVideoId.Value, getVideos.PageSize);
             }
 
@@ -65,7 +56,7 @@ namespace KillrVideo.Search
         public async Task<TagsStartingWith> GetTagsStartingWith(GetTagsStartingWith getTags)
         {
             string firstLetter = getTags.TagStartsWith.Substring(0, 1);
-            PreparedStatement preparedStatement = await _getTagsStartingWith;
+            PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT tag FROM tags_by_letter WHERE first_letter = ? AND tag >= ? LIMIT ?");
             BoundStatement boundStatement = preparedStatement.Bind(firstLetter, getTags.TagStartsWith, getTags.PageSize);
             RowSet rows = await _session.ExecuteAsync(boundStatement);
             return new TagsStartingWith

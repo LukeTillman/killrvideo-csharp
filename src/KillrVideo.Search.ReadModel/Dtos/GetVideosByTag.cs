@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KillrVideo.Search.Dtos
+namespace KillrVideo.Search.ReadModel.Dtos
 {
     /// <summary>
     /// Parameters for requesting a page of videos by tag.
