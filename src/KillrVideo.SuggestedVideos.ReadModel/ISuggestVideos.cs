@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using KillrVideo.SuggestedVideos.Dtos;
+using KillrVideo.SuggestedVideos.ReadModel.Dtos;
 
-namespace KillrVideo.SuggestedVideos
+namespace KillrVideo.SuggestedVideos.ReadModel
 {
     /// <summary>
     /// Suggests videos that might be interesting to a user.

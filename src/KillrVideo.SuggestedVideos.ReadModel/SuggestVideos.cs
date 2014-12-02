@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.SuggestedVideos.Dtos;
+using KillrVideo.SuggestedVideos.ReadModel.Dtos;
 using KillrVideo.Utils;
 
-namespace KillrVideo.SuggestedVideos
+namespace KillrVideo.SuggestedVideos.ReadModel
 {
     /// <summary>
     /// Makes video suggestions based on data in Cassandra.
@@ -16,17 +16,14 @@ namespace KillrVideo.SuggestedVideos
         private const int RelatedVideosToReturn = 4;
 
         private readonly ISession _session;
+        private readonly TaskCache<string, PreparedStatement> _statementCache;
 
-        private readonly AsyncLazy<PreparedStatement> _getTagsForVideo;
-        private readonly AsyncLazy<PreparedStatement> _getVideosForTag;
-
-        public SuggestVideos(ISession session)
+        public SuggestVideos(ISession session, TaskCache<string, PreparedStatement> statementCache)
         {
             if (session == null) throw new ArgumentNullException("session");
+            if (statementCache == null) throw new ArgumentNullException("statementCache");
             _session = session;
-
-            _getTagsForVideo = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync("SELECT tags FROM videos WHERE videoid = ?"));
-            _getVideosForTag = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync("SELECT * FROM videos_by_tag WHERE tag = ? LIMIT ?"));
+            _statementCache = statementCache;
         }
 
         /// <summary>
@@ -35,7 +32,7 @@ namespace KillrVideo.SuggestedVideos
         public async Task<RelatedVideos> GetRelatedVideos(Guid videoId)
         {
             // Lookup the tags for the video
-            PreparedStatement tagsForVideoPrepared = await _getTagsForVideo;
+            PreparedStatement tagsForVideoPrepared = await _statementCache.NoContext.GetOrAddAsync("SELECT tags FROM videos WHERE videoid = ?");
             BoundStatement tagsForVideoBound = tagsForVideoPrepared.Bind(videoId);
             RowSet tagRows = await _session.ExecuteAsync(tagsForVideoBound);
             Row tagRow = tagRows.SingleOrDefault();
@@ -50,7 +47,7 @@ namespace KillrVideo.SuggestedVideos
                 return new RelatedVideos { VideoId = videoId, Videos = Enumerable.Empty<VideoPreview>() };
 
             var relatedVideos = new Dictionary<Guid, VideoPreview>();
-            PreparedStatement videosForTagPrepared = await _getVideosForTag;
+            PreparedStatement videosForTagPrepared = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM videos_by_tag WHERE tag = ? LIMIT ?");
 
             var inFlightQueries = new List<Task<RowSet>>();
             for (var i = 0; i < tags.Count; i++)

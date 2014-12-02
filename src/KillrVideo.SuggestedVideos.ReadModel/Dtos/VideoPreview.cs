@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KillrVideo.SuggestedVideos.Dtos
+namespace KillrVideo.SuggestedVideos.ReadModel.Dtos
 {
     /// <summary>
     /// DTO representing some basic details of a video necessary for showing a preview.

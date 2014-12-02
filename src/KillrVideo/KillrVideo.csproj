@@ -392,10 +392,6 @@
       <Project>{d7e26bcf-316d-431e-b448-dbc54cb17b4f}</Project>
       <Name>KillrVideo.Statistics</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.SuggestedVideos\KillrVideo.SuggestedVideos.csproj">
-      <Project>{33a7f88f-189d-435c-aadb-6d270e6bf3c5}</Project>
-      <Name>KillrVideo.SuggestedVideos</Name>
-    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Uploads.Messages\KillrVideo.Uploads.Messages.csproj">
       <Project>{c51cf234-ece1-4edc-93e2-844e88999825}</Project>
       <Name>KillrVideo.Uploads.Messages</Name>

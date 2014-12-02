@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace KillrVideo.SuggestedVideos.Dtos
+namespace KillrVideo.SuggestedVideos.ReadModel.Dtos
 {
     /// <summary>
     /// Represents videos related to another video.
