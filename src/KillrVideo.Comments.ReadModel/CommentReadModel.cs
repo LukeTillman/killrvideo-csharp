@@ -1,6 +1,9 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Cassandra;
 using KillrVideo.Comments.ReadModel.Dtos;
+using KillrVideo.Utils;
 
 namespace KillrVideo.Comments.ReadModel
 {
@@ -10,27 +13,14 @@ namespace KillrVideo.Comments.ReadModel
     public class CommentReadModel : ICommentReadModel
     {
         private readonly ISession _session;
+        private readonly TaskCache<string, PreparedStatement> _statementCache;
 
-        private readonly AsyncLazy<PreparedStatement> _getUserComments;
-        private readonly AsyncLazy<PreparedStatement> _getUserCommentsPage;
-        private readonly AsyncLazy<PreparedStatement> _getVideoComments;
-        private readonly AsyncLazy<PreparedStatement> _getVideoCommentsPage; 
- 
-        public CommentReadModel(ISession session)
+        public CommentReadModel(ISession session, TaskCache<string, PreparedStatement> statementCache)
         {
             if (session == null) throw new ArgumentNullException("session");
+            if (statementCache == null) throw new ArgumentNullException("statementCache");
             _session = session;
-
-            // Some reusable prepared statements
-            _getUserComments = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync(
-                "SELECT commentid, videoid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_user WHERE userid = ? LIMIT ?"));
-            _getUserCommentsPage = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync(
-                "SELECT commentid, videoid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_user WHERE userid = ? AND commentid <= ? LIMIT ?"));
-
-            _getVideoComments = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync(
-                "SELECT commentid, userid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_video WHERE videoid = ? LIMIT ?"));
-            _getVideoCommentsPage = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync(
-                "SELECT commentid, userid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_video WHERE videoid = ? AND commentid <= ? LIMIT ?"));
+            _statementCache = statementCache;
         }
 
         /// <summary>
@@ -43,12 +33,14 @@ namespace KillrVideo.Comments.ReadModel
 
             if (getComments.FirstCommentIdOnPage.HasValue)
             {
-                prepared = await _getUserCommentsPage;
+                prepared = await _statementCache.NoContext.GetOrAddAsync(
+                    "SELECT commentid, videoid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_user WHERE userid = ? AND commentid <= ? LIMIT ?");
                 bound = prepared.Bind(getComments.UserId, getComments.FirstCommentIdOnPage.Value, getComments.PageSize);
             }
             else
             {
-                prepared = await _getUserComments;
+                prepared = await _statementCache.NoContext.GetOrAddAsync(
+                    "SELECT commentid, videoid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_user WHERE userid = ? LIMIT ?");
                 bound = prepared.Bind(getComments.UserId, getComments.PageSize);
             }
 
@@ -70,12 +62,14 @@ namespace KillrVideo.Comments.ReadModel
 
             if (getComments.FirstCommentIdOnPage.HasValue)
             {
-                prepared = await _getVideoCommentsPage;
+                prepared = await _statementCache.NoContext.GetOrAddAsync(
+                    "SELECT commentid, userid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_video WHERE videoid = ? AND commentid <= ? LIMIT ?");
                 bound = prepared.Bind(getComments.VideoId, getComments.FirstCommentIdOnPage.Value, getComments.PageSize);
             }
             else
             {
-                prepared = await _getVideoComments;
+                prepared = await _statementCache.NoContext.GetOrAddAsync(
+                    "SELECT commentid, userid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_video WHERE videoid = ? LIMIT ?");
                 bound = prepared.Bind(getComments.VideoId, getComments.PageSize);
             }
 

@@ -44,6 +44,9 @@
     <Reference Include="Castle.Core">
       <HintPath>..\packages\Castle.Core.3.3.0\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.Windsor">
+      <HintPath>..\packages\Castle.Windsor.3.3.0\lib\net45\Castle.Windsor.dll</HintPath>
+    </Reference>
     <Reference Include="Crc32C.NET">
       <HintPath>..\packages\Crc32C.NET.1.0.5.0\lib\net20\Crc32C.NET.dll</HintPath>
     </Reference>
@@ -70,9 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommentsWindsorInstaller.cs" />
-    <Compile Include="CommentWriteModel.cs" />
     <Compile Include="Handlers\CommentOnVideoHandler.cs" />
-    <Compile Include="ICommentWriteModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

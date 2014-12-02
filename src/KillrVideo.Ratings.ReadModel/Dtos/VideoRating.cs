@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KillrVideo.Ratings.Dtos
+namespace KillrVideo.Ratings.ReadModel.Dtos
 {
     /// <summary>
     /// Represents the current rating stats for a given video.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KillrVideo.Ratings.Dtos
+namespace KillrVideo.Ratings.ReadModel.Dtos
 {
     /// <summary>
     /// Represents the rating given by a user for a specific video.

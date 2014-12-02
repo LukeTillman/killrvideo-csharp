@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Ratings.Dtos;
+using KillrVideo.Ratings.ReadModel.Dtos;
 using KillrVideo.Utils;
 
-namespace KillrVideo.Ratings
+namespace KillrVideo.Ratings.ReadModel
 {
     /// <summary>
     /// Handles reading data from Cassandra for videos.
@@ -13,19 +13,14 @@ namespace KillrVideo.Ratings
     public class RatingsReadModel : IRatingsReadModel
     {
         private readonly ISession _session;
-
-        private readonly AsyncLazy<PreparedStatement> _getVideoRating;
-        private readonly AsyncLazy<PreparedStatement> _getVideoRatingForUser;
+        private readonly TaskCache<string, PreparedStatement> _statementCache;
         
-        public RatingsReadModel(ISession session)
+        public RatingsReadModel(ISession session, TaskCache<string, PreparedStatement> statementCache)
         {
             if (session == null) throw new ArgumentNullException("session");
+            if (statementCache == null) throw new ArgumentNullException("statementCache");
             _session = session;
-
-            // Reusable prepared statements
-            _getVideoRating = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync("SELECT * FROM video_ratings WHERE videoid = ?"));
-            _getVideoRatingForUser = new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync(
-                "SELECT rating FROM video_ratings_by_user WHERE videoid = ? AND userid = ?"));
+            _statementCache = statementCache;
         }
         
         /// <summary>
@@ -33,7 +28,7 @@ namespace KillrVideo.Ratings
         /// </summary>
         public async Task<VideoRating> GetRating(Guid videoId)
         {
-            PreparedStatement preparedStatement = await _getVideoRating;
+            PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM video_ratings WHERE videoid = ?");
             BoundStatement boundStatement = preparedStatement.Bind(videoId);
             RowSet rows = await _session.ExecuteAsync(boundStatement);
 
@@ -46,7 +41,7 @@ namespace KillrVideo.Ratings
         /// </summary>
         public async Task<UserVideoRating> GetRatingFromUser(Guid videoId, Guid userId)
         {
-            PreparedStatement preparedStatement = await _getVideoRatingForUser;
+            PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT rating FROM video_ratings_by_user WHERE videoid = ? AND userid = ?");
             BoundStatement boundStatement = preparedStatement.Bind(videoId, userId);
             RowSet rows = await _session.ExecuteAsync(boundStatement);
 

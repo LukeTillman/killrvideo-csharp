@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using KillrVideo.Ratings.Dtos;
+using KillrVideo.Ratings.ReadModel.Dtos;
 
-namespace KillrVideo.Ratings
+namespace KillrVideo.Ratings.ReadModel
 {
     /// <summary>
     /// Handles reads for user ratings data of videos.
