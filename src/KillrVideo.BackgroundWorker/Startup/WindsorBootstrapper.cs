@@ -5,9 +5,10 @@ using System.Reflection;
 using Cassandra;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
-using KillrVideo.Comments.Worker;
-using KillrVideo.Ratings.Worker;
-using KillrVideo.Statistics.Worker;
+using KillrVideo.Comments;
+using KillrVideo.Ratings;
+using KillrVideo.Search;
+using KillrVideo.Statistics;
 using KillrVideo.Uploads.Worker;
 using KillrVideo.UserManagement.Worker;
 using KillrVideo.Utils;
@@ -42,7 +43,7 @@ namespace KillrVideo.BackgroundWorker.Startup
             var container = new WindsorContainer();
 
             // Install all the components from the service workers we're composing here in this endpoint
-            container.Install(new CommentsWindsorInstaller(), new RatingsWindsorInstaller(), new StatisticsWindsorInstaller(),
+            container.Install(new CommentsWindsorInstaller(), new RatingsWindsorInstaller(), new StatisticsWindsorInstaller(), new SearchWindsorInstaller(),
                               new UploadsWindsorInstaller(), new UserManagementWindsorInstaller(), new VideoCatalogWindsorInstaller());
 
             // Do container registrations (these would normally be organized as Windsor installers, but for brevity they are inline here)

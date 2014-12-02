@@ -4,7 +4,7 @@ using Castle.Windsor;
 using KillrVideo.Statistics.Messages.Commands;
 using KillrVideo.Utils.Nimbus;
 
-namespace KillrVideo.Statistics.Worker
+namespace KillrVideo.Statistics
 {
     /// <summary>
     /// Castle Windsor installer for installing all the components needed by the Statistics worker.
@@ -16,11 +16,6 @@ namespace KillrVideo.Statistics.Worker
             container.Register(
                 Component.For<NimbusAssemblyConfig>()
                          .Instance(NimbusAssemblyConfig.FromTypes(typeof(StatisticsWindsorInstaller), typeof(RecordPlaybackStarted))));
-
-            // Register the Statistics components as singletons so their state can be reused (prepared statements)
-            container.Register(
-                Classes.FromAssemblyContaining<PlaybackStatsWriteModel>().Pick()
-                       .WithServiceFirstInterface().LifestyleSingleton());
         }
     }
 }

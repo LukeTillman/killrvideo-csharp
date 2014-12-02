@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KillrVideo.Statistics.Dtos
+namespace KillrVideo.Statistics.ReadModel.Dtos
 {
     /// <summary>
     /// The playback stats for a video.

@@ -53,9 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Handlers\RecordPlaybackStartedHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StatisticsWindsorInstaller.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

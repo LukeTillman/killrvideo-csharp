@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using KillrVideo.Statistics.Dtos;
+using KillrVideo.Statistics.ReadModel.Dtos;
 
-namespace KillrVideo.Statistics
+namespace KillrVideo.Statistics.ReadModel
 {
     public interface IPlaybackStatsReadModel
     {

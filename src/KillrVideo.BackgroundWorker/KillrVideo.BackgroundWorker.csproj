@@ -124,9 +124,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KillrVideo.Statistics.Worker\KillrVideo.Statistics.Worker.csproj">
-      <Project>{1163c400-55b9-46c8-aade-e5e7feaaa550}</Project>
-      <Name>KillrVideo.Statistics.Worker</Name>
+    <ProjectReference Include="..\KillrVideo.Comments\KillrVideo.Comments.csproj">
+      <Project>{37bb374e-2e30-4f9d-8f1d-6982116a07b0}</Project>
+      <Name>KillrVideo.Comments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Ratings\KillrVideo.Ratings.csproj">
+      <Project>{c054a489-a037-49e5-8461-546cd61817eb}</Project>
+      <Name>KillrVideo.Ratings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Search\KillrVideo.Search.csproj">
+      <Project>{3da30c11-33c7-4ee8-aa9e-c18a9483efca}</Project>
+      <Name>KillrVideo.Search</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Statistics\KillrVideo.Statistics.csproj">
+      <Project>{d7e26bcf-316d-431e-b448-dbc54cb17b4f}</Project>
+      <Name>KillrVideo.Statistics</Name>
     </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Uploads.Worker\KillrVideo.Uploads.Worker.csproj">
       <Project>{24d2ae50-8f3a-4601-b808-054e0fb9a7a4}</Project>
