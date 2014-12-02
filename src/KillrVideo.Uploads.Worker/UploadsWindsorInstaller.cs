@@ -2,8 +2,8 @@
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using KillrVideo.Uploads.Messages.Commands;
-using KillrVideo.Uploads.Worker.Jobs;
+using KillrVideo.Uploads.Messages.RequestResponse;
+using KillrVideo.Uploads.Worker.EncodingJobMonitor;
 using KillrVideo.Utils.Nimbus;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.MediaServices.Client;
@@ -25,16 +25,18 @@ namespace KillrVideo.Uploads.Worker
         {
             container.Register(
                 Component.For<NimbusAssemblyConfig>()
-                         .Instance(NimbusAssemblyConfig.FromTypes(typeof(UploadsWindsorInstaller), typeof(AddUploadedVideo))));
+                         .Instance(NimbusAssemblyConfig.FromTypes(typeof(UploadsWindsorInstaller), typeof(GenerateUploadDestination))));
 
-            // Register the Uploads components as singletons so their state can be reused (prepared statements)
+            // Register the Uploads components
             container.Register(
-                Classes.FromAssemblyContaining<UploadedVideosWriteModel>().Pick()
-                       .WithServiceFirstInterface().LifestyleSingleton());
+                // Most components
+                Classes.FromAssemblyContaining<UploadDestinationManager>().Pick()
+                       .WithServiceFirstInterface().LifestyleTransient(),
 
-            // Register all IUploadWorkerJobs in this assembly
-            container.Register(Classes.FromThisAssembly().BasedOn<IUploadWorkerJob>().WithServiceBase().LifestyleTransient());
-
+                // The encoding job
+                Component.For<EncodingListenerJob>().LifestyleTransient()
+                );
+            
             // Register Azure components
             RegisterAzureComponents(container);
         }
@@ -54,13 +56,19 @@ namespace KillrVideo.Uploads.Worker
                 // Not thread-safe, so register as transient
                 Component.For<CloudMediaContext>().LifestyleTransient()
             );
-
+            
             // Setup queue for notifications about video encoding jobs
             var storageAccount = CloudStorageAccount.Parse(storageConnectionString);
             container.Register(
                 // Register the queue client and get a new one each time (transient) just to be safe
-                Component.For<CloudQueueClient>().UsingFactoryMethod(storageAccount.CreateCloudQueueClient).LifestyleTransient()
-            );
+                Component.For<CloudQueueClient>().UsingFactoryMethod(storageAccount.CreateCloudQueueClient).LifestyleTransient(),
+
+                // Register the notification endpoint factory and endpoint
+                Component.For<NotificationEndPointFactory>().LifestyleSingleton(),
+                Component.For<INotificationEndPoint>()
+                         .UsingFactoryMethod((k, ctx) => k.Resolve<NotificationEndPointFactory>().GetNotificationEndPoint())
+                         .LifestyleSingleton()
+                );
         }
 
         /// <summary>

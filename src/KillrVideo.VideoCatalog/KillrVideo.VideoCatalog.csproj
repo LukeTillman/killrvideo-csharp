@@ -66,16 +66,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dtos\GetLatestVideos.cs" />
-    <Compile Include="Dtos\GetUserVideos.cs" />
-    <Compile Include="Dtos\LatestVideos.cs" />
-    <Compile Include="Dtos\UserVideos.cs" />
-    <Compile Include="Dtos\VideoPreview.cs" />
-    <Compile Include="IVideoCatalogReadModel.cs" />
     <Compile Include="IVideoCatalogWriteModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Dtos\VideoDetails.cs" />
-    <Compile Include="VideoCatalogReadModel.cs" />
     <Compile Include="VideoCatalogWriteModel.cs" />
   </ItemGroup>
   <ItemGroup>

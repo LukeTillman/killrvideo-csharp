@@ -15,7 +15,7 @@ namespace KillrVideo.VideoCatalog.Worker
         {
             container.Register(
                 Component.For<NimbusAssemblyConfig>()
-                         .Instance(NimbusAssemblyConfig.FromTypes(typeof(VideoCatalogWindsorInstaller), typeof(AddVideo))));
+                         .Instance(NimbusAssemblyConfig.FromTypes(typeof(VideoCatalogWindsorInstaller), typeof(SubmitUploadedVideo))));
 
             // Register the VideoCatalog components as singletons so their state can be reused (prepared statements)
             container.Register(

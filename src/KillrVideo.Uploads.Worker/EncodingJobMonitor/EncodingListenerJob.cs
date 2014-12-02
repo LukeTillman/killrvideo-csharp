@@ -1,37 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using KillrVideo.Uploads.Dtos;
-using KillrVideo.Uploads.Worker.Jobs;
 using log4net;
-using Microsoft.WindowsAzure.MediaServices.Client;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
 
 namespace KillrVideo.Uploads.Worker.EncodingJobMonitor
 {
-    // ReSharper disable ReplaceWithSingleCallToSingle
-    // ReSharper disable ReplaceWithSingleCallToFirstOrDefault
-    // ReSharper disable ReplaceWithSingleCallToSingleOrDefault
-
     /// <summary>
-    /// A job that listens for notifications from Azure Media Services about encoding job progress and 
+    /// A job that listens for notifications from Azure Media Services about encoding job progress and dispatches
+    /// the events to a monitor to handle them.
     /// </summary>
-    public class EncodingListenerJob : UploadWorkerJobBase
+    public class EncodingListenerJob
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (EncodingListenerJob));
-        private static readonly TimeSpan PublishedVideosGoodFor = TimeSpan.FromDays(10000);
         private const string PoisionQueueName = UploadConfig.NotificationQueueName + "-errors";
 
-        private readonly CloudMediaContext _cloudMediaContext;
-        private readonly IUploadedVideosWriteModel _uploadWriteModel;
-        private readonly IUploadedVideosReadModel _uploadReadModel;
-        private readonly IVideoWriteModel _videoWriteModel;
         private readonly CloudQueueClient _cloudQueueClient;
-        private readonly Random _random;
-
+        private readonly IMonitorEncodingJobs _monitor;
+        
         private CloudQueue _queue;
         private CloudQueue _poisonQueue;
         private bool _initialized;
@@ -39,22 +28,14 @@ namespace KillrVideo.Uploads.Worker.EncodingJobMonitor
         private const int MessagesPerGet = 10;
         private const int MaxRetries = 6;
 
-        public EncodingListenerJob(CloudQueueClient cloudQueueClient, CloudMediaContext cloudMediaContext,
-                                   IUploadedVideosWriteModel uploadWriteModel, IUploadedVideosReadModel uploadReadModel,
-                                   IVideoWriteModel videoWriteModel)
+        public EncodingListenerJob(CloudQueueClient cloudQueueClient, IMonitorEncodingJobs monitor)
         {
             if (cloudQueueClient == null) throw new ArgumentNullException("cloudQueueClient");
-            if (cloudMediaContext == null) throw new ArgumentNullException("cloudMediaContext");
-            if (uploadWriteModel == null) throw new ArgumentNullException("uploadWriteModel");
-            if (uploadReadModel == null) throw new ArgumentNullException("uploadReadModel");
-            if (videoWriteModel == null) throw new ArgumentNullException("videoWriteModel");
-            _cloudQueueClient = cloudQueueClient;
-            _cloudMediaContext = cloudMediaContext;
-            _uploadWriteModel = uploadWriteModel;
-            _uploadReadModel = uploadReadModel;
-            _videoWriteModel = videoWriteModel;
+            if (monitor == null) throw new ArgumentNullException("monitor");
 
-            _random = new Random();
+            _cloudQueueClient = cloudQueueClient;
+            _monitor = monitor;
+
             _initialized = false;
         }
 
@@ -67,7 +48,33 @@ namespace KillrVideo.Uploads.Worker.EncodingJobMonitor
             _initialized = true;
         }
 
-        protected override async Task ExecuteImpl(CancellationToken cancellationToken)
+        /// <summary>
+        /// Executes the job.
+        /// </summary>
+        public async Task Execute(CancellationToken cancellationToken)
+        {
+            while (true)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                try
+                {
+                    await ExecuteImpl(cancellationToken).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException)
+                {
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    Logger.Error("Error while processing job", e);
+                }
+
+                await Task.Delay(TimeSpan.FromSeconds(10), cancellationToken).ConfigureAwait(false);
+            }
+        }
+
+        protected async Task ExecuteImpl(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -120,7 +127,7 @@ namespace KillrVideo.Uploads.Worker.EncodingJobMonitor
                     bool handledSuccessfully = false;
                     try
                     {
-                        await HandleJobStateChange(jobEvent);
+                        await _monitor.HandleEncodingJobEvent(jobEvent);
                         handledSuccessfully = true;
                     }
                     catch (Exception e)
@@ -159,89 +166,5 @@ namespace KillrVideo.Uploads.Worker.EncodingJobMonitor
 
             // Exit method to allow a cooldown period (10s) between polling the queue whenever we run out of messages
         }
-
-        private async Task HandleJobStateChange(EncodingJobEvent jobEvent)
-        {
-            // Log the event to C* (this should be idempotent in case of dupliacte tries since we're keyed by the job id, date, and etag in C*)
-            string jobId = jobEvent.GetJobId();
-            await _uploadWriteModel.AddEncodingJobNotification(new AddEncodingJobNotification
-            {
-                JobId = jobId,
-                StatusDate = jobEvent.TimeStamp,
-                ETag = jobEvent.ETag,
-                NewState = jobEvent.GetNewState(),
-                OldState = jobEvent.GetOldState()
-            });
-
-            // If the job is completed successfully, add the video
-            if (jobEvent.WasSuccessful())
-            {
-                // Find the job in Azure Media Services and throw if not found
-                IJob job = _cloudMediaContext.Jobs.Where(j => j.Id == jobId).SingleOrDefault();
-                if (job == null)
-                    throw new InvalidOperationException(string.Format("Could not find job {0}", jobId));
-
-                List<IAsset> outputAssets = job.OutputMediaAssets.ToList();
-
-                // Find the encoded video asset
-                IAsset asset = outputAssets.SingleOrDefault(a => a.Name.StartsWith(UploadConfig.EncodedVideoAssetNamePrefix));
-                if (asset == null)
-                    throw new InvalidOperationException(string.Format("Could not find video output asset for job {0}", jobId));
-                
-                // Publish the asset for progressive downloading (HTML5) by creating an SAS locator for it and adding the file name to the path
-                ILocator locator = asset.Locators.Where(l => l.Type == LocatorType.Sas).FirstOrDefault();
-                if (locator == null)
-                {
-                    const AccessPermissions readPermissions = AccessPermissions.Read | AccessPermissions.List;
-                    locator = await _cloudMediaContext.Locators.CreateAsync(LocatorType.Sas, asset, readPermissions,
-                                                                            PublishedVideosGoodFor);
-                }
-
-                // Get the URL for streaming from the locator (embed file name for the mp4 in locator before query string)
-                IAssetFile mp4File = asset.AssetFiles.ToList().Single(f => f.Name.EndsWith(".mp4", StringComparison.OrdinalIgnoreCase));
-                var location = new UriBuilder(locator.Path);
-                location.Path += "/" + mp4File.Name;
-
-                // Find the thumbnail asset
-                IAsset thumbnailAsset = outputAssets.SingleOrDefault(a => a.Name.StartsWith(UploadConfig.ThumbnailAssetNamePrefix));
-                if (thumbnailAsset == null)
-                    throw new InvalidOperationException(string.Format("Could not find thumbnail output asset for job {0}", jobId));
-
-                // Publish the thumbnail asset by creating a locator for it (again, check if already present)
-                ILocator thumbnailLocator = thumbnailAsset.Locators.Where(l => l.Type == LocatorType.Sas).FirstOrDefault();
-                if (thumbnailLocator == null)
-                {
-                    thumbnailLocator = await _cloudMediaContext.Locators.CreateAsync(LocatorType.Sas, thumbnailAsset, AccessPermissions.Read,
-                                                                                     PublishedVideosGoodFor);
-                }
-
-                // Get the URL for a random thumbnail file in the asset
-                List<IAssetFile> jpgFiles =
-                    thumbnailAsset.AssetFiles.ToList().Where(f => f.Name.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)).ToList();
-                var thumbnailLocation = new UriBuilder(thumbnailLocator.Path);
-                int randomThumbnailIndex = _random.Next(jpgFiles.Count);
-                thumbnailLocation.Path += "/" + jpgFiles[randomThumbnailIndex].Name;
-                
-                UploadedVideo uploadedVideo = await _uploadReadModel.GetByJobId(jobId);
-                if (uploadedVideo == null)
-                    throw new InvalidOperationException(string.Format("Could not find uploaded video data for job {0}", jobId));
-
-                await _videoWriteModel.AddVideo(new AddVideo
-                {
-                    VideoId = uploadedVideo.VideoId,
-                    UserId = uploadedVideo.UserId,
-                    Name = uploadedVideo.Name,
-                    Description = uploadedVideo.Description,
-                    Tags = uploadedVideo.Tags,
-                    Location = location.Uri.AbsoluteUri,
-                    LocationType = VideoLocationType.Upload,
-                    PreviewImageLocation = thumbnailLocation.Uri.AbsoluteUri
-                });
-            }
-        }
     }
-
-    // ReSharper enable ReplaceWithSingleCallToSingle
-    // ReSharper enable ReplaceWithSingleCallToFirstOrDefault
-    // ReSharper enable ReplaceWithSingleCallToSingleOrDefault
 }

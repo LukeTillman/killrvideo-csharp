@@ -23,7 +23,7 @@
             $.ajax({
                 type: "POST",
                 url: "/upload/getlateststatus",
-                data: JSON.stringify({ jobId: params.jobId }),
+                data: JSON.stringify({ videoId: params.videoId }),
                 contentType: "application/json",
                 dataType: "json"
             }).done(function (response) {

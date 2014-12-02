@@ -2,7 +2,9 @@
 using System.Threading.Tasks;
 using Cassandra;
 using KillrVideo.Comments.Messages.Commands;
+using KillrVideo.Comments.Messages.Events;
 using KillrVideo.Utils;
+using Nimbus;
 
 namespace KillrVideo.Comments
 {
@@ -12,16 +14,23 @@ namespace KillrVideo.Comments
     public class CommentWriteModel : ICommentWriteModel
     {
         private readonly ISession _session;
+        private readonly IBus _bus;
 
         private readonly AsyncLazy<PreparedStatement[]> _addCommentStatements;
 
-        public CommentWriteModel(ISession session)
+        public CommentWriteModel(ISession session, IBus bus)
         {
             if (session == null) throw new ArgumentNullException("session");
+            if (bus == null) throw new ArgumentNullException("bus");
             _session = session;
+            _bus = bus;
 
             // Some reusable prepared statements
-            _addCommentStatements = new AsyncLazy<PreparedStatement[]>(PrepareAddCommentStatements);
+            _addCommentStatements = new AsyncLazy<PreparedStatement[]>(() => Task.WhenAll(new[]
+            {
+                _session.PrepareAsync("INSERT INTO comments_by_video (videoid, commentid, userid, comment) VALUES (?, ?, ?, ?)"),
+                _session.PrepareAsync("INSERT INTO comments_by_user (userid, commentid, videoid, comment) VALUES (?, ?, ?, ?)")
+            }));
         }
 
         /// <summary>
@@ -40,15 +49,19 @@ namespace KillrVideo.Comments
             // INSERT INTO comments_by_user
             batch.Add(preparedStatements[1].Bind(comment.UserId, comment.CommentId, comment.VideoId, comment.Comment));
 
-            await _session.ExecuteAsync(batch);
-        }
+            // Use a client side timestamp for the writes that we can include when we publish the event
+            var timestamp = DateTimeOffset.UtcNow;
+            batch.SetTimestamp(timestamp);
 
-        private Task<PreparedStatement[]> PrepareAddCommentStatements()
-        {
-            return Task.WhenAll(new[]
+            await _session.ExecuteAsync(batch);
+
+            // Tell the world about the comment
+            await _bus.Publish(new UserCommentedOnVideo
             {
-                _session.PrepareAsync("INSERT INTO comments_by_video (videoid, commentid, userid, comment) VALUES (?, ?, ?, ?)"),
-                _session.PrepareAsync("INSERT INTO comments_by_user (userid, commentid, videoid, comment) VALUES (?, ?, ?, ?)")
+                UserId = comment.UserId,
+                VideoId = comment.VideoId,
+                CommentId = comment.CommentId,
+                Timestamp = timestamp
             });
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using KillrVideo.VideoCatalog.Messages.Commands;
 
 namespace KillrVideo.VideoCatalog
@@ -9,8 +10,18 @@ namespace KillrVideo.VideoCatalog
     public interface IVideoCatalogWriteModel
     {
         /// <summary>
-        /// Adds a new video.
+        /// Adds a YouTube video to the catalog.
         /// </summary>
-        Task AddVideo(AddVideo video);
+        Task AddYouTubeVideo(SubmitYouTubeVideo youTubeVideo);
+
+        /// <summary>
+        /// Adds an uploaded video to the catalog.
+        /// </summary>
+        Task AddUploadedVideo(SubmitUploadedVideo uploadedVideo);
+
+        /// <summary>
+        /// Updates an uploaded video with the playback location for the video and the thumbnail preview location.
+        /// </summary>
+        Task UpdateUploadedVideoLocations(Guid videoId, string videoLocation, string thumbnailLocation);
     }
 }

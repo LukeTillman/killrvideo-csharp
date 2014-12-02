@@ -247,8 +247,8 @@
     <Compile Include="Models\Account\UserRegisteredViewModel.cs" />
     <Compile Include="Models\Comments\AddCommentViewModel.cs" />
     <Compile Include="Models\Shared\UserProfileViewModel.cs" />
-    <Compile Include="Models\Upload\AssetCreatedViewModel.cs" />
-    <Compile Include="Models\Upload\CreateAssetViewModel.cs" />
+    <Compile Include="Models\Upload\UploadDestinationViewModel.cs" />
+    <Compile Include="Models\Upload\GenerateUploadDestinationViewModel.cs" />
     <Compile Include="Models\Upload\AddUploadedVideoViewModel.cs" />
     <Compile Include="Models\Upload\GetLatestStatusViewModel.cs" />
     <Compile Include="Models\Upload\LatestStatusViewModel.cs" />
@@ -402,9 +402,9 @@
       <Project>{c51cf234-ece1-4edc-93e2-844e88999825}</Project>
       <Name>KillrVideo.Uploads.Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.Uploads\KillrVideo.Uploads.csproj">
-      <Project>{249ac1eb-7035-4e88-a311-c683e049a0ea}</Project>
-      <Name>KillrVideo.Uploads</Name>
+    <ProjectReference Include="..\KillrVideo.Uploads.ReadModel\KillrVideo.Uploads.ReadModel.csproj">
+      <Project>{b3d9f944-0d59-43f0-86eb-751787f2b84e}</Project>
+      <Name>KillrVideo.Uploads.ReadModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\KillrVideo.UserManagement.Messages\KillrVideo.UserManagement.Messages.csproj">
       <Project>{5b9a5088-45fc-44cb-8dae-678cdfa82405}</Project>

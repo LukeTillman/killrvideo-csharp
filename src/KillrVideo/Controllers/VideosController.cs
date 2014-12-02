@@ -15,13 +15,10 @@ using KillrVideo.Statistics;
 using KillrVideo.Statistics.Dtos;
 using KillrVideo.SuggestedVideos;
 using KillrVideo.SuggestedVideos.Dtos;
-using KillrVideo.Uploads;
-using KillrVideo.Uploads.Dtos;
 using KillrVideo.UserManagement;
 using KillrVideo.UserManagement.Dtos;
-using KillrVideo.VideoCatalog;
-using KillrVideo.VideoCatalog.Dtos;
-using KillrVideo.VideoCatalog.Messages;
+using KillrVideo.VideoCatalog.ReadModel;
+using KillrVideo.VideoCatalog.ReadModel.Dtos;
 using Nimbus;
 
 namespace KillrVideo.Controllers
@@ -32,18 +29,16 @@ namespace KillrVideo.Controllers
     public class VideosController : ConventionControllerBase
     {
         private readonly IVideoCatalogReadModel _videoReadModel;
-        private readonly IUploadedVideosReadModel _uploadReadModel;
         private readonly IUserReadModel _userReadModel;
         private readonly IPlaybackStatsReadModel _statsReadModel;
         private readonly IRatingsReadModel _ratingsReadModel;
         private readonly ISuggestVideos _suggestionService;
         private readonly IBus _bus;
 
-        public VideosController(IVideoCatalogReadModel videoReadModel, IUploadedVideosReadModel uploadReadModel, IUserReadModel userReadModel,
-                                IPlaybackStatsReadModel statsReadModel, IRatingsReadModel ratingsReadModel, ISuggestVideos suggestionService, IBus bus)
+        public VideosController(IVideoCatalogReadModel videoReadModel, IUserReadModel userReadModel, IPlaybackStatsReadModel statsReadModel,
+                                IRatingsReadModel ratingsReadModel, ISuggestVideos suggestionService, IBus bus)
         {
             if (videoReadModel == null) throw new ArgumentNullException("videoReadModel");
-            if (uploadReadModel == null) throw new ArgumentNullException("uploadReadModel");
             if (userReadModel == null) throw new ArgumentNullException("userReadModel");
             if (statsReadModel == null) throw new ArgumentNullException("statsReadModel");
             if (ratingsReadModel == null) throw new ArgumentNullException("ratingsReadModel");
@@ -51,7 +46,6 @@ namespace KillrVideo.Controllers
             if (bus == null) throw new ArgumentNullException("bus");
 
             _videoReadModel = videoReadModel;
-            _uploadReadModel = uploadReadModel;
             _userReadModel = userReadModel;
             _statsReadModel = statsReadModel;
             _ratingsReadModel = ratingsReadModel;
@@ -72,48 +66,27 @@ namespace KillrVideo.Controllers
             await Task.WhenAll(videoViewsTask, videoDetailsTask);
 
             VideoDetails videoDetails = videoDetailsTask.Result;
-            UserProfileViewModel profile;
-            if (videoDetails != null)
-            {
-                // TODO: Better way than client-side JOIN?
-                profile = await GetUserProfile(videoDetails.UserId);
-
-                // Found the video, display it
-                return View(new ViewVideoViewModel
-                {
-                    VideoId = videoId,
-                    Title = videoDetails.Name,
-                    Description = videoDetails.Description,
-                    LocationType = videoDetails.LocationType,
-                    Location = videoDetails.Location,
-                    Tags = videoDetails.Tags,
-                    UploadDate = videoDetails.AddedDate,
-                    InProgress = false,
-                    Author = profile,
-                    Views = videoViewsTask.Result.Views
-                });
-            }
-
-            // The video might currently be processing (i.e. if it was just uploaded), so try and find it
-            UploadedVideo uploadDetails = await _uploadReadModel.GetByVideoId(videoId);
-            if (uploadDetails == null)
+            if (videoDetails == null)
                 throw new ArgumentException(string.Format("Could not find a video with id {0}", videoId));
 
             // TODO: Better way than client-side JOIN?
-            profile = await GetUserProfile(uploadDetails.UserId);
+            UserProfileViewModel profile = await GetUserProfile(videoDetails.UserId);
 
+            bool inProgress = videoDetails.LocationType == VideoLocationType.Upload && videoDetails.Location == null;
+
+            // Found the video, display it
             return View(new ViewVideoViewModel
             {
                 VideoId = videoId,
-                Title = uploadDetails.Name,
-                Description = uploadDetails.Description,
-                UploadDate = uploadDetails.AddedDate,
-                LocationType = VideoLocationType.Upload,
-                Tags = uploadDetails.Tags,
-                InProgress = true,
-                InProgressJobId = uploadDetails.JobId,
+                Title = videoDetails.Name,
+                Description = videoDetails.Description,
+                LocationType = videoDetails.LocationType,
+                Location = videoDetails.Location,
+                Tags = videoDetails.Tags,
+                UploadDate = videoDetails.AddedDate,
+                InProgress = inProgress,
                 Author = profile,
-                Views = 0
+                Views = videoViewsTask.Result.Views
             });
         }
 

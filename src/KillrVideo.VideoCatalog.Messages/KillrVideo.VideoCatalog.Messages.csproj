@@ -45,13 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\AddVideo.cs" />
+    <Compile Include="Commands\SubmitUploadedVideo.cs" />
+    <Compile Include="Commands\SubmitYouTubeVideo.cs" />
+    <Compile Include="Events\IVideoAdded.cs" />
+    <Compile Include="Events\UploadedVideoAccepted.cs" />
+    <Compile Include="Events\UploadedVideoAdded.cs" />
+    <Compile Include="Events\YouTubeVideoAdded.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VideoLocationType.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Events\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

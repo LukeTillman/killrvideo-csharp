@@ -9,8 +9,8 @@ namespace KillrVideo.Models.Upload
     public class GetLatestStatusViewModel
     {
         /// <summary>
-        /// The job Id to get the latest status for.
+        /// The video Id to get the latest status for.
         /// </summary>
-        public string JobId { get; set; }
+        public Guid VideoId { get; set; }
     }
 }

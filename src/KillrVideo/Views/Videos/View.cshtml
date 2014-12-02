@@ -1,5 +1,4 @@
-﻿@using System
-@using KillrVideo.Data
+﻿@using KillrVideo.VideoCatalog.ReadModel.Dtos
 @model KillrVideo.Models.Videos.ViewVideoViewModel
 
 @{
@@ -16,7 +15,7 @@
         <div class="embed-responsive embed-responsive-16by9">
             @if (Model.InProgress)
             {
-                <video-upload-status params="jobId: '@Model.InProgressJobId'"></video-upload-status>
+                <video-upload-status params="videoId: '@Model.VideoId'"></video-upload-status>
             }
             else
             {

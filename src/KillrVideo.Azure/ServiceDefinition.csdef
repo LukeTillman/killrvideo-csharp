@@ -17,9 +17,6 @@
     </Imports>
     <ConfigurationSettings>
       <Setting name="CassandraClusterLocation" />
-      <Setting name="AzureMediaServicesAccountName" />
-      <Setting name="AzureMediaServicesAccountKey" />
-      <Setting name="AzureStorageConnectionString" />
       <Setting name="AzureServiceBusConnectionString" />
       <Setting name="AzureServiceBusNamePrefix" />
       <Setting name="AnalyticsEnabled" />

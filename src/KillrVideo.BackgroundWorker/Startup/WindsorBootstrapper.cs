@@ -10,6 +10,7 @@ using KillrVideo.Ratings.Worker;
 using KillrVideo.Statistics.Worker;
 using KillrVideo.Uploads.Worker;
 using KillrVideo.UserManagement.Worker;
+using KillrVideo.Utils;
 using KillrVideo.Utils.Nimbus;
 using KillrVideo.VideoCatalog.Worker;
 using log4net;
@@ -74,9 +75,13 @@ namespace KillrVideo.BackgroundWorker.Startup
                 throw;
             }
 
-            // Register both Cluster and ISession instances with Windsor (essentially as Singletons since it will reuse the instance)
+            // Create a cache for prepared statements that can be used across the app
+            var statementCache = new TaskCache<string, PreparedStatement>(cql => session.PrepareAsync(cql));
+
+            // Register ISession instance and a statement cache for reusing prepared statements as singletons
             container.Register(
-                Component.For<ISession>().Instance(session)
+                Component.For<ISession>().Instance(session),
+                Component.For<TaskCache<string, PreparedStatement>>().Instance(statementCache)
             );
         }
         
@@ -108,6 +113,7 @@ namespace KillrVideo.BackgroundWorker.Startup
                                              .WithConnectionString(connectionString)
                                              .WithNames(appName, uniqueName)
                                              .WithTypesFrom(typeProvider)
+                                             .WithJsonSerializer()
                                              .WithWindsorDefaults(container)
                                              .Build())
                          .LifestyleSingleton()

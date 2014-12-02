@@ -41,19 +41,16 @@ namespace KillrVideo.Controllers
                            ? new HashSet<string>()
                            : new HashSet<string>(model.Tags.Select(t => t.Trim()));
 
-            var addVideo = new AddVideo
+            await _bus.Send(new SubmitYouTubeVideo
             {
                 VideoId = videoId,
                 UserId = User.GetCurrentUserId().Value,
                 Name = model.Name,
                 Description = model.Description,
-                Location = model.YouTubeVideoId,
-                LocationType = VideoLocationType.YouTube,
                 Tags = tags,
-                PreviewImageLocation = string.Format("//img.youtube.com/vi/{0}/hqdefault.jpg", model.YouTubeVideoId)
-            };
-            await _bus.Send(addVideo);
-
+                YouTubeVideoId = model.YouTubeVideoId
+            });
+            
             // Indicate success
             return JsonSuccess(new YouTubeVideoAddedViewModel
             {

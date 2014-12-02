@@ -26,8 +26,8 @@
             return f ? f.name : "No file selected.";
         });
 
-        // The asset data for the upload file (set once upload is complete)
-        self.uploadFileAssetData = ko.observable();
+        // The URL where the file was uploaded (set once upload is complete)
+        self.uploadUrl = null;
 
         // How far along we are in the upload
         self.percentComplete = ko.observable(-1);
@@ -75,7 +75,7 @@
             self.uploadRetryAvailable(false);
 
             // Create the asset on our server, then upload to Azure
-            createAsset(uploadFile).then(uploadTheFile)
+            generateUploadUrl(uploadFile).then(uploadTheFile)
                 .done(function() {
                     // One last check to make sure we didn't get cancelled
                     if (self.uploadCancelled() === true)
@@ -106,7 +106,7 @@
         // Resets the selected file
         self.resetFile = function () {
             self.uploadFile(null);
-            self.uploadFileAssetData(null);
+            self.uploadUrl = null;
             self.percentComplete(-1);
             self.uploadStatus("");
             self.showCommonDetails(false);
@@ -125,13 +125,8 @@
 
         // Subscribe to the save video click on the parent and save the video
         ko.postbox.subscribe("add-upload-save-clicked", function (videoDetails) {
-            var createAssetData = self.uploadFileAssetData();
-
             var addVideoData = {
-                // Copy some data from the response of the create asset call
-                assetId: createAssetData.assetId,
-                fileName: createAssetData.fileName,
-                uploadLocatorId: createAssetData.uploadLocatorId,
+                uploadUrl: self.uploadUrl,
 
                 // Copy some data from when save was originally called
                 name: videoDetails.name,
@@ -166,23 +161,23 @@
         };
 
         // Creates the upload file asset in Azure Media Services via a call to our web app
-        function createAsset(uploadFile) {
+        function generateUploadUrl(uploadFile) {
             // Make sure we weren't cancelled yet
             if (self.uploadCancelled() === true)
                 return $.Deferred().reject().promise();
 
-            return $.post("/upload/createasset", { fileName: uploadFile.name })
-                .then(function(createAssetResponse) {
+            return $.post("/upload/generateuploaddestination", { fileName: uploadFile.name })
+                .then(function(uploadDestinationResponse) {
                     // If server response indicates failure or the upload was cancelled, just return a rejected promise
-                    if (!createAssetResponse.success || self.uploadCancelled() === true)
+                    if (!uploadDestinationResponse.success || self.uploadCancelled() === true)
                         return $.Deferred().reject().promise();
 
-                    return $.Deferred().resolve(uploadFile, createAssetResponse).promise();
+                    return $.Deferred().resolve(uploadFile, uploadDestinationResponse).promise();
                 });
         }
 
         // Does the file upload directly to Azure storage (in chunks)
-        function uploadTheFile(uploadFile, createAssetResponse) {
+        function uploadTheFile(uploadFile, uploadDestinationResponse) {
             // Make sure we weren't cancelled yet
             if (self.uploadCancelled() === true)
                 return $.Deferred().reject().promise();
@@ -200,14 +195,14 @@
             // Once all chunks have been uploaded, we need to make a final request to commit the block list
             uploadFileChunks = uploadFileChunks.then(putBlockList);
 
-            // Upload is done, so chain one more task to save the asset data
+            // Upload is done, so chain one more task to save the upload URL
             uploadFileChunks = uploadFileChunks.then(function() {
-                return self.uploadFileAssetData(createAssetResponse.data);
+                return self.uploadUrl(uploadDestinationResponse.data);
             });
 
             // Create a file reader and resolve the original deferred we created with it to start the upload
             var fileReader = new FileReader();
-            defer.resolve(uploadFile, fileReader, 0, chunks, [], createAssetResponse.data.uploadUrl);   // These args will be passed to the first readFileChunk call
+            defer.resolve(uploadFile, fileReader, 0, chunks, [], uploadDestinationResponse.data.uploadUrl);   // These args will be passed to the first readFileChunk call
 
             // Return the finished upload process as a promise
             return uploadFileChunks.promise();

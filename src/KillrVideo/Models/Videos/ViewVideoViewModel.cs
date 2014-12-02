@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using KillrVideo.Models.Shared;
-using KillrVideo.VideoCatalog.Messages;
+using KillrVideo.VideoCatalog.ReadModel.Dtos;
 
 namespace KillrVideo.Models.Videos
 {
@@ -17,9 +17,7 @@ namespace KillrVideo.Models.Videos
 
         public VideoLocationType LocationType { get; set; }
         public string Location { get; set; }
-
         public bool InProgress { get; set; }
-        public string InProgressJobId { get; set; }
 
         public IEnumerable<string> Tags { get; set; }
 

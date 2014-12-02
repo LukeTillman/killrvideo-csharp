@@ -119,36 +119,36 @@ CREATE TABLE comments_by_user (
     PRIMARY KEY (userid, commentid)
 ) WITH CLUSTERING ORDER BY (commentid DESC);
 
-// Pending uploaded videos by id
-CREATE TABLE uploaded_videos (
+// Uploaded video assets that have been created in Azure Media Services
+CREATE TABLE uploaded_video_destinations (
+    upload_url text,
+    assetid text,
+    filename text,
+    locatorid text,
+    PRIMARY KEY (upload_url)
+);
+
+CREATE TABLE uploaded_video_jobs (
     videoid uuid,
-    userid uuid,
-    name text,
-    description text,
-    tags set<text>,
-    added_date timestamp,
+    upload_url text,
     jobid text,
     PRIMARY KEY (videoid)
 );
 
-// Same as uploaded_videos just keyed by the encoding job's id
-CREATE TABLE uploaded_videos_by_jobid (
+CREATE TABLE uploaded_video_jobs_by_jobid (
     jobid text,
     videoid uuid,
-    userid uuid,
-    name text,
-    description text,
-    tags set<text>,
-    added_date timestamp,
+    upload_url text,
     PRIMARY KEY (jobid)
 );
 
 // Log of notifications from Azure Media Services encoding jobs (latest updates first)
 CREATE TABLE encoding_job_notifications (
-    jobid text,
+    videoid uuid,
     status_date timestamp,
     etag text,
+    jobid text,
     newstate text,
     oldstate text,
-    PRIMARY KEY (jobid, status_date, etag)
+    PRIMARY KEY (videoid, status_date, etag)
 ) WITH CLUSTERING ORDER BY (status_date DESC, etag ASC);

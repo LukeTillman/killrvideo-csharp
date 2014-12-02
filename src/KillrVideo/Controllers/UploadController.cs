@@ -1,80 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using KillrVideo.ActionResults;
 using KillrVideo.Authentication;
 using KillrVideo.Models.Upload;
-using KillrVideo.Uploads;
-using KillrVideo.Uploads.Dtos;
 using KillrVideo.Uploads.Messages.Commands;
+using KillrVideo.Uploads.Messages.RequestResponse;
+using KillrVideo.Uploads.ReadModel;
+using KillrVideo.Uploads.ReadModel.Dtos;
+using KillrVideo.VideoCatalog.Messages.Commands;
 using Microsoft.WindowsAzure.MediaServices.Client;
 using Nimbus;
 
 namespace KillrVideo.Controllers
 {
-// ReSharper disable ReplaceWithSingleCallToFirstOrDefault
-
     /// <summary>
     /// Controller handles upload of videos.
     /// </summary>
     public class UploadController : ConventionControllerBase
     {
-        private readonly CloudMediaContext _cloudMediaContext;
-        private readonly INotificationEndPoint _notificationEndPoint;
         private readonly IUploadedVideosReadModel _uploadReadModel;
         private readonly IBus _bus;
 
-        public UploadController(CloudMediaContext cloudMediaContext, INotificationEndPoint notificationEndPoint,
-                                IUploadedVideosReadModel uploadReadModel, IBus bus)
+        public UploadController(IUploadedVideosReadModel uploadReadModel, IBus bus)
         {
-            if (cloudMediaContext == null) throw new ArgumentNullException("cloudMediaContext");
-            if (notificationEndPoint == null) throw new ArgumentNullException("notificationEndPoint");
             if (uploadReadModel == null) throw new ArgumentNullException("uploadReadModel");
             if (bus == null) throw new ArgumentNullException("bus");
-            _cloudMediaContext = cloudMediaContext;
-            _notificationEndPoint = notificationEndPoint;
             _uploadReadModel = uploadReadModel;
             _bus = bus;
         }
 
         /// <summary>
-        /// Creates a new video Asset in Azure Media services and returns the information necessary for the client to upload the file
-        /// directly to the Azure storage account associated with Media Services.
+        /// Generates a new upload destination in Azure Media Services for the file and returns the URL where the file can be
+        /// directly uploaded.
         /// </summary>
         [HttpPost, Authorize]
-        public async Task<JsonNetResult> CreateAsset(CreateAssetViewModel model)
+        public async Task<JsonNetResult> GenerateUploadDestination(GenerateUploadDestinationViewModel model)
         {
-            // Validate the file extension is one supported by media services and sanitize the file name to remove any invalid characters
-            string fileName;
-            if (TryVerifyAndSanitizeFileName(model.FileName, out fileName) == false)
+            // Generate a destination for the upload
+            UploadDestination uploadDestination = await _bus.Request(new GenerateUploadDestination { FileName = model.FileName });
+            if (uploadDestination.ErrorMessage != null)
             {
-                ModelState.AddModelError(string.Empty, "That file type is not currently supported.");
+                ModelState.AddModelError(string.Empty, uploadDestination.ErrorMessage);
                 return JsonFailure();
             }
             
-            // Create the media services asset
-            string assetName = string.Format("Original - {0}", fileName);
-            IAsset asset = await _cloudMediaContext.Assets.CreateAsync(assetName, AssetCreationOptions.None, CancellationToken.None);
-            IAssetFile file = await asset.AssetFiles.CreateAsync(fileName, CancellationToken.None);
-            
-            // Create locator for the upload directly to storage
-            ILocator uploadLocator = await _cloudMediaContext.Locators.CreateAsync(LocatorType.Sas, asset, AccessPermissions.Write,
-                                                                                   UploadConfig.UploadMaxTime, DateTime.UtcNow.AddMinutes(-2));
-            
-            var uploadUrl = new UriBuilder(uploadLocator.Path);
-            uploadUrl.Path = uploadUrl.Path + "/" + fileName;
-
             // Return the Id and the URL where the file can be uploaded
-            return JsonSuccess(new AssetCreatedViewModel
+            return JsonSuccess(new UploadDestinationViewModel
             {
-                AssetId = asset.Id,
-                FileName = fileName,
-                UploadUrl = uploadUrl.Uri.AbsoluteUri,
-                UploadLocatorId = uploadLocator.Id
+                UploadUrl = uploadDestination.UploadUrl
             });
         }
 
@@ -84,61 +60,20 @@ namespace KillrVideo.Controllers
         [HttpPost, Authorize]
         public async Task<JsonNetResult> Add(AddUploadedVideoViewModel model)
         {
-            // Find the asset to be published
-            IAsset asset = _cloudMediaContext.Assets.Where(a => a.Id == model.AssetId).FirstOrDefault();
-            if (asset == null)
-                throw new InvalidOperationException(string.Format("Could not find asset {0} for publishing.", model.AssetId));
-
-            // Set the file as the primary asset file
-            IAssetFile assetFile = asset.AssetFiles.Where(f => f.Name == model.FileName).FirstOrDefault();
-            if (assetFile == null)
-                throw new InvalidOperationException(string.Format("Could not find file {0} on asset {1}.", model.FileName, model.AssetId));
-
-            assetFile.IsPrimary = true;
-            await assetFile.UpdateAsync();
-            
-            // Remove the upload locator (i.e. revoke upload access)
-            ILocator uploadLocator = asset.Locators.Where(l => l.Id == model.UploadLocatorId).FirstOrDefault();
-            if (uploadLocator != null)
-                await uploadLocator.DeleteAsync();
-            
-            // Create a job with a single task to encode the video
-            string outputAssetName = string.Format("{0}{1}", UploadConfig.EncodedVideoAssetNamePrefix, model.FileName);
-            IJob job = _cloudMediaContext.Jobs.CreateWithSingleTask(MediaProcessorNames.WindowsAzureMediaEncoder,
-                                                                    MediaEncoderTaskPresetStrings.H264BroadbandSD16x9, asset,
-                                                                    outputAssetName, AssetCreationOptions.None);
-            
-            // Get a reference to the asset for the encoded file
-            IAsset encodedAsset = job.Tasks.Single().OutputAssets.Single();
-            
-            // Add a task to create thumbnails to the encoding job (just using the default Thumbnails generation settings)
-            string taskName = string.Format("Create Thumbnails - {0}", model.FileName);
-            IMediaProcessor processor = _cloudMediaContext.MediaProcessors.GetLatestMediaProcessorByName(MediaProcessorNames.WindowsAzureMediaEncoder);
-            ITask task = job.Tasks.AddNew(taskName, processor, UploadConfig.ThumbnailGenerationXml, TaskOptions.ProtectedConfiguration);
-
-            // The task should use the encoded file from the first task as input and output thumbnails in a new asset
-            task.InputAssets.Add(encodedAsset);
-            task.OutputAssets.AddNew(string.Format("{0}{1}", UploadConfig.ThumbnailAssetNamePrefix, model.FileName), AssetCreationOptions.None);
-
-
-            // Get status upades on the job's progress on Azure queue, then start the job
-            job.JobNotificationSubscriptions.AddNew(NotificationJobState.All, _notificationEndPoint);
-            await job.SubmitAsync();
-
-            // Create record for uploaded video in Cassandra
+            // Add the uploaded video
             var videoId = Guid.NewGuid();
             var tags = model.Tags == null
                            ? new HashSet<string>()
                            : new HashSet<string>(model.Tags.Select(t => t.Trim()));
 
-            await _bus.Send(new AddUploadedVideo
+            await _bus.Send(new SubmitUploadedVideo
             {
+                UploadUrl = model.UploadUrl,
                 VideoId = videoId,
                 UserId = User.GetCurrentUserId().Value,
                 Name = model.Name,
                 Description = model.Description,
-                Tags = tags,
-                JobId = job.Id
+                Tags = tags
             });
 
             // Return a URL where the video can be viewed (after the encoding task is finished)
@@ -154,7 +89,7 @@ namespace KillrVideo.Controllers
         [HttpPost]
         public async Task<JsonNetResult> GetLatestStatus(GetLatestStatusViewModel model)
         {
-            EncodingJobProgress status = await _uploadReadModel.GetStatusForJob(model.JobId);
+            EncodingJobProgress status = await _uploadReadModel.GetStatusForVideo(model.VideoId);
 
             // If there isn't a status (yet) just return queued with a timestamp from 30 seconds ago
             if (status == null)
@@ -162,29 +97,5 @@ namespace KillrVideo.Controllers
 
             return JsonSuccess(new LatestStatusViewModel {StatusDate = status.StatusDate, Status = status.CurrentState});
         }
-
-        /// <summary>
-        /// Verifies the file is an allowed file extension type and sanitizes the file name if the extension type is allowed.
-        /// </summary>
-        private static bool TryVerifyAndSanitizeFileName(string fileName, out string sanitizedFileName)
-        {
-            sanitizedFileName = null;
-
-            if (string.IsNullOrEmpty(fileName))
-                return false;
-
-            // Verify the file extension is allowed
-            string extension = Path.GetExtension(fileName);
-            if (UploadConfig.AllowedFileExtensions.Contains(extension) == false)
-                return false;
-
-            // Remove any disallowed characters in the file name (including any extra "." since only 1 for the extension is allowed)
-            sanitizedFileName = Path.GetFileNameWithoutExtension(fileName);
-            sanitizedFileName = UploadConfig.DisallowedFileNameCharacters.Replace(sanitizedFileName, string.Empty);
-            sanitizedFileName = string.Format("{0}.{1}", sanitizedFileName, extension);
-            return true;
-        }
     }
-
-// ReSharper restore ReplaceWithSingleCallToFirstOrDefault
 }

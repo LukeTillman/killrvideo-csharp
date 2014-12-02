@@ -10,10 +10,11 @@ namespace KillrVideo.Utils
     public static class HelperExtensions
     {
         /// <summary>
-        /// Converts an IEnumerable&lt;T&gt; to a HashSet&lt;T&gt;.
+        /// Converts an IEnumerable&lt;T&gt; to a HashSet&lt;T&gt;.  If the IEnumerable is null, returns an empty HashSet.
         /// </summary>
         public static HashSet<T> ToHashSet<T>(this IEnumerable<T> enumerable)
         {
+            if (enumerable == null) return new HashSet<T>();
             return new HashSet<T>(enumerable);
         }
 

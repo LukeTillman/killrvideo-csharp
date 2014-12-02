@@ -35,9 +35,6 @@ namespace KillrVideo
         private static readonly ILog Logger = LogManager.GetLogger(typeof (WindsorConfig));
 
         private const string ClusterLocationAppSettingsKey = "CassandraClusterLocation";
-        private const string MediaServicesNameAppSettingsKey = "AzureMediaServicesAccountName";
-        private const string MediaServicesKeyAppSettingsKey = "AzureMediaServicesAccountKey";
-        private const string StorageConnectionStringAppSettingsKey = "AzureStorageConnectionString";
         private const string AzureServiceBusConnectionStringKey = "AzureServiceBusConnectionString";
         private const string AzureServiceBusNamePrefixKey = "AzureServiceBusNamePrefix";
 
@@ -54,7 +51,6 @@ namespace KillrVideo
             RegisterCassandra(container);
             RegisterReadModels(container);
             RegisterMvcControllers(container);
-            RegisterAzureComponents(container);
             RegisterMessageBus(container);
 
             return container;
@@ -111,42 +107,7 @@ namespace KillrVideo
                 Classes.FromThisAssembly().BasedOn<IController>().LifestyleTransient()
             );
         }
-
-        private static void RegisterAzureComponents(WindsorContainer container)
-        {
-            // Get Azure configurations
-            string mediaServicesAccountName = GetRequiredSetting(MediaServicesNameAppSettingsKey);
-            string mediaServicesAccountKey = GetRequiredSetting(MediaServicesKeyAppSettingsKey);
-            string storageConnectionString = GetRequiredSetting(StorageConnectionStringAppSettingsKey);
-            
-            // We've got all the configs we need so start registering Azure objects
-            var mediaCredentials = new MediaServicesCredentials(mediaServicesAccountName, mediaServicesAccountKey);
-            container.Register(
-                // Recommended be shared by all CloudMediaContext objects so register as singleton
-                Component.For<MediaServicesCredentials>().Instance(mediaCredentials),
-
-                // Not thread-safe, so register as transient
-                Component.For<CloudMediaContext>().LifestyleTransient()
-            );
-
-            // Setup queue for notifications about video encoding jobs
-            var storageAccount = CloudStorageAccount.Parse(storageConnectionString);
-            var notificationQueue = storageAccount.CreateCloudQueueClient().GetQueueReference(UploadConfig.NotificationQueueName);
-            notificationQueue.CreateIfNotExists();
-
-            // Create a notification endpoint for Media Services attached to the queue if one doesn't exist
-            INotificationEndPoint notificationEndPoint = GetOrAddNotificationEndPoint(mediaCredentials);
-
-            container.Register(
-                // Register the queue client and get a new one each time (transient) just to be safe
-                Component.For<CloudQueueClient>().UsingFactoryMethod(storageAccount.CreateCloudQueueClient).LifestyleTransient(),
-
-                // All asset publishing can just reuse the notification endpoint
-                Component.For<INotificationEndPoint>().Instance(notificationEndPoint)
-            );
-
-        }
-
+        
         private static void RegisterMessageBus(WindsorContainer container)
         {
             // Get the Azure Service Bus connection string and prefix for names
@@ -173,6 +134,7 @@ namespace KillrVideo
                                              .WithConnectionString(connectionString)
                                              .WithNames(appName, uniqueName)
                                              .WithTypesFrom(typeProvider)
+                                             .WithJsonSerializer()
                                              .WithWindsorDefaults(container)
                                              .Build())
                          .LifestyleSingleton()
@@ -184,15 +146,7 @@ namespace KillrVideo
         {
             var cloudMediaContext = new CloudMediaContext(mediaCredentials);
             
-            // ReSharper disable once ReplaceWithSingleCallToFirstOrDefault
-            INotificationEndPoint endpoint = cloudMediaContext.NotificationEndPoints
-                                                              .Where(ep => ep.Name == UploadConfig.NotificationQueueName)
-                                                              .FirstOrDefault();
-            if (endpoint != null)
-                return endpoint;
-
-            return cloudMediaContext.NotificationEndPoints.Create(UploadConfig.NotificationQueueName, NotificationEndPointType.AzureQueue,
-                                                                  UploadConfig.NotificationQueueName);
+            
         }
 
         /// <summary>

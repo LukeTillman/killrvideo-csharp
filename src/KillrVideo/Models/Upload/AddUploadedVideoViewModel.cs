@@ -10,19 +10,9 @@ namespace KillrVideo.Models.Upload
     public class AddUploadedVideoViewModel : IAddVideoViewModel
     {
         /// <summary>
-        /// The asset's Id.
+        /// The URL where the video was uploaded.
         /// </summary>
-        public string AssetId { get; set; }
-
-        /// <summary>
-        /// The file name.
-        /// </summary>
-        public string FileName { get; set; }
-
-        /// <summary>
-        /// The unique Id for the upload locator.
-        /// </summary>
-        public string UploadLocatorId { get; set; }
+        public string UploadUrl { get; set; }
 
         /// <summary>
         /// The name/title for the video.
