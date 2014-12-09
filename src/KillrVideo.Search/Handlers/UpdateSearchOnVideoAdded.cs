@@ -10,7 +10,7 @@ namespace KillrVideo.Search.Handlers
     /// <summary>
     /// Updates the search by tags data when new videos are added to the video catalog.
     /// </summary>
-    public class UpdateSearchOnVideoAdded : IHandleMulticastEvent<IVideoAdded>
+    public class UpdateSearchOnVideoAdded : IHandleCompetingEvent<IVideoAdded>
     {
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;

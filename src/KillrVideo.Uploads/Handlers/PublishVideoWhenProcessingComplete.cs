@@ -14,7 +14,7 @@ namespace KillrVideo.Uploads.Handlers
     /// <summary>
     /// Publishes a video for playback when the encoding job is complete.
     /// </summary>
-    public class PublishVideoWhenProcessingComplete : IHandleMulticastEvent<UploadedVideoProcessingSucceeded>
+    public class PublishVideoWhenProcessingComplete : IHandleCompetingEvent<UploadedVideoProcessingSucceeded>
     {
         private static readonly TimeSpan PublishedVideosGoodFor = TimeSpan.FromDays(10000);
 

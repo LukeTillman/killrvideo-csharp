@@ -14,7 +14,7 @@ namespace KillrVideo.Uploads.Handlers
     /// <summary>
     /// Handler for kicking off an encoding job once an uploaded video has been accepted.
     /// </summary>
-    public class EncodeVideoWhenAcceptedHandler : IHandleMulticastEvent<UploadedVideoAccepted>
+    public class EncodeVideoWhenAcceptedHandler : IHandleCompetingEvent<UploadedVideoAccepted>
     {
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;

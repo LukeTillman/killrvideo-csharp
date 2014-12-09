@@ -14,7 +14,7 @@ namespace KillrVideo.VideoCatalog.Handlers
     /// <summary>
     /// Updates an uploaded videos information in the catalog once the video has been published and is ready for viewing.
     /// </summary>
-    public class UpdateUploadedVideoWhenPublished : IHandleMulticastEvent<UploadedVideoPublished>
+    public class UpdateUploadedVideoWhenPublished : IHandleCompetingEvent<UploadedVideoPublished>
     {
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
