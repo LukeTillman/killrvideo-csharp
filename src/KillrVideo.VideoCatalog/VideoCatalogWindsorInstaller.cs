@@ -4,7 +4,7 @@ using Castle.Windsor;
 using KillrVideo.Utils.Nimbus;
 using KillrVideo.VideoCatalog.Messages.Commands;
 
-namespace KillrVideo.VideoCatalog.Worker
+namespace KillrVideo.VideoCatalog
 {
     /// <summary>
     /// Castle Windsor installer for installing all the components needed by the VideoCatalog worker.
@@ -16,11 +16,6 @@ namespace KillrVideo.VideoCatalog.Worker
             container.Register(
                 Component.For<NimbusAssemblyConfig>()
                          .Instance(NimbusAssemblyConfig.FromTypes(typeof(VideoCatalogWindsorInstaller), typeof(SubmitUploadedVideo))));
-
-            // Register the VideoCatalog components as singletons so their state can be reused (prepared statements)
-            container.Register(
-                Classes.FromAssemblyContaining<VideoCatalogWriteModel>().Pick()
-                       .WithServiceFirstInterface().LifestyleSingleton());
         }
     }
 }

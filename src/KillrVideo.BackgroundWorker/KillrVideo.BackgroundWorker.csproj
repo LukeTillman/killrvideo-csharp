@@ -144,10 +144,6 @@
       <Project>{9516b3f3-89b7-4343-9f88-ffee6d74fffc}</Project>
       <Name>KillrVideo.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.VideoCatalog.Worker\KillrVideo.VideoCatalog.Worker.csproj">
-      <Project>{759e48db-da83-4d4b-9476-ac3020fae853}</Project>
-      <Name>KillrVideo.VideoCatalog.Worker</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
