@@ -9,11 +9,11 @@ using KillrVideo.Comments;
 using KillrVideo.Ratings;
 using KillrVideo.Search;
 using KillrVideo.Statistics;
-using KillrVideo.Uploads.Worker;
-using KillrVideo.UserManagement.Worker;
+using KillrVideo.Uploads;
+using KillrVideo.UserManagement;
 using KillrVideo.Utils;
 using KillrVideo.Utils.Nimbus;
-using KillrVideo.VideoCatalog.Worker;
+using KillrVideo.VideoCatalog;
 using log4net;
 using Microsoft.WindowsAzure;
 using Nimbus;
@@ -42,7 +42,7 @@ namespace KillrVideo.BackgroundWorker.Startup
         {
             var container = new WindsorContainer();
 
-            // Install all the components from the service workers we're composing here in this endpoint
+            // Install all the components from the services we're composing here in this endpoint
             container.Install(new CommentsWindsorInstaller(), new RatingsWindsorInstaller(), new StatisticsWindsorInstaller(), new SearchWindsorInstaller(),
                               new UploadsWindsorInstaller(), new UserManagementWindsorInstaller(), new VideoCatalogWindsorInstaller());
 

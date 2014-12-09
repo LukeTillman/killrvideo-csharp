@@ -140,9 +140,21 @@
       <Project>{d7e26bcf-316d-431e-b448-dbc54cb17b4f}</Project>
       <Name>KillrVideo.Statistics</Name>
     </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Uploads\KillrVideo.Uploads.csproj">
+      <Project>{249ac1eb-7035-4e88-a311-c683e049a0ea}</Project>
+      <Name>KillrVideo.Uploads</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.UserManagement\KillrVideo.UserManagement.csproj">
+      <Project>{5fcf1c36-ed2a-4bf0-b231-b12506210f6d}</Project>
+      <Name>KillrVideo.UserManagement</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
       <Project>{9516b3f3-89b7-4343-9f88-ffee6d74fffc}</Project>
       <Name>KillrVideo.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.VideoCatalog\KillrVideo.VideoCatalog.csproj">
+      <Project>{89ce1d0d-12d7-42ce-a407-1c92c8ff4645}</Project>
+      <Name>KillrVideo.VideoCatalog</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

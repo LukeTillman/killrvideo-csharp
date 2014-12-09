@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Castle.Windsor;
 using KillrVideo.BackgroundWorker.Startup;
-using KillrVideo.Uploads.Worker.Jobs;
+using KillrVideo.Uploads.EncodingJobMonitor;
 using log4net;
 using log4net.Config;
 using Microsoft.WindowsAzure.ServiceRuntime;
@@ -18,14 +18,13 @@ namespace KillrVideo.BackgroundWorker
         private static readonly ILog Logger = LogManager.GetLogger(typeof (WorkerRole));
 
         private readonly CancellationTokenSource _cancellationTokenSource;
-        private readonly List<Task> _tasks;
+        private Task _uploadMonitor;
 
         private IWindsorContainer _windsorContainer;
         
         public WorkerRole()
         {
             _cancellationTokenSource = new CancellationTokenSource();
-            _tasks = new List<Task>();
         }
 
         public override bool OnStart()
@@ -47,15 +46,11 @@ namespace KillrVideo.BackgroundWorker
                 var bus = _windsorContainer.Resolve<Bus>();
                 bus.Start();
 
-                // Use the container to get any jobs to run and execute them as Tasks
+                // Start the Upload monitoring job
                 CancellationToken token = _cancellationTokenSource.Token;
-                IUploadWorkerJob[] jobs = _windsorContainer.ResolveAll<IUploadWorkerJob>();
-                foreach (IUploadWorkerJob job in jobs)
-                {
-                    IUploadWorkerJob currentJob = job;
-                    _tasks.Add(Task.Run(() => currentJob.Execute(token), token));
-                }
-                
+                var job = _windsorContainer.Resolve<EncodingListenerJob>();
+                _uploadMonitor = Task.Run(() => job.Execute(token), token);
+
                 return base.OnStart();
             }
             catch (Exception e)
@@ -71,9 +66,10 @@ namespace KillrVideo.BackgroundWorker
 
             try
             {
-                // Cancel any tasks in progress and wait for them to finish
+                // Cancel the upload monitor task and wait for it to finish
                 _cancellationTokenSource.Cancel();
-                Task.WaitAll(_tasks.ToArray());
+                if (_uploadMonitor != null)
+                    _uploadMonitor.Wait();
             }
             catch (AggregateException ae)
             {
