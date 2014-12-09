@@ -140,10 +140,6 @@
       <Project>{d7e26bcf-316d-431e-b448-dbc54cb17b4f}</Project>
       <Name>KillrVideo.Statistics</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.UserManagement.Worker\KillrVideo.UserManagement.Worker.csproj">
-      <Project>{21238b1a-4ace-4b59-b2a7-2a59f08bfbfe}</Project>
-      <Name>KillrVideo.UserManagement.Worker</Name>
-    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
       <Project>{9516b3f3-89b7-4343-9f88-ffee6d74fffc}</Project>
       <Name>KillrVideo.Utils</Name>

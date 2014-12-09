@@ -66,8 +66,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserManagement", "UserManag
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VideoCatalog", "VideoCatalog", "{E34704FB-622C-4783-9779-74F09440E281}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.UserManagement.Worker", "KillrVideo.UserManagement.Worker\KillrVideo.UserManagement.Worker.csproj", "{21238B1A-4ACE-4B59-B2A7-2A59F08BFBFE}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.VideoCatalog.Worker", "KillrVideo.VideoCatalog.Worker\KillrVideo.VideoCatalog.Worker.csproj", "{759E48DB-DA83-4D4B-9476-AC3020FAE853}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.Uploads.ReadModel", "KillrVideo.Uploads.ReadModel\KillrVideo.Uploads.ReadModel.csproj", "{B3D9F944-0D59-43F0-86EB-751787F2B84E}"
@@ -85,6 +83,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.Statistics.ReadModel", "KillrVideo.Statistics.ReadModel\KillrVideo.Statistics.ReadModel.csproj", "{11EF3847-A18E-4A1A-A58D-8C20B71783BC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.SuggestedVideos.ReadModel", "KillrVideo.SuggestedVideos.ReadModel\KillrVideo.SuggestedVideos.ReadModel.csproj", "{E4594154-8578-4C9B-ABF8-FC3526891D92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.UserManagement.ReadModel", "KillrVideo.UserManagement.ReadModel\KillrVideo.UserManagement.ReadModel.csproj", "{3E65C5F6-D91C-4A3D-8B07-45E758F2D632}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -160,10 +160,6 @@ Global
 		{C51CF234-ECE1-4EDC-93E2-844E88999825}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C51CF234-ECE1-4EDC-93E2-844E88999825}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C51CF234-ECE1-4EDC-93E2-844E88999825}.Release|Any CPU.Build.0 = Release|Any CPU
-		{21238B1A-4ACE-4B59-B2A7-2A59F08BFBFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{21238B1A-4ACE-4B59-B2A7-2A59F08BFBFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{21238B1A-4ACE-4B59-B2A7-2A59F08BFBFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{21238B1A-4ACE-4B59-B2A7-2A59F08BFBFE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{759E48DB-DA83-4D4B-9476-AC3020FAE853}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{759E48DB-DA83-4D4B-9476-AC3020FAE853}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{759E48DB-DA83-4D4B-9476-AC3020FAE853}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -200,6 +196,10 @@ Global
 		{E4594154-8578-4C9B-ABF8-FC3526891D92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4594154-8578-4C9B-ABF8-FC3526891D92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4594154-8578-4C9B-ABF8-FC3526891D92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E65C5F6-D91C-4A3D-8B07-45E758F2D632}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E65C5F6-D91C-4A3D-8B07-45E758F2D632}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E65C5F6-D91C-4A3D-8B07-45E758F2D632}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E65C5F6-D91C-4A3D-8B07-45E758F2D632}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -227,7 +227,6 @@ Global
 		{866AA1A1-025C-4A3A-8D85-381EA3C0180F} = {B70BBD28-B0F5-4642-B08A-3BA9C0D103AD}
 		{F5981848-98EB-4490-8650-802E54249BBD} = {B70BBD28-B0F5-4642-B08A-3BA9C0D103AD}
 		{E34704FB-622C-4783-9779-74F09440E281} = {B70BBD28-B0F5-4642-B08A-3BA9C0D103AD}
-		{21238B1A-4ACE-4B59-B2A7-2A59F08BFBFE} = {F5981848-98EB-4490-8650-802E54249BBD}
 		{759E48DB-DA83-4D4B-9476-AC3020FAE853} = {E34704FB-622C-4783-9779-74F09440E281}
 		{B3D9F944-0D59-43F0-86EB-751787F2B84E} = {866AA1A1-025C-4A3A-8D85-381EA3C0180F}
 		{FC5B1860-3AA6-4481-BF80-C048C787CD31} = {E34704FB-622C-4783-9779-74F09440E281}
@@ -237,6 +236,7 @@ Global
 		{F4399660-3EE4-4539-AD24-F4DCAE736688} = {26C327BF-AB75-487E-B755-9F34439772FD}
 		{11EF3847-A18E-4A1A-A58D-8C20B71783BC} = {C08190B9-7BEB-4D15-8E85-D8B25B8D18E9}
 		{E4594154-8578-4C9B-ABF8-FC3526891D92} = {658BC99A-0B0E-42F5-B063-280E298B29B2}
+		{3E65C5F6-D91C-4A3D-8B07-45E758F2D632} = {F5981848-98EB-4490-8650-802E54249BBD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\TransientFaultHandling.Core.5.1.1209.1\lib\NET4

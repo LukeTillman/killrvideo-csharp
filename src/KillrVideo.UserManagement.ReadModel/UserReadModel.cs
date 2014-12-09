@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.UserManagement.Dtos;
+using KillrVideo.UserManagement.ReadModel.Dtos;
 using KillrVideo.Utils;
 
-namespace KillrVideo.UserManagement
+namespace KillrVideo.UserManagement.ReadModel
 {
     /// <summary>
     /// Handles queries related to users using the core Cassandra driver (Statements, Session, etc.)
@@ -14,20 +14,14 @@ namespace KillrVideo.UserManagement
     public class UserReadModel : IUserReadModel
     {
         private readonly ISession _session;
+        private readonly TaskCache<string, PreparedStatement> _statementCache;
 
-        // Reusable, lazy-evaluated prepared statements
-        private readonly AsyncLazy<PreparedStatement> _getCredentials;
-        private readonly AsyncLazy<PreparedStatement> _getUserProfileById; 
-
-        public UserReadModel(ISession session)
+        public UserReadModel(ISession session, TaskCache<string, PreparedStatement> statementCache)
         {
             if (session == null) throw new ArgumentNullException("session");
+            if (statementCache == null) throw new ArgumentNullException("statementCache");
             _session = session;
-
-            _getCredentials =
-                new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync("SELECT email, password, userid FROM user_credentials WHERE email = ?"));
-            _getUserProfileById =
-                new AsyncLazy<PreparedStatement>(() => _session.PrepareAsync("SELECT userid, firstname, lastname, email FROM users WHERE userid = ?"));
+            _statementCache = statementCache;
         }
 
         /// <summary>
@@ -35,7 +29,8 @@ namespace KillrVideo.UserManagement
         /// </summary>
         public async Task<UserCredentials> GetCredentials(string emailAddress)
         {
-            PreparedStatement preparedStatement = await _getCredentials;
+            PreparedStatement preparedStatement =
+                await _statementCache.NoContext.GetOrAddAsync("SELECT email, password, userid FROM user_credentials WHERE email = ?");
 
             // Use the get credentials prepared statement to find credentials for the user
             RowSet result = await _session.ExecuteAsync(preparedStatement.Bind(emailAddress)).ConfigureAwait(false);
@@ -56,7 +51,8 @@ namespace KillrVideo.UserManagement
 
         public async Task<UserProfile> GetUserProfile(Guid userId)
         {
-            PreparedStatement preparedStatement = await _getUserProfileById;
+            PreparedStatement preparedStatement =
+                await _statementCache.NoContext.GetOrAddAsync("SELECT userid, firstname, lastname, email FROM users WHERE userid = ?");
 
             // We should get a single row back for a user id, or null
             RowSet resultRows = await _session.ExecuteAsync(preparedStatement.Bind(userId)).ConfigureAwait(false);

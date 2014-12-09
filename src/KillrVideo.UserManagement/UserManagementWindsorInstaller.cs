@@ -4,7 +4,7 @@ using Castle.Windsor;
 using KillrVideo.UserManagement.Messages.Commands;
 using KillrVideo.Utils.Nimbus;
 
-namespace KillrVideo.UserManagement.Worker
+namespace KillrVideo.UserManagement
 {
     /// <summary>
     /// Castle Windsor installer for installing all the components needed by the UserManagement worker.
@@ -16,11 +16,6 @@ namespace KillrVideo.UserManagement.Worker
             container.Register(
                 Component.For<NimbusAssemblyConfig>()
                          .Instance(NimbusAssemblyConfig.FromTypes(typeof(UserManagementWindsorInstaller), typeof(CreateUser))));
-
-            // Register the UserManagement components as singletons so their state can be reused (prepared statements)
-            container.Register(
-                Classes.FromAssemblyContaining<UserWriteModel>().Pick()
-                       .WithServiceFirstInterface().LifestyleSingleton());
         }
     }
 }

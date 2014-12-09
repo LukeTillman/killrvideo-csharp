@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using KillrVideo.UserManagement.Dtos;
+using KillrVideo.UserManagement.ReadModel.Dtos;
 
-namespace KillrVideo.UserManagement
+namespace KillrVideo.UserManagement.ReadModel
 {
     public interface IUserReadModel
     {

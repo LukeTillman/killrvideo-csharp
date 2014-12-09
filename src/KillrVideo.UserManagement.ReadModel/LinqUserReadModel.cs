@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
 using Cassandra.Data.Linq;
-using KillrVideo.UserManagement.Dtos;
+using KillrVideo.UserManagement.ReadModel.Dtos;
 
-namespace KillrVideo.UserManagement
+namespace KillrVideo.UserManagement.ReadModel
 {
     /// <summary>
     /// Handles queries related to users using the LINQ to CQL driver.
