@@ -7,12 +7,12 @@ using KillrVideo.ActionFilters;
 using KillrVideo.ActionResults;
 using KillrVideo.Models.Search;
 using KillrVideo.Models.Shared;
-using KillrVideo.Search;
-using KillrVideo.Search.Dtos;
-using KillrVideo.Statistics;
-using KillrVideo.Statistics.Dtos;
-using KillrVideo.UserManagement;
-using KillrVideo.UserManagement.Dtos;
+using KillrVideo.Search.ReadModel;
+using KillrVideo.Search.ReadModel.Dtos;
+using KillrVideo.Statistics.ReadModel;
+using KillrVideo.Statistics.ReadModel.Dtos;
+using KillrVideo.UserManagement.ReadModel;
+using KillrVideo.UserManagement.ReadModel.Dtos;
 
 namespace KillrVideo.Controllers
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
-using KillrVideo.Statistics.Dtos;
-using KillrVideo.UserManagement.Dtos;
+using KillrVideo.Statistics.ReadModel.Dtos;
+using KillrVideo.UserManagement.ReadModel.Dtos;
 
 namespace KillrVideo.Models.Shared
 {
@@ -23,7 +23,7 @@ namespace KillrVideo.Models.Shared
         /// <summary>
         /// A static mapper function for mapping from the data model to this ViewModel object.
         /// </summary>
-        public static VideoPreviewViewModel FromDataModel(VideoCatalog.Dtos.VideoPreview preview, UserProfile author, PlayStats stats, UrlHelper urlHelper)
+        public static VideoPreviewViewModel FromDataModel(VideoCatalog.ReadModel.Dtos.VideoPreview preview, UserProfile author, PlayStats stats, UrlHelper urlHelper)
         {
             if (preview == null) return null;
 
@@ -43,7 +43,7 @@ namespace KillrVideo.Models.Shared
         /// <summary>
         /// A static mapper function for mapping from the data model to this ViewModel object.
         /// </summary>
-        public static VideoPreviewViewModel FromDataModel(KillrVideo.Search.Dtos.VideoPreview preview, UserProfile author, PlayStats stats, UrlHelper urlHelper)
+        public static VideoPreviewViewModel FromDataModel(KillrVideo.Search.ReadModel.Dtos.VideoPreview preview, UserProfile author, PlayStats stats, UrlHelper urlHelper)
         {
             if (preview == null) return null;
 
@@ -63,7 +63,7 @@ namespace KillrVideo.Models.Shared
         /// <summary>
         /// A static mapper function for mapping from the data model to this ViewModel object.
         /// </summary>
-        public static VideoPreviewViewModel FromDataModel(SuggestedVideos.Dtos.VideoPreview preview, UserProfile author, PlayStats stats, UrlHelper urlHelper)
+        public static VideoPreviewViewModel FromDataModel(SuggestedVideos.ReadModel.Dtos.VideoPreview preview, UserProfile author, PlayStats stats, UrlHelper urlHelper)
         {
             if (preview == null) return null;
 

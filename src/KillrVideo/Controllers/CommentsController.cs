@@ -5,15 +5,15 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using KillrVideo.ActionResults;
 using KillrVideo.Authentication;
-using KillrVideo.Comments;
-using KillrVideo.Comments.Dtos;
 using KillrVideo.Comments.Messages.Commands;
+using KillrVideo.Comments.ReadModel;
+using KillrVideo.Comments.ReadModel.Dtos;
 using KillrVideo.Models.Comments;
-using KillrVideo.UserManagement;
-using KillrVideo.UserManagement.Dtos;
+using KillrVideo.UserManagement.ReadModel;
+using KillrVideo.UserManagement.ReadModel.Dtos;
 using KillrVideo.Utils;
-using KillrVideo.VideoCatalog;
-using KillrVideo.VideoCatalog.Dtos;
+using KillrVideo.VideoCatalog.ReadModel;
+using KillrVideo.VideoCatalog.ReadModel.Dtos;
 using Nimbus;
 
 namespace KillrVideo.Controllers

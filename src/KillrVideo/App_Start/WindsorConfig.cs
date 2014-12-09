@@ -8,19 +8,15 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using KillrVideo.Comments.Messages.Commands;
 using KillrVideo.Ratings.Messages.Commands;
-using KillrVideo.Search;
+using KillrVideo.Search.ReadModel;
 using KillrVideo.Statistics.Messages.Commands;
-using KillrVideo.SuggestedVideos;
-using KillrVideo.Uploads;
-using KillrVideo.Uploads.Messages.Commands;
-using KillrVideo.UserManagement;
+using KillrVideo.SuggestedVideos.ReadModel;
+using KillrVideo.Uploads.Messages.RequestResponse;
 using KillrVideo.UserManagement.Messages.Commands;
+using KillrVideo.UserManagement.ReadModel;
 using KillrVideo.VideoCatalog.Messages.Commands;
 using log4net;
 using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.MediaServices.Client;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Queue;
 using Nimbus;
 using Nimbus.Configuration;
 using Nimbus.Infrastructure;
@@ -116,8 +112,8 @@ namespace KillrVideo
 
             // Create a type provider with all our message assemblies (there shouldn't be any handlers here since the web app only sends commands)
             var typeProvider = new AssemblyScanningTypeProvider(typeof (CommentOnVideo).Assembly, typeof (RateVideo).Assembly,
-                                                                typeof (RecordPlaybackStarted).Assembly, typeof (AddUploadedVideo).Assembly,
-                                                                typeof (CreateUser).Assembly, typeof (AddVideo).Assembly);
+                                                                typeof (RecordPlaybackStarted).Assembly, typeof (GenerateUploadDestination).Assembly,
+                                                                typeof (CreateUser).Assembly, typeof (SubmitUploadedVideo).Assembly);
             container.RegisterNimbus(typeProvider);
 
             // Get app name and unique name
@@ -140,13 +136,6 @@ namespace KillrVideo
                          .LifestyleSingleton()
                          .StartUsingMethod("Start")
                 );
-        }
-
-        private static INotificationEndPoint GetOrAddNotificationEndPoint(MediaServicesCredentials mediaCredentials)
-        {
-            var cloudMediaContext = new CloudMediaContext(mediaCredentials);
-            
-            
         }
 
         /// <summary>

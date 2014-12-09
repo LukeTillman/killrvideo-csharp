@@ -372,25 +372,33 @@
       <Project>{92b7eb7e-890c-4f34-87fe-8f3b15c77241}</Project>
       <Name>KillrVideo.Comments.Messages</Name>
     </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Comments.ReadModel\KillrVideo.Comments.ReadModel.csproj">
+      <Project>{e196ef68-315c-4223-810c-f2ece08cbb05}</Project>
+      <Name>KillrVideo.Comments.ReadModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Ratings.Messages\KillrVideo.Ratings.Messages.csproj">
       <Project>{2d0aee43-129e-448b-96d1-9b68d0311584}</Project>
       <Name>KillrVideo.Ratings.Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.Ratings\KillrVideo.Ratings.csproj">
-      <Project>{c054a489-a037-49e5-8461-546cd61817eb}</Project>
-      <Name>KillrVideo.Ratings</Name>
+    <ProjectReference Include="..\KillrVideo.Ratings.ReadModel\KillrVideo.Ratings.ReadModel.csproj">
+      <Project>{a4d7496e-1625-4bbe-92bc-4d84ab3e780e}</Project>
+      <Name>KillrVideo.Ratings.ReadModel</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.Search\KillrVideo.Search.csproj">
-      <Project>{3da30c11-33c7-4ee8-aa9e-c18a9483efca}</Project>
-      <Name>KillrVideo.Search</Name>
+    <ProjectReference Include="..\KillrVideo.Search.ReadModel\KillrVideo.Search.ReadModel.csproj">
+      <Project>{f4399660-3ee4-4539-ad24-f4dcae736688}</Project>
+      <Name>KillrVideo.Search.ReadModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Statistics.Messages\KillrVideo.Statistics.Messages.csproj">
       <Project>{194dc607-2a7c-4802-80e8-8d351dbf32ca}</Project>
       <Name>KillrVideo.Statistics.Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.Statistics\KillrVideo.Statistics.csproj">
-      <Project>{d7e26bcf-316d-431e-b448-dbc54cb17b4f}</Project>
-      <Name>KillrVideo.Statistics</Name>
+    <ProjectReference Include="..\KillrVideo.Statistics.ReadModel\KillrVideo.Statistics.ReadModel.csproj">
+      <Project>{11ef3847-a18e-4a1a-a58d-8c20b71783bc}</Project>
+      <Name>KillrVideo.Statistics.ReadModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.SuggestedVideos.ReadModel\KillrVideo.SuggestedVideos.ReadModel.csproj">
+      <Project>{e4594154-8578-4c9b-abf8-fc3526891d92}</Project>
+      <Name>KillrVideo.SuggestedVideos.ReadModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Uploads.Messages\KillrVideo.Uploads.Messages.csproj">
       <Project>{c51cf234-ece1-4edc-93e2-844e88999825}</Project>
@@ -404,9 +412,9 @@
       <Project>{5b9a5088-45fc-44cb-8dae-678cdfa82405}</Project>
       <Name>KillrVideo.UserManagement.Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.UserManagement\KillrVideo.UserManagement.csproj">
-      <Project>{5fcf1c36-ed2a-4bf0-b231-b12506210f6d}</Project>
-      <Name>KillrVideo.UserManagement</Name>
+    <ProjectReference Include="..\KillrVideo.UserManagement.ReadModel\KillrVideo.UserManagement.ReadModel.csproj">
+      <Project>{3e65c5f6-d91c-4a3d-8b07-45e758f2d632}</Project>
+      <Name>KillrVideo.UserManagement.ReadModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
       <Project>{9516b3f3-89b7-4343-9f88-ffee6d74fffc}</Project>

@@ -3,8 +3,8 @@ using System.Web.Mvc;
 using KillrVideo.Authentication;
 using KillrVideo.Models.Home;
 using KillrVideo.Models.Shared;
-using KillrVideo.UserManagement;
-using KillrVideo.UserManagement.Dtos;
+using KillrVideo.UserManagement.ReadModel;
+using KillrVideo.UserManagement.ReadModel.Dtos;
 using KillrVideo.Utils;
 
 namespace KillrVideo.Controllers

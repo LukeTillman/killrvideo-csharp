@@ -6,9 +6,9 @@ using KillrVideo.ActionResults;
 using KillrVideo.Authentication;
 using KillrVideo.Models.Account;
 using KillrVideo.Models.Shared;
-using KillrVideo.UserManagement;
-using KillrVideo.UserManagement.Dtos;
 using KillrVideo.UserManagement.Messages.Commands;
+using KillrVideo.UserManagement.ReadModel;
+using KillrVideo.UserManagement.ReadModel.Dtos;
 using KillrVideo.Utils;
 using Nimbus;
 
