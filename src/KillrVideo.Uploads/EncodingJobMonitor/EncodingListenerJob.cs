@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Cassandra;
 using KillrVideo.Uploads.Dtos;
+using KillrVideo.Uploads.Messages.Events;
+using KillrVideo.Utils;
 using log4net;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
+using Nimbus;
 
-namespace KillrVideo.Uploads.Worker.EncodingJobMonitor
+namespace KillrVideo.Uploads.EncodingJobMonitor
 {
     /// <summary>
-    /// A job that listens for notifications from Azure Media Services about encoding job progress and dispatches
-    /// the events to a monitor to handle them.
+    /// A job that listens for notifications from Azure Media Services about encoding job progress and logs the events in C*, as well
+    /// as publishes events on the Bus about the status of the encoding job.
     /// </summary>
     public class EncodingListenerJob
     {
@@ -19,8 +24,10 @@ namespace KillrVideo.Uploads.Worker.EncodingJobMonitor
         private const string PoisionQueueName = UploadConfig.NotificationQueueName + "-errors";
 
         private readonly CloudQueueClient _cloudQueueClient;
-        private readonly IMonitorEncodingJobs _monitor;
-        
+        private readonly ISession _session;
+        private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly IBus _bus;
+
         private CloudQueue _queue;
         private CloudQueue _poisonQueue;
         private bool _initialized;
@@ -28,14 +35,18 @@ namespace KillrVideo.Uploads.Worker.EncodingJobMonitor
         private const int MessagesPerGet = 10;
         private const int MaxRetries = 6;
 
-        public EncodingListenerJob(CloudQueueClient cloudQueueClient, IMonitorEncodingJobs monitor)
+        public EncodingListenerJob(CloudQueueClient cloudQueueClient, ISession session, TaskCache<string, PreparedStatement> statementCache, IBus bus)
         {
             if (cloudQueueClient == null) throw new ArgumentNullException("cloudQueueClient");
-            if (monitor == null) throw new ArgumentNullException("monitor");
-
+            if (session == null) throw new ArgumentNullException("session");
+            if (statementCache == null) throw new ArgumentNullException("statementCache");
+            if (bus == null) throw new ArgumentNullException("bus");
+            
             _cloudQueueClient = cloudQueueClient;
-            _monitor = monitor;
-
+            _session = session;
+            _statementCache = statementCache;
+            _bus = bus;
+            
             _initialized = false;
         }
 
@@ -74,7 +85,7 @@ namespace KillrVideo.Uploads.Worker.EncodingJobMonitor
             }
         }
 
-        protected async Task ExecuteImpl(CancellationToken cancellationToken)
+        private async Task ExecuteImpl(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -127,7 +138,7 @@ namespace KillrVideo.Uploads.Worker.EncodingJobMonitor
                     bool handledSuccessfully = false;
                     try
                     {
-                        await _monitor.HandleEncodingJobEvent(jobEvent);
+                        await HandleEncodingJobEvent(jobEvent);
                         handledSuccessfully = true;
                     }
                     catch (Exception e)
@@ -165,6 +176,54 @@ namespace KillrVideo.Uploads.Worker.EncodingJobMonitor
             } while (gotSomeMessages);
 
             // Exit method to allow a cooldown period (10s) between polling the queue whenever we run out of messages
+        }
+
+        private async Task HandleEncodingJobEvent(EncodingJobEvent notification)
+        {
+            string jobId = notification.GetJobId();
+
+            // Lookup the uploaded video's Id by job Id
+            PreparedStatement lookupPrepared =
+                await _statementCache.NoContext.GetOrAddAsync("SELECT videoid FROM uploaded_video_jobs_by_jobid WHERE jobid = ?");
+            RowSet lookupRows = await _session.ExecuteAsync(lookupPrepared.Bind(jobId));
+            Row lookupRow = lookupRows.SingleOrDefault();
+            if (lookupRow == null)
+                throw new InvalidOperationException(string.Format("Could not find video for job id {0}", jobId));
+
+            var videoId = lookupRow.GetValue<Guid>("videoid");
+
+            // Log the event to C* (this should be idempotent in case of dupliacte tries since we're keyed by the job id, date, and etag in C*)
+            PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync(
+                "INSERT INTO encoding_job_notifications (videoid, status_date, etag, jobId, newstate, oldstate) VALUES (?, ?, ?, ?, ?, ?)");
+
+            string newState = notification.GetNewState();
+            string oldState = notification.GetOldState();
+            DateTimeOffset statusDate = notification.TimeStamp;
+
+            // INSERT INTO encoding_job_notifications ...
+            await _session.ExecuteAsync(
+                preparedStatement.Bind(videoId, statusDate, notification.ETag, jobId, newState, oldState).SetTimestamp(statusDate));
+
+            // See if the job has finished and if not, just bail
+            if (notification.IsJobFinished() == false)
+                return;
+
+            // Publish the appropriate event based on whether the job was successful or not
+            if (notification.WasSuccessful())
+            {
+                await _bus.Publish(new UploadedVideoProcessingSucceeded
+                {
+                    VideoId = videoId,
+                    Timestamp = notification.TimeStamp
+                });
+                return;
+            }
+
+            await _bus.Publish(new UploadedVideoProcessingFailed
+            {
+                VideoId = videoId,
+                Timestamp = notification.TimeStamp
+            });
         }
     }
 }

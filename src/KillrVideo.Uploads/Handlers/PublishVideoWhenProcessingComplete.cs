@@ -1,20 +1,20 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Uploads.Dtos;
 using KillrVideo.Uploads.Messages.Events;
 using KillrVideo.Utils;
 using Microsoft.WindowsAzure.MediaServices.Client;
 using Nimbus;
+using Nimbus.Handlers;
 
-namespace KillrVideo.Uploads
+namespace KillrVideo.Uploads.Handlers
 {
     /// <summary>
-    /// Component responsible for reacing to changes in Azure Media Services encoding job states.
+    /// Publishes a video for playback when the encoding job is complete.
     /// </summary>
-    public class EncodingJobMonitor : IMonitorEncodingJobs
+    public class PublishVideoWhenProcessingComplete : IHandleMulticastEvent<UploadedVideoProcessingSucceeded>
     {
         private static readonly TimeSpan PublishedVideosGoodFor = TimeSpan.FromDays(10000);
 
@@ -22,15 +22,16 @@ namespace KillrVideo.Uploads
         private readonly TaskCache<string, PreparedStatement> _statementCache;
         private readonly IBus _bus;
         private readonly CloudMediaContext _cloudMediaContext;
+
         private readonly Random _random;
 
-        public EncodingJobMonitor(ISession session, TaskCache<string, PreparedStatement> statementCache, IBus bus, CloudMediaContext cloudMediaContext)
+        public PublishVideoWhenProcessingComplete(ISession session, TaskCache<string, PreparedStatement> statementCache,
+                                                  IBus bus, CloudMediaContext cloudMediaContext)
         {
             if (session == null) throw new ArgumentNullException("session");
             if (statementCache == null) throw new ArgumentNullException("statementCache");
             if (bus == null) throw new ArgumentNullException("bus");
             if (cloudMediaContext == null) throw new ArgumentNullException("cloudMediaContext");
-
             _session = session;
             _statementCache = statementCache;
             _bus = bus;
@@ -42,44 +43,17 @@ namespace KillrVideo.Uploads
         // ReSharper disable ReplaceWithSingleCallToFirstOrDefault
         // ReSharper disable ReplaceWithSingleCallToSingleOrDefault
 
-        /// <summary>
-        /// Handles an event/notification from Azure Media Services about an encoding job.
-        /// </summary>
-        public async Task HandleEncodingJobEvent(EncodingJobEvent notification)
+        public async Task Handle(UploadedVideoProcessingSucceeded encodedVideo)
         {
-            string jobId = notification.GetJobId();
-
-            // Lookup the uploaded video's Id by job Id
+            // Lookup the job Id for the video in Cassandra
             PreparedStatement lookupPrepared =
-                await _statementCache.NoContext.GetOrAddAsync("SELECT videoid FROM uploaded_video_jobs_by_jobid WHERE jobid = ?");
-            RowSet lookupRows = await _session.ExecuteAsync(lookupPrepared.Bind(jobId));
+                await _statementCache.NoContext.GetOrAddAsync("SELECT jobid FROM uploaded_video_jobs WHERE videoid = ?");
+            RowSet lookupRows = await _session.ExecuteAsync(lookupPrepared.Bind(encodedVideo.VideoId));
             Row lookupRow = lookupRows.SingleOrDefault();
             if (lookupRow == null)
-                throw new InvalidOperationException(string.Format("Could not find video for job id {0}", jobId));
+                throw new InvalidOperationException(string.Format("Could not find job for video id {0}", encodedVideo.VideoId));
 
-            var videoId = lookupRow.GetValue<Guid>("videoid");
-
-            // If the job isn't finished yet, just record the event and bail
-            if (notification.IsJobFinished() == false)
-            {
-                await RecordEventInCassandra(notification, videoId);
-                return;
-            }
-            
-            // See if the finished job was successful
-            if (notification.WasSuccessful() == false)
-            {
-                // Job failed so record it and notify the world
-                await RecordEventInCassandra(notification, videoId);
-                await _bus.Publish(new UploadedVideoProcessingFailed
-                {
-                    VideoId = videoId,
-                    Timestamp = notification.TimeStamp
-                });
-                return;
-            }
-
-            // Job finished successfully, so do work necessary to publish it for playback
+            var jobId = lookupRow.GetValue<string>("jobid");
 
             // Find the job in Azure Media Services and throw if not found
             IJob job = _cloudMediaContext.Jobs.Where(j => j.Id == jobId).SingleOrDefault();
@@ -127,37 +101,17 @@ namespace KillrVideo.Uploads
             int randomThumbnailIndex = _random.Next(jpgFiles.Count);
             thumbnailLocation.Path += "/" + jpgFiles[randomThumbnailIndex].Name;
 
-            // Record the status and tell the world about the successful encoding job
-            await RecordEventInCassandra(notification, videoId);
-            await _bus.Publish(new UploadedVideoProcessingSucceeded
+            // Tell the world about the video that's been published
+            await _bus.Publish(new UploadedVideoPublished
             {
-                VideoId = videoId,
+                VideoId = encodedVideo.VideoId,
                 VideoUrl = videoLocation.Uri.AbsoluteUri,
                 ThumbnailUrl = thumbnailLocation.Uri.AbsoluteUri,
-                Timestamp = notification.TimeStamp
+                Timestamp = encodedVideo.Timestamp
             });
         }
 
         // ReSharper restore ReplaceWithSingleCallToFirstOrDefault
         // ReSharper restore ReplaceWithSingleCallToSingleOrDefault
-
-        /// <summary>
-        /// Records an encoding job event in Cassandra.
-        /// </summary>
-        private async Task RecordEventInCassandra(EncodingJobEvent notification, Guid videoId)
-        {
-            // Log the event to C* (this should be idempotent in case of dupliacte tries since we're keyed by the job id, date, and etag in C*)
-            PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync(
-                "INSERT INTO encoding_job_notifications (videoid, status_date, etag, jobId, newstate, oldstate) VALUES (?, ?, ?, ?, ?, ?)");
-
-            string jobId = notification.GetJobId();
-            string newState = notification.GetNewState();
-            string oldState = notification.GetOldState();
-            DateTimeOffset statusDate = notification.TimeStamp;
-            
-            // INSERT INTO encoding_job_notifications ...
-            await _session.ExecuteAsync(
-                preparedStatement.Bind(videoId, statusDate, notification.ETag, jobId, newState, oldState).SetTimestamp(statusDate));
-        }
     }
 }

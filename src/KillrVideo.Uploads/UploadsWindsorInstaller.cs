@@ -2,15 +2,15 @@
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
+using KillrVideo.Uploads.EncodingJobMonitor;
 using KillrVideo.Uploads.Messages.RequestResponse;
-using KillrVideo.Uploads.Worker.EncodingJobMonitor;
 using KillrVideo.Utils.Nimbus;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.MediaServices.Client;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 
-namespace KillrVideo.Uploads.Worker
+namespace KillrVideo.Uploads
 {
     /// <summary>
     /// Castle Windsor installer for installing all the components needed by the Uploads worker.
@@ -24,16 +24,11 @@ namespace KillrVideo.Uploads.Worker
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(
+                // Assembly configuration for Uploads handlers/messages
                 Component.For<NimbusAssemblyConfig>()
-                         .Instance(NimbusAssemblyConfig.FromTypes(typeof(UploadsWindsorInstaller), typeof(GenerateUploadDestination))));
+                         .Instance(NimbusAssemblyConfig.FromTypes(typeof (UploadsWindsorInstaller), typeof (GenerateUploadDestination))),
 
-            // Register the Uploads components
-            container.Register(
-                // Most components
-                Classes.FromAssemblyContaining<UploadDestinationManager>().Pick()
-                       .WithServiceFirstInterface().LifestyleTransient(),
-
-                // The encoding job
+                // Job for listening to Azure Media Services notifications
                 Component.For<EncodingListenerJob>().LifestyleTransient()
                 );
             

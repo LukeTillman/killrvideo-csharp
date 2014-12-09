@@ -1,18 +1,20 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
 using KillrVideo.Uploads.Messages.Events;
 using KillrVideo.Utils;
+using KillrVideo.VideoCatalog.Messages.Events;
 using Microsoft.WindowsAzure.MediaServices.Client;
 using Nimbus;
+using Nimbus.Handlers;
 
-namespace KillrVideo.Uploads
+namespace KillrVideo.Uploads.Handlers
 {
     /// <summary>
-    /// Manages video encoding jobs in Azure Media Services.
+    /// Handler for kicking off an encoding job once an uploaded video has been accepted.
     /// </summary>
-    public class EncodingJobManager : IManageEncodingJobs
+    public class EncodeVideoWhenAcceptedHandler : IHandleMulticastEvent<UploadedVideoAccepted>
     {
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
@@ -20,15 +22,14 @@ namespace KillrVideo.Uploads
         private readonly CloudMediaContext _cloudMediaContext;
         private readonly INotificationEndPoint _notificationEndPoint;
 
-        public EncodingJobManager(ISession session, TaskCache<string, PreparedStatement> statementCache, IBus bus,
-                                  CloudMediaContext cloudMediaContext, INotificationEndPoint notificationEndPoint)
+        public EncodeVideoWhenAcceptedHandler(ISession session, TaskCache<string, PreparedStatement> statementCache, IBus bus, CloudMediaContext cloudMediaContext,
+                                              INotificationEndPoint notificationEndPoint)
         {
             if (session == null) throw new ArgumentNullException("session");
             if (statementCache == null) throw new ArgumentNullException("statementCache");
             if (bus == null) throw new ArgumentNullException("bus");
             if (cloudMediaContext == null) throw new ArgumentNullException("cloudMediaContext");
             if (notificationEndPoint == null) throw new ArgumentNullException("notificationEndPoint");
-
             _session = session;
             _statementCache = statementCache;
             _bus = bus;
@@ -38,14 +39,14 @@ namespace KillrVideo.Uploads
 
         // ReSharper disable ReplaceWithSingleCallToFirstOrDefault
 
-        public async Task StartEncodingJob(Guid videoId, string uploadUrl)
+        public async Task Handle(UploadedVideoAccepted uploadAccepted)
         {
             // Find the uploaded file's information
             PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM uploaded_video_destinations WHERE upload_url = ?");
-            RowSet rows = await _session.ExecuteAsync(prepared.Bind(uploadUrl));
+            RowSet rows = await _session.ExecuteAsync(prepared.Bind(uploadAccepted.UploadUrl));
             Row row = rows.SingleOrDefault();
             if (row == null)
-                throw new InvalidOperationException(string.Format("Could not find uploaded video with URL {0}", uploadUrl));
+                throw new InvalidOperationException(string.Format("Could not find uploaded video with URL {0}", uploadAccepted.UploadUrl));
 
             var assetId = row.GetValue<string>("assetid");
             var filename = row.GetValue<string>("filename");
@@ -60,7 +61,7 @@ namespace KillrVideo.Uploads
             IJob job = _cloudMediaContext.Jobs.CreateWithSingleTask(MediaProcessorNames.WindowsAzureMediaEncoder,
                                                                     MediaEncoderTaskPresetStrings.H264BroadbandSD16x9, asset,
                                                                     outputAssetName, AssetCreationOptions.None);
-            
+
             // Get a reference to the asset for the encoded file
             IAsset encodedAsset = job.Tasks.Single().OutputAssets.Single();
 
@@ -81,12 +82,12 @@ namespace KillrVideo.Uploads
 
             // Store the job information for the video in Cassandra
             PreparedStatement[] saveJobInfoPrepared = await _statementCache.GetOrAddAllAsync(
-                "INSERT INTO uploaded_video_jobs (videoid, upload_url, jobid) VALUES (?, ?, ?)", 
+                "INSERT INTO uploaded_video_jobs (videoid, upload_url, jobid) VALUES (?, ?, ?)",
                 "INSERT INTO uploaded_video_jobs_by_jobid (jobid, videoid, upload_url) VALUES (?, ?, ?)");
 
             var batch = new BatchStatement();
-            batch.Add(saveJobInfoPrepared[0].Bind(videoId, uploadUrl, jobId));
-            batch.Add(saveJobInfoPrepared[1].Bind(jobId, videoId, uploadUrl));
+            batch.Add(saveJobInfoPrepared[0].Bind(uploadAccepted.VideoId, uploadAccepted.UploadUrl, jobId));
+            batch.Add(saveJobInfoPrepared[1].Bind(jobId, uploadAccepted.VideoId, uploadAccepted.UploadUrl));
             batch.SetTimestamp(DateTimeOffset.UtcNow);
 
             await _session.ExecuteAsync(batch);
@@ -94,7 +95,7 @@ namespace KillrVideo.Uploads
             // Tell the world an encoding job started
             await _bus.Publish(new UploadedVideoProcessingStarted
             {
-                VideoId = videoId,
+                VideoId = uploadAccepted.VideoId,
                 Timestamp = batch.Timestamp.Value
             });
         }
