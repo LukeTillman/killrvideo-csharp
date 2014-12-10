@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Configuration;
 using System.Linq;
+using System.Reflection;
 using System.Web.Mvc;
 using Cassandra;
 using Castle.Facilities.Startable;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using KillrVideo.Comments.Messages.Commands;
+using KillrVideo.Comments.ReadModel;
 using KillrVideo.Ratings.Messages.Commands;
+using KillrVideo.Ratings.ReadModel;
 using KillrVideo.Search.ReadModel;
 using KillrVideo.Statistics.Messages.Commands;
+using KillrVideo.Statistics.ReadModel;
 using KillrVideo.SuggestedVideos.ReadModel;
 using KillrVideo.Uploads.Messages.RequestResponse;
+using KillrVideo.Uploads.ReadModel;
 using KillrVideo.UserManagement.Messages.Commands;
 using KillrVideo.UserManagement.ReadModel;
+using KillrVideo.Utils;
 using KillrVideo.VideoCatalog.Messages.Commands;
+using KillrVideo.VideoCatalog.ReadModel;
 using log4net;
 using Microsoft.WindowsAzure;
 using Nimbus;
@@ -35,6 +42,19 @@ namespace KillrVideo
         private const string AzureServiceBusNamePrefixKey = "AzureServiceBusNamePrefix";
 
         private const string Keyspace = "killrvideo";
+
+        private static readonly Assembly[] ReadModelAssemblies =
+        {
+            typeof (ICommentReadModel).Assembly, typeof (IRatingsReadModel).Assembly, typeof (ISearchVideosByTag).Assembly,
+            typeof (IPlaybackStatsReadModel).Assembly, typeof (ISuggestVideos).Assembly, typeof (IUploadedVideosReadModel).Assembly,
+            typeof (IUserReadModel).Assembly, typeof (IVideoCatalogReadModel).Assembly
+        };
+
+        private static readonly Assembly[] MessageAssemblies =
+        {
+            typeof (CommentOnVideo).Assembly, typeof (RateVideo).Assembly, typeof (RecordPlaybackStarted).Assembly,
+            typeof (GenerateUploadDestination).Assembly, typeof (CreateUser).Assembly, typeof (SubmitUploadedVideo).Assembly
+        };
 
         /// <summary>
         /// Creates the Windsor container and does all necessary registrations for the KillrVideo app.
@@ -75,25 +95,27 @@ namespace KillrVideo
                 throw;
             }
 
-            // Register both Cluster and ISession instances with Windsor (essentially as Singletons since it will reuse the instance)
+            // Create a cache for prepared statements that can be used across the app
+            var statementCache = new TaskCache<string, PreparedStatement>(cql => session.PrepareAsync(cql));
+
+            // Register ISession instance and a statement cache for reusing prepared statements as singletons
             container.Register(
-                Component.For<ISession>().Instance(session)
+                Component.For<ISession>().Instance(session),
+                Component.For<TaskCache<string, PreparedStatement>>().Instance(statementCache)
             );
         }
 
         private static void RegisterReadModels(WindsorContainer container)
         {
-            container.Register(
-                // Register all the read model objects in the KillrVideo.XXXX projects and register them as Singletons since
-                // we want the state in them (reusable prepared statements) to actually be reused
-                Classes.FromAssemblyInThisApplication().Where(t => t.Name.EndsWith("ReadModel"))
-                       .WithServiceFirstInterface().LifestyleSingleton()
-                       .ConfigureFor<LinqUserReadModel>(c => c.IsDefault()),     // Change the Type here to use other IUserReadModel implementations (i.e. ADO.NET or core)
-                
-                // Register read-only services that don't follow the ReadModel naming convention
-                Component.For<ISearchVideosByTag>().ImplementedBy<SearchVideosByTag>().LifestyleSingleton(),
-                Component.For<ISuggestVideos>().ImplementedBy<SuggestVideos>().LifestyleSingleton()
-            );
+            // Register the read model classes in all those assemblies
+            foreach (var asm in ReadModelAssemblies)
+            {
+                container.Register(
+                    Classes.FromAssembly(asm).Pick()
+                           .WithServiceFirstInterface().LifestyleTransient()
+                           .ConfigureFor<LinqUserReadModel>(cfg => cfg.IsDefault())
+                );
+            }
         }
 
         private static void RegisterMvcControllers(WindsorContainer container)
@@ -111,9 +133,7 @@ namespace KillrVideo
             string namePrefix = GetRequiredSetting(AzureServiceBusNamePrefixKey);
 
             // Create a type provider with all our message assemblies (there shouldn't be any handlers here since the web app only sends commands)
-            var typeProvider = new AssemblyScanningTypeProvider(typeof (CommentOnVideo).Assembly, typeof (RateVideo).Assembly,
-                                                                typeof (RecordPlaybackStarted).Assembly, typeof (GenerateUploadDestination).Assembly,
-                                                                typeof (CreateUser).Assembly, typeof (SubmitUploadedVideo).Assembly);
+            var typeProvider = new AssemblyScanningTypeProvider(MessageAssemblies);
             container.RegisterNimbus(typeProvider);
 
             // Get app name and unique name

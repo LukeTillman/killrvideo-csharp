@@ -41,7 +41,7 @@ namespace KillrVideo.BackgroundWorker.Startup
         public static IWindsorContainer CreateContainer()
         {
             var container = new WindsorContainer();
-
+            
             // Install all the components from the services we're composing here in this endpoint
             container.Install(new CommentsWindsorInstaller(), new RatingsWindsorInstaller(), new StatisticsWindsorInstaller(), new SearchWindsorInstaller(),
                               new UploadsWindsorInstaller(), new UserManagementWindsorInstaller(), new VideoCatalogWindsorInstaller());

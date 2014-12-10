@@ -41,7 +41,6 @@
   <ItemGroup>
     <Compile Include="INoCapturedContextTaskCache.cs" />
     <Compile Include="TaskCache.cs" />
-    <Compile Include="AsyncLazy.cs" />
     <Compile Include="DateTimePrecise.cs" />
     <Compile Include="GuidGeneration.cs" />
     <Compile Include="GuidGenerator.cs" />
