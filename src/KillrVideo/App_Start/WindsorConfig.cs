@@ -24,6 +24,7 @@ using KillrVideo.VideoCatalog.Messages.Commands;
 using KillrVideo.VideoCatalog.ReadModel;
 using log4net;
 using Microsoft.WindowsAzure;
+using Microsoft.WindowsAzure.ServiceRuntime;
 using Nimbus;
 using Nimbus.Configuration;
 using Nimbus.Infrastructure;
@@ -138,7 +139,7 @@ namespace KillrVideo
 
             // Get app name and unique name
             string appName = string.Format("{0}KillrVideo.Web", namePrefix);
-            string uniqueName = string.Format("{0}{1}", namePrefix, Environment.MachineName);
+            string uniqueName = string.Format("{0}{1}", namePrefix, RoleEnvironment.CurrentRoleInstance.Id);
 
             // Register the bus itself and start it when it's resolved for the first time
             container.Register(

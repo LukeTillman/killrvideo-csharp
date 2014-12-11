@@ -16,6 +16,7 @@ using KillrVideo.Utils.Nimbus;
 using KillrVideo.VideoCatalog;
 using log4net;
 using Microsoft.WindowsAzure;
+using Microsoft.WindowsAzure.ServiceRuntime;
 using Nimbus;
 using Nimbus.Configuration;
 using Nimbus.Infrastructure;
@@ -102,7 +103,7 @@ namespace KillrVideo.BackgroundWorker.Startup
 
             // Get app name and unique name
             string appName = string.Format("{0}KillrVideo.BackgroundWorker", namePrefix);
-            string uniqueName = string.Format("{0}{1}", namePrefix, Environment.MachineName);
+            string uniqueName = string.Format("{0}{1}", namePrefix, RoleEnvironment.CurrentRoleInstance.Id);
 
             // Register the bus itself
             container.Register(
