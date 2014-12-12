@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace KillrVideo.Search.ReadModel.Dtos
+namespace KillrVideo.Search.Dtos
 {
     /// <summary>
     /// Represents a page of tags starting with specified text.

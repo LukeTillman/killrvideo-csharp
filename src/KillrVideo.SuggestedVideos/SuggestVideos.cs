@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.SuggestedVideos.ReadModel.Dtos;
+using KillrVideo.SuggestedVideos.Dtos;
 using KillrVideo.Utils;
 
-namespace KillrVideo.SuggestedVideos.ReadModel
+namespace KillrVideo.SuggestedVideos
 {
     /// <summary>
     /// Makes video suggestions based on data in Cassandra.

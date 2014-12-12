@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KillrVideo.Search.ReadModel.Dtos
+namespace KillrVideo.Search.Dtos
 {
     /// <summary>
     /// Parameters for getting tags starting with specified text.

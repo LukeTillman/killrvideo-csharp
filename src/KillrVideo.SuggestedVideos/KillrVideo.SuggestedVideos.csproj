@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{33A7F88F-189D-435C-AADB-6D270E6BF3C5}</ProjectGuid>
+    <ProjectGuid>{846E5D96-7F24-4CAA-8DDE-90F36DAE7E06}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>KillrVideo.SuggestedVideos</RootNamespace>
@@ -59,14 +59,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dtos\RelatedVideos.cs" />
+    <Compile Include="Dtos\VideoPreview.cs" />
+    <Compile Include="ISuggestVideos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SuggestVideos.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
-      <Project>{9516b3f3-89b7-4343-9f88-ffee6d74fffc}</Project>
+      <Project>{9516B3F3-89B7-4343-9F88-FFEE6D74FFFC}</Project>
       <Name>KillrVideo.Utils</Name>
     </ProjectReference>
   </ItemGroup>

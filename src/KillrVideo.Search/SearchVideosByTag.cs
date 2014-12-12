@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Search.ReadModel.Dtos;
+using KillrVideo.Search.Dtos;
 using KillrVideo.Utils;
 
-namespace KillrVideo.Search.ReadModel
+namespace KillrVideo.Search
 {
     /// <summary>
     /// Searches for videos by tag in Cassandra.

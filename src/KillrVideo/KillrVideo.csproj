@@ -376,14 +376,6 @@
       <Project>{2d0aee43-129e-448b-96d1-9b68d0311584}</Project>
       <Name>KillrVideo.Ratings.Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.Search.ReadModel\KillrVideo.Search.ReadModel.csproj">
-      <Project>{f4399660-3ee4-4539-ad24-f4dcae736688}</Project>
-      <Name>KillrVideo.Search.ReadModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.SuggestedVideos.ReadModel\KillrVideo.SuggestedVideos.ReadModel.csproj">
-      <Project>{e4594154-8578-4c9b-abf8-fc3526891d92}</Project>
-      <Name>KillrVideo.SuggestedVideos.ReadModel</Name>
-    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Uploads.Messages\KillrVideo.Uploads.Messages.csproj">
       <Project>{c51cf234-ece1-4edc-93e2-844e88999825}</Project>
       <Name>KillrVideo.Uploads.Messages</Name>

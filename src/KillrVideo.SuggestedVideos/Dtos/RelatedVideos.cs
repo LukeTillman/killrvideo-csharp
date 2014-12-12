@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace KillrVideo.Search.ReadModel.Dtos
+namespace KillrVideo.SuggestedVideos.Dtos
 {
     /// <summary>
-    /// Represents a page of videos by tag.
+    /// Represents videos related to another video.
     /// </summary>
     [Serializable]
-    public class VideosByTag
+    public class RelatedVideos
     {
-        public string Tag { get; set; }
+        public Guid VideoId { get; set; }
         public IEnumerable<VideoPreview> Videos { get; set; }
     }
 }

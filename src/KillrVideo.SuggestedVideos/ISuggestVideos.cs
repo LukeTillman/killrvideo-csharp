@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using KillrVideo.SuggestedVideos.ReadModel.Dtos;
+using KillrVideo.SuggestedVideos.Dtos;
 
-namespace KillrVideo.SuggestedVideos.ReadModel
+namespace KillrVideo.SuggestedVideos
 {
     /// <summary>
-    /// Suggests videos that might be interesting to a user.
+    /// The public API for the video suggestion service.
     /// </summary>
     public interface ISuggestVideos
     {

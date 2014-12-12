@@ -70,9 +70,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.VideoCatalog.Rea
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.Comments", "KillrVideo.Comments\KillrVideo.Comments.csproj", "{37BB374E-2E30-4F9D-8F1D-6982116A07B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.Search.ReadModel", "KillrVideo.Search.ReadModel\KillrVideo.Search.ReadModel.csproj", "{F4399660-3EE4-4539-AD24-F4DCAE736688}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.Search.Worker", "KillrVideo.Search.Worker\KillrVideo.Search.Worker.csproj", "{FAE17162-13E1-45C6-B2BF-6F4C4DF0CF40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.SuggestedVideos.ReadModel", "KillrVideo.SuggestedVideos.ReadModel\KillrVideo.SuggestedVideos.ReadModel.csproj", "{E4594154-8578-4C9B-ABF8-FC3526891D92}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.SuggestedVideos", "KillrVideo.SuggestedVideos\KillrVideo.SuggestedVideos.csproj", "{846E5D96-7F24-4CAA-8DDE-90F36DAE7E06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -156,14 +156,14 @@ Global
 		{37BB374E-2E30-4F9D-8F1D-6982116A07B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37BB374E-2E30-4F9D-8F1D-6982116A07B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37BB374E-2E30-4F9D-8F1D-6982116A07B0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F4399660-3EE4-4539-AD24-F4DCAE736688}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F4399660-3EE4-4539-AD24-F4DCAE736688}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F4399660-3EE4-4539-AD24-F4DCAE736688}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F4399660-3EE4-4539-AD24-F4DCAE736688}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E4594154-8578-4C9B-ABF8-FC3526891D92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E4594154-8578-4C9B-ABF8-FC3526891D92}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E4594154-8578-4C9B-ABF8-FC3526891D92}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E4594154-8578-4C9B-ABF8-FC3526891D92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAE17162-13E1-45C6-B2BF-6F4C4DF0CF40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAE17162-13E1-45C6-B2BF-6F4C4DF0CF40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAE17162-13E1-45C6-B2BF-6F4C4DF0CF40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAE17162-13E1-45C6-B2BF-6F4C4DF0CF40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{846E5D96-7F24-4CAA-8DDE-90F36DAE7E06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{846E5D96-7F24-4CAA-8DDE-90F36DAE7E06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{846E5D96-7F24-4CAA-8DDE-90F36DAE7E06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{846E5D96-7F24-4CAA-8DDE-90F36DAE7E06}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -193,8 +193,8 @@ Global
 		{B3D9F944-0D59-43F0-86EB-751787F2B84E} = {866AA1A1-025C-4A3A-8D85-381EA3C0180F}
 		{FC5B1860-3AA6-4481-BF80-C048C787CD31} = {E34704FB-622C-4783-9779-74F09440E281}
 		{37BB374E-2E30-4F9D-8F1D-6982116A07B0} = {EBC2A0AB-0C33-4DE2-BB32-8231077DAB7B}
-		{F4399660-3EE4-4539-AD24-F4DCAE736688} = {26C327BF-AB75-487E-B755-9F34439772FD}
-		{E4594154-8578-4C9B-ABF8-FC3526891D92} = {658BC99A-0B0E-42F5-B063-280E298B29B2}
+		{FAE17162-13E1-45C6-B2BF-6F4C4DF0CF40} = {26C327BF-AB75-487E-B755-9F34439772FD}
+		{846E5D96-7F24-4CAA-8DDE-90F36DAE7E06} = {658BC99A-0B0E-42F5-B063-280E298B29B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\TransientFaultHandling.Core.5.1.1209.1\lib\NET4
