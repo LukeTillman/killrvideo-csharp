@@ -5,15 +5,11 @@ using System.Reflection;
 using Cassandra;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
-using KillrVideo.Comments;
-using KillrVideo.Ratings;
-using KillrVideo.Search;
-using KillrVideo.Statistics;
-using KillrVideo.Uploads;
-using KillrVideo.UserManagement;
+using KillrVideo.Search.Worker;
+using KillrVideo.Uploads.Worker;
 using KillrVideo.Utils;
 using KillrVideo.Utils.Nimbus;
-using KillrVideo.VideoCatalog;
+using KillrVideo.VideoCatalog.Worker;
 using log4net;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.ServiceRuntime;
@@ -43,9 +39,8 @@ namespace KillrVideo.BackgroundWorker.Startup
         {
             var container = new WindsorContainer();
             
-            // Install all the components from the services we're composing here in this endpoint
-            container.Install(new CommentsWindsorInstaller(), new RatingsWindsorInstaller(), new StatisticsWindsorInstaller(), new SearchWindsorInstaller(),
-                              new UploadsWindsorInstaller(), new UserManagementWindsorInstaller(), new VideoCatalogWindsorInstaller());
+            // Install all the components from the workers we're composing here in this endpoint
+            container.Install(new SearchWorkerWindsorInstaller(), new UploadsWorkerWindsorInstaller(), new VideoCatalogWorkerWindsorInstaller());
 
             // Do container registrations (these would normally be organized as Windsor installers, but for brevity they are inline here)
             RegisterCassandra(container);

@@ -3,7 +3,9 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using KillrVideo.Uploads.Dtos;
+using KillrVideo.Uploads.Messages.Events;
 using KillrVideo.Utils.Nimbus;
+using KillrVideo.VideoCatalog.Messages.Events;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.MediaServices.Client;
 using Microsoft.WindowsAzure.Storage;
@@ -14,7 +16,7 @@ namespace KillrVideo.Uploads.Worker
     /// <summary>
     /// Castle Windsor installer for installing all the components needed by the Uploads worker.
     /// </summary>
-    public class UploadsWindsorInstaller : IWindsorInstaller
+    public class UploadsWorkerWindsorInstaller : IWindsorInstaller
     {
         private const string MediaServicesNameAppSettingsKey = "AzureMediaServicesAccountName";
         private const string MediaServicesKeyAppSettingsKey = "AzureMediaServicesAccountKey";
@@ -25,7 +27,8 @@ namespace KillrVideo.Uploads.Worker
             container.Register(
                 // Assembly configuration for Uploads handlers/messages
                 Component.For<NimbusAssemblyConfig>()
-                         .Instance(NimbusAssemblyConfig.FromTypes(typeof (UploadsWindsorInstaller), typeof (GenerateUploadDestination))),
+                         .Instance(NimbusAssemblyConfig.FromTypes(typeof (UploadsWorkerWindsorInstaller), typeof (GenerateUploadDestination),
+                                                                  typeof(UploadedVideoPublished), typeof(UploadedVideoAccepted))),
 
                 // Job for listening to Azure Media Services notifications
                 Component.For<EncodingListenerJob>().LifestyleTransient()

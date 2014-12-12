@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Castle.Windsor;
 using KillrVideo.BackgroundWorker.Startup;
-using KillrVideo.Uploads.EncodingJobMonitor;
+using KillrVideo.Uploads.Worker;
 using log4net;
 using log4net.Config;
 using Microsoft.WindowsAzure.ServiceRuntime;

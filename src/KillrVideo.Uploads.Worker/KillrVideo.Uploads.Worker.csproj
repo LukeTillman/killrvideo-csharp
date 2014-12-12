@@ -127,7 +127,7 @@
     <Compile Include="NotificationEndpointFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UploadConfig.cs" />
-    <Compile Include="UploadsWindsorInstaller.cs" />
+    <Compile Include="UploadsWorkerWindsorInstaller.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KillrVideo.Uploads.Messages\KillrVideo.Uploads.Messages.csproj">

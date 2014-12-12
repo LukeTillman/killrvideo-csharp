@@ -124,37 +124,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KillrVideo.Comments\KillrVideo.Comments.csproj">
-      <Project>{37bb374e-2e30-4f9d-8f1d-6982116a07b0}</Project>
-      <Name>KillrVideo.Comments</Name>
+    <ProjectReference Include="..\KillrVideo.Search.Worker\KillrVideo.Search.Worker.csproj">
+      <Project>{fae17162-13e1-45c6-b2bf-6f4c4df0cf40}</Project>
+      <Name>KillrVideo.Search.Worker</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.Ratings\KillrVideo.Ratings.csproj">
-      <Project>{c054a489-a037-49e5-8461-546cd61817eb}</Project>
-      <Name>KillrVideo.Ratings</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.Search\KillrVideo.Search.csproj">
-      <Project>{3da30c11-33c7-4ee8-aa9e-c18a9483efca}</Project>
-      <Name>KillrVideo.Search</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.Statistics\KillrVideo.Statistics.csproj">
-      <Project>{d7e26bcf-316d-431e-b448-dbc54cb17b4f}</Project>
-      <Name>KillrVideo.Statistics</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.Uploads\KillrVideo.Uploads.csproj">
-      <Project>{249ac1eb-7035-4e88-a311-c683e049a0ea}</Project>
-      <Name>KillrVideo.Uploads</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.UserManagement\KillrVideo.UserManagement.csproj">
-      <Project>{5fcf1c36-ed2a-4bf0-b231-b12506210f6d}</Project>
-      <Name>KillrVideo.UserManagement</Name>
+    <ProjectReference Include="..\KillrVideo.Uploads.Worker\KillrVideo.Uploads.Worker.csproj">
+      <Project>{2ce828ee-5031-4137-9d75-2aa069751f23}</Project>
+      <Name>KillrVideo.Uploads.Worker</Name>
     </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
       <Project>{9516b3f3-89b7-4343-9f88-ffee6d74fffc}</Project>
       <Name>KillrVideo.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.VideoCatalog\KillrVideo.VideoCatalog.csproj">
-      <Project>{89ce1d0d-12d7-42ce-a407-1c92c8ff4645}</Project>
-      <Name>KillrVideo.VideoCatalog</Name>
+    <ProjectReference Include="..\KillrVideo.VideoCatalog.Worker\KillrVideo.VideoCatalog.Worker.csproj">
+      <Project>{2cee7365-93b2-4c57-a530-de30c79de945}</Project>
+      <Name>KillrVideo.VideoCatalog.Worker</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
