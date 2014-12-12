@@ -90,7 +90,7 @@ namespace KillrVideo.BackgroundWorker.Startup
 
             // Ask the container for any assembly config that's been registered
             NimbusAssemblyConfig[] nimbusAssemblyConfigs = container.ResolveAll<NimbusAssemblyConfig>();
-            Assembly[] assemblies = nimbusAssemblyConfigs.SelectMany(ac => ac.AssembliesToScan).ToArray();
+            Assembly[] assemblies = nimbusAssemblyConfigs.SelectMany(ac => ac.AssembliesToScan).Distinct().ToArray();
             
             // Create the Nimbus type provider to scan those assemblies and register with container
             var typeProvider = new AssemblyScanningTypeProvider(assemblies);

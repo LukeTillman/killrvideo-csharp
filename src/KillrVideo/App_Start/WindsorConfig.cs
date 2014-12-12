@@ -7,21 +7,16 @@ using Cassandra;
 using Castle.Facilities.Startable;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
-using KillrVideo.Comments.Messages.Commands;
-using KillrVideo.Comments.ReadModel;
-using KillrVideo.Ratings.Messages.Commands;
-using KillrVideo.Ratings.ReadModel;
-using KillrVideo.Search.ReadModel;
-using KillrVideo.Statistics.Messages.Commands;
-using KillrVideo.Statistics.ReadModel;
-using KillrVideo.SuggestedVideos.ReadModel;
-using KillrVideo.Uploads.Messages.RequestResponse;
-using KillrVideo.Uploads.ReadModel;
-using KillrVideo.UserManagement.Messages.Commands;
-using KillrVideo.UserManagement.ReadModel;
+using KillrVideo.Comments;
+using KillrVideo.Ratings;
+using KillrVideo.Search;
+using KillrVideo.Statistics;
+using KillrVideo.SuggestedVideos;
+using KillrVideo.Uploads;
+using KillrVideo.UserManagement;
 using KillrVideo.Utils;
-using KillrVideo.VideoCatalog.Messages.Commands;
-using KillrVideo.VideoCatalog.ReadModel;
+using KillrVideo.Utils.Nimbus;
+using KillrVideo.VideoCatalog;
 using log4net;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.ServiceRuntime;
@@ -43,20 +38,7 @@ namespace KillrVideo
         private const string AzureServiceBusNamePrefixKey = "AzureServiceBusNamePrefix";
 
         private const string Keyspace = "killrvideo";
-
-        private static readonly Assembly[] ReadModelAssemblies =
-        {
-            typeof (ICommentReadModel).Assembly, typeof (IRatingsReadModel).Assembly, typeof (ISearchVideosByTag).Assembly,
-            typeof (IPlaybackStatsReadModel).Assembly, typeof (ISuggestVideos).Assembly, typeof (IUploadedVideosReadModel).Assembly,
-            typeof (IUserReadModel).Assembly, typeof (IVideoCatalogReadModel).Assembly
-        };
-
-        private static readonly Assembly[] MessageAssemblies =
-        {
-            typeof (CommentOnVideo).Assembly, typeof (RateVideo).Assembly, typeof (RecordPlaybackStarted).Assembly,
-            typeof (GenerateUploadDestination).Assembly, typeof (CreateUser).Assembly, typeof (SubmitUploadedVideo).Assembly
-        };
-
+        
         /// <summary>
         /// Creates the Windsor container and does all necessary registrations for the KillrVideo app.
         /// </summary>
@@ -66,7 +48,7 @@ namespace KillrVideo
 
             // Do container registrations (these would normally be organized as Windsor installers, but for brevity they are inline here)
             RegisterCassandra(container);
-            RegisterReadModels(container);
+            RegisterServices(container);
             RegisterMvcControllers(container);
             RegisterMessageBus(container);
 
@@ -106,17 +88,13 @@ namespace KillrVideo
             );
         }
 
-        private static void RegisterReadModels(WindsorContainer container)
+        private static void RegisterServices(WindsorContainer container)
         {
-            // Register the read model classes in all those assemblies
-            foreach (var asm in ReadModelAssemblies)
-            {
-                container.Register(
-                    Classes.FromAssembly(asm).Pick()
-                           .WithServiceFirstInterface().LifestyleTransient()
-                           .ConfigureFor<LinqUserReadModel>(cfg => cfg.IsDefault())
-                );
-            }
+            // Just use the installers in the services
+            container.Install(new CommentsServiceWindsorInstaller(), new RatingsServiceWindsorInstaller(), new SearchServiceWindsorInstaller(),
+                              new StatisticsServiceWindsorInstaller(), new SuggestedVideosServiceWindsorInstaller(),
+                              new UploadsServiceWindsorInstaller(), new UserManagementServiceWindsorInstaller(),
+                              new VideoCatalogServiceWindsorInstaller());
         }
 
         private static void RegisterMvcControllers(WindsorContainer container)
@@ -133,8 +111,12 @@ namespace KillrVideo
             string connectionString = GetRequiredSetting(AzureServiceBusConnectionStringKey);
             string namePrefix = GetRequiredSetting(AzureServiceBusNamePrefixKey);
 
-            // Create a type provider with all our message assemblies (there shouldn't be any handlers here since the web app only sends commands)
-            var typeProvider = new AssemblyScanningTypeProvider(MessageAssemblies);
+            // Ask the container for any assembly config that's been registered
+            NimbusAssemblyConfig[] nimbusAssemblyConfigs = container.ResolveAll<NimbusAssemblyConfig>();
+            Assembly[] assemblies = nimbusAssemblyConfigs.SelectMany(ac => ac.AssembliesToScan).Distinct().ToArray();
+
+            // Create the Nimbus type provider to scan those assemblies and register with container
+            var typeProvider = new AssemblyScanningTypeProvider(assemblies);
             container.RegisterNimbus(typeProvider);
 
             // Get app name and unique name
