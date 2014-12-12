@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using Nimbus.MessageContracts;
 
-namespace KillrVideo.VideoCatalog.Messages.Commands
+namespace KillrVideo.VideoCatalog.Dtos
 {
     /// <summary>
-    /// Submits a YouTube video to the catalog.
+    /// DTO representing all the available details of a specific video.
     /// </summary>
     [Serializable]
-    public class SubmitYouTubeVideo : IBusCommand
+    public class VideoDetails
     {
         public Guid VideoId { get; set; }
         public Guid UserId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Location { get; set; }
+        public VideoLocationType LocationType { get; set; }
         public ISet<string> Tags { get; set; }
-        public string YouTubeVideoId { get; set; }
+        public DateTimeOffset AddedDate { get; set; }
     }
 }

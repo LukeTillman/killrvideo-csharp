@@ -72,12 +72,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Handlers\SubmitUploadedVideoHandler.cs" />
-    <Compile Include="Handlers\SubmitYouTubeVideoHandler.cs" />
-    <Compile Include="Handlers\UpdateUploadedVideoWhenPublished.cs" />
+    <Compile Include="Dtos\GetLatestVideos.cs" />
+    <Compile Include="Dtos\GetUserVideos.cs" />
+    <Compile Include="Dtos\LatestVideos.cs" />
+    <Compile Include="Dtos\SubmitUploadedVideo.cs" />
+    <Compile Include="Dtos\SubmitYouTubeVideo.cs" />
+    <Compile Include="Dtos\UserVideos.cs" />
+    <Compile Include="Dtos\VideoDetails.cs" />
+    <Compile Include="Dtos\VideoLocationType.cs" />
+    <Compile Include="Dtos\VideoPreview.cs" />
+    <Compile Include="IVideoCatalogService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VideoCatalogConstants.cs" />
-    <Compile Include="VideoCatalogWindsorInstaller.cs" />
+    <Compile Include="VideoCatalogService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

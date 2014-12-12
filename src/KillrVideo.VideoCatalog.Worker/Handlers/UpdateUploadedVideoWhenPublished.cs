@@ -9,7 +9,7 @@ using KillrVideo.VideoCatalog.Messages.Events;
 using Nimbus;
 using Nimbus.Handlers;
 
-namespace KillrVideo.VideoCatalog.Handlers
+namespace KillrVideo.VideoCatalog.Worker.Handlers
 {
     /// <summary>
     /// Updates an uploaded videos information in the catalog once the video has been published and is ready for viewing.

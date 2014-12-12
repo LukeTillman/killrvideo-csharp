@@ -1,15 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using KillrVideo.VideoCatalog.ReadModel.Dtos;
+using KillrVideo.VideoCatalog.Dtos;
 
-namespace KillrVideo.VideoCatalog.ReadModel
+namespace KillrVideo.VideoCatalog
 {
     /// <summary>
-    /// Does reads for the video catalog.
+    /// The public API for the video catalog service.
     /// </summary>
-    public interface IVideoCatalogReadModel
+    public interface IVideoCatalogService
     {
+        /// <summary>
+        /// Submits an uploaded video to the catalog.
+        /// </summary>
+        Task SubmitUploadedVideo(SubmitUploadedVideo uploadedVideo);
+
+        /// <summary>
+        /// Submits a YouTube video to the catalog.
+        /// </summary>
+        Task SubmitYouTubeVideo(SubmitYouTubeVideo youTubeVideo);
+
         /// <summary>
         /// Gets the details of a specific video.
         /// </summary>

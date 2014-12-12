@@ -396,10 +396,6 @@
       <Project>{a8dabf0a-03fe-4ea2-a1b3-fb5720a0b878}</Project>
       <Name>KillrVideo.VideoCatalog.Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.VideoCatalog.ReadModel\KillrVideo.VideoCatalog.ReadModel.csproj">
-      <Project>{fc5b1860-3aa6-4481-bf80-c048c787cd31}</Project>
-      <Name>KillrVideo.VideoCatalog.ReadModel</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

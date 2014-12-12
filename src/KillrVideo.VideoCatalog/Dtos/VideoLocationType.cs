@@ -1,4 +1,4 @@
-﻿namespace KillrVideo.VideoCatalog.ReadModel.Dtos
+﻿namespace KillrVideo.VideoCatalog.Dtos
 {
     /// <summary>
     /// Enum representing the location type (source) of the video.

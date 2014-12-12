@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KillrVideo.VideoCatalog.ReadModel.Dtos
+namespace KillrVideo.VideoCatalog.Dtos
 {
     /// <summary>
     /// Parameters for getting the latest videos

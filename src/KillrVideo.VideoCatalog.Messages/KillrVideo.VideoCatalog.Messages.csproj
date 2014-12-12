@@ -45,8 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\SubmitUploadedVideo.cs" />
-    <Compile Include="Commands\SubmitYouTubeVideo.cs" />
     <Compile Include="Events\IVideoAdded.cs" />
     <Compile Include="Events\UploadedVideoAccepted.cs" />
     <Compile Include="Events\UploadedVideoAdded.cs" />

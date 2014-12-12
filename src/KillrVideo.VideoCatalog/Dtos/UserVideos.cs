@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace KillrVideo.VideoCatalog.ReadModel.Dtos
+namespace KillrVideo.VideoCatalog.Dtos
 {
     /// <summary>
     /// Represents a page of videos for a user.
