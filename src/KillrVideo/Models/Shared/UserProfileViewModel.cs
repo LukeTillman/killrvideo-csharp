@@ -1,5 +1,5 @@
 ﻿using System;
-using KillrVideo.UserManagement.ReadModel.Dtos;
+using KillrVideo.UserManagement.Dtos;
 using KillrVideo.Utils;
 
 namespace KillrVideo.Models.Shared

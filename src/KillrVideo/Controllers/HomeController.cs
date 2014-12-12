@@ -3,20 +3,20 @@ using System.Web.Mvc;
 using KillrVideo.Authentication;
 using KillrVideo.Models.Home;
 using KillrVideo.Models.Shared;
-using KillrVideo.UserManagement.ReadModel;
-using KillrVideo.UserManagement.ReadModel.Dtos;
+using KillrVideo.UserManagement;
+using KillrVideo.UserManagement.Dtos;
 using KillrVideo.Utils;
 
 namespace KillrVideo.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IUserReadModel _userReadModel;
-
-        public HomeController(IUserReadModel userReadModel)
+        private readonly IUserManagementService _userManagement;
+        
+        public HomeController(IUserManagementService userManagement)
         {
-            if (userReadModel == null) throw new ArgumentNullException("userReadModel");
-            _userReadModel = userReadModel;
+            if (userManagement == null) throw new ArgumentNullException("userManagement");
+            _userManagement = userManagement;
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace KillrVideo.Controllers
                 // Since MVC currently doesn't support async child actions (until ASP.NET vNext), we've got to invoke the async 
                 // method synchronously (luckily, we won't deadlock here because our async method is using ConfigureAwait(false)
                 // under the covers).  See http://aspnetwebstack.codeplex.com/workitem/601 for details.
-                UserProfile profile = _userReadModel.GetUserProfile(userId.Value).Result;
+                UserProfile profile = _userManagement.GetUserProfile(userId.Value).Result;
                 
                 model.LoggedInUser = new UserProfileViewModel
                 {

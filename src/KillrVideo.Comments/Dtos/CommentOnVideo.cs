@@ -1,5 +1,4 @@
 ﻿using System;
-using Nimbus.MessageContracts;
 
 namespace KillrVideo.Comments.Dtos
 {
@@ -7,7 +6,7 @@ namespace KillrVideo.Comments.Dtos
     /// DTO for commenting on a video.
     /// </summary>
     [Serializable]
-    public class CommentOnVideo : IBusCommand
+    public class CommentOnVideo
     {
         public Guid VideoId { get; set; }
         public Guid UserId { get; set; }

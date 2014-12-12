@@ -1,5 +1,4 @@
 ﻿using System;
-using Nimbus.MessageContracts;
 
 namespace KillrVideo.Ratings.Dtos
 {
@@ -7,7 +6,7 @@ namespace KillrVideo.Ratings.Dtos
     /// DTO for rating a video.
     /// </summary>
     [Serializable]
-    public class RateVideo : IBusCommand
+    public class RateVideo
     {
         public Guid VideoId { get; set; }
         public Guid UserId { get; set; }

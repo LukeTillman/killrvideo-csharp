@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using KillrVideo.ActionResults;
 using KillrVideo.Models.PlaybackStats;
-using KillrVideo.Statistics.Messages.Commands;
-using Nimbus;
+using KillrVideo.Statistics;
+using KillrVideo.Statistics.Dtos;
 
 namespace KillrVideo.Controllers
 {
@@ -13,12 +13,12 @@ namespace KillrVideo.Controllers
     /// </summary>
     public class PlaybackStatsController : ConventionControllerBase
     {
-        private readonly IBus _bus;
-
-        public PlaybackStatsController(IBus bus)
+        private readonly IStatisticsService _stats;
+        
+        public PlaybackStatsController(IStatisticsService stats)
         {
-            if (bus == null) throw new ArgumentNullException("bus");
-            _bus = bus;
+            if (stats == null) throw new ArgumentNullException("stats");
+            _stats = stats;
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace KillrVideo.Controllers
         [HttpPost]
         public async Task<JsonNetResult> Started(StartedViewModel model)
         {
-            await _bus.Send(new RecordPlaybackStarted { VideoId = model.VideoId });
+            await _stats.RecordPlaybackStarted(new RecordPlaybackStarted { VideoId = model.VideoId });
             return JsonSuccess();
         }
     }

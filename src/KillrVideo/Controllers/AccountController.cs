@@ -6,25 +6,20 @@ using KillrVideo.ActionResults;
 using KillrVideo.Authentication;
 using KillrVideo.Models.Account;
 using KillrVideo.Models.Shared;
-using KillrVideo.UserManagement.Messages.Commands;
-using KillrVideo.UserManagement.ReadModel;
-using KillrVideo.UserManagement.ReadModel.Dtos;
+using KillrVideo.UserManagement;
+using KillrVideo.UserManagement.Dtos;
 using KillrVideo.Utils;
-using Nimbus;
 
 namespace KillrVideo.Controllers
 {
     public class AccountController : ConventionControllerBase
     {
-        private readonly IUserReadModel _userReadModel;
-        private readonly IBus _bus;
-
-        public AccountController(IUserReadModel userReadModel, IBus bus)
+        private readonly IUserManagementService _userManagement;
+        
+        public AccountController(IUserManagementService userManagement)
         {
-            if (userReadModel == null) throw new ArgumentNullException("userReadModel");
-            if (bus == null) throw new ArgumentNullException("bus");
-            _userReadModel = userReadModel;
-            _bus = bus;
+            if (userManagement == null) throw new ArgumentNullException("userManagement");
+            _userManagement = userManagement;
         }
 
         /// <summary>
@@ -65,7 +60,7 @@ namespace KillrVideo.Controllers
             //    return JsonFailure();
             //}
 
-            await _bus.Send(createUser);
+            await _userManagement.CreateUser(createUser);
 
             // Assume creation successful so sign the user in
             SignTheUserIn(userId);
@@ -93,7 +88,7 @@ namespace KillrVideo.Controllers
                 return JsonFailure();
 
             // Lookup the user's credentials by email address
-            UserCredentials credentials = await _userReadModel.GetCredentials(model.EmailAddress);
+            UserCredentials credentials = await _userManagement.GetCredentials(model.EmailAddress);
             
             // Validate the credentials
             if (credentials == null || PasswordHash.ValidatePassword(model.Password, credentials.Password) == false)
@@ -141,7 +136,7 @@ namespace KillrVideo.Controllers
             if (userId.HasValue == false)
                 throw new InvalidOperationException("No user logged in and no user was specified.");
 
-            UserProfile profile = await _userReadModel.GetUserProfile(userId.Value);
+            UserProfile profile = await _userManagement.GetUserProfile(userId.Value);
             return View(new AccountInfoViewModel
             {
                 UserProfile = new UserProfileViewModel

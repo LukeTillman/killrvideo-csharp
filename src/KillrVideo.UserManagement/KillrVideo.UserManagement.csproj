@@ -80,6 +80,7 @@
     <Compile Include="LinqUserManagementService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserManagementService.cs" />
+    <Compile Include="UserManagementServiceWindsorInstaller.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -6,9 +6,8 @@ using System.Web.Mvc;
 using KillrVideo.ActionResults;
 using KillrVideo.Authentication;
 using KillrVideo.Models.YouTube;
-using KillrVideo.VideoCatalog.Messages;
-using KillrVideo.VideoCatalog.Messages.Commands;
-using Nimbus;
+using KillrVideo.VideoCatalog;
+using KillrVideo.VideoCatalog.Dtos;
 
 namespace KillrVideo.Controllers
 {
@@ -17,12 +16,12 @@ namespace KillrVideo.Controllers
     /// </summary>
     public class YouTubeController : ConventionControllerBase
     {
-        private readonly IBus _bus;
+        private readonly IVideoCatalogService _videoCatalog;
 
-        public YouTubeController(IBus bus)
+        public YouTubeController(IVideoCatalogService videoCatalog)
         {
-            if (bus == null) throw new ArgumentNullException("bus");
-            _bus = bus;
+            if (videoCatalog == null) throw new ArgumentNullException("videoCatalog");
+            _videoCatalog = videoCatalog;
         }
 
         /// <summary>
@@ -41,7 +40,7 @@ namespace KillrVideo.Controllers
                            ? new HashSet<string>()
                            : new HashSet<string>(model.Tags.Select(t => t.Trim()));
 
-            await _bus.Send(new SubmitYouTubeVideo
+            await _videoCatalog.SubmitYouTubeVideo(new SubmitYouTubeVideo
             {
                 VideoId = videoId,
                 UserId = User.GetCurrentUserId().Value,

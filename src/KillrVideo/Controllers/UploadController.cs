@@ -6,13 +6,10 @@ using System.Web.Mvc;
 using KillrVideo.ActionResults;
 using KillrVideo.Authentication;
 using KillrVideo.Models.Upload;
-using KillrVideo.Uploads.Messages.Commands;
-using KillrVideo.Uploads.Messages.RequestResponse;
-using KillrVideo.Uploads.ReadModel;
-using KillrVideo.Uploads.ReadModel.Dtos;
-using KillrVideo.VideoCatalog.Messages.Commands;
-using Microsoft.WindowsAzure.MediaServices.Client;
-using Nimbus;
+using KillrVideo.Uploads;
+using KillrVideo.Uploads.Dtos;
+using KillrVideo.VideoCatalog;
+using KillrVideo.VideoCatalog.Dtos;
 
 namespace KillrVideo.Controllers
 {
@@ -21,15 +18,15 @@ namespace KillrVideo.Controllers
     /// </summary>
     public class UploadController : ConventionControllerBase
     {
-        private readonly IUploadedVideosReadModel _uploadReadModel;
-        private readonly IBus _bus;
+        private readonly IUploadsService _uploads;
+        private readonly IVideoCatalogService _videoCatalog;
 
-        public UploadController(IUploadedVideosReadModel uploadReadModel, IBus bus)
+        public UploadController(IUploadsService uploads, IVideoCatalogService videoCatalog)
         {
-            if (uploadReadModel == null) throw new ArgumentNullException("uploadReadModel");
-            if (bus == null) throw new ArgumentNullException("bus");
-            _uploadReadModel = uploadReadModel;
-            _bus = bus;
+            if (uploads == null) throw new ArgumentNullException("uploads");
+            if (videoCatalog == null) throw new ArgumentNullException("videoCatalog");
+            _uploads = uploads;
+            _videoCatalog = videoCatalog;
         }
 
         /// <summary>
@@ -40,7 +37,7 @@ namespace KillrVideo.Controllers
         public async Task<JsonNetResult> GenerateUploadDestination(GenerateUploadDestinationViewModel model)
         {
             // Generate a destination for the upload
-            UploadDestination uploadDestination = await _bus.Request(new GenerateUploadDestination { FileName = model.FileName });
+            UploadDestination uploadDestination = await _uploads.GenerateUploadDestination(new GenerateUploadDestination { FileName = model.FileName });
             if (uploadDestination.ErrorMessage != null)
             {
                 ModelState.AddModelError(string.Empty, uploadDestination.ErrorMessage);
@@ -66,7 +63,7 @@ namespace KillrVideo.Controllers
                            ? new HashSet<string>()
                            : new HashSet<string>(model.Tags.Select(t => t.Trim()));
 
-            await _bus.Send(new SubmitUploadedVideo
+            await _videoCatalog.SubmitUploadedVideo(new SubmitUploadedVideo
             {
                 UploadUrl = model.UploadUrl,
                 VideoId = videoId,
@@ -89,7 +86,7 @@ namespace KillrVideo.Controllers
         [HttpPost]
         public async Task<JsonNetResult> GetLatestStatus(GetLatestStatusViewModel model)
         {
-            EncodingJobProgress status = await _uploadReadModel.GetStatusForVideo(model.VideoId);
+            EncodingJobProgress status = await _uploads.GetStatusForVideo(model.VideoId);
 
             // If there isn't a status (yet) just return queued with a timestamp from 30 seconds ago
             if (status == null)

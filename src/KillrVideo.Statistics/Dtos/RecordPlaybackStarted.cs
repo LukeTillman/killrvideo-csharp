@@ -1,5 +1,4 @@
 ﻿using System;
-using Nimbus.MessageContracts;
 
 namespace KillrVideo.Statistics.Dtos
 {
@@ -7,7 +6,7 @@ namespace KillrVideo.Statistics.Dtos
     /// Command for recording a playback of a video.
     /// </summary>
     [Serializable]
-    public class RecordPlaybackStarted : IBusCommand
+    public class RecordPlaybackStarted
     {
         public Guid VideoId { get; set; }
     }

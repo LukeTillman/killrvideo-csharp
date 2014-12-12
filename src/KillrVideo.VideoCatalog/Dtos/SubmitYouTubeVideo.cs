@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Nimbus.MessageContracts;
 
 namespace KillrVideo.VideoCatalog.Dtos
 {
@@ -8,7 +7,7 @@ namespace KillrVideo.VideoCatalog.Dtos
     /// Submits a YouTube video to the catalog.
     /// </summary>
     [Serializable]
-    public class SubmitYouTubeVideo : IBusCommand
+    public class SubmitYouTubeVideo
     {
         public Guid VideoId { get; set; }
         public Guid UserId { get; set; }

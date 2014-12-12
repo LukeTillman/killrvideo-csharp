@@ -5,37 +5,31 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using KillrVideo.ActionResults;
 using KillrVideo.Authentication;
-using KillrVideo.Comments.Messages.Commands;
-using KillrVideo.Comments.ReadModel;
-using KillrVideo.Comments.ReadModel.Dtos;
+using KillrVideo.Comments;
+using KillrVideo.Comments.Dtos;
 using KillrVideo.Models.Comments;
-using KillrVideo.UserManagement.ReadModel;
-using KillrVideo.UserManagement.ReadModel.Dtos;
+using KillrVideo.UserManagement;
+using KillrVideo.UserManagement.Dtos;
 using KillrVideo.Utils;
-using KillrVideo.VideoCatalog.ReadModel;
-using KillrVideo.VideoCatalog.ReadModel.Dtos;
-using Nimbus;
+using KillrVideo.VideoCatalog;
+using KillrVideo.VideoCatalog.Dtos;
 
 namespace KillrVideo.Controllers
 {
     public class CommentsController : ConventionControllerBase
     {
-        private readonly ICommentReadModel _commentReadModel;
-        private readonly IVideoCatalogReadModel _videoReadModel;
-        private readonly IUserReadModel _userReadModel;
-        private readonly IBus _bus;
-
-        public CommentsController(ICommentReadModel commentReadModel, IVideoCatalogReadModel videoReadModel, IUserReadModel userReadModel,
-                                  IBus bus)
+        private readonly ICommentsService _comments;
+        private readonly IVideoCatalogService _videoCatalog;
+        private readonly IUserManagementService _userManagement;
+        
+        public CommentsController(ICommentsService comments, IVideoCatalogService videoCatalog, IUserManagementService userManagement)
         {
-            if (commentReadModel == null) throw new ArgumentNullException("commentReadModel");
-            if (videoReadModel == null) throw new ArgumentNullException("videoReadModel");
-            if (userReadModel == null) throw new ArgumentNullException("userReadModel");
-            if (bus == null) throw new ArgumentNullException("bus");
-            _commentReadModel = commentReadModel;
-            _videoReadModel = videoReadModel;
-            _userReadModel = userReadModel;
-            _bus = bus;
+            if (comments == null) throw new ArgumentNullException("comments");
+            if (videoCatalog == null) throw new ArgumentNullException("videoCatalog");
+            if (userManagement == null) throw new ArgumentNullException("userManagement");
+            _comments = comments;
+            _videoCatalog = videoCatalog;
+            _userManagement = userManagement;
         }
 
         /// <summary>
@@ -44,7 +38,7 @@ namespace KillrVideo.Controllers
         [HttpPost]
         public async Task<JsonNetResult> ByVideo(GetVideoCommentsViewModel model)
         {
-            VideoComments result = await _commentReadModel.GetVideoComments(new GetVideoComments
+            VideoComments result = await _comments.GetVideoComments(new GetVideoComments
             {
                 VideoId = model.VideoId,
                 PageSize = model.PageSize,
@@ -54,7 +48,7 @@ namespace KillrVideo.Controllers
             // For the ViewModel, we also want to include the information about a user who made the comments on the video, so
             // get the user profile information for the comments and then use a LINQ to Objects Join to merge the two together
             // (this should be OK since the dataset should be small)
-            IEnumerable<UserProfile> userProfiles = await _userReadModel.GetUserProfiles(result.Comments.Select(c => c.UserId).ToHashSet());
+            IEnumerable<UserProfile> userProfiles = await _userManagement.GetUserProfiles(result.Comments.Select(c => c.UserId).ToHashSet());
 
             var returnModel = new VideoCommentsViewModel
             {
@@ -89,7 +83,7 @@ namespace KillrVideo.Controllers
             }
 
             // Get a page of comments for the user, then look up video details for those videos
-            UserComments result = await _commentReadModel.GetUserComments(new GetUserComments
+            UserComments result = await _comments.GetUserComments(new GetUserComments
             {
                 UserId = userId.Value,
                 PageSize = model.PageSize,
@@ -99,7 +93,7 @@ namespace KillrVideo.Controllers
             // For the ViewModel, we want to add information about the video to each comment as well, so get the video preview 
             // information for the comments and then use a LINQ to objects Join to merge the two together (this should be OK since
             // the dataset should be small since we're doing a page at a time)
-            IEnumerable<VideoPreview> videoPreviews = await _videoReadModel.GetVideoPreviews(result.Comments.Select(c => c.VideoId).ToHashSet());
+            IEnumerable<VideoPreview> videoPreviews = await _videoCatalog.GetVideoPreviews(result.Comments.Select(c => c.VideoId).ToHashSet());
             
             var returnModel = new UserCommentsViewModel
             {
@@ -138,10 +132,10 @@ namespace KillrVideo.Controllers
                 Comment = model.Comment
             };
 
-            await _bus.Send(commentOnVideo);
+            await _comments.CommentOnVideo(commentOnVideo);
 
             // Lookup the current user's information to include in the return data
-            UserProfile userInfo = await _userReadModel.GetUserProfile(userId);
+            UserProfile userInfo = await _userManagement.GetUserProfile(userId);
 
             return JsonSuccess(new VideoCommentViewModel
             {

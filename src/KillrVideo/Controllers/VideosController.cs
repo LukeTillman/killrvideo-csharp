@@ -8,18 +8,16 @@ using KillrVideo.ActionResults;
 using KillrVideo.Authentication;
 using KillrVideo.Models.Shared;
 using KillrVideo.Models.Videos;
-using KillrVideo.Ratings.Messages.Commands;
-using KillrVideo.Ratings.ReadModel;
-using KillrVideo.Ratings.ReadModel.Dtos;
-using KillrVideo.Statistics.ReadModel;
-using KillrVideo.Statistics.ReadModel.Dtos;
-using KillrVideo.SuggestedVideos.ReadModel;
-using KillrVideo.SuggestedVideos.ReadModel.Dtos;
-using KillrVideo.UserManagement.ReadModel;
-using KillrVideo.UserManagement.ReadModel.Dtos;
-using KillrVideo.VideoCatalog.ReadModel;
-using KillrVideo.VideoCatalog.ReadModel.Dtos;
-using Nimbus;
+using KillrVideo.Ratings;
+using KillrVideo.Ratings.Dtos;
+using KillrVideo.Statistics;
+using KillrVideo.Statistics.Dtos;
+using KillrVideo.SuggestedVideos;
+using KillrVideo.SuggestedVideos.Dtos;
+using KillrVideo.UserManagement;
+using KillrVideo.UserManagement.Dtos;
+using KillrVideo.VideoCatalog;
+using KillrVideo.VideoCatalog.Dtos;
 
 namespace KillrVideo.Controllers
 {
@@ -28,29 +26,25 @@ namespace KillrVideo.Controllers
     /// </summary>
     public class VideosController : ConventionControllerBase
     {
-        private readonly IVideoCatalogReadModel _videoReadModel;
-        private readonly IUserReadModel _userReadModel;
-        private readonly IPlaybackStatsReadModel _statsReadModel;
-        private readonly IRatingsReadModel _ratingsReadModel;
-        private readonly ISuggestVideos _suggestionService;
-        private readonly IBus _bus;
+        private readonly IVideoCatalogService _videoCatalog;
+        private readonly IUserManagementService _userManagement;
+        private readonly IStatisticsService _stats;
+        private readonly IRatingsService _ratings;
+        private readonly ISuggestVideos _suggestions;
 
-        public VideosController(IVideoCatalogReadModel videoReadModel, IUserReadModel userReadModel, IPlaybackStatsReadModel statsReadModel,
-                                IRatingsReadModel ratingsReadModel, ISuggestVideos suggestionService, IBus bus)
+        public VideosController(IVideoCatalogService videoCatalog, IUserManagementService userManagement, IStatisticsService stats,
+                                IRatingsService ratings, ISuggestVideos suggestions)
         {
-            if (videoReadModel == null) throw new ArgumentNullException("videoReadModel");
-            if (userReadModel == null) throw new ArgumentNullException("userReadModel");
-            if (statsReadModel == null) throw new ArgumentNullException("statsReadModel");
-            if (ratingsReadModel == null) throw new ArgumentNullException("ratingsReadModel");
-            if (suggestionService == null) throw new ArgumentNullException("suggestionService");
-            if (bus == null) throw new ArgumentNullException("bus");
-
-            _videoReadModel = videoReadModel;
-            _userReadModel = userReadModel;
-            _statsReadModel = statsReadModel;
-            _ratingsReadModel = ratingsReadModel;
-            _suggestionService = suggestionService;
-            _bus = bus;
+            if (videoCatalog == null) throw new ArgumentNullException("videoCatalog");
+            if (userManagement == null) throw new ArgumentNullException("userManagement");
+            if (stats == null) throw new ArgumentNullException("stats");
+            if (ratings == null) throw new ArgumentNullException("ratings");
+            if (suggestions == null) throw new ArgumentNullException("suggestions");
+            _videoCatalog = videoCatalog;
+            _userManagement = userManagement;
+            _stats = stats;
+            _ratings = ratings;
+            _suggestions = suggestions;
         }
 
         /// <summary>
@@ -60,8 +54,8 @@ namespace KillrVideo.Controllers
         public async Task<ViewResult> View(Guid videoId)
         {
             // Get the views for the video and try to find the video by id (in parallel)
-            Task<PlayStats> videoViewsTask = _statsReadModel.GetNumberOfPlays(videoId);
-            Task<VideoDetails> videoDetailsTask = _videoReadModel.GetVideo(videoId);
+            Task<PlayStats> videoViewsTask = _stats.GetNumberOfPlays(videoId);
+            Task<VideoDetails> videoDetailsTask = _videoCatalog.GetVideo(videoId);
 
             await Task.WhenAll(videoViewsTask, videoDetailsTask);
 
@@ -105,14 +99,14 @@ namespace KillrVideo.Controllers
         [HttpPost]
         public async Task<JsonNetResult> Related(GetRelatedVideosViewModel model)
         {
-            RelatedVideos relatedVideos = await _suggestionService.GetRelatedVideos(model.VideoId);
+            RelatedVideos relatedVideos = await _suggestions.GetRelatedVideos(model.VideoId);
 
             // TODO:  Better solution than client-side JOINs
             var authorIds = new HashSet<Guid>(relatedVideos.Videos.Select(v => v.UserId));
-            Task<IEnumerable<UserProfile>> authorsTask = _userReadModel.GetUserProfiles(authorIds);
+            Task<IEnumerable<UserProfile>> authorsTask = _userManagement.GetUserProfiles(authorIds);
 
             var videoIds = new HashSet<Guid>(relatedVideos.Videos.Select(v => v.VideoId));
-            Task<IEnumerable<PlayStats>> statsTask = _statsReadModel.GetNumberOfPlays(videoIds);
+            Task<IEnumerable<PlayStats>> statsTask = _stats.GetNumberOfPlays(videoIds);
 
             await Task.WhenAll(authorsTask, statsTask);
 
@@ -141,7 +135,7 @@ namespace KillrVideo.Controllers
                 return JsonFailure();
             }
 
-            UserVideos userVideos = await _videoReadModel.GetUserVideos(new GetUserVideos
+            UserVideos userVideos = await _videoCatalog.GetUserVideos(new GetUserVideos
             {
                 UserId = userId.Value,
                 PageSize = model.PageSize,
@@ -150,10 +144,10 @@ namespace KillrVideo.Controllers
             });
 
             // TODO:  Better solution than client-side JOINs
-            Task<UserProfile> authorTask = _userReadModel.GetUserProfile(userId.Value);
+            Task<UserProfile> authorTask = _userManagement.GetUserProfile(userId.Value);
             
             var videoIds = new HashSet<Guid>(userVideos.Videos.Select(v => v.VideoId));
-            Task<IEnumerable<PlayStats>> statsTask = _statsReadModel.GetNumberOfPlays(videoIds);
+            Task<IEnumerable<PlayStats>> statsTask = _stats.GetNumberOfPlays(videoIds);
 
             await Task.WhenAll(authorTask, statsTask);
 
@@ -172,7 +166,7 @@ namespace KillrVideo.Controllers
         [HttpPost]
         public async Task<JsonNetResult> Recent(GetRecentVideosViewModel model)
         {
-            LatestVideos recentVideos = await _videoReadModel.GetLastestVideos(new GetLatestVideos
+            LatestVideos recentVideos = await _videoCatalog.GetLastestVideos(new GetLatestVideos
             {
                 PageSize = model.PageSize,
                 FirstVideoOnPageDate = model.FirstVideoOnPage == null ? (DateTimeOffset?) null : model.FirstVideoOnPage.AddedDate,
@@ -181,10 +175,10 @@ namespace KillrVideo.Controllers
 
             // TODO:  Better solution than client-side JOINs
             var authorIds = new HashSet<Guid>(recentVideos.Videos.Select(v => v.UserId));
-            Task<IEnumerable<UserProfile>> authorsTask = _userReadModel.GetUserProfiles(authorIds);
+            Task<IEnumerable<UserProfile>> authorsTask = _userManagement.GetUserProfiles(authorIds);
 
             var videoIds = new HashSet<Guid>(recentVideos.Videos.Select(v => v.VideoId));
-            Task<IEnumerable<PlayStats>> statsTask = _statsReadModel.GetNumberOfPlays(videoIds);
+            Task<IEnumerable<PlayStats>> statsTask = _stats.GetNumberOfPlays(videoIds);
 
             await Task.WhenAll(authorsTask, statsTask);
 
@@ -206,13 +200,13 @@ namespace KillrVideo.Controllers
         public async Task<JsonNetResult> GetRatings(GetRatingsViewModel model)
         {
             // We definitely want the overall rating info, so start there
-            Task<VideoRating> ratingTask = _ratingsReadModel.GetRating(model.VideoId);
+            Task<VideoRating> ratingTask = _ratings.GetRating(model.VideoId);
 
             // If a user is logged in, we also want their rating
             Guid? userId = User.GetCurrentUserId();
             Task<UserVideoRating> userRatingTask = null;
             if (userId.HasValue)
-                userRatingTask = _ratingsReadModel.GetRatingFromUser(model.VideoId, userId.Value);
+                userRatingTask = _ratings.GetRatingFromUser(model.VideoId, userId.Value);
 
             // Await data appropriately
             VideoRating ratingData = await ratingTask;
@@ -236,7 +230,7 @@ namespace KillrVideo.Controllers
         [HttpPost, Authorize]
         public async Task<JsonNetResult> Rate(RateVideoViewModel model)
         {
-            await _bus.Send(new RateVideo
+            await _ratings.RateVideo(new RateVideo
             {
                 VideoId = model.VideoId, 
                 UserId = User.GetCurrentUserId().Value,
@@ -247,7 +241,7 @@ namespace KillrVideo.Controllers
 
         private async Task<UserProfileViewModel> GetUserProfile(Guid userId)
         {
-            UserProfile profile = await _userReadModel.GetUserProfile(userId);
+            UserProfile profile = await _userManagement.GetUserProfile(userId);
             return UserProfileViewModel.FromDataModel(profile);
         }
 	}
