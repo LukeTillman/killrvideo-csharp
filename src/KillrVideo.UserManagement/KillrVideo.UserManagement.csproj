@@ -72,9 +72,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Handlers\CreateUserHandler.cs" />
+    <Compile Include="Dtos\CreateUser.cs" />
+    <Compile Include="Dtos\UserCredentials.cs" />
+    <Compile Include="Dtos\UserProfile.cs" />
+    <Compile Include="IUserManagementService.cs" />
+    <Compile Include="LinqUserManagementService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserManagementWindsorInstaller.cs" />
+    <Compile Include="UserManagementService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

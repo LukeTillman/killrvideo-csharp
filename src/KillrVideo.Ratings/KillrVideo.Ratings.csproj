@@ -72,9 +72,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Handlers\RateVideoHandler.cs" />
+    <Compile Include="Dtos\RateVideo.cs" />
+    <Compile Include="Dtos\UserVideoRating.cs" />
+    <Compile Include="Dtos\VideoRating.cs" />
+    <Compile Include="IRatingsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RatingsWindsorInstaller.cs" />
+    <Compile Include="RatingsService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

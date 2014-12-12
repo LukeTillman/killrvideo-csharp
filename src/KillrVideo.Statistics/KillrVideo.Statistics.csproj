@@ -71,18 +71,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Handlers\RecordPlaybackStartedHandler.cs" />
+    <Compile Include="Dtos\PlayStats.cs" />
+    <Compile Include="Dtos\RecordPlaybackStarted.cs" />
+    <Compile Include="IStatisticsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StatisticsWindsorInstaller.cs" />
+    <Compile Include="StatisticsService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KillrVideo.Statistics.Messages\KillrVideo.Statistics.Messages.csproj">
-      <Project>{194dc607-2a7c-4802-80e8-8d351dbf32ca}</Project>
-      <Name>KillrVideo.Statistics.Messages</Name>
-    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
       <Project>{9516b3f3-89b7-4343-9f88-ffee6d74fffc}</Project>
       <Name>KillrVideo.Utils</Name>

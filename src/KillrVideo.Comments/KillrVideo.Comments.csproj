@@ -72,8 +72,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommentsWindsorInstaller.cs" />
-    <Compile Include="Handlers\CommentOnVideoHandler.cs" />
+    <Compile Include="CommentsService.cs" />
+    <Compile Include="Dtos\CommentOnVideo.cs" />
+    <Compile Include="Dtos\GetUserComments.cs" />
+    <Compile Include="Dtos\GetVideoComments.cs" />
+    <Compile Include="Dtos\UserComment.cs" />
+    <Compile Include="Dtos\UserComments.cs" />
+    <Compile Include="Dtos\VideoComment.cs" />
+    <Compile Include="Dtos\VideoComments.cs" />
+    <Compile Include="ICommentsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
