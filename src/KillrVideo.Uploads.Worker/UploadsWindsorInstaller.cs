@@ -2,15 +2,14 @@
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using KillrVideo.Uploads.EncodingJobMonitor;
-using KillrVideo.Uploads.Messages.RequestResponse;
+using KillrVideo.Uploads.Dtos;
 using KillrVideo.Utils.Nimbus;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.MediaServices.Client;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 
-namespace KillrVideo.Uploads
+namespace KillrVideo.Uploads.Worker
 {
     /// <summary>
     /// Castle Windsor installer for installing all the components needed by the Uploads worker.

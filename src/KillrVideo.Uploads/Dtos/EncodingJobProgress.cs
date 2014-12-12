@@ -1,6 +1,6 @@
 using System;
 
-namespace KillrVideo.Uploads.ReadModel.Dtos
+namespace KillrVideo.Uploads.Dtos
 {
     /// <summary>
     /// DTO that represents the encoding job progress for an uploaded video.

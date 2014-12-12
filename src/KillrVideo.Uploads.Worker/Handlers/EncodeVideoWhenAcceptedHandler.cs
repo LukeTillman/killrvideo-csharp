@@ -9,7 +9,7 @@ using Microsoft.WindowsAzure.MediaServices.Client;
 using Nimbus;
 using Nimbus.Handlers;
 
-namespace KillrVideo.Uploads.Handlers
+namespace KillrVideo.Uploads.Worker.Handlers
 {
     /// <summary>
     /// Handler for kicking off an encoding job once an uploaded video has been accepted.

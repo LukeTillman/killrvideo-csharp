@@ -1,7 +1,7 @@
 ﻿using System;
 using Nimbus.MessageContracts;
 
-namespace KillrVideo.Uploads.Messages.Commands
+namespace KillrVideo.Uploads.Dtos
 {
     /// <summary>
     /// Marks an upload as complete.

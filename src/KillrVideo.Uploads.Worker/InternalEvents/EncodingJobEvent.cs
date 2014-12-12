@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace KillrVideo.Uploads.Dtos
+namespace KillrVideo.Uploads.Worker.InternalEvents
 {
     /// <summary>
     /// Represents an event message from Azure Media Services pulled down from a notificaiton queue.

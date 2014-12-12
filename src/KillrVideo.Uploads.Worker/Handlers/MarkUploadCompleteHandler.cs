@@ -2,14 +2,14 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Uploads.InternalEvents;
-using KillrVideo.Uploads.Messages.Commands;
+using KillrVideo.Uploads.Dtos;
+using KillrVideo.Uploads.Worker.InternalEvents;
 using KillrVideo.Utils;
 using Microsoft.WindowsAzure.MediaServices.Client;
 using Nimbus;
 using Nimbus.Handlers;
 
-namespace KillrVideo.Uploads.Handlers
+namespace KillrVideo.Uploads.Worker.Handlers
 {
     /// <summary>
     /// Marks uploads as complete.

@@ -1,7 +1,7 @@
 ﻿using System;
 using Nimbus.MessageContracts;
 
-namespace KillrVideo.Uploads.Messages.RequestResponse
+namespace KillrVideo.Uploads.Dtos
 {
     /// <summary>
     /// The destination for an upload.

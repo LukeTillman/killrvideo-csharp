@@ -3,14 +3,14 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Uploads.InternalEvents;
-using KillrVideo.Uploads.Messages.RequestResponse;
+using KillrVideo.Uploads.Dtos;
+using KillrVideo.Uploads.Worker.InternalEvents;
 using KillrVideo.Utils;
 using Microsoft.WindowsAzure.MediaServices.Client;
 using Nimbus;
 using Nimbus.Handlers;
 
-namespace KillrVideo.Uploads.Handlers
+namespace KillrVideo.Uploads.Worker.Handlers
 {
     /// <summary>
     /// Handles requests to generate upload destinations for uploaded videos.

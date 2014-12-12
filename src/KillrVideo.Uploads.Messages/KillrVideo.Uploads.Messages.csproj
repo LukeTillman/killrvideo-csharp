@@ -44,14 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\MarkUploadComplete.cs" />
     <Compile Include="Events\UploadedVideoProcessingFailed.cs" />
     <Compile Include="Events\UploadedVideoProcessingStarted.cs" />
     <Compile Include="Events\UploadedVideoProcessingSucceeded.cs" />
     <Compile Include="Events\UploadedVideoPublished.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RequestResponse\GenerateUploadDestination.cs" />
-    <Compile Include="RequestResponse\UploadDestination.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

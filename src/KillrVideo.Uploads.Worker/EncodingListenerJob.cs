@@ -4,15 +4,15 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Uploads.Dtos;
 using KillrVideo.Uploads.Messages.Events;
+using KillrVideo.Uploads.Worker.InternalEvents;
 using KillrVideo.Utils;
 using log4net;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
 using Nimbus;
 
-namespace KillrVideo.Uploads.EncodingJobMonitor
+namespace KillrVideo.Uploads.Worker
 {
     /// <summary>
     /// A job that listens for notifications from Azure Media Services about encoding job progress and logs the events in C*, as well

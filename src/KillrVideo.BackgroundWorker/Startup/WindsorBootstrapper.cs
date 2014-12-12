@@ -121,7 +121,7 @@ namespace KillrVideo.BackgroundWorker.Startup
                          .LifestyleSingleton()
                 );
         }
-        
+
         /// <summary>
         /// Gets a required setting from CloudConfigurationManager and throws a ConfigurationErrorsException if setting is null/empty.
         /// </summary>

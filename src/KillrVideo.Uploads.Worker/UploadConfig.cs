@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace KillrVideo.Uploads
+namespace KillrVideo.Uploads.Worker
 {
     /// <summary>
     /// Constants/static fields related to video upload.

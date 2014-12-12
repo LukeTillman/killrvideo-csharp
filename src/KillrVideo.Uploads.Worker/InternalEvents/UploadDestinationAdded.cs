@@ -1,7 +1,7 @@
 ﻿using System;
 using Nimbus.MessageContracts;
 
-namespace KillrVideo.Uploads.InternalEvents
+namespace KillrVideo.Uploads.Worker.InternalEvents
 {
     /// <summary>
     /// Internal event for when an upload destination is added to Azure Media Services.

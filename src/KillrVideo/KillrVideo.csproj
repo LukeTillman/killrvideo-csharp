@@ -380,10 +380,6 @@
       <Project>{c51cf234-ece1-4edc-93e2-844e88999825}</Project>
       <Name>KillrVideo.Uploads.Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.Uploads.ReadModel\KillrVideo.Uploads.ReadModel.csproj">
-      <Project>{b3d9f944-0d59-43f0-86eb-751787f2b84e}</Project>
-      <Name>KillrVideo.Uploads.ReadModel</Name>
-    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.UserManagement.Messages\KillrVideo.UserManagement.Messages.csproj">
       <Project>{5b9a5088-45fc-44cb-8dae-678cdfa82405}</Project>
       <Name>KillrVideo.UserManagement.Messages</Name>

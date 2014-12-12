@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.WindowsAzure.MediaServices.Client;
 using Microsoft.WindowsAzure.Storage.Queue;
 
-namespace KillrVideo.Uploads
+namespace KillrVideo.Uploads.Worker
 {
     /// <summary>
     /// Factory for creating/getting the Azure Media Service endpoint for upload job notifications.
