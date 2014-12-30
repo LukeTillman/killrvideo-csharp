@@ -158,8 +158,8 @@ CREATE TABLE sample_data_job_log (
     job_name text,
     scheduled_run_time timestamp,
     actual_run_time timestamp,
-    PRIMARY KEY (job_name, run_time)
-) WITH CLUSTERING ORDER BY (run_time DESC);
+    PRIMARY KEY (job_name, scheduled_run_time, actual_run_time)
+) WITH CLUSTERING ORDER BY (scheduled_run_time DESC, actual_run_time DESC);
 
 // Lease table for sample data worker (max lease time 180 seconds)
 CREATE TABLE sample_data_leases (
