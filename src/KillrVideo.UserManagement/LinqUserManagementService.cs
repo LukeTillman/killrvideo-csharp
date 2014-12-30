@@ -35,6 +35,9 @@ namespace KillrVideo.UserManagement
         /// </summary>
         public async Task CreateUser(CreateUser user)
         {
+            // Hash the user's password
+            string hashedPassword = PasswordHash.CreateHash(user.Password);
+
             // TODO:  Use LINQ to create users
             DateTimeOffset timestamp = DateTimeOffset.UtcNow;
 
@@ -42,7 +45,7 @@ namespace KillrVideo.UserManagement
                 "INSERT INTO user_credentials (email, password, userid) VALUES (?, ?, ?) IF NOT EXISTS");
 
             // Insert the credentials info (this will return false if a user with that email address already exists)
-            IStatement insertCredentialsStatement = preparedCredentials.Bind(user.EmailAddress, user.Password, user.UserId).SetTimestamp(timestamp);
+            IStatement insertCredentialsStatement = preparedCredentials.Bind(user.EmailAddress, hashedPassword, user.UserId).SetTimestamp(timestamp);
             RowSet credentialsResult = await _session.ExecuteAsync(insertCredentialsStatement).ConfigureAwait(false);
 
             // The first column in the row returned will be a boolean indicating whether the change was applied (TODO: Compensating action for user creation failure?)
