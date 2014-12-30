@@ -124,6 +124,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KillrVideo.SampleData.Worker\KillrVideo.SampleData.Worker.csproj">
+      <Project>{04C8CE15-1313-47E8-98F8-4100DEDA6C6C}</Project>
+      <Name>KillrVideo.SampleData.Worker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Search.Worker\KillrVideo.Search.Worker.csproj">
       <Project>{fae17162-13e1-45c6-b2bf-6f4c4df0cf40}</Project>
       <Name>KillrVideo.Search.Worker</Name>

@@ -152,3 +152,18 @@ CREATE TABLE encoding_job_notifications (
     oldstate text,
     PRIMARY KEY (videoid, status_date, etag)
 ) WITH CLUSTERING ORDER BY (status_date DESC, etag ASC);
+
+// Log of sample data jobs that have been run
+CREATE TABLE sample_data_job_log (
+    job_name text,
+    scheduled_run_time timestamp,
+    actual_run_time timestamp,
+    PRIMARY KEY (job_name, run_time)
+) WITH CLUSTERING ORDER BY (run_time DESC);
+
+// Lease table for sample data worker (max lease time 180 seconds)
+CREATE TABLE sample_data_leases (
+    name text,
+    owner text,
+    PRIMARY KEY (name)
+) WITH default_time_to_live = 180;

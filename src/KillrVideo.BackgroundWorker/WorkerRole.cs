@@ -12,6 +12,9 @@ using Nimbus;
 
 namespace KillrVideo.BackgroundWorker
 {
+    /// <summary>
+    /// The main Azure entry point for the KillVideo.BackgroundWorker role.
+    /// </summary>
     public class WorkerRole : RoleEntryPoint
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (WorkerRole));
@@ -34,7 +37,7 @@ namespace KillrVideo.BackgroundWorker
             // Bootstrap Log4net logging
             XmlConfigurator.Configure();
 
-            Logger.Info("KillrVideo.UploadWorker is starting");
+            Logger.Info("KillrVideo.BackgroundWorker is starting");
 
             try
             {
@@ -54,14 +57,14 @@ namespace KillrVideo.BackgroundWorker
             }
             catch (Exception e)
             {
-                Logger.Error("Exception in UploadWorker OnStart", e);
+                Logger.Error("Exception in BackgroundWorker OnStart", e);
                 throw;
             }
         }
         
         public override void OnStop()
         {
-            Logger.Info("KillrVideo.UploadWorker is stopping");
+            Logger.Info("KillrVideo.BackgroundWorker is stopping");
 
             try
             {
@@ -79,12 +82,12 @@ namespace KillrVideo.BackgroundWorker
                     if (operationCancelled != null)
                         continue;
 
-                    Logger.Error("Unexpected exception while cancelling Tasks in UploadWorker stop", exception);
+                    Logger.Error("Unexpected exception while cancelling Tasks in BackgroundWorker stop", exception);
                 }
             }
             catch (Exception e)
             {
-                Logger.Error("Unexpected error during UploadWorker stop", e);
+                Logger.Error("Unexpected error during BackgroundWorker stop", e);
             }
 
             // Dispose of Windsor container

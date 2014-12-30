@@ -74,6 +74,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.VideoCatalog.Wor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.Uploads.Worker", "KillrVideo.Uploads.Worker\KillrVideo.Uploads.Worker.csproj", "{2CE828EE-5031-4137-9D75-2AA069751F23}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SampleData", "SampleData", "{B9DB3B86-3376-479D-801D-9E250871CA61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.SampleData.Worker", "KillrVideo.SampleData.Worker\KillrVideo.SampleData.Worker.csproj", "{04C8CE15-1313-47E8-98F8-4100DEDA6C6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.SampleData", "KillrVideo.SampleData\KillrVideo.SampleData.csproj", "{F7088371-8ED3-4827-B15A-05F598C27399}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -164,6 +170,14 @@ Global
 		{2CE828EE-5031-4137-9D75-2AA069751F23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CE828EE-5031-4137-9D75-2AA069751F23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CE828EE-5031-4137-9D75-2AA069751F23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04C8CE15-1313-47E8-98F8-4100DEDA6C6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04C8CE15-1313-47E8-98F8-4100DEDA6C6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04C8CE15-1313-47E8-98F8-4100DEDA6C6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04C8CE15-1313-47E8-98F8-4100DEDA6C6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7088371-8ED3-4827-B15A-05F598C27399}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7088371-8ED3-4827-B15A-05F598C27399}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7088371-8ED3-4827-B15A-05F598C27399}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7088371-8ED3-4827-B15A-05F598C27399}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -195,6 +209,9 @@ Global
 		{846E5D96-7F24-4CAA-8DDE-90F36DAE7E06} = {658BC99A-0B0E-42F5-B063-280E298B29B2}
 		{2CEE7365-93B2-4C57-A530-DE30C79DE945} = {E34704FB-622C-4783-9779-74F09440E281}
 		{2CE828EE-5031-4137-9D75-2AA069751F23} = {866AA1A1-025C-4A3A-8D85-381EA3C0180F}
+		{B9DB3B86-3376-479D-801D-9E250871CA61} = {B70BBD28-B0F5-4642-B08A-3BA9C0D103AD}
+		{04C8CE15-1313-47E8-98F8-4100DEDA6C6C} = {B9DB3B86-3376-479D-801D-9E250871CA61}
+		{F7088371-8ED3-4827-B15A-05F598C27399} = {B9DB3B86-3376-479D-801D-9E250871CA61}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\TransientFaultHandling.Core.5.1.1209.1\lib\NET4
