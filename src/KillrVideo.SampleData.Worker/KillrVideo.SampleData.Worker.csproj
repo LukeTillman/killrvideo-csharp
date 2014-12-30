@@ -51,6 +51,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Crc32C.NET.1.0.5.0\lib\net20\Crc32C.NET.dll</HintPath>
     </Reference>
+    <Reference Include="FFaker.Net">
+      <HintPath>..\packages\FFaker.Net.1.1.0.1\lib\net40\FFaker.Net.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
@@ -79,11 +82,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\GetSampleData.cs" />
     <Compile Include="Handlers\AddSampleCommentsHandler.cs" />
     <Compile Include="Handlers\AddSampleRatingsHandler.cs" />
     <Compile Include="Handlers\AddSampleUsersHandler.cs" />
     <Compile Include="Handlers\AddSampleVideoViewsHandler.cs" />
     <Compile Include="Handlers\AddSampleYouTubeVideosHandler.cs" />
+    <Compile Include="Components\IGetSampleData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleDataWorkerWindsorInstaller.cs" />
     <Compile Include="Scheduler\Jobs\AddSampleCommentsJob.cs" />
@@ -103,6 +108,10 @@
     <ProjectReference Include="..\KillrVideo.SampleData\KillrVideo.SampleData.csproj">
       <Project>{F7088371-8ED3-4827-B15A-05F598C27399}</Project>
       <Name>KillrVideo.SampleData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.UserManagement\KillrVideo.UserManagement.csproj">
+      <Project>{5FCF1C36-ED2A-4BF0-B231-B12506210F6D}</Project>
+      <Name>KillrVideo.UserManagement</Name>
     </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
       <Project>{9516B3F3-89B7-4343-9F88-FFEE6D74FFFC}</Project>

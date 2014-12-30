@@ -3,6 +3,7 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using KillrVideo.SampleData.Dtos;
+using KillrVideo.SampleData.Worker.Components;
 using KillrVideo.SampleData.Worker.Scheduler;
 using KillrVideo.Utils.Nimbus;
 
@@ -26,6 +27,7 @@ namespace KillrVideo.SampleData.Worker
             // Configure the lease manager
             var leaseManagerConfig = new LeaseManagerConfig { LeaseName = "SampleDataJobs", UniqueId = _uniqueId };
 
+            // Register components
             container.Register(
                 // Assembly configuration for SampleData handlers/messages
                 Component.For<NimbusAssemblyConfig>()
@@ -34,8 +36,17 @@ namespace KillrVideo.SampleData.Worker
                 // Scheduler and related components
                 Component.For<SampleDataJobScheduler>().LifestyleTransient(),
                 Component.For<LeaseManager>().LifestyleTransient()
-                         .DependsOn(Dependency.OnValue<LeaseManagerConfig>(leaseManagerConfig))
+                         .DependsOn(Dependency.OnValue<LeaseManagerConfig>(leaseManagerConfig)),
+
+                // Scheduler jobs
+                Classes.FromThisAssembly().BasedOn<SampleDataJob>().WithServiceBase().LifestyleTransient(),
+
+                // Other components
+                Component.For<IGetSampleData>().ImplementedBy<GetSampleData>().LifestyleTransient()
             );
+
+            // Also install the sample data service since it's used by the scheduler jobs
+            container.Install(new SampleDataServiceWindsorInstaller());
         }
     }
 }

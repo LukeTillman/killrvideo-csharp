@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using KillrVideo.SampleData.Dtos;
 using Nimbus;
@@ -18,26 +19,41 @@ namespace KillrVideo.SampleData
             _bus = bus;
         }
 
+        /// <summary>
+        /// Adds sample comments to the site.
+        /// </summary>
         public Task AddSampleComments(AddSampleComments comments)
         {
             return _bus.Send(comments);
         }
 
+        /// <summary>
+        /// Adds sample video ratings to the site.
+        /// </summary>
         public Task AddSampleRatings(AddSampleRatings ratings)
         {
             return _bus.Send(ratings);
         }
 
+        /// <summary>
+        /// Adds sample users to the site.
+        /// </summary>
         public Task AddSampleUsers(AddSampleUsers users)
         {
             return _bus.Send(users);
         }
 
+        /// <summary>
+        /// Adds sample video views to the site.
+        /// </summary>
         public Task AddSampleVideoViews(AddSampleVideoViews views)
         {
             return _bus.Send(views);
         }
 
+        /// <summary>
+        /// Adds sample YouTube videos to the site.
+        /// </summary>
         public Task AddSampleYouTubeVideos(AddSampleYouTubeVideos videos)
         {
             return _bus.Send(videos);

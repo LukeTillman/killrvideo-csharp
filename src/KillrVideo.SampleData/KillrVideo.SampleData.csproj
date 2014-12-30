@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\packages\Castle.Core.3.3.0\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Nimbus.InfrastructureContracts">
       <HintPath>..\packages\Nimbus.InfrastructureContracts.1.3.0.2\lib\net45\Nimbus.InfrastructureContracts.dll</HintPath>
     </Reference>
@@ -55,6 +58,7 @@
     <Compile Include="ISampleDataService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleDataService.cs" />
+    <Compile Include="SampleDataServiceWindsorInstaller.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

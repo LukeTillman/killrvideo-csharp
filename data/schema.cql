@@ -167,3 +167,10 @@ CREATE TABLE sample_data_leases (
     owner text,
     PRIMARY KEY (name)
 ) WITH default_time_to_live = 180;
+
+// Table to keep track of sample users added to the site
+CREATE TABLE sample_data_users (
+    userid uuid,
+    PRIMARY KEY(userid)
+);
+
