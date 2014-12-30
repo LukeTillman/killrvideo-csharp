@@ -233,7 +233,6 @@
     <Compile Include="Models\YouTube\AddYouTubeVideoViewModel.cs" />
     <Compile Include="Models\YouTube\YouTubeVideoAddedViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Authentication\PasswordHash.cs" />
     <Compile Include="Utils\AzureTraceAppender.cs" />
     <Compile Include="Utils\GlobalConfigs.cs" />
     <Compile Include="Utils\GravatarHasher.cs" />

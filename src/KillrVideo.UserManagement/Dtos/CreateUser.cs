@@ -11,6 +11,10 @@ namespace KillrVideo.UserManagement.Dtos
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string EmailAddress { get; set; }
+
+        /// <summary>
+        /// The plain text password for the new user.
+        /// </summary>
         public string Password { get; set; }
     }
 }

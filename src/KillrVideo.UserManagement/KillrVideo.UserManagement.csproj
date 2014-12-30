@@ -78,6 +78,7 @@
     <Compile Include="Dtos\UserProfile.cs" />
     <Compile Include="IUserManagementService.cs" />
     <Compile Include="LinqUserManagementService.cs" />
+    <Compile Include="PasswordHash.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserManagementService.cs" />
     <Compile Include="UserManagementServiceWindsorInstaller.cs" />

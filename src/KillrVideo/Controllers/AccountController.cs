@@ -40,8 +40,6 @@ namespace KillrVideo.Controllers
             if (ModelState.IsValid == false)
                 return JsonFailure();
 
-            // TODO: Password hashing as part of the user management service
-
             // Generate a user Id and try to register the user account (map from view model first)
             Guid userId = Guid.NewGuid();
             var createUser = new CreateUser
@@ -49,7 +47,7 @@ namespace KillrVideo.Controllers
                 EmailAddress = model.EmailAddress,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                Password = PasswordHash.CreateHash(model.Password),
+                Password = model.Password,
                 UserId = userId
             };
 
@@ -87,19 +85,16 @@ namespace KillrVideo.Controllers
             if (ModelState.IsValid == false)
                 return JsonFailure();
 
-            // Lookup the user's credentials by email address
-            UserCredentials credentials = await _userManagement.GetCredentials(model.EmailAddress);
-            
-            // Validate the credentials
-            if (credentials == null || PasswordHash.ValidatePassword(model.Password, credentials.Password) == false)
+            // Verify the user's credentials
+            Guid? userId = await _userManagement.VerifyCredentials(model.EmailAddress, model.Password);
+            if (userId == null)
             {
                 ModelState.AddModelError(string.Empty, "Invalid email address or password");
                 return JsonFailure();
             }
 
-            SignTheUserIn(credentials.UserId);
-            
-            return JsonSuccess(new UserSignedInViewModel {AfterLoginUrl = Url.Action("Index", "Home")});
+            SignTheUserIn(userId.Value);
+            return JsonSuccess(new UserSignedInViewModel { AfterLoginUrl = Url.Action("Index", "Home") });
         }
 
         /// <summary>

@@ -33,13 +33,16 @@ namespace KillrVideo.UserManagement
         /// </summary>
         public async Task CreateUser(CreateUser user)
         {
+            // Hash the user's password
+            string hashedPassword = PasswordHash.CreateHash(user.Password);
+
             DateTimeOffset timestamp = DateTimeOffset.UtcNow;
 
             PreparedStatement preparedCredentials = await _statementCache.NoContext.GetOrAddAsync(
                 "INSERT INTO user_credentials (email, password, userid) VALUES (?, ?, ?) IF NOT EXISTS");
 
             // Insert the credentials info (this will return false if a user with that email address already exists)
-            IStatement insertCredentialsStatement = preparedCredentials.Bind(user.EmailAddress, user.Password, user.UserId).SetTimestamp(timestamp);
+            IStatement insertCredentialsStatement = preparedCredentials.Bind(user.EmailAddress, hashedPassword, user.UserId).SetTimestamp(timestamp);
             RowSet credentialsResult = await _session.ExecuteAsync(insertCredentialsStatement).ConfigureAwait(false);
 
             // The first column in the row returned will be a boolean indicating whether the change was applied (TODO: Compensating action for user creation failure?)
@@ -68,9 +71,9 @@ namespace KillrVideo.UserManagement
         }
 
         /// <summary>
-        /// Gets user credentials by email address.  Returns null if they cannot be found.
+        /// Verifies a user's credentials and returns the user's Id if successful, otherwise null.
         /// </summary>
-        public async Task<UserCredentials> GetCredentials(string emailAddress)
+        public async Task<Guid?> VerifyCredentials(string emailAddress, string password)
         {
             PreparedStatement preparedStatement =
                 await _statementCache.NoContext.GetOrAddAsync("SELECT email, password, userid FROM user_credentials WHERE email = ?");
@@ -83,15 +86,13 @@ namespace KillrVideo.UserManagement
             if (row == null)
                 return null;
 
-            // Map row to UserCredentials object
-            return new UserCredentials
-            {
-                EmailAddress = row.GetValue<string>("email"),
-                Password = row.GetValue<string>("password"),
-                UserId = row.GetValue<Guid>("userid")
-            };
-        }
+            // Verify the password hash
+            if (PasswordHash.ValidatePassword(password, row.GetValue<string>("password")) == false)
+                return null;
 
+            return row.GetValue<Guid>("userid");
+        }
+        
         /// <summary>
         /// Gets a user's profile information by their user Id.  Returns null if they cannot be found.
         /// </summary>

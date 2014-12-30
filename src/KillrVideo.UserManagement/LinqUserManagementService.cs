@@ -71,16 +71,27 @@ namespace KillrVideo.UserManagement
         }
 
         /// <summary>
-        /// Gets user credentials by email address.  Returns null if they cannot be found.
+        /// Verifies a user's credentials and returns the user's Id if successful, otherwise null.
         /// </summary>
-        public async Task<UserCredentials> GetCredentials(string emailAddress)
+        public async Task<Guid?> VerifyCredentials(string emailAddress, string password)
         {
+            // Lookup the user by email address
             IEnumerable<UserCredentials> results = await _session.GetTable<UserCredentials>()
                                                                  .Where(uc => uc.EmailAddress == emailAddress)
                                                                  .ExecuteAsync().ConfigureAwait(false);
-            return results.SingleOrDefault();
-        }
+            
+            // Make sure we found a user
+            UserCredentials credentials = results.SingleOrDefault();
+            if (credentials == null)
+                return null;
 
+            // Verify the password hash
+            if (PasswordHash.ValidatePassword(password, credentials.Password) == false)
+                return null;
+
+            return credentials.UserId;
+        }
+        
         /// <summary>
         /// Gets a user's profile information by their user Id.  Returns null if they cannot be found.
         /// </summary>

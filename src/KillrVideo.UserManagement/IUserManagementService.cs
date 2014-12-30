@@ -16,9 +16,9 @@ namespace KillrVideo.UserManagement
         Task CreateUser(CreateUser user);
 
         /// <summary>
-        /// Gets user credentials by email address.  Returns null if they cannot be found.
+        /// Verifies a user's credentials and returns the user's Id if successful, otherwise null.
         /// </summary>
-        Task<UserCredentials> GetCredentials(string emailAddress);
+        Task<Guid?> VerifyCredentials(string emailAddress, string password);
 
         /// <summary>
         /// Gets a user's profile information by their user Id.  Returns null if they cannot be found.
