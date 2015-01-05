@@ -7,11 +7,19 @@ using KillrVideo.Utils;
 namespace KillrVideo.SampleData.Worker.Scheduler.Jobs
 {
     /// <summary>
-    /// Scheduled job that runs every 15 minutes to add sample users to the site.
+    /// Scheduled job that runs to add sample users to the site.
     /// </summary>
     public class AddSampleUsersJob : SampleDataJob
     {
         private readonly ISampleDataService _sampleDataService;
+
+        /// <summary>
+        /// Runs every 2 hours.
+        /// </summary>
+        protected override int MinutesBetweenRuns
+        {
+            get { return 120; }
+        }
 
         public AddSampleUsersJob(ISession session, TaskCache<string, PreparedStatement> statementCache, ISampleDataService sampleDataService) 
             : base(session, statementCache)
@@ -20,14 +28,9 @@ namespace KillrVideo.SampleData.Worker.Scheduler.Jobs
             _sampleDataService = sampleDataService;
         }
 
-        protected override int MinutesBetweenRuns
-        {
-            get { return 15; }
-        }
-
         protected override Task RunImpl()
         {
-            return _sampleDataService.AddSampleUsers(new AddSampleUsers { NumberOfUsers = 3, Timestamp = DateTimeOffset.UtcNow });
+            return _sampleDataService.AddSampleUsers(new AddSampleUsers { NumberOfUsers = 3 });
         }
     }
 }

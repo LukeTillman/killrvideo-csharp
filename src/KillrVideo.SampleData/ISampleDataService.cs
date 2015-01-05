@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using KillrVideo.SampleData.Dtos;
 
 namespace KillrVideo.SampleData
@@ -35,5 +32,10 @@ namespace KillrVideo.SampleData
         /// Adds sample YouTube videos to the site.
         /// </summary>
         Task AddSampleYouTubeVideos(AddSampleYouTubeVideos videos);
+
+        /// <summary>
+        /// Triggers a refresh of the YouTube sample video sources.
+        /// </summary>
+        Task RefreshYouTubeSources(RefreshYouTubeSources refresh);
     }
 }

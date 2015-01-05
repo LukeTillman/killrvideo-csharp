@@ -54,11 +54,42 @@
     <Reference Include="FFaker.Net">
       <HintPath>..\packages\FFaker.Net.1.1.0.1\lib\net40\FFaker.Net.dll</HintPath>
     </Reference>
+    <Reference Include="Google.Apis">
+      <HintPath>..\packages\Google.Apis.1.9.0\lib\net40\Google.Apis.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Auth">
+      <HintPath>..\packages\Google.Apis.Auth.1.9.0\lib\net40\Google.Apis.Auth.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Auth.PlatformServices">
+      <HintPath>..\packages\Google.Apis.Auth.1.9.0\lib\net40\Google.Apis.Auth.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Core">
+      <HintPath>..\packages\Google.Apis.Core.1.9.0\lib\portable-net40+sl50+win+wpa81+wp80\Google.Apis.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.PlatformServices">
+      <HintPath>..\packages\Google.Apis.1.9.0\lib\net40\Google.Apis.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.YouTube.v3">
+      <HintPath>..\packages\Google.Apis.YouTube.v3.1.9.0.1250\lib\portable-net40+sl50+win+wpa81+wp80\Google.Apis.YouTube.v3.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="LZ4">
       <HintPath>..\packages\lz4net.1.0.5.93\lib\net40-client\LZ4.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Nimbus.InfrastructureContracts">
       <HintPath>..\packages\Nimbus.InfrastructureContracts.1.3.0.2\lib\net45\Nimbus.InfrastructureContracts.dll</HintPath>
@@ -71,6 +102,16 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Extensions">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\net45\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\net45\System.Net.Http.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Threading.Tasks.Dataflow, Version=4.5.24.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Tpl.Dataflow.4.5.24\lib\portable-net45+win8+wpa81\System.Threading.Tasks.Dataflow.dll</HintPath>
@@ -80,15 +121,24 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Zlib.Portable">
+      <HintPath>..\packages\Zlib.Portable.1.10.0\lib\portable-net4+sl5+wp8+win8+wpa81+MonoTouch+MonoAndroid\Zlib.Portable.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\GetSampleData.cs" />
+    <Compile Include="Components\YouTube\IManageSampleYouTubeVideos.cs" />
+    <Compile Include="Components\YouTube\YouTubeVideo.cs" />
+    <Compile Include="Components\YouTube\SampleYouTubeVideoManager.cs" />
+    <Compile Include="Components\YouTube\YouTubeVideoSource.cs" />
     <Compile Include="Handlers\AddSampleCommentsHandler.cs" />
     <Compile Include="Handlers\AddSampleRatingsHandler.cs" />
     <Compile Include="Handlers\AddSampleUsersHandler.cs" />
     <Compile Include="Handlers\AddSampleVideoViewsHandler.cs" />
     <Compile Include="Handlers\AddSampleYouTubeVideosHandler.cs" />
     <Compile Include="Components\IGetSampleData.cs" />
+    <Compile Include="Handlers\RecordVideosAddedHandler.cs" />
+    <Compile Include="Handlers\RefreshYouTubeSourcesHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleDataWorkerWindsorInstaller.cs" />
     <Compile Include="Scheduler\Jobs\AddSampleCommentsJob.cs" />
@@ -96,18 +146,32 @@
     <Compile Include="Scheduler\Jobs\AddSampleUsersJob.cs" />
     <Compile Include="Scheduler\Jobs\AddSampleVideoViewsJob.cs" />
     <Compile Include="Scheduler\Jobs\AddSampleYouTubeVideosJob.cs" />
+    <Compile Include="Scheduler\Jobs\RefreshYouTubeVideoSourcesJob.cs" />
     <Compile Include="Scheduler\LeaseManagerConfig.cs" />
     <Compile Include="Scheduler\SampleDataJobScheduler.cs" />
     <Compile Include="Scheduler\SampleDataJob.cs" />
     <Compile Include="Scheduler\LeaseManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KillrVideo.Comments\KillrVideo.Comments.csproj">
+      <Project>{37BB374E-2E30-4F9D-8F1D-6982116A07B0}</Project>
+      <Name>KillrVideo.Comments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Ratings\KillrVideo.Ratings.csproj">
+      <Project>{C054A489-A037-49E5-8461-546CD61817EB}</Project>
+      <Name>KillrVideo.Ratings</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.SampleData\KillrVideo.SampleData.csproj">
       <Project>{F7088371-8ED3-4827-B15A-05F598C27399}</Project>
       <Name>KillrVideo.SampleData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Statistics\KillrVideo.Statistics.csproj">
+      <Project>{D7E26BCF-316D-431E-B448-DBC54CB17B4F}</Project>
+      <Name>KillrVideo.Statistics</Name>
     </ProjectReference>
     <ProjectReference Include="..\KillrVideo.UserManagement\KillrVideo.UserManagement.csproj">
       <Project>{5FCF1C36-ED2A-4BF0-B231-B12506210F6D}</Project>
@@ -116,6 +180,14 @@
     <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
       <Project>{9516B3F3-89B7-4343-9F88-FFEE6D74FFFC}</Project>
       <Name>KillrVideo.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.VideoCatalog.Messages\KillrVideo.VideoCatalog.Messages.csproj">
+      <Project>{A8DABF0A-03FE-4EA2-A1B3-FB5720A0B878}</Project>
+      <Name>KillrVideo.VideoCatalog.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.VideoCatalog\KillrVideo.VideoCatalog.csproj">
+      <Project>{89CE1D0D-12D7-42CE-A407-1C92C8FF4645}</Project>
+      <Name>KillrVideo.VideoCatalog</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
@@ -126,6 +198,11 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -226,7 +226,7 @@ namespace KillrVideo.VideoCatalog
                 Videos = rows.Select(MapRowToVideoPreview).ToList()
             };
         }
-
+        
         /// <summary>
         /// Maps a row to a VideoDetails object.
         /// </summary>

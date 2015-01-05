@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using KillrVideo.SampleData.Dtos;
 using Nimbus;
@@ -57,6 +56,14 @@ namespace KillrVideo.SampleData
         public Task AddSampleYouTubeVideos(AddSampleYouTubeVideos videos)
         {
             return _bus.Send(videos);
+        }
+
+        /// <summary>
+        /// Triggers a refresh of the YouTube sample video sources.
+        /// </summary>
+        public Task RefreshYouTubeSources(RefreshYouTubeSources refresh)
+        {
+            return _bus.Send(refresh);
         }
     }
 }

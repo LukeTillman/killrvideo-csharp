@@ -174,3 +174,23 @@ CREATE TABLE sample_data_users (
     PRIMARY KEY(userid)
 );
 
+// Table to be able to retrieve random videos to add sample data to (comments, ratings, etc)
+CREATE TABLE sample_data_videos (
+    videoid uuid,
+    PRIMARY KEY (videoid)
+);
+
+// Table to keep track of sample YouTube videos that have been added
+CREATE TABLE sample_data_youtube_videos (
+    sourceid text,
+    published_at timestamp,
+    youtube_video_id text,
+    name text,
+    description text,
+    used boolean,
+    PRIMARY KEY (sourceid, published_at, youtube_video_id)
+) WITH CLUSTERING ORDER BY (published_at DESC, youtube_video_id ASC);
+
+// An index for keeping track of used sample YouTube videos (will be queried by partition key + used status so should be OK to use here)
+CREATE INDEX sample_data_youtube_videos_used ON sample_data_youtube_videos (used);
+

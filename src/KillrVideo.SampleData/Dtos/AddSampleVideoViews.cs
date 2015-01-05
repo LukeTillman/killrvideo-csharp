@@ -7,6 +7,5 @@ namespace KillrVideo.SampleData.Dtos
     public class AddSampleVideoViews : IBusCommand
     {
         public int NumberOfViews { get; set; }
-        public DateTimeOffset Timestamp { get; set; }
     }
 }

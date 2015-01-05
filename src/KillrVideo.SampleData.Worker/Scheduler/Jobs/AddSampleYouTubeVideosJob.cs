@@ -7,11 +7,19 @@ using KillrVideo.Utils;
 namespace KillrVideo.SampleData.Worker.Scheduler.Jobs
 {
     /// <summary>
-    /// Scheduled sample data job that adds YouTube videos to the site every 10 minutes.
+    /// Scheduled sample data job that adds sample YouTube videos to the site.
     /// </summary>
     public class AddSampleYouTubeVideosJob : SampleDataJob
     {
         private readonly ISampleDataService _sampleDataService;
+
+        /// <summary>
+        /// Runs every 8 hours.
+        /// </summary>
+        protected override int MinutesBetweenRuns
+        {
+            get { return 480; }
+        }
 
         public AddSampleYouTubeVideosJob(ISession session, TaskCache<string, PreparedStatement> statementCache, ISampleDataService sampleDataService) 
             : base(session, statementCache)
@@ -20,14 +28,9 @@ namespace KillrVideo.SampleData.Worker.Scheduler.Jobs
             _sampleDataService = sampleDataService;
         }
 
-        protected override int MinutesBetweenRuns
-        {
-            get { return 10; }
-        }
-
         protected override Task RunImpl()
         {
-            return _sampleDataService.AddSampleYouTubeVideos(new AddSampleYouTubeVideos { NumberOfVideos = 3, Timestamp = DateTimeOffset.UtcNow });
+            return _sampleDataService.AddSampleYouTubeVideos(new AddSampleYouTubeVideos { NumberOfVideos = 1 });
         }
     }
 }

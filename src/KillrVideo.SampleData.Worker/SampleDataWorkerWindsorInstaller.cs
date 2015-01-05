@@ -2,6 +2,8 @@
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
+using Google.Apis.Services;
+using Google.Apis.YouTube.v3;
 using KillrVideo.SampleData.Dtos;
 using KillrVideo.SampleData.Worker.Components;
 using KillrVideo.SampleData.Worker.Scheduler;
@@ -32,7 +34,7 @@ namespace KillrVideo.SampleData.Worker
                 // Assembly configuration for SampleData handlers/messages
                 Component.For<NimbusAssemblyConfig>()
                          .Instance(NimbusAssemblyConfig.FromTypes(typeof (SampleDataWorkerWindsorInstaller), typeof (AddSampleUsers))),
-                
+
                 // Scheduler and related components
                 Component.For<SampleDataJobScheduler>().LifestyleTransient(),
                 Component.For<LeaseManager>().LifestyleTransient()
@@ -42,8 +44,19 @@ namespace KillrVideo.SampleData.Worker
                 Classes.FromThisAssembly().BasedOn<SampleDataJob>().WithServiceBase().LifestyleTransient(),
 
                 // Other components
-                Component.For<IGetSampleData>().ImplementedBy<GetSampleData>().LifestyleTransient()
-            );
+                Classes.FromThisAssembly().InSameNamespaceAs<GetSampleData>(includeSubnamespaces: true)
+                       .WithServiceFirstInterface().WithServiceSelf().LifestyleTransient()
+                );
+
+            // Create client for YouTube API
+            var youTubeInit = new BaseClientService.Initializer
+            {
+                ApiKey = "AIzaSyCGJBnK-sW0Y5IDGdFt8EAVqStNnZ7ZDNw",
+                ApplicationName = "KillrVideo.SampleData.Worker"
+            };
+            var youTubeClient = new YouTubeService(youTubeInit);
+
+            container.Register(Component.For<YouTubeService>().Instance(youTubeClient));
 
             // Also install the sample data service since it's used by the scheduler jobs
             container.Install(new SampleDataServiceWindsorInstaller());

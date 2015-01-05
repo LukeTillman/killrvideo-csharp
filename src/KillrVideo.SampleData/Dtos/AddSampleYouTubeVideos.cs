@@ -10,6 +10,5 @@ namespace KillrVideo.SampleData.Dtos
     public class AddSampleYouTubeVideos : IBusCommand
     {
         public int NumberOfVideos { get; set; }
-        public DateTimeOffset Timestamp { get; set; }
     }
 }

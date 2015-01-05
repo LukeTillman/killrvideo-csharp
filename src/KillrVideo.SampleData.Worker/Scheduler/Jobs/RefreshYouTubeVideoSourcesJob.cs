@@ -7,21 +7,21 @@ using KillrVideo.Utils;
 namespace KillrVideo.SampleData.Worker.Scheduler.Jobs
 {
     /// <summary>
-    /// Sample data job that adds sample comments to videos.
+    /// Job to trigger a refresh of sample YouTube videos available from our list of sample video sources.
     /// </summary>
-    public class AddSampleCommentsJob : SampleDataJob
+    public class RefreshYouTubeVideoSourcesJob : SampleDataJob
     {
         private readonly ISampleDataService _sampleDataService;
 
         /// <summary>
-        /// Runs every 5 minutes.
+        /// Runs every 6 hours.
         /// </summary>
         protected override int MinutesBetweenRuns
         {
-            get { return 5; }
+            get { return 360; }
         }
 
-        public AddSampleCommentsJob(ISession session, TaskCache<string, PreparedStatement> statementCache, ISampleDataService sampleDataService) 
+        public RefreshYouTubeVideoSourcesJob(ISession session, TaskCache<string, PreparedStatement> statementCache, ISampleDataService sampleDataService) 
             : base(session, statementCache)
         {
             if (sampleDataService == null) throw new ArgumentNullException("sampleDataService");
@@ -30,7 +30,7 @@ namespace KillrVideo.SampleData.Worker.Scheduler.Jobs
 
         protected override Task RunImpl()
         {
-            return _sampleDataService.AddSampleComments(new AddSampleComments { NumberOfComments = 5 });
+            return _sampleDataService.RefreshYouTubeSources(new RefreshYouTubeSources());
         }
     }
 }

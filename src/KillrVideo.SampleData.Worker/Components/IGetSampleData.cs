@@ -10,8 +10,13 @@ namespace KillrVideo.SampleData.Worker.Components
     public interface IGetSampleData
     {
         /// <summary>
-        /// Gets a random collection of sample user ids.
+        /// Gets a random collection of sample user ids.  May include duplicate user ids.
         /// </summary>
-        Task<IEnumerable<Guid>> GetRandomSampleUserIds(int maxCount);
+        Task<List<Guid>> GetRandomSampleUserIds(int count);
+
+        /// <summary>
+        /// Gets a random collection of video ids for videos on the site.  May include duplicate video ids.
+        /// </summary>
+        Task<List<Guid>> GetRandomVideoIds(int count);
     }
 }

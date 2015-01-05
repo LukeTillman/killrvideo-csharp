@@ -7,6 +7,5 @@ namespace KillrVideo.SampleData.Dtos
     public class AddSampleComments : IBusCommand
     {
         public int NumberOfComments { get; set; }
-        public DateTimeOffset Timestamp { get; set; }
     }
 }
