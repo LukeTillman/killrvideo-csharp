@@ -34,10 +34,6 @@ namespace KillrVideo.SampleData.Worker
 
             // Register components
             container.Register(
-                // Assembly configuration for SampleData handlers/messages
-                Component.For<NimbusAssemblyConfig>()
-                         .Instance(NimbusAssemblyConfig.FromTypes(typeof (SampleDataWorkerWindsorInstaller), typeof (AddSampleUsers))),
-
                 // Scheduler and related components
                 Component.For<SampleDataJobScheduler>().LifestyleTransient(),
                 Component.For<LeaseManager>().LifestyleTransient()
@@ -50,6 +46,9 @@ namespace KillrVideo.SampleData.Worker
                 Classes.FromThisAssembly().InSameNamespaceAs<GetSampleData>(includeSubnamespaces: true)
                        .WithServiceFirstInterface().WithServiceSelf().LifestyleTransient()
                 );
+
+            // Assembly configuration for SampleData handlers/messages
+            NimbusAssemblyConfig.AddFromTypes(typeof (SampleDataWorkerWindsorInstaller), typeof (AddSampleUsers));
 
             // Create client for YouTube API
             var youTubeInit = new BaseClientService.Initializer

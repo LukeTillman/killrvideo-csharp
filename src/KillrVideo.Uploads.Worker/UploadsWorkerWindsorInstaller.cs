@@ -25,14 +25,13 @@ namespace KillrVideo.Uploads.Worker
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(
-                // Assembly configuration for Uploads handlers/messages
-                Component.For<NimbusAssemblyConfig>()
-                         .Instance(NimbusAssemblyConfig.FromTypes(typeof (UploadsWorkerWindsorInstaller), typeof (GenerateUploadDestination),
-                                                                  typeof(UploadedVideoPublished), typeof(UploadedVideoAccepted))),
-
                 // Job for listening to Azure Media Services notifications
                 Component.For<EncodingListenerJob>().LifestyleTransient()
-                );
+            );
+
+            // Assembly configuration for Uploads handlers/messages
+            NimbusAssemblyConfig.AddFromTypes(typeof (UploadsWorkerWindsorInstaller), typeof (GenerateUploadDestination),
+                                              typeof (UploadedVideoPublished), typeof (UploadedVideoAccepted));
             
             // Register Azure components
             RegisterAzureComponents(container);

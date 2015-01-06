@@ -15,11 +15,11 @@ namespace KillrVideo.VideoCatalog
         {
             container.Register(
                 // Most components
-                Classes.FromThisAssembly().Pick().WithServiceFirstInterface().LifestyleTransient(),
-
-                // Messages published on the bus by service
-                Component.For<NimbusAssemblyConfig>().Instance(NimbusAssemblyConfig.FromTypes(typeof(YouTubeVideoAdded)))
+                Classes.FromThisAssembly().Pick().WithServiceFirstInterface().LifestyleTransient()
             );
+
+            // Messages published on the bus by service
+            NimbusAssemblyConfig.AddFromTypes(typeof (YouTubeVideoAdded));
         }
     }
 }

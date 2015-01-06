@@ -16,11 +16,11 @@ namespace KillrVideo.UserManagement
             container.Register(
                 // Most components (override to use Linq implementation of service)
                 Classes.FromThisAssembly().Pick().WithServiceFirstInterface().LifestyleTransient()
-                       .ConfigureFor<LinqUserManagementService>(c => c.IsDefault()),
-
-                // Messages published on the bus by service
-                Component.For<NimbusAssemblyConfig>().Instance(NimbusAssemblyConfig.FromTypes(typeof (UserCreated)))
+                       .ConfigureFor<LinqUserManagementService>(c => c.IsDefault())
             );
+
+            // Messages published on the bus by service
+            NimbusAssemblyConfig.AddFromTypes(typeof (UserCreated));
         }
     }
 }

@@ -6,6 +6,7 @@ namespace KillrVideo.Comments.Messages.Events
     /// <summary>
     /// Event for when a user posts a comment on a video.
     /// </summary>
+    [Serializable]
     public class UserCommentedOnVideo : IBusEvent
     {
         public Guid UserId { get; set; }

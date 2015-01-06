@@ -15,11 +15,8 @@ namespace KillrVideo.VideoCatalog.Worker
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             // Register Nimbus handler/message assemblies
-            container.Register(
-                Component.For<NimbusAssemblyConfig>()
-                         .Instance(NimbusAssemblyConfig.FromTypes(typeof (VideoCatalogWorkerWindsorInstaller), typeof (UploadedVideoPublished),
-                                                                  typeof (UploadedVideoAdded)))
-                );
+            NimbusAssemblyConfig.AddFromTypes(typeof (VideoCatalogWorkerWindsorInstaller), typeof (UploadedVideoPublished),
+                                              typeof (UploadedVideoAdded));
         }
     }
 }

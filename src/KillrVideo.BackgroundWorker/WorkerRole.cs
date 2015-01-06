@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Castle.Windsor;
 using KillrVideo.BackgroundWorker.Startup;
+using KillrVideo.SampleData.Worker.Scheduler;
 using KillrVideo.Uploads.Worker;
 using log4net;
 using log4net.Config;
@@ -19,13 +22,14 @@ namespace KillrVideo.BackgroundWorker
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (WorkerRole));
 
+        private readonly List<Task> _backgroundTasks;
         private readonly CancellationTokenSource _cancellationTokenSource;
-        private Task _uploadMonitor;
 
         private IWindsorContainer _windsorContainer;
-        
+
         public WorkerRole()
         {
+            _backgroundTasks = new List<Task>();
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
@@ -51,8 +55,12 @@ namespace KillrVideo.BackgroundWorker
                 // Start the Upload monitoring job
                 CancellationToken token = _cancellationTokenSource.Token;
                 var job = _windsorContainer.Resolve<EncodingListenerJob>();
-                _uploadMonitor = Task.Run(() => job.Execute(token), token);
+                _backgroundTasks.Add(Task.Run(() => job.Execute(token), token));
 
+                // Start the sample data worker job scheduler
+                var sampleDataScheduler = _windsorContainer.Resolve<SampleDataJobScheduler>();
+                _backgroundTasks.Add(Task.Run(() => sampleDataScheduler.Run(token), token));
+                
                 return base.OnStart();
             }
             catch (Exception e)
@@ -68,22 +76,15 @@ namespace KillrVideo.BackgroundWorker
 
             try
             {
-                // Cancel the upload monitor task and wait for it to finish
+                // Cancel the background tasks, then wait for them to finish
                 _cancellationTokenSource.Cancel();
-                if (_uploadMonitor != null)
-                    _uploadMonitor.Wait();
+                Task.WhenAll(_backgroundTasks).Wait();
             }
             catch (AggregateException ae)
             {
-                foreach (Exception exception in ae.InnerExceptions)
-                {
-                    // Ignore OperationCancelledExceptions since we expect those
-                    var operationCancelled = exception as OperationCanceledException;
-                    if (operationCancelled != null)
-                        continue;
-
+                // Log any exceptions that aren't OperationCanceled, which we expect
+                foreach(var exception in ae.Flatten().InnerExceptions.Where(e => e is OperationCanceledException == false))
                     Logger.Error("Unexpected exception while cancelling Tasks in BackgroundWorker stop", exception);
-                }
             }
             catch (Exception e)
             {

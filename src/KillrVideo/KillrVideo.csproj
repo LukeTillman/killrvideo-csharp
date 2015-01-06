@@ -237,6 +237,7 @@
     <Compile Include="Utils\AzureTraceAppender.cs" />
     <Compile Include="Utils\GlobalConfigs.cs" />
     <Compile Include="Utils\GravatarHasher.cs" />
+    <Compile Include="Utils\NimbusLog4NetLogger.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-cosmo\css\bootstrap.css" />

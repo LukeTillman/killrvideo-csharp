@@ -15,11 +15,11 @@ namespace KillrVideo.Uploads
         {
             container.Register(
                 // Most components
-                Classes.FromThisAssembly().Pick().WithServiceFirstInterface().LifestyleTransient(),
-
-                // Messages sent on the bus by service (doesn't currently publish any events, those are handled in the Worker)
-                Component.For<NimbusAssemblyConfig>().Instance(NimbusAssemblyConfig.FromTypes(typeof(GenerateUploadDestination)))
+                Classes.FromThisAssembly().Pick().WithServiceFirstInterface().LifestyleTransient()
             );
+
+            // Messages sent on the bus by service (doesn't currently publish any events, those are handled in the Worker)
+            NimbusAssemblyConfig.AddFromTypes(typeof (GenerateUploadDestination));
         }
     }
 }

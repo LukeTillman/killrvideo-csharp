@@ -15,11 +15,11 @@ namespace KillrVideo.Ratings
         {
             container.Register(
                 // Most components
-                Classes.FromThisAssembly().Pick().WithServiceFirstInterface().LifestyleTransient(),
-
-                // Messages published on the bus by service
-                Component.For<NimbusAssemblyConfig>().Instance(NimbusAssemblyConfig.FromTypes(typeof(UserRatedVideo)))
+                Classes.FromThisAssembly().Pick().WithServiceFirstInterface().LifestyleTransient()
             );
+
+            // Messages published on the bus by service
+            NimbusAssemblyConfig.AddFromTypes(typeof (UserRatedVideo));
         }
     }
 }

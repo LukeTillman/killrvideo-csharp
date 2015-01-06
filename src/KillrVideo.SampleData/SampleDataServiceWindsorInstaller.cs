@@ -14,11 +14,11 @@ namespace KillrVideo.SampleData
         {
             container.Register(
                 // Most components
-                Classes.FromThisAssembly().Pick().WithServiceFirstInterface().LifestyleTransient(),
-
-                // Messages sent on the bus by service
-                Component.For<NimbusAssemblyConfig>().Instance(NimbusAssemblyConfig.FromTypes(typeof(SampleDataServiceWindsorInstaller)))
+                Classes.FromThisAssembly().Pick().WithServiceFirstInterface().LifestyleTransient()
             );
+
+            // Messages sent on the bus by service
+            NimbusAssemblyConfig.AddFromTypes(typeof (SampleDataServiceWindsorInstaller));
         }
     }
 }

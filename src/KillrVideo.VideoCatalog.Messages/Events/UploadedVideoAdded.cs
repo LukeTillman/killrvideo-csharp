@@ -15,7 +15,7 @@ namespace KillrVideo.VideoCatalog.Messages.Events
         public string Description { get; set; }
         public string Location { get; set; }
         public string PreviewImageLocation { get; set; }
-        public ISet<string> Tags { get; set; }
+        public HashSet<string> Tags { get; set; }
         public DateTimeOffset Timestamp { get; set; }
 
         public UploadedVideoAdded()

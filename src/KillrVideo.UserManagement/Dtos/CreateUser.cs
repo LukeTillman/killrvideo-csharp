@@ -5,6 +5,7 @@ namespace KillrVideo.UserManagement.Dtos
     /// <summary>
     /// DTO for creating a new user account.
     /// </summary>
+    [Serializable]
     public class CreateUser
     {
         public Guid UserId { get; set; }

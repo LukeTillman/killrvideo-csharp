@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Configuration;
 using System.Linq;
-using System.Reflection;
 using Cassandra;
 using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
+using KillrVideo.BackgroundWorker.Utils;
 using KillrVideo.SampleData.Worker;
 using KillrVideo.Search.Worker;
 using KillrVideo.Uploads.Worker;
@@ -41,6 +42,7 @@ namespace KillrVideo.BackgroundWorker.Startup
         public static IWindsorContainer CreateContainer()
         {
             var container = new WindsorContainer();
+            container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
 
             string youTubeApiKey = GetRequiredSetting(YouTubeApiKey);
 
@@ -94,12 +96,8 @@ namespace KillrVideo.BackgroundWorker.Startup
             string connectionString = GetRequiredSetting(AzureServiceBusConnectionStringKey);
             string namePrefix = GetRequiredSetting(AzureServiceBusNamePrefixKey);
 
-            // Ask the container for any assembly config that's been registered
-            NimbusAssemblyConfig[] nimbusAssemblyConfigs = container.ResolveAll<NimbusAssemblyConfig>();
-            Assembly[] assemblies = nimbusAssemblyConfigs.SelectMany(ac => ac.AssembliesToScan).Distinct().ToArray();
-            
-            // Create the Nimbus type provider to scan those assemblies and register with container
-            var typeProvider = new AssemblyScanningTypeProvider(assemblies);
+            // Create the Nimbus type provider to scan the assemblies from the static NimbusAssemblyConfig class
+            var typeProvider = new AssemblyScanningTypeProvider(NimbusAssemblyConfig.AssembliesToScan.Distinct().ToArray());
             container.RegisterNimbus(typeProvider);
 
             // Get app name and unique name
@@ -108,6 +106,7 @@ namespace KillrVideo.BackgroundWorker.Startup
 
             // Register the bus itself
             container.Register(
+                Component.For<ILogger>().ImplementedBy<NimbusLog4NetLogger>().LifestyleSingleton(),
                 Component.For<IBus, Bus>()
                          .ImplementedBy<Bus>()
                          .UsingFactoryMethod(

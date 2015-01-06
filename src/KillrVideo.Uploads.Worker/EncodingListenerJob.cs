@@ -60,6 +60,22 @@ namespace KillrVideo.Uploads.Worker
         }
 
         /// <summary>
+        /// Starts the encoding listener job.
+        /// </summary>
+        public void Start()
+        {
+            
+        }
+
+        /// <summary>
+        /// Stops the encoding listener job.
+        /// </summary>
+        public void Stop()
+        {
+            
+        }
+
+        /// <summary>
         /// Executes the job.
         /// </summary>
         public async Task Execute(CancellationToken cancellationToken)

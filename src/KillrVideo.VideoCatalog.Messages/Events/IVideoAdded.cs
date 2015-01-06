@@ -15,7 +15,7 @@ namespace KillrVideo.VideoCatalog.Messages.Events
         string Description { get; }
         string Location { get; }
         string PreviewImageLocation { get; }
-        ISet<string> Tags { get; }
+        HashSet<string> Tags { get; }
         DateTimeOffset Timestamp { get; }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using System.Linq;
-using System.Reflection;
 using System.Web.Mvc;
 using Cassandra;
 using Castle.Facilities.Startable;
@@ -45,7 +44,7 @@ namespace KillrVideo
         public static IWindsorContainer CreateContainer()
         {
             var container = new WindsorContainer();
-
+            
             // Do container registrations (these would normally be organized as Windsor installers, but for brevity they are inline here)
             RegisterCassandra(container);
             RegisterServices(container);
@@ -111,12 +110,8 @@ namespace KillrVideo
             string connectionString = GetRequiredSetting(AzureServiceBusConnectionStringKey);
             string namePrefix = GetRequiredSetting(AzureServiceBusNamePrefixKey);
 
-            // Ask the container for any assembly config that's been registered
-            NimbusAssemblyConfig[] nimbusAssemblyConfigs = container.ResolveAll<NimbusAssemblyConfig>();
-            Assembly[] assemblies = nimbusAssemblyConfigs.SelectMany(ac => ac.AssembliesToScan).Distinct().ToArray();
-
-            // Create the Nimbus type provider to scan those assemblies and register with container
-            var typeProvider = new AssemblyScanningTypeProvider(assemblies);
+            // Create the Nimbus type provider to scan the assemblies from the static NimbusAssemblyConfig class
+            var typeProvider = new AssemblyScanningTypeProvider(NimbusAssemblyConfig.AssembliesToScan.Distinct().ToArray());
             container.RegisterNimbus(typeProvider);
 
             // Get app name and unique name
@@ -125,6 +120,7 @@ namespace KillrVideo
 
             // Register the bus itself and start it when it's resolved for the first time
             container.Register(
+                Component.For<ILogger>().ImplementedBy<NimbusLog4NetLogger>().LifestyleSingleton(),
                 Component.For<IBus>()
                          .ImplementedBy<Bus>()
                          .UsingFactoryMethod(

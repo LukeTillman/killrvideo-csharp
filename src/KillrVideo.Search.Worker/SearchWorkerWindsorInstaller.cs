@@ -14,10 +14,7 @@ namespace KillrVideo.Search.Worker
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             // Register Nimbus handler/message assemblies
-            container.Register(
-                Component.For<NimbusAssemblyConfig>()
-                         .Instance(NimbusAssemblyConfig.FromTypes(typeof (SearchWorkerWindsorInstaller), typeof (IVideoAdded)))
-                );
+            NimbusAssemblyConfig.AddFromTypes(typeof (SearchWorkerWindsorInstaller), typeof (IVideoAdded));
         }
     }
 }
