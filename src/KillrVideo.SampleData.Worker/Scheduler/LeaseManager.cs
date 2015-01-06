@@ -83,7 +83,7 @@ namespace KillrVideo.SampleData.Worker.Scheduler
 
                 // Try to acquire the lease using LWT in Cassandra
                 PreparedStatement prepared =
-                    await _statementCache.NoContext.GetOrAddAsync("INSERT INTO sample_data_leases VALUES (name, owner) VALUES (?, ?) IF NOT EXISTS");
+                    await _statementCache.NoContext.GetOrAddAsync("INSERT INTO sample_data_leases (name, owner) VALUES (?, ?) IF NOT EXISTS");
                 BoundStatement bound = prepared.Bind(_leaseName, _uniqueId);
                 RowSet rows = await _session.ExecuteAsync(bound).ConfigureAwait(false);
                 Row row = rows.Single();
