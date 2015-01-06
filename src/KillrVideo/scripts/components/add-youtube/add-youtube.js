@@ -12,13 +12,27 @@
     }
 
     // Set API key once loaded and then load the YouTube API
-    var youTubeDataApiReady = googleApiLoaded.then(function() {
-        gapi.client.setApiKey("AIzaSyCGJBnK-sW0Y5IDGdFt8EAVqStNnZ7ZDNw");
-
+    var youTubeDataApiReady = googleApiLoaded.then(function () {
         var defer = $.Deferred();
-        gapi.client.load("youtube", "v3", function() {
-            defer.resolve();
+
+        // Make AJAX call to get the API key
+        $.ajax({
+            type: "GET",
+            url: "/youtube/getkey",
+            dataType: "json"
+        }).then(function(response) {
+            // If there was some problem, just bail
+            if (!response.success)
+                defer.reject();
+
+            // Set the API key and load API
+            gapi.client.setApiKey(response.data.youTubeApiKey);
+            gapi.client.load("youtube", "v3", function () {
+                // Once API is loaded, we can resolve the deferred
+                defer.resolve();
+            });
         });
+        
         return defer;
     });
 

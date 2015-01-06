@@ -8,6 +8,7 @@ using KillrVideo.Authentication;
 using KillrVideo.Models.YouTube;
 using KillrVideo.VideoCatalog;
 using KillrVideo.VideoCatalog.Dtos;
+using Microsoft.WindowsAzure;
 
 namespace KillrVideo.Controllers
 {
@@ -22,6 +23,18 @@ namespace KillrVideo.Controllers
         {
             if (videoCatalog == null) throw new ArgumentNullException("videoCatalog");
             _videoCatalog = videoCatalog;
+        }
+
+        /// <summary>
+        /// Gets the YouTube API key.
+        /// </summary>
+        [HttpGet]
+        public JsonNetResult GetKey()
+        {
+            return JsonSuccess(new GetKeyViewModel
+            {
+                YouTubeApiKey = CloudConfigurationManager.GetSetting("YouTubeApiKey")
+            });
         }
 
         /// <summary>

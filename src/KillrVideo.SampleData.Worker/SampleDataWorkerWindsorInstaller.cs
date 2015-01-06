@@ -17,11 +17,14 @@ namespace KillrVideo.SampleData.Worker
     public class SampleDataWorkerWindsorInstaller : IWindsorInstaller
     {
         private readonly string _uniqueId;
+        private readonly string _youTubeApiKey;
 
-        public SampleDataWorkerWindsorInstaller(string uniqueId)
+        public SampleDataWorkerWindsorInstaller(string uniqueId, string youTubeApiKey)
         {
             if (uniqueId == null) throw new ArgumentNullException("uniqueId");
+            if (youTubeApiKey == null) throw new ArgumentNullException("youTubeApiKey");
             _uniqueId = uniqueId;
+            _youTubeApiKey = youTubeApiKey;
         }
 
         public void Install(IWindsorContainer container, IConfigurationStore store)
@@ -51,7 +54,7 @@ namespace KillrVideo.SampleData.Worker
             // Create client for YouTube API
             var youTubeInit = new BaseClientService.Initializer
             {
-                ApiKey = "AIzaSyCGJBnK-sW0Y5IDGdFt8EAVqStNnZ7ZDNw",
+                ApiKey = _youTubeApiKey,
                 ApplicationName = "KillrVideo.SampleData.Worker"
             };
             var youTubeClient = new YouTubeService(youTubeInit);

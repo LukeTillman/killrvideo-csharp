@@ -33,16 +33,20 @@ namespace KillrVideo.BackgroundWorker.Startup
         private const string AzureServiceBusConnectionStringKey = "AzureServiceBusConnectionString";
         private const string AzureServiceBusNamePrefixKey = "AzureServiceBusNamePrefix";
 
+        private const string YouTubeApiKey = "YouTubeApiKey";
+
         /// <summary>
         /// Creates the Windsor container and does all necessary registrations for the KillrVideo.UploadWorker role.
         /// </summary>
         public static IWindsorContainer CreateContainer()
         {
             var container = new WindsorContainer();
-            
+
+            string youTubeApiKey = GetRequiredSetting(YouTubeApiKey);
+
             // Install all the components from the workers we're composing here in this endpoint
             container.Install(new SearchWorkerWindsorInstaller(), new UploadsWorkerWindsorInstaller(), new VideoCatalogWorkerWindsorInstaller(),
-                              new SampleDataWorkerWindsorInstaller(RoleEnvironment.CurrentRoleInstance.Id));
+                              new SampleDataWorkerWindsorInstaller(RoleEnvironment.CurrentRoleInstance.Id, youTubeApiKey));
 
             // Do container registrations (these would normally be organized as Windsor installers, but for brevity they are inline here)
             RegisterCassandra(container);
