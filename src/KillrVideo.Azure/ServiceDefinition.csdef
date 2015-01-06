@@ -18,7 +18,6 @@
     <ConfigurationSettings>
       <Setting name="CassandraClusterLocation" />
       <Setting name="AzureServiceBusConnectionString" />
-      <Setting name="AzureServiceBusNamePrefix" />
       <Setting name="YouTubeApiKey" />
       <Setting name="EnableSampleDataEntry" />
       <Setting name="AnalyticsEnabled" />
@@ -36,7 +35,6 @@
       <Setting name="AzureMediaServicesAccountKey" />
       <Setting name="AzureStorageConnectionString" />
       <Setting name="AzureServiceBusConnectionString" />
-      <Setting name="AzureServiceBusNamePrefix" />
       <Setting name="YouTubeApiKey" />
     </ConfigurationSettings>
   </WorkerRole>

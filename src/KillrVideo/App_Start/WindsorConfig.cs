@@ -34,8 +34,7 @@ namespace KillrVideo
 
         private const string ClusterLocationAppSettingsKey = "CassandraClusterLocation";
         private const string AzureServiceBusConnectionStringKey = "AzureServiceBusConnectionString";
-        private const string AzureServiceBusNamePrefixKey = "AzureServiceBusNamePrefix";
-
+        
         private const string Keyspace = "killrvideo";
         
         /// <summary>
@@ -106,17 +105,16 @@ namespace KillrVideo
         
         private static void RegisterMessageBus(WindsorContainer container)
         {
-            // Get the Azure Service Bus connection string and prefix for names
+            // Get the Azure Service Bus connection string
             string connectionString = GetRequiredSetting(AzureServiceBusConnectionStringKey);
-            string namePrefix = GetRequiredSetting(AzureServiceBusNamePrefixKey);
-
+            
             // Create the Nimbus type provider to scan the assemblies from the static NimbusAssemblyConfig class
             var typeProvider = new AssemblyScanningTypeProvider(NimbusAssemblyConfig.AssembliesToScan.Distinct().ToArray());
             container.RegisterNimbus(typeProvider);
 
             // Get app name and unique name
-            string appName = string.Format("{0}KillrVideo.Web", namePrefix);
-            string uniqueName = string.Format("{0}{1}", namePrefix, RoleEnvironment.CurrentRoleInstance.Id);
+            const string appName = "KillrVideo.Web";
+            string uniqueName = RoleEnvironment.CurrentRoleInstance.Id;
 
             // Register the bus itself and start it when it's resolved for the first time
             container.Register(

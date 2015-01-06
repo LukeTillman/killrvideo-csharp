@@ -6,7 +6,6 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="CassandraClusterLocation" value="" />
       <Setting name="AzureServiceBusConnectionString" value="" />
-      <Setting name="AzureServiceBusNamePrefix" value="DEV-" />
       <Setting name="YouTubeApiKey" value="" />
       <Setting name="EnableSampleDataEntry" value="true" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="false" />
@@ -28,7 +27,6 @@
       <Setting name="AzureMediaServicesAccountKey" value="" />
       <Setting name="AzureStorageConnectionString" value="" />
       <Setting name="AzureServiceBusConnectionString" value="" />
-      <Setting name="AzureServiceBusNamePrefix" value="DEV-" />
       <Setting name="YouTubeApiKey" value="" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="false" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="" />
