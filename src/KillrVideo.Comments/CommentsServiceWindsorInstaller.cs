@@ -1,8 +1,6 @@
 ﻿using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using KillrVideo.Comments.Messages.Events;
-using KillrVideo.Utils.Nimbus;
 
 namespace KillrVideo.Comments
 {
@@ -17,9 +15,6 @@ namespace KillrVideo.Comments
                 // Most components
                 Classes.FromThisAssembly().Pick().WithServiceFirstInterface().LifestyleTransient()
             );
-
-            // Messages published on the bus by service
-            NimbusAssemblyConfig.AddFromTypes(typeof (UserCommentedOnVideo));
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Castle.MicroKernel;
 
-namespace KillrVideo
+namespace KillrVideo.Utils
 {
     /// <summary>
     /// A controller factory for MVC that uses Windsor to create controller instances.

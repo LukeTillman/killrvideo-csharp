@@ -6,12 +6,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Castle.Windsor;
 using KillrVideo.BackgroundWorker.Startup;
-using KillrVideo.SampleData.Worker.Scheduler;
-using KillrVideo.Uploads.Worker;
+using KillrVideo.Utils.WorkerComposition;
 using log4net;
 using log4net.Config;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using Nimbus;
+using Serilog;
 
 namespace KillrVideo.BackgroundWorker
 {
@@ -22,14 +21,14 @@ namespace KillrVideo.BackgroundWorker
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (WorkerRole));
 
-        private readonly List<Task> _backgroundTasks;
         private readonly CancellationTokenSource _cancellationTokenSource;
+        private readonly List<Task> _logicalWorkerTasks;
 
         private IWindsorContainer _windsorContainer;
 
         public WorkerRole()
         {
-            _backgroundTasks = new List<Task>();
+            _logicalWorkerTasks = new List<Task>();
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
@@ -38,8 +37,9 @@ namespace KillrVideo.BackgroundWorker
             // Set the maximum number of concurrent connections 
             ServicePointManager.DefaultConnectionLimit = 12;
 
-            // Bootstrap Log4net logging
+            // Bootstrap Log4net logging and serilog logger
             XmlConfigurator.Configure();
+            Log.Logger = new LoggerConfiguration().WriteTo.Log4Net().CreateLogger();
 
             Logger.Info("KillrVideo.BackgroundWorker is starting");
 
@@ -48,18 +48,22 @@ namespace KillrVideo.BackgroundWorker
                 // Initialize the Windsor container
                 _windsorContainer = WindsorBootstrapper.CreateContainer();
 
-                // Start the message bus
-                var bus = _windsorContainer.Resolve<Bus>();
-                bus.Start();
+                // Create the logical worker instances
+                var logicalWorkers = new ILogicalWorkerRole[]
+                {
+                    new VideoCatalog.Worker.WorkerRole(_windsorContainer),
+                    new Search.Worker.WorkerRole(_windsorContainer),
+                    new Uploads.Worker.WorkerRole(_windsorContainer),
+                    new SampleData.Worker.WorkerRole(_windsorContainer)
+                };
 
-                // Start the Upload monitoring job
+                // Fire OnStart on all the logical workers
                 CancellationToken token = _cancellationTokenSource.Token;
-                var job = _windsorContainer.Resolve<EncodingListenerJob>();
-                _backgroundTasks.Add(Task.Run(() => job.Execute(token), token));
-
-                // Start the sample data worker job scheduler
-                var sampleDataScheduler = _windsorContainer.Resolve<SampleDataJobScheduler>();
-                _backgroundTasks.Add(Task.Run(() => sampleDataScheduler.Run(token), token));
+                foreach (ILogicalWorkerRole worker in logicalWorkers)
+                {
+                    ILogicalWorkerRole worker1 = worker;
+                    _logicalWorkerTasks.Add(Task.Run(() => worker1.OnStart(token), token));
+                }
                 
                 return base.OnStart();
             }
@@ -76,9 +80,9 @@ namespace KillrVideo.BackgroundWorker
 
             try
             {
-                // Cancel the background tasks, then wait for them to finish
+                // Cancel the logical worker tasks, then wait for them to finish
                 _cancellationTokenSource.Cancel();
-                Task.WhenAll(_backgroundTasks).Wait();
+                Task.WhenAll(_logicalWorkerTasks).Wait();
             }
             catch (AggregateException ae)
             {

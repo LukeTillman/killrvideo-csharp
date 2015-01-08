@@ -1,7 +1,6 @@
 ﻿using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using KillrVideo.Utils.Nimbus;
 
 namespace KillrVideo.SampleData
 {
@@ -16,9 +15,6 @@ namespace KillrVideo.SampleData
                 // Most components
                 Classes.FromThisAssembly().Pick().WithServiceFirstInterface().LifestyleTransient()
             );
-
-            // Messages sent on the bus by service
-            NimbusAssemblyConfig.AddFromTypes(typeof (SampleDataServiceWindsorInstaller));
         }
     }
 }

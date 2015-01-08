@@ -1,8 +1,6 @@
 ﻿using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using KillrVideo.UserManagement.Messages.Events;
-using KillrVideo.Utils.Nimbus;
 
 namespace KillrVideo.UserManagement
 {
@@ -18,9 +16,6 @@ namespace KillrVideo.UserManagement
                 Classes.FromThisAssembly().Pick().WithServiceFirstInterface().LifestyleTransient()
                        .ConfigureFor<LinqUserManagementService>(c => c.IsDefault())
             );
-
-            // Messages published on the bus by service
-            NimbusAssemblyConfig.AddFromTypes(typeof (UserCreated));
         }
     }
 }

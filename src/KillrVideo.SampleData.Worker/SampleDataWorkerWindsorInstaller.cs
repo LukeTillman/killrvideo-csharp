@@ -1,13 +1,12 @@
-﻿using System;
+﻿using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
-using KillrVideo.SampleData.Dtos;
 using KillrVideo.SampleData.Worker.Components;
 using KillrVideo.SampleData.Worker.Scheduler;
-using KillrVideo.Utils.Nimbus;
+using KillrVideo.Utils.Configuration;
 
 namespace KillrVideo.SampleData.Worker
 {
@@ -16,52 +15,52 @@ namespace KillrVideo.SampleData.Worker
     /// </summary>
     public class SampleDataWorkerWindsorInstaller : IWindsorInstaller
     {
-        private readonly string _uniqueId;
-        private readonly string _youTubeApiKey;
-
-        public SampleDataWorkerWindsorInstaller(string uniqueId, string youTubeApiKey)
-        {
-            if (uniqueId == null) throw new ArgumentNullException("uniqueId");
-            if (youTubeApiKey == null) throw new ArgumentNullException("youTubeApiKey");
-            _uniqueId = uniqueId;
-            _youTubeApiKey = youTubeApiKey;
-        }
+        private const string YouTubeApiKey = "YouTubeApiKey";
 
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            // Configure the lease manager
-            var leaseManagerConfig = new LeaseManagerConfig { LeaseName = "SampleDataJobs", UniqueId = _uniqueId };
-
             // Register components
             container.Register(
                 // Scheduler and related components
                 Component.For<SampleDataJobScheduler>().LifestyleTransient(),
-                Component.For<LeaseManager>().LifestyleTransient()
-                         .DependsOn(Dependency.OnValue<LeaseManagerConfig>(leaseManagerConfig)),
+                Component.For<LeaseManager>().LifestyleTransient(),
+                Component.For<LeaseManagerConfig>().UsingFactoryMethod(CreateLeaseManagerConfig).LifestyleSingleton(),
 
                 // Scheduler jobs
                 Classes.FromThisAssembly().BasedOn<SampleDataJob>().WithServiceBase().LifestyleTransient(),
 
                 // Other components
                 Classes.FromThisAssembly().InSameNamespaceAs<GetSampleData>(includeSubnamespaces: true)
-                       .WithServiceFirstInterface().WithServiceSelf().LifestyleTransient()
-                );
+                       .WithServiceFirstInterface().WithServiceSelf().LifestyleTransient(),
 
-            // Assembly configuration for SampleData handlers/messages
-            NimbusAssemblyConfig.AddFromTypes(typeof (SampleDataWorkerWindsorInstaller), typeof (AddSampleUsers));
+                // YouTube API client
+                Component.For<YouTubeService>().UsingFactoryMethod(CreateYouTubeService).LifestyleSingleton()
+            );
+        }
+
+        private static LeaseManagerConfig CreateLeaseManagerConfig(IKernel kernel)
+        {
+            // Configure the lease manager
+            var configRetriever = kernel.Resolve<IGetEnvironmentConfiguration>();
+            var leaseManagerConfig = new LeaseManagerConfig { LeaseName = "SampleDataJobs", UniqueId = configRetriever.UniqueInstanceId };
+            kernel.ReleaseComponent(configRetriever);
+
+            return leaseManagerConfig;
+        }
+
+        private static YouTubeService CreateYouTubeService(IKernel kernel)
+        {
+            var configRetriever = kernel.Resolve<IGetEnvironmentConfiguration>();
+            string apiKey = configRetriever.GetSetting(YouTubeApiKey);
+            kernel.ReleaseComponent(configRetriever);
 
             // Create client for YouTube API
             var youTubeInit = new BaseClientService.Initializer
             {
-                ApiKey = _youTubeApiKey,
+                ApiKey = apiKey,
                 ApplicationName = "KillrVideo.SampleData.Worker"
             };
-            var youTubeClient = new YouTubeService(youTubeInit);
-
-            container.Register(Component.For<YouTubeService>().Instance(youTubeClient));
-
-            // Also install the sample data service since it's used by the scheduler jobs
-            container.Install(new SampleDataServiceWindsorInstaller());
+            return new YouTubeService(youTubeInit);
         }
     }
 }

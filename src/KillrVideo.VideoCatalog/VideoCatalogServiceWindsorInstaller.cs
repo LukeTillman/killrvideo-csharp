@@ -1,8 +1,6 @@
 ﻿using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using KillrVideo.Utils.Nimbus;
-using KillrVideo.VideoCatalog.Messages.Events;
 
 namespace KillrVideo.VideoCatalog
 {
@@ -17,9 +15,6 @@ namespace KillrVideo.VideoCatalog
                 // Most components
                 Classes.FromThisAssembly().Pick().WithServiceFirstInterface().LifestyleTransient()
             );
-
-            // Messages published on the bus by service
-            NimbusAssemblyConfig.AddFromTypes(typeof (YouTubeVideoAdded));
         }
     }
 }

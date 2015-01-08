@@ -3,8 +3,10 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Castle.Windsor;
+using KillrVideo.Utils;
 using log4net;
 using log4net.Config;
+using Serilog;
 
 namespace KillrVideo
 {
@@ -16,9 +18,10 @@ namespace KillrVideo
 
         protected void Application_Start()
         {
-            // Bootstrap log4net logging
+            // Bootstrap log4net logging and Serilog logger
             XmlConfigurator.Configure();
-
+            Log.Logger = new LoggerConfiguration().WriteTo.Log4Net().CreateLogger();
+            
             Logger.Info("KillrVideo is starting");
 
             // Bootstrap Windsor container and tell MVC to use Windsor to create IController instances

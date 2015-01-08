@@ -17,6 +17,7 @@ namespace KillrVideo.SampleData.Worker.Scheduler
         private static readonly ILog Logger = LogManager.GetLogger(typeof(LeaseManager));
         private static readonly TimeSpan MaxLeaseTime = TimeSpan.FromSeconds(180);
         private static readonly TimeSpan RetryOnExceptionWaitTime = TimeSpan.FromSeconds(5);
+        private static readonly DateTimeOffset EpochPlusMaxLeaseTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero).Add(MaxLeaseTime);
 
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
@@ -113,7 +114,7 @@ namespace KillrVideo.SampleData.Worker.Scheduler
             if (row == null)
                 return;
 
-            var expiration = row.GetValue<DateTimeOffset>("writetime(owner)").Add(MaxLeaseTime);
+            var expiration = EpochPlusMaxLeaseTime.AddMicroseconds(row.GetValue<long>("writetime(owner)"));
 
             // See how long we need to wait
             TimeSpan delay = expiration - DateTimeOffset.UtcNow;

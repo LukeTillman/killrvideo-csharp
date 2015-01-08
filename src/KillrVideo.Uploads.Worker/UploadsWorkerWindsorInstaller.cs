@@ -1,12 +1,9 @@
-﻿using System.Configuration;
+﻿using System.Linq;
+using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using KillrVideo.Uploads.Dtos;
-using KillrVideo.Uploads.Messages.Events;
-using KillrVideo.Utils.Nimbus;
-using KillrVideo.VideoCatalog.Messages.Events;
-using Microsoft.WindowsAzure;
+using KillrVideo.Utils.Configuration;
 using Microsoft.WindowsAzure.MediaServices.Client;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
@@ -25,58 +22,78 @@ namespace KillrVideo.Uploads.Worker
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(
+                // Azure Media Services components
+                Component.For<MediaServicesCredentials>().UsingFactoryMethod(CreateCredentials).LifestyleSingleton(),
+                Component.For<CloudMediaContext>().LifestyleTransient(),
+                Component.For<INotificationEndPoint>().UsingFactoryMethod(CreateNotificationEndPoint).LifestyleSingleton(),
+
+                // Azure Storage components
+                Component.For<CloudStorageAccount>().UsingFactoryMethod(CreateCloudStorageAccount).LifestyleTransient(),
+                Component.For<CloudQueueClient>().UsingFactoryMethod(CreateCloudQueueClient).LifestyleTransient(),
+                
                 // Job for listening to Azure Media Services notifications
                 Component.For<EncodingListenerJob>().LifestyleTransient()
             );
-
-            // Assembly configuration for Uploads handlers/messages
-            NimbusAssemblyConfig.AddFromTypes(typeof (UploadsWorkerWindsorInstaller), typeof (GenerateUploadDestination),
-                                              typeof (UploadedVideoPublished), typeof (UploadedVideoAccepted));
-            
-            // Register Azure components
-            RegisterAzureComponents(container);
         }
 
-        private static void RegisterAzureComponents(IWindsorContainer container)
+        private static MediaServicesCredentials CreateCredentials(IKernel kernel)
         {
             // Get Azure configurations
-            string mediaServicesAccountName = GetRequiredSetting(MediaServicesNameAppSettingsKey);
-            string mediaServicesAccountKey = GetRequiredSetting(MediaServicesKeyAppSettingsKey);
-            string storageConnectionString = GetRequiredSetting(StorageConnectionStringAppSettingsKey);
+            var configRetriever = kernel.Resolve<IGetEnvironmentConfiguration>();
+            string mediaServicesAccountName = configRetriever.GetSetting(MediaServicesNameAppSettingsKey);
+            string mediaServicesAccountKey = configRetriever.GetSetting(MediaServicesKeyAppSettingsKey);
+            kernel.ReleaseComponent(configRetriever);
 
-            var mediaCredentials = new MediaServicesCredentials(mediaServicesAccountName, mediaServicesAccountKey);
-            container.Register(
-                // Recommended be shared by all CloudMediaContext objects so register as singleton
-                Component.For<MediaServicesCredentials>().Instance(mediaCredentials),
-
-                // Not thread-safe, so register as transient
-                Component.For<CloudMediaContext>().LifestyleTransient()
-            );
-            
-            // Setup queue for notifications about video encoding jobs
-            var storageAccount = CloudStorageAccount.Parse(storageConnectionString);
-            container.Register(
-                // Register the queue client and get a new one each time (transient) just to be safe
-                Component.For<CloudQueueClient>().UsingFactoryMethod(storageAccount.CreateCloudQueueClient).LifestyleTransient(),
-
-                // Register the notification endpoint factory and endpoint
-                Component.For<NotificationEndPointFactory>().LifestyleSingleton(),
-                Component.For<INotificationEndPoint>()
-                         .UsingFactoryMethod((k, ctx) => k.Resolve<NotificationEndPointFactory>().GetNotificationEndPoint())
-                         .LifestyleSingleton()
-                );
+            // Return the credentials
+            return new MediaServicesCredentials(mediaServicesAccountName, mediaServicesAccountKey);
         }
 
-        /// <summary>
-        /// Gets a required setting from CloudConfigurationManager and throws a ConfigurationErrorsException if setting is null/empty.
-        /// </summary>
-        private static string GetRequiredSetting(string key)
+        private static CloudStorageAccount CreateCloudStorageAccount(IKernel kernel)
         {
-            var value = CloudConfigurationManager.GetSetting(key);
-            if (string.IsNullOrEmpty(value))
-                throw new ConfigurationErrorsException(string.Format("No value for required setting {0} in cloud configuration", key));
+            // Get Azure configurations
+            var configRetriever = kernel.Resolve<IGetEnvironmentConfiguration>();
+            string storageConnectionString = configRetriever.GetSetting(StorageConnectionStringAppSettingsKey);
+            kernel.ReleaseComponent(configRetriever);
 
-            return value;
+            return CloudStorageAccount.Parse(storageConnectionString);
+        }
+
+        private static CloudQueueClient CreateCloudQueueClient(IKernel kernel)
+        {
+            var storageAccount = kernel.Resolve<CloudStorageAccount>();
+            CloudQueueClient client = storageAccount.CreateCloudQueueClient();
+            kernel.ReleaseComponent(storageAccount);
+
+            return client;
+        }
+
+        private static INotificationEndPoint CreateNotificationEndPoint(IKernel kernel)
+        {
+            var cloudMediaContext = kernel.Resolve<CloudMediaContext>();
+            var cloudQueueClient = kernel.Resolve<CloudQueueClient>();
+
+            try
+            {
+                // ReSharper disable once ReplaceWithSingleCallToFirstOrDefault
+                INotificationEndPoint endpoint = cloudMediaContext.NotificationEndPoints
+                                                                   .Where(ep => ep.Name == UploadConfig.NotificationQueueName)
+                                                                   .FirstOrDefault();
+                if (endpoint != null)
+                    return endpoint;
+
+                // Make sure the queue exists in Azure Storage
+                var notificationQueue = cloudQueueClient.GetQueueReference(UploadConfig.NotificationQueueName);
+                notificationQueue.CreateIfNotExists();
+
+                // Create the endpoint
+                return cloudMediaContext.NotificationEndPoints.Create(UploadConfig.NotificationQueueName, NotificationEndPointType.AzureQueue,
+                                                                       UploadConfig.NotificationQueueName);
+            }
+            finally
+            {
+                kernel.ReleaseComponent(cloudMediaContext);
+                kernel.ReleaseComponent(cloudQueueClient);
+            }
         }
     }
 }
