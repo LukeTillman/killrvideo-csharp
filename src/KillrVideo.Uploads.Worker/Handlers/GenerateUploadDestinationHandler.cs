@@ -54,15 +54,16 @@ namespace KillrVideo.Uploads.Worker.Handlers
             uploadUrl.Path = uploadUrl.Path + "/" + fileName;
             string absoluteUploadUrl = uploadUrl.Uri.AbsoluteUri;
 
+            DateTimeOffset timestamp = DateTimeOffset.UtcNow;
+
             // Store some of that information in Cassandra so we can look it up later
             PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync(
-                "INSERT INTO uploaded_video_destinations (upload_url, assetid, filename, locatorid) VALUES (?, ?, ?, ?)");
-            BoundStatement bound = prepared.Bind(absoluteUploadUrl, asset.Id, fileName, uploadLocator.Id);
-            bound.SetTimestamp(DateTime.UtcNow);
+                "INSERT INTO uploaded_video_destinations (upload_url, assetid, filename, locatorid) VALUES (?, ?, ?, ?) USING TIMESTAMP ?");
+            BoundStatement bound = prepared.Bind(absoluteUploadUrl, asset.Id, fileName, uploadLocator.Id, timestamp.ToMicrosecondsSinceEpoch());
             await _session.ExecuteAsync(bound);
 
             // Let everyone know we added an upload destination
-            await _bus.Publish(new UploadDestinationAdded { UploadUrl = absoluteUploadUrl, Timestamp = bound.Timestamp.Value });
+            await _bus.Publish(new UploadDestinationAdded { UploadUrl = absoluteUploadUrl, Timestamp = timestamp });
 
             // Reply
             return new UploadDestination { ErrorMessage = null, UploadUrl = absoluteUploadUrl };

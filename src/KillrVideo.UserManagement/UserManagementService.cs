@@ -39,10 +39,11 @@ namespace KillrVideo.UserManagement
             DateTimeOffset timestamp = DateTimeOffset.UtcNow;
 
             PreparedStatement preparedCredentials = await _statementCache.NoContext.GetOrAddAsync(
-                "INSERT INTO user_credentials (email, password, userid) VALUES (?, ?, ?) IF NOT EXISTS");
+                "INSERT INTO user_credentials (email, password, userid) VALUES (?, ?, ?) IF NOT EXISTS USING TIMESTAMP ?");
 
             // Insert the credentials info (this will return false if a user with that email address already exists)
-            IStatement insertCredentialsStatement = preparedCredentials.Bind(user.EmailAddress, hashedPassword, user.UserId).SetTimestamp(timestamp);
+            IStatement insertCredentialsStatement = preparedCredentials.Bind(user.EmailAddress, hashedPassword, user.UserId,
+                                                                             timestamp.ToMicrosecondsSinceEpoch());
             RowSet credentialsResult = await _session.ExecuteAsync(insertCredentialsStatement).ConfigureAwait(false);
 
             // The first column in the row returned will be a boolean indicating whether the change was applied (TODO: Compensating action for user creation failure?)
@@ -51,11 +52,11 @@ namespace KillrVideo.UserManagement
                 return;
 
             PreparedStatement preparedUser = await _statementCache.NoContext.GetOrAddAsync(
-                "INSERT INTO users (userid, firstname, lastname, email, created_date) VALUES (?, ?, ?, ?, ?)");
+                "INSERT INTO users (userid, firstname, lastname, email, created_date) VALUES (?, ?, ?, ?, ?) USING TIMESTAMP ?");
 
             // Insert the "profile" information using a parameterized CQL statement
             IStatement insertUserStatement =
-                preparedUser.Bind(user.UserId, user.FirstName, user.LastName, user.EmailAddress, timestamp).SetTimestamp(timestamp);
+                preparedUser.Bind(user.UserId, user.FirstName, user.LastName, user.EmailAddress, timestamp, timestamp.ToMicrosecondsSinceEpoch());
 
             await _session.ExecuteAsync(insertUserStatement).ConfigureAwait(false);
 

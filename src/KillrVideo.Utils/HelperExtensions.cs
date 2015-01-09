@@ -9,8 +9,6 @@ namespace KillrVideo.Utils
     /// </summary>
     public static class HelperExtensions
     {
-        private const long TicksPerMicrosecond = 10;
-
         /// <summary>
         /// Converts an IEnumerable&lt;T&gt; to a HashSet&lt;T&gt;.  If the IEnumerable is null, returns an empty HashSet.
         /// </summary>
@@ -27,14 +25,6 @@ namespace KillrVideo.Utils
         public static DateTimeOffset Truncate(this DateTimeOffset dateTimeOffset, long resolution)
         {
             return new DateTimeOffset(dateTimeOffset.Ticks - (dateTimeOffset.Ticks % resolution), dateTimeOffset.Offset);
-        }
-
-        /// <summary>
-        /// Adds the number of microseconds specified to the DateTimeOffset and returns a new DateTimeOffset.
-        /// </summary>
-        public static DateTimeOffset AddMicroseconds(this DateTimeOffset dateTimeOffset, long microSeconds)
-        {
-            return dateTimeOffset.AddTicks(microSeconds*TicksPerMicrosecond);
         }
 
         /// <summary>

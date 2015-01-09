@@ -210,7 +210,7 @@ namespace KillrVideo.Uploads.Worker
 
             // Log the event to C* (this should be idempotent in case of dupliacte tries since we're keyed by the job id, date, and etag in C*)
             PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync(
-                "INSERT INTO encoding_job_notifications (videoid, status_date, etag, jobId, newstate, oldstate) VALUES (?, ?, ?, ?, ?, ?)");
+                "INSERT INTO encoding_job_notifications (videoid, status_date, etag, jobId, newstate, oldstate) VALUES (?, ?, ?, ?, ?, ?) USING TIMESTAMP ?");
 
             string newState = notification.GetNewState();
             string oldState = notification.GetOldState();
@@ -218,7 +218,7 @@ namespace KillrVideo.Uploads.Worker
 
             // INSERT INTO encoding_job_notifications ...
             await _session.ExecuteAsync(
-                preparedStatement.Bind(videoId, statusDate, notification.ETag, jobId, newState, oldState).SetTimestamp(statusDate));
+                preparedStatement.Bind(videoId, statusDate, notification.ETag, jobId, newState, oldState, statusDate.ToMicrosecondsSinceEpoch()));
 
             // See if the job has finished and if not, just bail
             if (notification.IsJobFinished() == false)
@@ -230,7 +230,7 @@ namespace KillrVideo.Uploads.Worker
                 await _bus.Publish(new UploadedVideoProcessingSucceeded
                 {
                     VideoId = videoId,
-                    Timestamp = notification.TimeStamp
+                    Timestamp = statusDate
                 });
                 return;
             }
@@ -238,7 +238,7 @@ namespace KillrVideo.Uploads.Worker
             await _bus.Publish(new UploadedVideoProcessingFailed
             {
                 VideoId = videoId,
-                Timestamp = notification.TimeStamp
+                Timestamp = statusDate
             });
         }
     }

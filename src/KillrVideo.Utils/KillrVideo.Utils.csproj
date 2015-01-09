@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Configuration\IGetEnvironmentConfiguration.cs" />
     <Compile Include="INoCapturedContextTaskCache.cs" />
+    <Compile Include="MicrosecondsSinceEpoch.cs" />
     <Compile Include="TaskCache.cs" />
     <Compile Include="DateTimePrecise.cs" />
     <Compile Include="GuidGeneration.cs" />

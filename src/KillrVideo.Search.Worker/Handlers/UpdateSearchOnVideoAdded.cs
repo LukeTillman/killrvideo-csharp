@@ -26,22 +26,22 @@ namespace KillrVideo.Search.Worker.Handlers
         public async Task Handle(IVideoAdded video)
         {
             PreparedStatement[] prepared = await _statementCache.GetOrAddAllAsync(
-                "INSERT INTO videos_by_tag (tag, videoid, added_date, userid, name, preview_image_location, tagged_date) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                "INSERT INTO tags_by_letter (first_letter, tag) VALUES (?, ?)");
+                "INSERT INTO videos_by_tag (tag, videoid, added_date, userid, name, preview_image_location, tagged_date) VALUES (?, ?, ?, ?, ?, ?, ?) USING TIMESTAMP ?",
+                "INSERT INTO tags_by_letter (first_letter, tag) VALUES (?, ?) USING TIMESTAMP ?");
 
             // Create a batch for executing the updates
             var batch = new BatchStatement();
-            batch.SetTimestamp(video.Timestamp);
-
+            
             // We need to add multiple statements for each tag
             foreach (string tag in video.Tags)
             {
                 // INSERT INTO videos_by_tag
-                batch.Add(prepared[0].Bind(tag, video.VideoId, video.Timestamp, video.UserId, video.Name, video.PreviewImageLocation, video.Timestamp));
+                batch.Add(prepared[0].Bind(tag, video.VideoId, video.Timestamp, video.UserId, video.Name, video.PreviewImageLocation, video.Timestamp,
+                                           video.Timestamp.ToMicrosecondsSinceEpoch()));
 
                 // INSERT INTO tags_by_letter
                 string firstLetter = tag.Substring(0, 1);
-                batch.Add(prepared[1].Bind(firstLetter, tag));
+                batch.Add(prepared[1].Bind(firstLetter, tag, video.Timestamp.ToMicrosecondsSinceEpoch()));
             }
 
             await _session.ExecuteAsync(batch).ConfigureAwait(false);

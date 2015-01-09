@@ -82,21 +82,22 @@ namespace KillrVideo.Uploads.Worker.Handlers
 
             // Store the job information for the video in Cassandra
             PreparedStatement[] saveJobInfoPrepared = await _statementCache.GetOrAddAllAsync(
-                "INSERT INTO uploaded_video_jobs (videoid, upload_url, jobid) VALUES (?, ?, ?)",
-                "INSERT INTO uploaded_video_jobs_by_jobid (jobid, videoid, upload_url) VALUES (?, ?, ?)");
+                "INSERT INTO uploaded_video_jobs (videoid, upload_url, jobid) VALUES (?, ?, ?) USING TIMESTAMP ?",
+                "INSERT INTO uploaded_video_jobs_by_jobid (jobid, videoid, upload_url) VALUES (?, ?, ?) USING TIMESTAMP ?");
+
+            DateTimeOffset timestamp = DateTimeOffset.UtcNow;
 
             var batch = new BatchStatement();
-            batch.Add(saveJobInfoPrepared[0].Bind(uploadAccepted.VideoId, uploadAccepted.UploadUrl, jobId));
-            batch.Add(saveJobInfoPrepared[1].Bind(jobId, uploadAccepted.VideoId, uploadAccepted.UploadUrl));
-            batch.SetTimestamp(DateTimeOffset.UtcNow);
-
+            batch.Add(saveJobInfoPrepared[0].Bind(uploadAccepted.VideoId, uploadAccepted.UploadUrl, jobId, timestamp.ToMicrosecondsSinceEpoch()));
+            batch.Add(saveJobInfoPrepared[1].Bind(jobId, uploadAccepted.VideoId, uploadAccepted.UploadUrl, timestamp.ToMicrosecondsSinceEpoch()));
+            
             await _session.ExecuteAsync(batch);
 
             // Tell the world an encoding job started
             await _bus.Publish(new UploadedVideoProcessingStarted
             {
                 VideoId = uploadAccepted.VideoId,
-                Timestamp = batch.Timestamp.Value
+                Timestamp = timestamp
             });
         }
 

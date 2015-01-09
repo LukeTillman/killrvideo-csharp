@@ -33,22 +33,23 @@ namespace KillrVideo.Comments
         /// </summary>
         public async Task CommentOnVideo(CommentOnVideo comment)
         {
+            // Use a client side timestamp for the writes that we can include when we publish the event
+            var timestamp = DateTimeOffset.UtcNow;
+
             PreparedStatement[] preparedStatements = await _statementCache.NoContext.GetOrAddAllAsync(
-                "INSERT INTO comments_by_video (videoid, commentid, userid, comment) VALUES (?, ?, ?, ?)",
-                "INSERT INTO comments_by_user (userid, commentid, videoid, comment) VALUES (?, ?, ?, ?)");
+                "INSERT INTO comments_by_video (videoid, commentid, userid, comment) VALUES (?, ?, ?, ?) USING TIMESTAMP ?",
+                "INSERT INTO comments_by_user (userid, commentid, videoid, comment) VALUES (?, ?, ?, ?) USING TIMESTAMP ?");
 
             // Use a batch to insert into all tables
             var batch = new BatchStatement();
 
             // INSERT INTO comments_by_video
-            batch.Add(preparedStatements[0].Bind(comment.VideoId, comment.CommentId, comment.UserId, comment.Comment));
+            batch.Add(preparedStatements[0].Bind(comment.VideoId, comment.CommentId, comment.UserId, comment.Comment,
+                                                 timestamp.ToMicrosecondsSinceEpoch()));
 
             // INSERT INTO comments_by_user
-            batch.Add(preparedStatements[1].Bind(comment.UserId, comment.CommentId, comment.VideoId, comment.Comment));
-
-            // Use a client side timestamp for the writes that we can include when we publish the event
-            var timestamp = DateTimeOffset.UtcNow;
-            batch.SetTimestamp(timestamp);
+            batch.Add(preparedStatements[1].Bind(comment.UserId, comment.CommentId, comment.VideoId, comment.Comment,
+                                                 timestamp.ToMicrosecondsSinceEpoch()));
 
             await _session.ExecuteAsync(batch);
 

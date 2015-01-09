@@ -35,14 +35,15 @@ namespace KillrVideo.VideoCatalog
         /// </summary>
         public async Task SubmitUploadedVideo(SubmitUploadedVideo uploadedVideo)
         {
+            var timestamp = DateTimeOffset.UtcNow;
+
             // Store the information we have now in Cassandra
             PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync(
                 "INSERT INTO videos (videoid, userid, name, description, tags, location_type) VALUES (?, ?, ?, ?, ?, " +
-                VideoCatalogConstants.UploadedVideoType + ")");
+                VideoCatalogConstants.UploadedVideoType + ") USING TIMESTAMP ?");
 
             BoundStatement bound = prepared.Bind(uploadedVideo.VideoId, uploadedVideo.UserId, uploadedVideo.Name, uploadedVideo.Description,
-                                                 uploadedVideo.Tags);
-            bound.SetTimestamp(DateTimeOffset.UtcNow);
+                                                 uploadedVideo.Tags, timestamp.ToMicrosecondsSinceEpoch());
             await _session.ExecuteAsync(bound);
 
             // Tell the world we've accepted an uploaded video (it hasn't officially been added until we get a location for the
@@ -51,7 +52,7 @@ namespace KillrVideo.VideoCatalog
             {
                 VideoId = uploadedVideo.VideoId,
                 UploadUrl = uploadedVideo.UploadUrl,
-                Timestamp = bound.Timestamp.Value
+                Timestamp = timestamp
             });
         }
 
@@ -63,10 +64,10 @@ namespace KillrVideo.VideoCatalog
             // Use a batch to insert the YouTube video into multiple tables
             PreparedStatement[] prepared = await _statementCache.NoContext.GetOrAddAllAsync(
                 "INSERT INTO videos (videoid, userid, name, description, location, preview_image_location, tags, added_date, location_type) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, " + VideoCatalogConstants.YouTubeVideoType + ")",
-                "INSERT INTO user_videos (userid, added_date, videoid, name, preview_image_location) VALUES (?, ?, ?, ?, ?)",
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, " + VideoCatalogConstants.YouTubeVideoType + ") USING TIMESTAMP ?",
+                "INSERT INTO user_videos (userid, added_date, videoid, name, preview_image_location) VALUES (?, ?, ?, ?, ?) USING TIMESTAMP ?",
                 string.Format(
-                    "INSERT INTO latest_videos (yyyymmdd, added_date, videoid, userid, name, preview_image_location) VALUES (?, ?, ?, ?, ?, ?) USING TTL {0}",
+                    "INSERT INTO latest_videos (yyyymmdd, added_date, videoid, userid, name, preview_image_location) VALUES (?, ?, ?, ?, ?, ?) USING TTL {0} AND TIMESTAMP ?",
                     VideoCatalogConstants.LatestVideosTtlSeconds));
 
             // Calculate date-related info and location/thumbnail for YouTube video
@@ -78,11 +79,12 @@ namespace KillrVideo.VideoCatalog
 
             var batch = new BatchStatement();
             batch.Add(prepared[0].Bind(youTubeVideo.VideoId, youTubeVideo.UserId, youTubeVideo.Name, youTubeVideo.Description, location,
-                                       previewImageLocation, youTubeVideo.Tags, addDate));
-            batch.Add(prepared[1].Bind(youTubeVideo.UserId, addDate, youTubeVideo.VideoId, youTubeVideo.Name, previewImageLocation));
-            batch.Add(prepared[2].Bind(yyyymmdd, addDate, youTubeVideo.VideoId, youTubeVideo.UserId, youTubeVideo.Name, previewImageLocation));
-            batch.SetTimestamp(addDate);
-
+                                       previewImageLocation, youTubeVideo.Tags, addDate, addDate.ToMicrosecondsSinceEpoch()));
+            batch.Add(prepared[1].Bind(youTubeVideo.UserId, addDate, youTubeVideo.VideoId, youTubeVideo.Name, previewImageLocation,
+                                       addDate.ToMicrosecondsSinceEpoch()));
+            batch.Add(prepared[2].Bind(yyyymmdd, addDate, youTubeVideo.VideoId, youTubeVideo.UserId, youTubeVideo.Name, previewImageLocation,
+                                       addDate.ToMicrosecondsSinceEpoch()));
+            
             // Send the batch to Cassandra
             await _session.ExecuteAsync(batch);
 
@@ -96,7 +98,7 @@ namespace KillrVideo.VideoCatalog
                 Location = location,
                 PreviewImageLocation = previewImageLocation,
                 Tags = youTubeVideo.Tags,
-                Timestamp = batch.Timestamp.Value
+                Timestamp = addDate
             });
         }
 
