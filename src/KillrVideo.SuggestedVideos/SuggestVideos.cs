@@ -34,7 +34,7 @@ namespace KillrVideo.SuggestedVideos
             // Lookup the tags for the video
             PreparedStatement tagsForVideoPrepared = await _statementCache.NoContext.GetOrAddAsync("SELECT tags FROM videos WHERE videoid = ?");
             BoundStatement tagsForVideoBound = tagsForVideoPrepared.Bind(videoId);
-            RowSet tagRows = await _session.ExecuteAsync(tagsForVideoBound);
+            RowSet tagRows = await _session.ExecuteAsync(tagsForVideoBound).ConfigureAwait(false);
             Row tagRow = tagRows.SingleOrDefault();
             if (tagRow == null)
                 return new RelatedVideos { VideoId = videoId, Videos = Enumerable.Empty<VideoPreview>() };
@@ -64,7 +64,7 @@ namespace KillrVideo.SuggestedVideos
                 // Every third query, or if this is the last tag, wait on all the query results
                 if (inFlightQueries.Count == 3 || i == tags.Count - 1)
                 {
-                    RowSet[] results = await Task.WhenAll(inFlightQueries);
+                    RowSet[] results = await Task.WhenAll(inFlightQueries).ConfigureAwait(false);
 
                     foreach (RowSet rowSet in results)
                     {

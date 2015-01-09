@@ -53,7 +53,7 @@ namespace KillrVideo.Uploads
         {
             PreparedStatement preparedStatement =
                 await _statementCache.NoContext.GetOrAddAsync("SELECT newstate, status_date FROM encoding_job_notifications WHERE videoid = ? LIMIT 1");
-            RowSet rows = await _session.ExecuteAsync(preparedStatement.Bind(videoId));
+            RowSet rows = await _session.ExecuteAsync(preparedStatement.Bind(videoId)).ConfigureAwait(false);
             return MapRowToEncodingJobProgress(rows.SingleOrDefault());
         }
 

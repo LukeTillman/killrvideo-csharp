@@ -68,7 +68,7 @@ namespace KillrVideo.UserManagement
                 LastName = user.LastName,
                 EmailAddress = user.EmailAddress,
                 Timestamp = timestamp
-            });
+            }).ConfigureAwait(false);
         }
 
         /// <summary>

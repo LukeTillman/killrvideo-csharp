@@ -94,7 +94,7 @@ namespace KillrVideo.SampleData.Worker.Scheduler
         {
             // Run the first job in the list
             SampleDataJob job = _jobs[0];
-            await job.Run();
+            await job.Run().ConfigureAwait(false);
 
             // Remove it from the beginning of the list and re-insert it in the correct position based on its new NextRunTime
             _jobs.RemoveAt(0);

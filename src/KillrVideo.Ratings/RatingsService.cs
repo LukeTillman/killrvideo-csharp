@@ -48,7 +48,7 @@ namespace KillrVideo.Ratings
                 preparedStatements[1].Bind(videoRating.VideoId, videoRating.UserId, videoRating.Rating, timestamp.ToMicrosecondsSinceEpoch())
             };
 
-            await Task.WhenAll(bound.Select(b => _session.ExecuteAsync(b)));
+            await Task.WhenAll(bound.Select(b => _session.ExecuteAsync(b))).ConfigureAwait(false);
 
             // Tell the world about the rating
             await _bus.Publish(new UserRatedVideo
@@ -57,7 +57,7 @@ namespace KillrVideo.Ratings
                 UserId = videoRating.UserId,
                 Rating = videoRating.Rating,
                 Timestamp = timestamp
-            });
+            }).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace KillrVideo.Ratings
         {
             PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM video_ratings WHERE videoid = ?");
             BoundStatement boundStatement = preparedStatement.Bind(videoId);
-            RowSet rows = await _session.ExecuteAsync(boundStatement);
+            RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
 
             // Use SingleOrDefault here because it's possible a video doesn't have any ratings yet and thus has no record
             return MapRowToVideoRating(rows.SingleOrDefault(), videoId);
@@ -80,7 +80,7 @@ namespace KillrVideo.Ratings
         {
             PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT rating FROM video_ratings_by_user WHERE videoid = ? AND userid = ?");
             BoundStatement boundStatement = preparedStatement.Bind(videoId, userId);
-            RowSet rows = await _session.ExecuteAsync(boundStatement);
+            RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
 
             // We may or may not have a rating
             Row row = rows.SingleOrDefault();

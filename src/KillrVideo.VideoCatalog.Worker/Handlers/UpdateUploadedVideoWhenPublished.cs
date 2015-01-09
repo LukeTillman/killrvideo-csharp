@@ -35,7 +35,7 @@ namespace KillrVideo.VideoCatalog.Worker.Handlers
             // Find the video
             PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM videos WHERE videoid = ?");
             BoundStatement bound = prepared.Bind(publishedVideo.VideoId);
-            RowSet rows = await _session.ExecuteAsync(bound);
+            RowSet rows = await _session.ExecuteAsync(bound).ConfigureAwait(false);
             Row videoRow = rows.SingleOrDefault();
             if (videoRow == null)
                 throw new InvalidOperationException(string.Format("Could not find video with id {0}", publishedVideo.VideoId));
@@ -67,8 +67,8 @@ namespace KillrVideo.VideoCatalog.Worker.Handlers
             batch.Add(writePrepared[0].Bind(publishedVideo.VideoUrl, publishedVideo.ThumbnailUrl, addDate, publishedVideo.VideoId, addDate.ToMicrosecondsSinceEpoch()));
             batch.Add(writePrepared[1].Bind(userId, addDate, publishedVideo.VideoId, name, publishedVideo.ThumbnailUrl, addDate.ToMicrosecondsSinceEpoch()));
             batch.Add(writePrepared[2].Bind(yyyymmdd, addDate, publishedVideo.VideoId, userId, name, publishedVideo.ThumbnailUrl, addDate.ToMicrosecondsSinceEpoch()));
-            
-            await _session.ExecuteAsync(batch);
+
+            await _session.ExecuteAsync(batch).ConfigureAwait(false);
 
             // Tell the world about the uploaded video that was added
             await _bus.Publish(new UploadedVideoAdded
@@ -81,7 +81,7 @@ namespace KillrVideo.VideoCatalog.Worker.Handlers
                 Location = publishedVideo.VideoUrl,
                 PreviewImageLocation = publishedVideo.ThumbnailUrl,
                 Timestamp = addDate
-            });
+            }).ConfigureAwait(false);
         }
     }
 }

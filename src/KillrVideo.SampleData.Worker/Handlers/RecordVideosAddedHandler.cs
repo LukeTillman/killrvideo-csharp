@@ -28,7 +28,7 @@ namespace KillrVideo.SampleData.Worker.Handlers
         {
             // Record the id in our sample data tracking table
             PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync("INSERT INTO sample_data_videos (videoid) VALUES (?)");
-            await _session.ExecuteAsync(prepared.Bind(busEvent.VideoId));
+            await _session.ExecuteAsync(prepared.Bind(busEvent.VideoId)).ConfigureAwait(false);
         }
     }
 }

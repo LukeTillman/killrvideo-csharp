@@ -31,7 +31,7 @@ namespace KillrVideo.Statistics
         {
             PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync("UPDATE video_playback_stats SET views = views + 1 WHERE videoid = ?");
             BoundStatement bound = prepared.Bind(playback.VideoId);
-            await _session.ExecuteAsync(bound);
+            await _session.ExecuteAsync(bound).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace KillrVideo.Statistics
         {
             PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync("SELECT videoid, views FROM video_playback_stats WHERE videoid = ?");
             BoundStatement bound = prepared.Bind(videoId);
-            RowSet rows = await _session.ExecuteAsync(bound);
+            RowSet rows = await _session.ExecuteAsync(bound).ConfigureAwait(false);
             return MapRowToPlayStats(rows.SingleOrDefault(), videoId);
         }
 
@@ -57,7 +57,7 @@ namespace KillrVideo.Statistics
 
             // Run queries in parallel (another example of multi-get at the driver level)
             var idsAndTasks = videoIds.Select(id => new { VideoId = id, ExecuteTask = _session.ExecuteAsync(prepared.Bind(id)) }).ToArray();
-            await Task.WhenAll(idsAndTasks.Select(idAndResult => idAndResult.ExecuteTask));
+            await Task.WhenAll(idsAndTasks.Select(idAndResult => idAndResult.ExecuteTask)).ConfigureAwait(false);
 
             // Be sure to return stats for each video id (even if the row was null)
             return idsAndTasks.Select(idTask => MapRowToPlayStats(idTask.ExecuteTask.Result.SingleOrDefault(), idTask.VideoId));

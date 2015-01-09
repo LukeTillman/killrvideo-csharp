@@ -29,10 +29,10 @@ namespace KillrVideo.SampleData.Worker.Handlers
         public async Task Handle(AddSampleComments busCommand)
         {
             // Get some sample users to use as comment authors
-            List<Guid> sampleUserIds = await _sampleDataRetriever.GetRandomSampleUserIds(busCommand.NumberOfComments);
+            List<Guid> sampleUserIds = await _sampleDataRetriever.GetRandomSampleUserIds(busCommand.NumberOfComments).ConfigureAwait(false);
 
             // Get some videos to comment on
-            List<Guid> videoIds = await _sampleDataRetriever.GetRandomVideoIds(busCommand.NumberOfComments);
+            List<Guid> videoIds = await _sampleDataRetriever.GetRandomVideoIds(busCommand.NumberOfComments).ConfigureAwait(false);
 
             // Add some sample comments in parallel
             var commentTasks = new List<Task>();
@@ -46,8 +46,8 @@ namespace KillrVideo.SampleData.Worker.Handlers
                     Comment = Lorem.GetParagraph()
                 }));
             }
-            
-            await Task.WhenAll(commentTasks);
+
+            await Task.WhenAll(commentTasks).ConfigureAwait(false);
         }
     }
 }

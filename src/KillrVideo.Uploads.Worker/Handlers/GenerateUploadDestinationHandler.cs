@@ -43,12 +43,13 @@ namespace KillrVideo.Uploads.Worker.Handlers
 
             // Create the media services asset
             string assetName = string.Format("Original - {0}", fileName);
-            IAsset asset = await _cloudMediaContext.Assets.CreateAsync(assetName, AssetCreationOptions.None, CancellationToken.None);
-            IAssetFile file = await asset.AssetFiles.CreateAsync(fileName, CancellationToken.None);
+            IAsset asset = await _cloudMediaContext.Assets.CreateAsync(assetName, AssetCreationOptions.None, CancellationToken.None).ConfigureAwait(false);
+            IAssetFile file = await asset.AssetFiles.CreateAsync(fileName, CancellationToken.None).ConfigureAwait(false);
 
             // Create locator for the upload directly to storage
             ILocator uploadLocator = await _cloudMediaContext.Locators.CreateAsync(LocatorType.Sas, asset, AccessPermissions.Write,
-                                                                                   UploadConfig.UploadMaxTime, DateTime.UtcNow.AddMinutes(-2));
+                                                                                   UploadConfig.UploadMaxTime, DateTime.UtcNow.AddMinutes(-2))
+                                                             .ConfigureAwait(false);
 
             var uploadUrl = new UriBuilder(uploadLocator.Path);
             uploadUrl.Path = uploadUrl.Path + "/" + fileName;
@@ -60,10 +61,10 @@ namespace KillrVideo.Uploads.Worker.Handlers
             PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync(
                 "INSERT INTO uploaded_video_destinations (upload_url, assetid, filename, locatorid) VALUES (?, ?, ?, ?) USING TIMESTAMP ?");
             BoundStatement bound = prepared.Bind(absoluteUploadUrl, asset.Id, fileName, uploadLocator.Id, timestamp.ToMicrosecondsSinceEpoch());
-            await _session.ExecuteAsync(bound);
+            await _session.ExecuteAsync(bound).ConfigureAwait(false);
 
             // Let everyone know we added an upload destination
-            await _bus.Publish(new UploadDestinationAdded { UploadUrl = absoluteUploadUrl, Timestamp = timestamp });
+            await _bus.Publish(new UploadDestinationAdded { UploadUrl = absoluteUploadUrl, Timestamp = timestamp }).ConfigureAwait(false);
 
             // Reply
             return new UploadDestination { ErrorMessage = null, UploadUrl = absoluteUploadUrl };

@@ -55,7 +55,7 @@ namespace KillrVideo.Uploads.Worker
             // Create the queues if they don't exist
             _queue = _cloudQueueClient.GetQueueReference(UploadConfig.NotificationQueueName);
             _poisonQueue = _cloudQueueClient.GetQueueReference(PoisionQueueName);
-            await Task.WhenAll(_queue.CreateIfNotExistsAsync(), _poisonQueue.CreateIfNotExistsAsync());
+            await Task.WhenAll(_queue.CreateIfNotExistsAsync(), _poisonQueue.CreateIfNotExistsAsync()).ConfigureAwait(false);
             _initialized = true;
         }
 
@@ -106,7 +106,7 @@ namespace KillrVideo.Uploads.Worker
             cancellationToken.ThrowIfCancellationRequested();
 
             if (_initialized == false)
-                await Initialize();
+                await Initialize().ConfigureAwait(false);
             
             bool gotSomeMessages;
             do
@@ -115,7 +115,7 @@ namespace KillrVideo.Uploads.Worker
                 gotSomeMessages = false;
 
                 // Get a batch of messages
-                IEnumerable<CloudQueueMessage> messages = await _queue.GetMessagesAsync(MessagesPerGet, cancellationToken);
+                IEnumerable<CloudQueueMessage> messages = await _queue.GetMessagesAsync(MessagesPerGet, cancellationToken).ConfigureAwait(false);
                 foreach (CloudQueueMessage message in messages)
                 {
                     // Check for cancellation before processing a message
@@ -139,14 +139,14 @@ namespace KillrVideo.Uploads.Worker
                     // If there was a problem with deserialization, just assume a poison message and delete it
                     if (jobEvent == null)
                     {
-                        await _queue.DeleteMessageAsync(message, cancellationToken);
+                        await _queue.DeleteMessageAsync(message, cancellationToken).ConfigureAwait(false);
                         continue;
                     }
 
                     // Ignore any messages that aren't for JobStateChanges
                     if (jobEvent.IsJobStateChangeEvent() == false)
                     {
-                        await _queue.DeleteMessageAsync(message, cancellationToken);
+                        await _queue.DeleteMessageAsync(message, cancellationToken).ConfigureAwait(false);
                         continue;
                     }
 
@@ -154,7 +154,7 @@ namespace KillrVideo.Uploads.Worker
                     bool handledSuccessfully = false;
                     try
                     {
-                        await HandleEncodingJobEvent(jobEvent);
+                        await HandleEncodingJobEvent(jobEvent).ConfigureAwait(false);
                         handledSuccessfully = true;
                     }
                     catch (Exception e)
@@ -165,7 +165,7 @@ namespace KillrVideo.Uploads.Worker
                     // If the message was handled successfully, just delete it
                     if (handledSuccessfully)
                     {
-                        await _queue.DeleteMessageAsync(message, cancellationToken);
+                        await _queue.DeleteMessageAsync(message, cancellationToken).ConfigureAwait(false);
                         continue;
                     }
                         
@@ -175,8 +175,8 @@ namespace KillrVideo.Uploads.Worker
                         // Move the message to a poison queue (NOTE: because Add + Delete aren't "transactional" it is possible
                         // a poison message might get added more than once to the poison queue, but that's OK)
                         Logger.Fatal(string.Format("Giving up on message: {0}", message.AsString));
-                        await _poisonQueue.AddMessageAsync(message, cancellationToken);
-                        await _queue.DeleteMessageAsync(message, cancellationToken);
+                        await _poisonQueue.AddMessageAsync(message, cancellationToken).ConfigureAwait(false);
+                        await _queue.DeleteMessageAsync(message, cancellationToken).ConfigureAwait(false);
                         continue;
                     }
                     
@@ -185,7 +185,7 @@ namespace KillrVideo.Uploads.Worker
                     jobEvent.RetryAttempts++;
                     message.SetMessageContent(JsonConvert.SerializeObject(jobEvent));
                     await _queue.UpdateMessageAsync(message, TimeSpan.FromSeconds(secondsUntilRetry),
-                                                    MessageUpdateFields.Content | MessageUpdateFields.Visibility, cancellationToken);
+                                                    MessageUpdateFields.Content | MessageUpdateFields.Visibility, cancellationToken).ConfigureAwait(false);
                 }
 
                 // If we got some messages from the queue, keep processing until we don't get any
@@ -201,7 +201,7 @@ namespace KillrVideo.Uploads.Worker
             // Lookup the uploaded video's Id by job Id
             PreparedStatement lookupPrepared =
                 await _statementCache.NoContext.GetOrAddAsync("SELECT videoid FROM uploaded_video_jobs_by_jobid WHERE jobid = ?");
-            RowSet lookupRows = await _session.ExecuteAsync(lookupPrepared.Bind(jobId));
+            RowSet lookupRows = await _session.ExecuteAsync(lookupPrepared.Bind(jobId)).ConfigureAwait(false);
             Row lookupRow = lookupRows.SingleOrDefault();
             if (lookupRow == null)
                 throw new InvalidOperationException(string.Format("Could not find video for job id {0}", jobId));
@@ -218,7 +218,7 @@ namespace KillrVideo.Uploads.Worker
 
             // INSERT INTO encoding_job_notifications ...
             await _session.ExecuteAsync(
-                preparedStatement.Bind(videoId, statusDate, notification.ETag, jobId, newState, oldState, statusDate.ToMicrosecondsSinceEpoch()));
+                preparedStatement.Bind(videoId, statusDate, notification.ETag, jobId, newState, oldState, statusDate.ToMicrosecondsSinceEpoch())).ConfigureAwait(false);
 
             // See if the job has finished and if not, just bail
             if (notification.IsJobFinished() == false)
@@ -231,7 +231,7 @@ namespace KillrVideo.Uploads.Worker
                 {
                     VideoId = videoId,
                     Timestamp = statusDate
-                });
+                }).ConfigureAwait(false);
                 return;
             }
 
@@ -239,7 +239,7 @@ namespace KillrVideo.Uploads.Worker
             {
                 VideoId = videoId,
                 Timestamp = statusDate
-            });
+            }).ConfigureAwait(false);
         }
     }
 }

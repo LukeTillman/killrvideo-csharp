@@ -51,7 +51,7 @@ namespace KillrVideo.Comments
             batch.Add(preparedStatements[1].Bind(comment.UserId, comment.CommentId, comment.VideoId, comment.Comment,
                                                  timestamp.ToMicrosecondsSinceEpoch()));
 
-            await _session.ExecuteAsync(batch);
+            await _session.ExecuteAsync(batch).ConfigureAwait(false);
 
             // Tell the world about the comment
             await _bus.Publish(new UserCommentedOnVideo
@@ -60,7 +60,7 @@ namespace KillrVideo.Comments
                 VideoId = comment.VideoId,
                 CommentId = comment.CommentId,
                 Timestamp = timestamp
-            });
+            }).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace KillrVideo.Comments
                 bound = prepared.Bind(getComments.UserId, getComments.PageSize);
             }
 
-            RowSet rows = await _session.ExecuteAsync(bound);
+            RowSet rows = await _session.ExecuteAsync(bound).ConfigureAwait(false);
             return new UserComments
             {
                 UserId = getComments.UserId,
@@ -113,7 +113,7 @@ namespace KillrVideo.Comments
                 bound = prepared.Bind(getComments.VideoId, getComments.PageSize);
             }
 
-            RowSet rows = await _session.ExecuteAsync(bound);
+            RowSet rows = await _session.ExecuteAsync(bound).ConfigureAwait(false);
             return new VideoComments
             {
                 VideoId = getComments.VideoId,

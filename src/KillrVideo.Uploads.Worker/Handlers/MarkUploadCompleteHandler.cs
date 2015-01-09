@@ -40,7 +40,7 @@ namespace KillrVideo.Uploads.Worker.Handlers
             // Find the details for the upload destination based on the Upload Url
             PreparedStatement getPrepared =
                 await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM uploaded_video_destinations WHERE upload_url = ?");
-            RowSet rows = await _session.ExecuteAsync(getPrepared.Bind(markComplete.UploadUrl));
+            RowSet rows = await _session.ExecuteAsync(getPrepared.Bind(markComplete.UploadUrl)).ConfigureAwait(false);
             Row uploadDestination = rows.SingleOrDefault();
             if (uploadDestination == null)
                 throw new InvalidOperationException(string.Format("Could not find upload destination details for URL {0}", markComplete.UploadUrl));
@@ -60,19 +60,19 @@ namespace KillrVideo.Uploads.Worker.Handlers
                 throw new InvalidOperationException(string.Format("Could not find file {0} on asset {1}.", filename, assetId));
 
             assetFile.IsPrimary = true;
-            await assetFile.UpdateAsync();
+            await assetFile.UpdateAsync().ConfigureAwait(false);
 
             // Remove the upload locator (i.e. revoke upload access)
             ILocator uploadLocator = asset.Locators.Where(l => l.Id == locatorId).FirstOrDefault();
             if (uploadLocator != null)
-                await uploadLocator.DeleteAsync();
+                await uploadLocator.DeleteAsync().ConfigureAwait(false);
 
             // Tell the world an upload finished
             await _bus.Publish(new UploadCompleted
             {
                 AssetId = assetId,
                 Filename = filename
-            });
+            }).ConfigureAwait(false);
         }
 
         // ReSharper restore ReplaceWithSingleCallToFirstOrDefault

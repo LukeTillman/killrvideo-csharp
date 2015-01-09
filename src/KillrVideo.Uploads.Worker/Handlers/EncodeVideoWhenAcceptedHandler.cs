@@ -43,7 +43,7 @@ namespace KillrVideo.Uploads.Worker.Handlers
         {
             // Find the uploaded file's information
             PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM uploaded_video_destinations WHERE upload_url = ?");
-            RowSet rows = await _session.ExecuteAsync(prepared.Bind(uploadAccepted.UploadUrl));
+            RowSet rows = await _session.ExecuteAsync(prepared.Bind(uploadAccepted.UploadUrl)).ConfigureAwait(false);
             Row row = rows.SingleOrDefault();
             if (row == null)
                 throw new InvalidOperationException(string.Format("Could not find uploaded video with URL {0}", uploadAccepted.UploadUrl));
@@ -76,12 +76,12 @@ namespace KillrVideo.Uploads.Worker.Handlers
 
             // Get status upades on the job's progress on Azure queue, then start the job
             job.JobNotificationSubscriptions.AddNew(NotificationJobState.All, _notificationEndPoint);
-            await job.SubmitAsync();
+            await job.SubmitAsync().ConfigureAwait(false);
 
             string jobId = job.Id;
 
             // Store the job information for the video in Cassandra
-            PreparedStatement[] saveJobInfoPrepared = await _statementCache.GetOrAddAllAsync(
+            PreparedStatement[] saveJobInfoPrepared = await _statementCache.NoContext.GetOrAddAllAsync(
                 "INSERT INTO uploaded_video_jobs (videoid, upload_url, jobid) VALUES (?, ?, ?) USING TIMESTAMP ?",
                 "INSERT INTO uploaded_video_jobs_by_jobid (jobid, videoid, upload_url) VALUES (?, ?, ?) USING TIMESTAMP ?");
 
@@ -90,15 +90,15 @@ namespace KillrVideo.Uploads.Worker.Handlers
             var batch = new BatchStatement();
             batch.Add(saveJobInfoPrepared[0].Bind(uploadAccepted.VideoId, uploadAccepted.UploadUrl, jobId, timestamp.ToMicrosecondsSinceEpoch()));
             batch.Add(saveJobInfoPrepared[1].Bind(jobId, uploadAccepted.VideoId, uploadAccepted.UploadUrl, timestamp.ToMicrosecondsSinceEpoch()));
-            
-            await _session.ExecuteAsync(batch);
+
+            await _session.ExecuteAsync(batch).ConfigureAwait(false);
 
             // Tell the world an encoding job started
             await _bus.Publish(new UploadedVideoProcessingStarted
             {
                 VideoId = uploadAccepted.VideoId,
                 Timestamp = timestamp
-            });
+            }).ConfigureAwait(false);
         }
 
         // ReSharper restore ReplaceWithSingleCallToFirstOrDefault

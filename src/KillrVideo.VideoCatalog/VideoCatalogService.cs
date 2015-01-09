@@ -44,7 +44,7 @@ namespace KillrVideo.VideoCatalog
 
             BoundStatement bound = prepared.Bind(uploadedVideo.VideoId, uploadedVideo.UserId, uploadedVideo.Name, uploadedVideo.Description,
                                                  uploadedVideo.Tags, timestamp.ToMicrosecondsSinceEpoch());
-            await _session.ExecuteAsync(bound);
+            await _session.ExecuteAsync(bound).ConfigureAwait(false);
 
             // Tell the world we've accepted an uploaded video (it hasn't officially been added until we get a location for the
             // video playback and thumbnail)
@@ -53,7 +53,7 @@ namespace KillrVideo.VideoCatalog
                 VideoId = uploadedVideo.VideoId,
                 UploadUrl = uploadedVideo.UploadUrl,
                 Timestamp = timestamp
-            });
+            }).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace KillrVideo.VideoCatalog
                                        addDate.ToMicrosecondsSinceEpoch()));
             
             // Send the batch to Cassandra
-            await _session.ExecuteAsync(batch);
+            await _session.ExecuteAsync(batch).ConfigureAwait(false);
 
             // Tell the world about the new YouTube video
             await _bus.Publish(new YouTubeVideoAdded
@@ -99,7 +99,7 @@ namespace KillrVideo.VideoCatalog
                 PreviewImageLocation = previewImageLocation,
                 Tags = youTubeVideo.Tags,
                 Timestamp = addDate
-            });
+            }).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace KillrVideo.VideoCatalog
         public async Task<VideoDetails> GetVideo(Guid videoId)
         {
             PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM videos WHERE videoid = ?");
-            RowSet rows = await _session.ExecuteAsync(preparedStatement.Bind(videoId));
+            RowSet rows = await _session.ExecuteAsync(preparedStatement.Bind(videoId)).ConfigureAwait(false);
             return MapRowToVideoDetails(rows.SingleOrDefault());
         }
 
@@ -131,7 +131,7 @@ namespace KillrVideo.VideoCatalog
 
             // Bind multiple times to the prepared statement with each video id and execute all the gets in parallel, then await
             // the completion of all the gets
-            RowSet[] rowSets = await Task.WhenAll(videoIds.Select(id => _session.ExecuteAsync(prepared.Bind(id))));
+            RowSet[] rowSets = await Task.WhenAll(videoIds.Select(id => _session.ExecuteAsync(prepared.Bind(id)))).ConfigureAwait(false);
 
             // Flatten the rows in the rowsets to VideoPreview objects
             return rowSets.SelectMany(rowSet => rowSet, (_, row) => MapRowToVideoPreview(row));
@@ -185,7 +185,7 @@ namespace KillrVideo.VideoCatalog
                     boundStatement = preparedStatement.Bind(bucket, recordsStillNeeded);
                 }
 
-                RowSet rows = await _session.ExecuteAsync(boundStatement);
+                RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
 
                 results.AddRange(rows.Select(MapRowToVideoPreview));
 
@@ -221,7 +221,7 @@ namespace KillrVideo.VideoCatalog
                 boundStatement = preparedStatement.Bind(getVideos.UserId, getVideos.PageSize);
             }
 
-            RowSet rows = await _session.ExecuteAsync(boundStatement);
+            RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
             return new UserVideos
             {
                 UserId = getVideos.UserId,

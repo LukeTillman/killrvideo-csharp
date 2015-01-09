@@ -42,7 +42,7 @@ namespace KillrVideo.Search
                 boundStatement = preparedStatement.Bind(getVideos.Tag, getVideos.FirstVideoOnPageVideoId.Value, getVideos.PageSize);
             }
 
-            RowSet rows = await _session.ExecuteAsync(boundStatement);
+            RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
             return new VideosByTag
             {
                 Tag = getVideos.Tag,
@@ -58,7 +58,7 @@ namespace KillrVideo.Search
             string firstLetter = getTags.TagStartsWith.Substring(0, 1);
             PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT tag FROM tags_by_letter WHERE first_letter = ? AND tag >= ? LIMIT ?");
             BoundStatement boundStatement = preparedStatement.Bind(firstLetter, getTags.TagStartsWith, getTags.PageSize);
-            RowSet rows = await _session.ExecuteAsync(boundStatement);
+            RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
             return new TagsStartingWith
             {
                 TagStartsWith = getTags.TagStartsWith,

@@ -48,7 +48,7 @@ namespace KillrVideo.Uploads.Worker.Handlers
             // Lookup the job Id for the video in Cassandra
             PreparedStatement lookupPrepared =
                 await _statementCache.NoContext.GetOrAddAsync("SELECT jobid FROM uploaded_video_jobs WHERE videoid = ?");
-            RowSet lookupRows = await _session.ExecuteAsync(lookupPrepared.Bind(encodedVideo.VideoId));
+            RowSet lookupRows = await _session.ExecuteAsync(lookupPrepared.Bind(encodedVideo.VideoId)).ConfigureAwait(false);
             Row lookupRow = lookupRows.SingleOrDefault();
             if (lookupRow == null)
                 throw new InvalidOperationException(string.Format("Could not find job for video id {0}", encodedVideo.VideoId));
@@ -73,7 +73,8 @@ namespace KillrVideo.Uploads.Worker.Handlers
             {
                 const AccessPermissions readPermissions = AccessPermissions.Read | AccessPermissions.List;
                 locator = await _cloudMediaContext.Locators.CreateAsync(LocatorType.Sas, asset, readPermissions,
-                                                                        PublishedVideosGoodFor);
+                                                                        PublishedVideosGoodFor)
+                                                  .ConfigureAwait(false);
             }
 
             // Get the URL for streaming from the locator (embed file name for the mp4 in locator before query string)
@@ -91,7 +92,8 @@ namespace KillrVideo.Uploads.Worker.Handlers
             if (thumbnailLocator == null)
             {
                 thumbnailLocator = await _cloudMediaContext.Locators.CreateAsync(LocatorType.Sas, thumbnailAsset, AccessPermissions.Read,
-                                                                                 PublishedVideosGoodFor);
+                                                                                 PublishedVideosGoodFor)
+                                                           .ConfigureAwait(false);
             }
 
             // Get the URL for a random thumbnail file in the asset
@@ -108,7 +110,7 @@ namespace KillrVideo.Uploads.Worker.Handlers
                 VideoUrl = videoLocation.Uri.AbsoluteUri,
                 ThumbnailUrl = thumbnailLocation.Uri.AbsoluteUri,
                 Timestamp = encodedVideo.Timestamp
-            });
+            }).ConfigureAwait(false);
         }
 
         // ReSharper restore ReplaceWithSingleCallToFirstOrDefault

@@ -58,7 +58,7 @@ namespace KillrVideo.SampleData.Worker.Components.YouTube
             foreach (int idx in indexes)
             {
                 YouTubeVideoSource source = YouTubeVideoSource.All[idx];
-                RowSet rowSet = await _session.ExecuteAsync(prepared.Bind(source.UniqueId, pageSize));
+                RowSet rowSet = await _session.ExecuteAsync(prepared.Bind(source.UniqueId, pageSize)).ConfigureAwait(false);
                 unusedVideos.AddRange(rowSet.Select(row => MapToYouTubeVideo(row, source)));
 
                 // If we've got enough videos, return them, otherwise go to the next source
@@ -79,7 +79,7 @@ namespace KillrVideo.SampleData.Worker.Components.YouTube
             PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync(
                 "UPDATE sample_data_youtube_videos SET used = true WHERE sourceid = ? AND published_at = ? AND youtube_video_id = ?");
 
-            await _session.ExecuteAsync(prepared.Bind(video.Source.UniqueId, video.PublishedAt, video.YouTubeVideoId));
+            await _session.ExecuteAsync(prepared.Bind(video.Source.UniqueId, video.PublishedAt, video.YouTubeVideoId)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -107,6 +107,7 @@ namespace KillrVideo.SampleData.Worker.Components.YouTube
                 SearchResource.ListRequest searchRequest = _youTubeService.Search.List("snippet");
                 searchRequest.MaxResults = MaxVideosPerRequest;
                 searchRequest.ChannelId = channelSource.ChannelId;
+                searchRequest.Type = "video";
                 searchRequest.Order = SearchResource.ListRequest.OrderEnum.Date;
                 if (string.IsNullOrEmpty(nextPageToken) == false)
                     searchRequest.PageToken = nextPageToken;
@@ -161,6 +162,7 @@ namespace KillrVideo.SampleData.Worker.Components.YouTube
                 SearchResource.ListRequest searchRequest = _youTubeService.Search.List("snippet");
                 searchRequest.MaxResults = MaxVideosPerRequest;
                 searchRequest.Q = keywordSource.SearchTerms;
+                searchRequest.Type = "video";
                 if (string.IsNullOrEmpty(nextPageToken) == false)
                     searchRequest.PageToken = nextPageToken;
 
