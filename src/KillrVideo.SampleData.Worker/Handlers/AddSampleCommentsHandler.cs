@@ -6,6 +6,7 @@ using KillrVideo.Comments;
 using KillrVideo.Comments.Dtos;
 using KillrVideo.SampleData.Dtos;
 using KillrVideo.SampleData.Worker.Components;
+using log4net;
 using Nimbus.Handlers;
 
 namespace KillrVideo.SampleData.Worker.Handlers
@@ -15,6 +16,8 @@ namespace KillrVideo.SampleData.Worker.Handlers
     /// </summary>
     public class AddSampleCommentsHandler : IHandleCommand<AddSampleComments>
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (AddSampleCommentsHandler));
+
         private readonly IGetSampleData _sampleDataRetriever;
         private readonly ICommentsService _commentService;
 
@@ -29,10 +32,20 @@ namespace KillrVideo.SampleData.Worker.Handlers
         public async Task Handle(AddSampleComments busCommand)
         {
             // Get some sample users to use as comment authors
-            List<Guid> sampleUserIds = await _sampleDataRetriever.GetRandomSampleUserIds(busCommand.NumberOfComments).ConfigureAwait(false);
+            List<Guid> userIds = await _sampleDataRetriever.GetRandomSampleUserIds(busCommand.NumberOfComments).ConfigureAwait(false);
+            if (userIds.Count == 0)
+            {
+                Logger.Warn("No sample users available.  Cannot add sample comments.");
+                return;
+            }
 
             // Get some videos to comment on
             List<Guid> videoIds = await _sampleDataRetriever.GetRandomVideoIds(busCommand.NumberOfComments).ConfigureAwait(false);
+            if (videoIds.Count == 0)
+            {
+                Logger.Warn("No sample videos available.  Cannot add sample comments.");
+                return;
+            }
 
             // Add some sample comments in parallel
             var commentTasks = new List<Task>();
@@ -42,7 +55,7 @@ namespace KillrVideo.SampleData.Worker.Handlers
                 {
                     CommentId = Guid.NewGuid(),
                     VideoId = videoIds[i],
-                    UserId = sampleUserIds[i],
+                    UserId = userIds[i],
                     Comment = Lorem.GetParagraph()
                 }));
             }

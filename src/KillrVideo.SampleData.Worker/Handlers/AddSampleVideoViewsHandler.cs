@@ -5,6 +5,7 @@ using KillrVideo.SampleData.Dtos;
 using KillrVideo.SampleData.Worker.Components;
 using KillrVideo.Statistics;
 using KillrVideo.Statistics.Dtos;
+using log4net;
 using Nimbus.Handlers;
 
 namespace KillrVideo.SampleData.Worker.Handlers
@@ -14,6 +15,8 @@ namespace KillrVideo.SampleData.Worker.Handlers
     /// </summary>
     public class AddSampleVideoViewsHandler : IHandleCommand<AddSampleVideoViews>
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (AddSampleVideoViewsHandler));
+
         private readonly IGetSampleData _sampleDataRetriever;
         private readonly IStatisticsService _statsService;
 
@@ -29,6 +32,11 @@ namespace KillrVideo.SampleData.Worker.Handlers
         {
             // Get some videos for adding views to
             List<Guid> videoIds = await _sampleDataRetriever.GetRandomVideoIds(busCommand.NumberOfViews).ConfigureAwait(false);
+            if (videoIds.Count == 0)
+            {
+                Logger.Warn("No sample videos available.  Cannot add sample video views.");
+                return;
+            }
 
             // Add some views in parallel
             var viewTasks = new List<Task>();

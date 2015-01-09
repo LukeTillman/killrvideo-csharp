@@ -5,6 +5,7 @@ using KillrVideo.Ratings;
 using KillrVideo.Ratings.Dtos;
 using KillrVideo.SampleData.Dtos;
 using KillrVideo.SampleData.Worker.Components;
+using log4net;
 using Nimbus.Handlers;
 
 namespace KillrVideo.SampleData.Worker.Handlers
@@ -14,6 +15,8 @@ namespace KillrVideo.SampleData.Worker.Handlers
     /// </summary>
     public class AddSampleRatingsHandler : IHandleCommand<AddSampleRatings>
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (AddSampleRatingsHandler));
+
         private readonly IGetSampleData _sampleDataRetriever;
         private readonly IRatingsService _ratingsService;
 
@@ -29,7 +32,18 @@ namespace KillrVideo.SampleData.Worker.Handlers
         {
             // Get some user ids and video ids to rate with those users
             List<Guid> userIds = await _sampleDataRetriever.GetRandomSampleUserIds(busCommand.NumberOfRatings).ConfigureAwait(false);
+            if (userIds.Count == 0)
+            {
+                Logger.Warn("No sample users available.  Cannot add sample ratings.");
+                return;
+            }
+
             List<Guid> videoIds = await _sampleDataRetriever.GetRandomVideoIds(busCommand.NumberOfRatings).ConfigureAwait(false);
+            if (videoIds.Count == 0)
+            {
+                Logger.Warn("No sample videos available.  Cannot add sample ratings.");
+                return;
+            }
 
             // Rate some videos in parallel
             var ratingTasks = new List<Task>();

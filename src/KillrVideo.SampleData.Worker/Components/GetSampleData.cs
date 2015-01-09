@@ -44,11 +44,9 @@ namespace KillrVideo.SampleData.Worker.Components
             
             // Union the results together and take the first count available
             var userIds = results.SelectMany(rowset => rowset).Select(r => r.GetValue<Guid>("userid")).Take(count).ToList();
-            if (userIds.Count == 0)
-                throw new InvalidOperationException("There are currently no sample users available.");
 
-            // If we got enough users, just return
-            if (userIds.Count == count)
+            // If we got enough users or don't have any, just return
+            if (userIds.Count == count || userIds.Count == 0)
                 return userIds;
 
             // We didn't get enough, so just fill the remaining we need by repeating the ones we did get
@@ -82,11 +80,9 @@ namespace KillrVideo.SampleData.Worker.Components
 
             // Union the results together and take the first count available
             var videoIds = results.SelectMany(rowset => rowset).Select(r => r.GetValue<Guid>("videoid")).Take(count).ToList();
-            if (videoIds.Count == 0)
-                throw new InvalidOperationException("There are currently no videos available.");
 
-            // If we got enough videos, just return
-            if (videoIds.Count == count)
+            // If we got enough videos or don't have any, just return
+            if (videoIds.Count == count || videoIds.Count == 0)
                 return videoIds;
 
             // We didn't get enough, so just fill the remaining we need by repeating the ones we did get

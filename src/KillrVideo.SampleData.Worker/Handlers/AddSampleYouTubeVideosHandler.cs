@@ -6,6 +6,7 @@ using KillrVideo.SampleData.Worker.Components;
 using KillrVideo.SampleData.Worker.Components.YouTube;
 using KillrVideo.VideoCatalog;
 using KillrVideo.VideoCatalog.Dtos;
+using log4net;
 using Nimbus.Handlers;
 
 namespace KillrVideo.SampleData.Worker.Handlers
@@ -15,6 +16,8 @@ namespace KillrVideo.SampleData.Worker.Handlers
     /// </summary>
     public class AddSampleYouTubeVideosHandler : IHandleCommand<AddSampleYouTubeVideos>
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (AddSampleYouTubeVideosHandler));
+
         private readonly IGetSampleData _sampleDataRetriever;
         private readonly IManageSampleYouTubeVideos _youTubeManager;
         private readonly IVideoCatalogService _videoCatalog;
@@ -34,7 +37,12 @@ namespace KillrVideo.SampleData.Worker.Handlers
         public async Task Handle(AddSampleYouTubeVideos busCommand)
         {
             // Get some sample users to be the authors for the videos we're going to add
-            List<Guid> sampleUserIds = await _sampleDataRetriever.GetRandomSampleUserIds(busCommand.NumberOfVideos).ConfigureAwait(false);
+            List<Guid> userIds = await _sampleDataRetriever.GetRandomSampleUserIds(busCommand.NumberOfVideos).ConfigureAwait(false);
+            if (userIds.Count == 0)
+            {
+                Logger.Warn("No sample users available.  Cannot add sample YouTube videos.");
+                return;
+            }
 
             // Get some unused sample videos
             List<YouTubeVideo> sampleVideos = await _youTubeManager.GetUnusedVideos(busCommand.NumberOfVideos).ConfigureAwait(false);
@@ -43,7 +51,7 @@ namespace KillrVideo.SampleData.Worker.Handlers
             for (int idx = 0; idx < sampleVideos.Count; idx++)
             {
                 YouTubeVideo sampleVideo = sampleVideos[idx];
-                Guid userId = sampleUserIds[idx];
+                Guid userId = userIds[idx];
                 
                 // Submit the video
                 await _videoCatalog.SubmitYouTubeVideo(new SubmitYouTubeVideo
