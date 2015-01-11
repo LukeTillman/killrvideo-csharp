@@ -47,8 +47,8 @@ namespace KillrVideo.SampleData.Worker.Components.YouTube
         {
             // Statement for getting unused videos from a source
             PreparedStatement prepared =
-                await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM sample_data_youtube_videos WHERE sourceid = ? AND used != true LIMIT ?");
-
+                await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM sample_data_youtube_videos WHERE sourceid = ?");
+            
             // Iterate the list of sources in random order
             var random = new Random();
             var indexes = Enumerable.Range(0, YouTubeVideoSource.All.Count).OrderBy(_ => random.Next());
@@ -58,12 +58,22 @@ namespace KillrVideo.SampleData.Worker.Components.YouTube
             foreach (int idx in indexes)
             {
                 YouTubeVideoSource source = YouTubeVideoSource.All[idx];
-                RowSet rowSet = await _session.ExecuteAsync(prepared.Bind(source.UniqueId, pageSize)).ConfigureAwait(false);
-                unusedVideos.AddRange(rowSet.Select(row => MapToYouTubeVideo(row, source)));
 
-                // If we've got enough videos, return them, otherwise go to the next source
-                if (unusedVideos.Count == pageSize)
-                    return unusedVideos;
+                // Use automatic paging to page through all the videos from the source
+                BoundStatement bound = prepared.Bind(source.UniqueId);
+                bound.SetPageSize(MaxVideosPerRequest);
+                RowSet rowSet = await _session.ExecuteAsync(bound).ConfigureAwait(false);
+
+                foreach (Row row in rowSet)
+                {
+                    var used = row.GetValue<bool?>("used");
+                    if (used == false || used == null)
+                        unusedVideos.Add(MapToYouTubeVideo(row, source));
+                    
+                    // If we've got enough videos, return them
+                    if (unusedVideos.Count == pageSize)
+                        return unusedVideos;
+                }
             }
             
             // We were unable to fill the quota, so throw
@@ -234,7 +244,8 @@ namespace KillrVideo.SampleData.Worker.Components.YouTube
                                                      ? playlistItem.Snippet.PublishedAt.Value.ToUniversalTime()
                                                      : Epoch;
 
-                    Task<RowSet> insertTask = _session.ExecuteAsync(preparedInsert.Bind(playlistSource.UniqueId, publishedAt, playlistItem.Snippet.ResourceId.VideoId,
+                    Task<RowSet> insertTask =
+                        _session.ExecuteAsync(preparedInsert.Bind(playlistSource.UniqueId, publishedAt, playlistItem.Snippet.ResourceId.VideoId,
                                                                   playlistItem.Snippet.Title, playlistItem.Snippet.Description));
                     insertTasks.Add(insertTask);
                 }
