@@ -5,7 +5,7 @@
     <IISLogs container="wad-iis-logfiles" />
     <CrashDumps container="wad-crash-dumps" />
   </Directories>
-  <Logs bufferQuotaInMB="1024" scheduledTransferPeriod="PT1M" scheduledTransferLogLevelFilter="Error" />
+  <Logs bufferQuotaInMB="1024" scheduledTransferPeriod="PT1M" scheduledTransferLogLevelFilter="Information" />
   <WindowsEventLog bufferQuotaInMB="1024" scheduledTransferPeriod="PT1M" scheduledTransferLogLevelFilter="Error">
     <DataSource name="Application!*" />
   </WindowsEventLog>

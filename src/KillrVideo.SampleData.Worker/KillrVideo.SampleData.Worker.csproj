@@ -110,6 +110,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Nimbus.MessageContracts.2.0.0.87\lib\net45\Nimbus.MessageContracts.dll</HintPath>
     </Reference>
+    <Reference Include="NLipsum.Core">
+      <HintPath>..\packages\NLipsum.0.1.3\lib\net40\NLipsum.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Snappy.NET">
       <HintPath>..\packages\Snappy.NET.1.1.1.8\lib\net45\Snappy.NET.dll</HintPath>
     </Reference>
@@ -169,6 +172,7 @@
     <Compile Include="WorkerRole.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

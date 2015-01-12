@@ -19,7 +19,7 @@ namespace KillrVideo.BackgroundWorker
     /// </summary>
     public class WorkerRole : RoleEntryPoint
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (WorkerRole));
+        private ILog _logger;
 
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly List<Task> _logicalWorkerTasks;
@@ -39,9 +39,10 @@ namespace KillrVideo.BackgroundWorker
 
             // Bootstrap Log4net logging and serilog logger
             XmlConfigurator.Configure();
+            _logger = LogManager.GetLogger(typeof (WorkerRole));
             Log.Logger = new LoggerConfiguration().WriteTo.Log4Net().CreateLogger();
 
-            Logger.Info("KillrVideo.BackgroundWorker is starting");
+            _logger.Info("KillrVideo.BackgroundWorker is starting");
 
             try
             {
@@ -69,14 +70,14 @@ namespace KillrVideo.BackgroundWorker
             }
             catch (Exception e)
             {
-                Logger.Error("Exception in BackgroundWorker OnStart", e);
+                _logger.Error("Exception in BackgroundWorker OnStart", e);
                 throw;
             }
         }
         
         public override void OnStop()
         {
-            Logger.Info("KillrVideo.BackgroundWorker is stopping");
+            _logger.Info("KillrVideo.BackgroundWorker is stopping");
 
             try
             {
@@ -88,11 +89,11 @@ namespace KillrVideo.BackgroundWorker
             {
                 // Log any exceptions that aren't OperationCanceled, which we expect
                 foreach(var exception in ae.Flatten().InnerExceptions.Where(e => e is OperationCanceledException == false))
-                    Logger.Error("Unexpected exception while cancelling Tasks in BackgroundWorker stop", exception);
+                    _logger.Error("Unexpected exception while cancelling Tasks in BackgroundWorker stop", exception);
             }
             catch (Exception e)
             {
-                Logger.Error("Unexpected error during BackgroundWorker stop", e);
+                _logger.Error("Unexpected error during BackgroundWorker stop", e);
             }
 
             // Dispose of Windsor container

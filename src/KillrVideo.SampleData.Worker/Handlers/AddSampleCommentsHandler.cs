@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cassandra;
-using Faker;
 using KillrVideo.Comments;
 using KillrVideo.Comments.Dtos;
 using KillrVideo.SampleData.Dtos;
 using KillrVideo.SampleData.Worker.Components;
 using log4net;
 using Nimbus.Handlers;
+using NLipsum.Core;
 
 namespace KillrVideo.SampleData.Worker.Handlers
 {
@@ -18,6 +18,21 @@ namespace KillrVideo.SampleData.Worker.Handlers
     public class AddSampleCommentsHandler : IHandleCommand<AddSampleComments>
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (AddSampleCommentsHandler));
+
+        private static readonly Func<string>[] LipsumSources = new Func<string>[]
+        {
+            () => Lipsums.ChildHarold,
+            () => Lipsums.Decameron,
+            () => Lipsums.Faust,
+            () => Lipsums.InDerFremde,
+            () => Lipsums.LeBateauIvre,
+            () => Lipsums.LeMasque,
+            () => Lipsums.NagyonFaj,
+            () => Lipsums.Omagyar,
+            () => Lipsums.RobinsonoKruso,
+            () => Lipsums.TheRaven,
+            () => Lipsums.TierrayLuna
+        };
 
         private readonly IGetSampleData _sampleDataRetriever;
         private readonly ICommentsService _commentService;
@@ -48,6 +63,11 @@ namespace KillrVideo.SampleData.Worker.Handlers
                 return;
             }
 
+            // Choose a NLipsum generator for generating the comment text
+            int lipsumIdx = new Random().Next(LipsumSources.Length);
+            var lipsum = new LipsumGenerator(LipsumSources[lipsumIdx](), false);
+            var comments = lipsum.GenerateParagraphs(busCommand.NumberOfComments, Paragraph.Short);
+            
             // Add some sample comments in parallel
             var commentTasks = new List<Task>();
             for (int i = 0; i < busCommand.NumberOfComments; i++)
@@ -57,7 +77,7 @@ namespace KillrVideo.SampleData.Worker.Handlers
                     CommentId = TimeUuid.NewId(),
                     VideoId = videoIds[i],
                     UserId = userIds[i],
-                    Comment = Lorem.GetParagraph()
+                    Comment = comments[i]
                 }));
             }
 
