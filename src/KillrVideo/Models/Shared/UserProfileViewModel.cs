@@ -11,7 +11,7 @@ namespace KillrVideo.Models.Shared
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string EmailAddress { get; set; }
-        public string GravatarHash { get; set; }
+        public string ProfileImageUrl { get; set; }
 
         /// <summary>
         /// Creates a ViewModel instance from the common user profile model returned from the data layer.
@@ -26,7 +26,7 @@ namespace KillrVideo.Models.Shared
                 EmailAddress = data.EmailAddress,
                 FirstName = data.FirstName,
                 LastName = data.LastName,
-                GravatarHash = GravatarHasher.GetHashForEmailAddress(data.EmailAddress)
+                ProfileImageUrl = GravatarHasher.GetImageUrlForEmailAddress(data.EmailAddress)
             };
         }
     }

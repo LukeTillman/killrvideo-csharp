@@ -134,14 +134,7 @@ namespace KillrVideo.Controllers
             UserProfile profile = await _userManagement.GetUserProfile(userId.Value);
             return View(new AccountInfoViewModel
             {
-                UserProfile = new UserProfileViewModel
-                {
-                    UserId = profile.UserId,
-                    EmailAddress = profile.EmailAddress,
-                    FirstName = profile.FirstName,
-                    LastName = profile.LastName,
-                    GravatarHash = GravatarHasher.GetHashForEmailAddress(profile.EmailAddress)
-                },
+                UserProfile = UserProfileViewModel.FromDataModel(profile),
                 IsCurrentlyLoggedInUser = isCurrentlyLoggedInUser
             });
         }

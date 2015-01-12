@@ -27,8 +27,8 @@
         </h3>
         <div class="row">
             <div class="col-md-3">
-                <img src="https://secure.gravatar.com/avatar/@Model.UserProfile.GravatarHash" class="img-rounded pull-left"
-                     alt="Gravatar for @Model.UserProfile.EmailAddress" />
+                <img src="@Model.UserProfile.ProfileImageUrl" class="img-responsive img-circle pull-left"
+                     alt="Profile image for @Model.UserProfile.EmailAddress" />
             </div>
             <div class="col-md-9">
                 <strong>@Model.UserProfile.FirstName @Model.UserProfile.LastName</strong><br />

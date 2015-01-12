@@ -43,15 +43,8 @@ namespace KillrVideo.Controllers
                 // method synchronously (luckily, we won't deadlock here because our async method is using ConfigureAwait(false)
                 // under the covers).  See http://aspnetwebstack.codeplex.com/workitem/601 for details.
                 UserProfile profile = _userManagement.GetUserProfile(userId.Value).Result;
-                
-                model.LoggedInUser = new UserProfileViewModel
-                {
-                    UserId = profile.UserId,
-                    FirstName = profile.FirstName,
-                    LastName = profile.LastName,
-                    EmailAddress = profile.EmailAddress,
-                    GravatarHash = GravatarHasher.GetHashForEmailAddress(profile.EmailAddress)
-                };
+
+                model.LoggedInUser = UserProfileViewModel.FromDataModel(profile);
             }
             
             return View(model);

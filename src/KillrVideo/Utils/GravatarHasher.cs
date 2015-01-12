@@ -6,10 +6,13 @@ namespace KillrVideo.Utils
 {
     public static class GravatarHasher
     {
+        private const string GravatarUrlPattern = "https://secure.gravatar.com/avatar/{0}";
+        private const string RoboHashUrlPattern = "https://robohash.org/{0}?gravatar=hashed&set=any&bgset=any";
+        
         /// <summary>
         /// Gets a Gravatar compatible hash string for the specified email address.
         /// </summary>
-        public static string GetHashForEmailAddress(string emailAddress)
+        private static string GetHashForEmailAddress(string emailAddress)
         {
             byte[] emailAddressBytes = Encoding.ASCII.GetBytes(emailAddress.Trim().ToLowerInvariant());
             using (var md5 = new MD5CryptoServiceProvider())
@@ -25,7 +28,7 @@ namespace KillrVideo.Utils
         public static string GetImageUrlForEmailAddress(string emailAddress)
         {
             var hash = GetHashForEmailAddress(emailAddress);
-            return string.Format("https://secure.gravatar.com/avatar/{0}", hash);
+            return string.Format(RoboHashUrlPattern, hash);
         }
     }
 }

@@ -78,8 +78,8 @@
             <div class="row">
                 <div class="col-xs-5" id="view-video-author">
                     <a href="@Url.Action("Info", "Account", new { userId = Model.Author.UserId })">
-                        <img src="https://secure.gravatar.com/avatar/@Model.Author.GravatarHash"
-                             alt="Gravatar for @Model.Author.EmailAddress" class="user-gravatar" />
+                        <img src="@Model.Author.ProfileImageUrl"
+                             alt="Profile image for @Model.Author.EmailAddress" class="user-gravatar" />
                     </a>
                     by:<br />
                     <a href="@Url.Action("Info", "Account", new { userId = Model.Author.UserId })">@Model.Author.FirstName @Model.Author.LastName</a>
