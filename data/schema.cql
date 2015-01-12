@@ -153,13 +153,14 @@ CREATE TABLE encoding_job_notifications (
     PRIMARY KEY (videoid, status_date, etag)
 ) WITH CLUSTERING ORDER BY (status_date DESC, etag ASC);
 
-// Log of sample data jobs that have been run
+// Log of sample data jobs that have been run (keep logs for max of 14 days)
 CREATE TABLE sample_data_job_log (
     job_name text,
     scheduled_run_time timestamp,
     actual_run_time timestamp,
     PRIMARY KEY (job_name, scheduled_run_time, actual_run_time)
-) WITH CLUSTERING ORDER BY (scheduled_run_time DESC, actual_run_time DESC);
+) WITH CLUSTERING ORDER BY (scheduled_run_time DESC, actual_run_time DESC)
+  AND default_time_to_live = 1209600;
 
 // Lease table for sample data worker (max lease time 180 seconds)
 CREATE TABLE sample_data_leases (

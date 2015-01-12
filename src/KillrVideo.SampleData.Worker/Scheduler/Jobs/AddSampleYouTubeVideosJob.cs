@@ -30,7 +30,8 @@ namespace KillrVideo.SampleData.Worker.Scheduler.Jobs
 
         protected override Task RunImpl()
         {
-            return _sampleDataService.AddSampleYouTubeVideos(new AddSampleYouTubeVideos { NumberOfVideos = 1 });
+            int numberOfVideos = IsFirstTimeRunning ? 10 : 1;
+            return _sampleDataService.AddSampleYouTubeVideos(new AddSampleYouTubeVideos { NumberOfVideos = numberOfVideos });
         }
     }
 }

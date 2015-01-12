@@ -14,7 +14,7 @@ namespace KillrVideo.SampleData.Worker.Scheduler
     {
         private static readonly DateTimeOffset Epoch = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
         private static readonly TimeSpan TimeUntilRetry = TimeSpan.FromSeconds(5);
-
+        
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
         private readonly ILog _logger;
@@ -26,6 +26,11 @@ namespace KillrVideo.SampleData.Worker.Scheduler
         /// The number of minutes between job runs.
         /// </summary>
         protected abstract int MinutesBetweenRuns { get; }
+
+        /// <summary>
+        /// Whether or not this is the first time the job has been run.
+        /// </summary>
+        protected bool IsFirstTimeRunning { get; private set; }
 
         /// <summary>
         /// The next time the job will run.
@@ -134,6 +139,9 @@ namespace KillrVideo.SampleData.Worker.Scheduler
             
             // Always use the scheduled run time as the next run time initially
             NextRunTime = _nextScheduledRunTime;
+
+            // If we don't have a last scheduled run time, this is the first time the job has run
+            IsFirstTimeRunning = lastScheduledRunTime.HasValue == false;
         }
     }
 }
