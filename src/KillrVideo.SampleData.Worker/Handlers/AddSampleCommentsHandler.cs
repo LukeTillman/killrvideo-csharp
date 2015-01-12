@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Cassandra;
 using Faker;
 using KillrVideo.Comments;
 using KillrVideo.Comments.Dtos;
@@ -53,7 +54,7 @@ namespace KillrVideo.SampleData.Worker.Handlers
             {
                 commentTasks.Add(_commentService.CommentOnVideo(new CommentOnVideo
                 {
-                    CommentId = Guid.NewGuid(),
+                    CommentId = TimeUuid.NewId(),
                     VideoId = videoIds[i],
                     UserId = userIds[i],
                     Comment = Lorem.GetParagraph()

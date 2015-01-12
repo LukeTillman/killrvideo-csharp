@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Cassandra;
 using KillrVideo.ActionResults;
 using KillrVideo.Authentication;
 using KillrVideo.Comments;
@@ -128,7 +129,7 @@ namespace KillrVideo.Controllers
             {
                 UserId = userId,
                 VideoId = model.VideoId,
-                CommentId = GuidGenerator.GenerateTimeBasedGuid(commentTimestamp),
+                CommentId = TimeUuid.NewId(commentTimestamp),
                 Comment = model.Comment
             };
 
