@@ -10,7 +10,7 @@ namespace KillrVideo.Search.Worker.Handlers
     /// <summary>
     /// Updates the search by tags data when new videos are added to the video catalog.
     /// </summary>
-    public class UpdateSearchOnVideoAdded : IHandleCompetingEvent<IVideoAdded>
+    public class UpdateSearchOnVideoAdded : IHandleCompetingEvent<UploadedVideoAdded>, IHandleCompetingEvent<YouTubeVideoAdded>
     {
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
@@ -23,7 +23,7 @@ namespace KillrVideo.Search.Worker.Handlers
             _statementCache = statementCache;
         }
 
-        public async Task Handle(IVideoAdded video)
+        private async Task HandleImpl(IVideoAdded video)
         {
             PreparedStatement[] prepared = await _statementCache.GetOrAddAllAsync(
                 "INSERT INTO videos_by_tag (tag, videoid, added_date, userid, name, preview_image_location, tagged_date) VALUES (?, ?, ?, ?, ?, ?, ?) USING TIMESTAMP ?",
@@ -45,6 +45,16 @@ namespace KillrVideo.Search.Worker.Handlers
             }
 
             await _session.ExecuteAsync(batch).ConfigureAwait(false);
+        }
+
+        public Task Handle(UploadedVideoAdded busEvent)
+        {
+            return HandleImpl(busEvent);
+        }
+
+        public Task Handle(YouTubeVideoAdded busEvent)
+        {
+            return HandleImpl(busEvent);
         }
     }
 }
