@@ -7,12 +7,12 @@
       <Setting name="CassandraClusterLocation" value="" />
       <Setting name="AzureServiceBusConnectionString" value="" />
       <Setting name="YouTubeApiKey" value="" />
-      <Setting name="EnableSampleDataEntry" value="true" />
+      <Setting name="SampleDataEntryEnabled" value="true" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="false" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="" />
-      <Setting name="AnalyticsEnabled" value="" />
+      <Setting name="AnalyticsEnabled" value="false" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="0000000000000000000000000000000000000000" thumbprintAlgorithm="sha1" />

@@ -19,7 +19,7 @@
       <Setting name="CassandraClusterLocation" />
       <Setting name="AzureServiceBusConnectionString" />
       <Setting name="YouTubeApiKey" />
-      <Setting name="EnableSampleDataEntry" />
+      <Setting name="SampleDataEntryEnabled" />
       <Setting name="AnalyticsEnabled" />
     </ConfigurationSettings>
   </WebRole>

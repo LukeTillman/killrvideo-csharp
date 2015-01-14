@@ -39,7 +39,12 @@
     <footer class="small">
         <div id="footer-main">
             <div class="container">
-                <ul class="list-inline"></ul>
+                <ul class="list-inline pull-left">
+                    @if (GlobalConfigs.SampleDataEntryEnabled)
+                    {
+                        <li><a href="@Url.Action("Index", "SampleData")">Add Sample Data</a></li>
+                    }
+                </ul>
                 <div class="pull-right">
                     &copy; @DateTime.Now.Year - KillrVideo
                 </div>

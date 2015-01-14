@@ -183,6 +183,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionFilters\NoCacheAttribute.cs" />
+    <Compile Include="ActionFilters\CheckSampleDataEntryEnabledAttribute.cs" />
     <Compile Include="ActionResults\JsonNetResult.cs" />
     <Compile Include="App_Start\CassandraWindsorInstaller.cs" />
     <Compile Include="App_Start\MvcWindsorInstaller.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="Authentication\PrincipalExtensions.cs" />
     <Compile Include="Controllers\ConventionControllerBase.cs" />
     <Compile Include="Controllers\PlaybackStatsController.cs" />
+    <Compile Include="Controllers\SampleDataController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\YouTubeController.cs" />
@@ -205,6 +207,11 @@
     <Compile Include="Models\Comments\VideoCommentViewModel.cs" />
     <Compile Include="Models\Home\ViewNavbarViewModel.cs" />
     <Compile Include="Models\PlaybackStats\StartedViewModel.cs" />
+    <Compile Include="Models\SampleData\AddCommentsViewModel.cs" />
+    <Compile Include="Models\SampleData\AddUsersViewModel.cs" />
+    <Compile Include="Models\SampleData\AddVideoRatingsViewModel.cs" />
+    <Compile Include="Models\SampleData\AddVideoViewsViewModel.cs" />
+    <Compile Include="Models\SampleData\AddYouTubeVideosViewModel.cs" />
     <Compile Include="Models\Search\SearchResultsViewModel.cs" />
     <Compile Include="Models\Search\SearchVideosViewModel.cs" />
     <Compile Include="Models\Search\ShowSearchResultsViewModel.cs" />
@@ -267,6 +274,7 @@
     <Content Include="scripts\app\account\register.js" />
     <Content Include="scripts\app\account\signin.js" />
     <Content Include="scripts\app\common.js" />
+    <Content Include="scripts\app\sampledata\index.js" />
     <Content Include="scripts\app\search\results.js" />
     <Content Include="scripts\app\shared\header.js" />
     <Content Include="scripts\app\videos\view.js" />
@@ -310,6 +318,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\SampleData\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -357,6 +366,10 @@
     <ProjectReference Include="..\KillrVideo.Ratings\KillrVideo.Ratings.csproj">
       <Project>{c054a489-a037-49e5-8461-546cd61817eb}</Project>
       <Name>KillrVideo.Ratings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.SampleData\KillrVideo.SampleData.csproj">
+      <Project>{F7088371-8ED3-4827-B15A-05F598C27399}</Project>
+      <Name>KillrVideo.SampleData</Name>
     </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Search\KillrVideo.Search.csproj">
       <Project>{3da30c11-33c7-4ee8-aa9e-c18a9483efca}</Project>
