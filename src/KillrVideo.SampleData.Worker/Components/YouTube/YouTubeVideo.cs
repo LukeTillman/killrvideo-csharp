@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace KillrVideo.SampleData.Worker.Components.YouTube
 {
     /// <summary>
     /// Represents a video returned from YouTube.
     /// </summary>
+    [Serializable]
     public class YouTubeVideo
     {
         public YouTubeVideoSource Source { get; set; }
@@ -12,5 +14,6 @@ namespace KillrVideo.SampleData.Worker.Components.YouTube
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTimeOffset PublishedAt { get; set; }
+        public HashSet<string> SuggestedTags { get; set; } 
     }
 }

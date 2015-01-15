@@ -15,7 +15,7 @@ namespace KillrVideo.SampleData.Worker.Components.YouTube
     public class SampleYouTubeVideoManager : IManageSampleYouTubeVideos
     {
         private static readonly DateTimeOffset Epoch = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
-
+        
         private const int MaxVideosPerRequest = 50;
         private const int MaxVideosPerSource = 300;
 
@@ -68,7 +68,7 @@ namespace KillrVideo.SampleData.Worker.Components.YouTube
                 {
                     var used = row.GetValue<bool?>("used");
                     if (used == false || used == null)
-                        unusedVideos.Add(MapToYouTubeVideo(row, source));
+                        unusedVideos.Add(MapToYouTubeVideo(row, source, random));
                     
                     // If we've got enough videos, return them
                     if (unusedVideos.Count == pageSize)
@@ -262,9 +262,10 @@ namespace KillrVideo.SampleData.Worker.Components.YouTube
                 await Task.WhenAll(insertTasks).ConfigureAwait(false);
         }
         
-        private static YouTubeVideo MapToYouTubeVideo(Row row, YouTubeVideoSource source)
+        private static YouTubeVideo MapToYouTubeVideo(Row row, YouTubeVideoSource source, Random random)
         {
-            return new YouTubeVideo
+            // Map to video
+            var video = new YouTubeVideo
             {
                 Source = source,
                 PublishedAt = row.GetValue<DateTimeOffset>("published_at"),
@@ -272,6 +273,33 @@ namespace KillrVideo.SampleData.Worker.Components.YouTube
                 Name = row.GetValue<string>("name"),
                 Description = row.GetValue<string>("description")
             };
+
+            // Choose some tags for the video (this isn't a fantastic way to do this, but since it's sample data, it will do)
+            var tags = new HashSet<string>();
+            int maxTags = random.Next(3, 6);
+
+            string lowerName = video.Name.ToLowerInvariant();
+            string lowerDescription = video.Description.ToLowerInvariant();
+
+            foreach (string possibleTag in source.PossibleTags)
+            {
+                if (lowerName.Contains(possibleTag) || lowerDescription.Contains(possibleTag))
+                    tags.Add(possibleTag);
+
+                if (tags.Count == maxTags)
+                    break;
+            }
+
+            // If we didn't get any tags, just pick some random ones specific to the source
+            if (tags.Count == 0)
+            {
+                foreach (string tag in source.SourceTags.Take(maxTags))
+                    tags.Add(tag);
+            }
+
+            // Return video with suggested tags
+            video.SuggestedTags = tags;
+            return video;
         }
     }
 }

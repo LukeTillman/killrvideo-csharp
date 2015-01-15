@@ -61,7 +61,7 @@ namespace KillrVideo.SampleData.Worker.Handlers
                     YouTubeVideoId = sampleVideo.YouTubeVideoId,
                     Name = sampleVideo.Name,
                     Description = sampleVideo.Description,
-                    Tags = new HashSet<string>()
+                    Tags = sampleVideo.SuggestedTags
                 }).ConfigureAwait(false);
 
                 // Mark them as used so we make a best effort not to reuse sample videos and post duplicates
