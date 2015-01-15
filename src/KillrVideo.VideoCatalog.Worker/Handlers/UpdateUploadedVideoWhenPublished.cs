@@ -53,20 +53,22 @@ namespace KillrVideo.VideoCatalog.Worker.Handlers
 
             // Update the video locations (and write to denormalized tables) via batch
             PreparedStatement[] writePrepared = await _statementCache.NoContext.GetOrAddAllAsync(
-                "UPDATE videos SET location = ?, preview_image_location = ?, added_date = ? WHERE videoid = ? USING TIMESTAMP ?",
+                "UPDATE videos USING TIMESTAMP ? SET location = ?, preview_image_location = ?, added_date = ? WHERE videoid = ?",
                 "INSERT INTO user_videos (userid, added_date, videoid, name, preview_image_location) VALUES (?, ?, ?, ?, ?) USING TIMESTAMP ?",
-                string.Format(
-                    "INSERT INTO latest_videos (yyyymmdd, added_date, videoid, userid, name, preview_image_location) VALUES (?, ?, ?, ?, ?, ?) USING TTL {0} AND TIMESTAMP ?",
-                    VideoCatalogConstants.LatestVideosTtlSeconds));
+                "INSERT INTO latest_videos (yyyymmdd, added_date, videoid, userid, name, preview_image_location) VALUES (?, ?, ?, ?, ?, ?) USING TIMESTAMP ? AND TTL ?"
+            );
 
             // Calculate date-related data for the video
             DateTimeOffset addDate = DateTimeOffset.UtcNow;
             string yyyymmdd = addDate.ToString("yyyyMMdd");
 
             var batch = new BatchStatement();
-            batch.Add(writePrepared[0].Bind(publishedVideo.VideoUrl, publishedVideo.ThumbnailUrl, addDate, publishedVideo.VideoId, addDate.ToMicrosecondsSinceEpoch()));
-            batch.Add(writePrepared[1].Bind(userId, addDate, publishedVideo.VideoId, name, publishedVideo.ThumbnailUrl, addDate.ToMicrosecondsSinceEpoch()));
-            batch.Add(writePrepared[2].Bind(yyyymmdd, addDate, publishedVideo.VideoId, userId, name, publishedVideo.ThumbnailUrl, addDate.ToMicrosecondsSinceEpoch()));
+            batch.Add(writePrepared[0].Bind(addDate.ToMicrosecondsSinceEpoch(), publishedVideo.VideoUrl, publishedVideo.ThumbnailUrl, addDate,
+                                            publishedVideo.VideoId));
+            batch.Add(writePrepared[1].Bind(userId, addDate, publishedVideo.VideoId, name, publishedVideo.ThumbnailUrl,
+                                            addDate.ToMicrosecondsSinceEpoch()));
+            batch.Add(writePrepared[2].Bind(yyyymmdd, addDate, publishedVideo.VideoId, userId, name, publishedVideo.ThumbnailUrl,
+                                            addDate.ToMicrosecondsSinceEpoch(), VideoCatalogConstants.LatestVideosTtlSeconds));
 
             await _session.ExecuteAsync(batch).ConfigureAwait(false);
 

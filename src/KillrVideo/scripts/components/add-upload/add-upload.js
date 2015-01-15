@@ -197,7 +197,7 @@
 
             // Upload is done, so chain one more task to save the upload URL
             uploadFileChunks = uploadFileChunks.then(function() {
-                return self.uploadUrl(uploadDestinationResponse.data);
+                self.uploadUrl = uploadDestinationResponse.data.uploadUrl;
             });
 
             // Create a file reader and resolve the original deferred we created with it to start the upload

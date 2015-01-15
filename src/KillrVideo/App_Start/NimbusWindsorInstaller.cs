@@ -30,7 +30,7 @@ namespace KillrVideo
             // Register the bus itself and its logger
             container.Register(
                 Component.For<ILogger>().ImplementedBy<SerilogStaticLogger>().LifestyleSingleton(),
-                Component.For<IBus>().UsingFactoryMethod(() => CreateBus(container, typeProvider)).StartUsingMethod("Start").LifestyleSingleton()
+                Component.For<IBus>().UsingFactoryMethod(() => CreateBus(container, typeProvider)).LifestyleSingleton()
             );
         }
 
@@ -52,6 +52,7 @@ namespace KillrVideo
                                           .WithWindsorDefaults(container)
                                           .WithTypesFrom(typeProvider)
                                           .Build();
+                bus.Start();
                 return bus;
             }
             finally

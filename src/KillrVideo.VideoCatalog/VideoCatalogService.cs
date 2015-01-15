@@ -39,11 +39,11 @@ namespace KillrVideo.VideoCatalog
 
             // Store the information we have now in Cassandra
             PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync(
-                "INSERT INTO videos (videoid, userid, name, description, tags, location_type) VALUES (?, ?, ?, ?, ?, " +
-                VideoCatalogConstants.UploadedVideoType + ") USING TIMESTAMP ?");
+                "INSERT INTO videos (videoid, userid, name, description, tags, location_type, added_date) VALUES (?, ?, ?, ?, ?, ?, ?) USING TIMESTAMP ?");
 
             BoundStatement bound = prepared.Bind(uploadedVideo.VideoId, uploadedVideo.UserId, uploadedVideo.Name, uploadedVideo.Description,
-                                                 uploadedVideo.Tags, timestamp.ToMicrosecondsSinceEpoch());
+                                                 uploadedVideo.Tags, VideoCatalogConstants.UploadedVideoType, timestamp,
+                                                 timestamp.ToMicrosecondsSinceEpoch());
             await _session.ExecuteAsync(bound).ConfigureAwait(false);
 
             // Tell the world we've accepted an uploaded video (it hasn't officially been added until we get a location for the
@@ -64,11 +64,9 @@ namespace KillrVideo.VideoCatalog
             // Use a batch to insert the YouTube video into multiple tables
             PreparedStatement[] prepared = await _statementCache.NoContext.GetOrAddAllAsync(
                 "INSERT INTO videos (videoid, userid, name, description, location, preview_image_location, tags, added_date, location_type) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, " + VideoCatalogConstants.YouTubeVideoType + ") USING TIMESTAMP ?",
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) USING TIMESTAMP ?",
                 "INSERT INTO user_videos (userid, added_date, videoid, name, preview_image_location) VALUES (?, ?, ?, ?, ?) USING TIMESTAMP ?",
-                string.Format(
-                    "INSERT INTO latest_videos (yyyymmdd, added_date, videoid, userid, name, preview_image_location) VALUES (?, ?, ?, ?, ?, ?) USING TTL {0} AND TIMESTAMP ?",
-                    VideoCatalogConstants.LatestVideosTtlSeconds));
+                "INSERT INTO latest_videos (yyyymmdd, added_date, videoid, userid, name, preview_image_location) VALUES (?, ?, ?, ?, ?, ?) USING TIMESTAMP ? AND TTL ?");
 
             // Calculate date-related info and location/thumbnail for YouTube video
             var addDate = DateTimeOffset.UtcNow;
@@ -79,11 +77,12 @@ namespace KillrVideo.VideoCatalog
 
             var batch = new BatchStatement();
             batch.Add(prepared[0].Bind(youTubeVideo.VideoId, youTubeVideo.UserId, youTubeVideo.Name, youTubeVideo.Description, location,
-                                       previewImageLocation, youTubeVideo.Tags, addDate, addDate.ToMicrosecondsSinceEpoch()));
+                                       previewImageLocation, youTubeVideo.Tags, addDate, VideoCatalogConstants.YouTubeVideoType,
+                                       addDate.ToMicrosecondsSinceEpoch()));
             batch.Add(prepared[1].Bind(youTubeVideo.UserId, addDate, youTubeVideo.VideoId, youTubeVideo.Name, previewImageLocation,
                                        addDate.ToMicrosecondsSinceEpoch()));
             batch.Add(prepared[2].Bind(yyyymmdd, addDate, youTubeVideo.VideoId, youTubeVideo.UserId, youTubeVideo.Name, previewImageLocation,
-                                       addDate.ToMicrosecondsSinceEpoch()));
+                                       addDate.ToMicrosecondsSinceEpoch(), VideoCatalogConstants.LatestVideosTtlSeconds));
             
             // Send the batch to Cassandra
             await _session.ExecuteAsync(batch).ConfigureAwait(false);
