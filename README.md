@@ -1,6 +1,9 @@
 # KillrVideo
 A sample video sharing application showing how to use [Apache Cassandra][11] with .NET via [DataStax .NET Driver][1] in the [Microsoft Azure][10] cloud.  The application is based on a [sample schema][2] (that has since been modified) for a video sharing site that Patrick McFadin has been using to demonstrate data modeling techniques with Apache Cassandra.
 
+#### See the live demo
+Go to [www.killrvideo.com](http://www.killrvideo.com) to see a live demo of this application hosted in Azure.
+
 ## Running Locally
 Once you've cloned the repository, you'll need to do a few things to get up and running locally.
 
