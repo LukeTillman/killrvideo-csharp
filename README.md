@@ -1,6 +1,9 @@
 # KillrVideo
 A sample video sharing application showing how to use [Apache Cassandra][11] with .NET via [DataStax .NET Driver][1] in the [Microsoft Azure][10] cloud.  The application is based on a [sample schema][2] (that has since been modified) for a video sharing site that Patrick McFadin has been using to demonstrate data modeling techniques with Apache Cassandra.
 
+#### See the live demo
+A live demo of KillrVideo running on Cassandra in Azure is available at [www.killrvideo.com][16].
+
 ## Running Locally
 Once you've cloned the repository, you'll need to do a few things to get up and running locally.
 
@@ -29,6 +32,7 @@ If you'd like a GUI for exploring Cassandra (and running the CQL script to creat
 
 #### Configure the KillrVideo Application
 You'll need to configure your local copy of KillrVideo with the correct connection strings and API keys that you created.  Here are the steps:
+
 1. Under the `/src/KillrVideo.Azure` folder, find the `ServiceConfiguration.Local.Transform.cscfg.template` configuration transform file.  Make a copy and rename it to `ServiceConfiguration.Local.Transform.cscfg` (i.e. remove the `.template` file extension).
 1. Edit the `ServiceConfiguration.Local.Transform.cscfg` transformation file you just created and fill in the values for your local environment.  You'll need to provide:
   * `CassandraClusterLocation`: the IP/DNS for your Cassandra cluster (for example, `127.0.0.1`).
@@ -90,3 +94,5 @@ limitations under the License.
   [13]: http://azure.microsoft.com/en-us/services/storage/
   [14]: https://developers.google.com/youtube/registering_an_application
   [15]: http://www.datastax.com/what-we-offer/products-services/devcenter
+  [16]: http://www.killrvideo.com
+  
