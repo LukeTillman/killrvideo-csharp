@@ -50,11 +50,10 @@ namespace KillrVideo.SampleData.Worker.Components
                 return userIds;
 
             // We didn't get enough, so just fill the remaining we need by repeating the ones we did get
-            int i = 0;
+            var random = new Random();
             while (userIds.Count < count)
             {
-                userIds.Add(userIds[i]);
-                i++;
+                userIds.Add(userIds[random.Next(userIds.Count)]);
             }
             return userIds;
         }
@@ -86,11 +85,10 @@ namespace KillrVideo.SampleData.Worker.Components
                 return videoIds;
 
             // We didn't get enough, so just fill the remaining we need by repeating the ones we did get
-            int i = 0;
+            var random = new Random();
             while (videoIds.Count < count)
             {
-                videoIds.Add(videoIds[i]);
-                i++;
+                videoIds.Add(videoIds[random.Next(videoIds.Count)]);
             }
             return videoIds;
         }
