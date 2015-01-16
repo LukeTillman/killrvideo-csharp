@@ -108,38 +108,29 @@ namespace KillrVideo.SampleData.Worker.Scheduler
         /// </summary>
         private void SetNextRunTime(DateTimeOffset? lastScheduledRunTime)
         {
+            var now = DateTimeOffset.UtcNow;
+
             // Calculate the most recent time in the past that the job would have run if it had started at Epoch time
-            double minutesSinceEpoch = DateTimeOffset.UtcNow.Subtract(Epoch).TotalMinutes;
+            double minutesSinceEpoch = now.Subtract(Epoch).TotalMinutes;
             double lastRunMinutesSinceEpoch = Math.Floor(minutesSinceEpoch / MinutesBetweenRuns) * MinutesBetweenRuns;
             DateTimeOffset lastTimeShouldHaveRun = Epoch.AddMinutes(lastRunMinutesSinceEpoch);
             
-            // If the last scheduled time it ran is null (i.e. this is the first time it's ever been run), just use the
-            // last time it should have run as the next scheduled run time so it will run immediately
-            if (lastScheduledRunTime == null)
+            // If the last scheduled time it ran is null (i.e. this is the first time it's ever been run), or it missed at least
+            // one run in the past, run it immediately for the most recent run it missed (this means jobs can skip runs when the
+            // service is shutdown which is OK, especially for local developer machines where the service may be shut off for
+            // long periods of time)
+            if (lastScheduledRunTime == null || lastScheduledRunTime.Value != lastTimeShouldHaveRun)
             {
                 _nextScheduledRunTime = lastTimeShouldHaveRun;
+                NextRunTime = now;
             }
             else
             {
-                // If the last time it ran successfully is the last time it should have, just increment to the next time
-                if (lastScheduledRunTime.Value == lastTimeShouldHaveRun)
-                {
-                    _nextScheduledRunTime = lastTimeShouldHaveRun.AddMinutes(MinutesBetweenRuns);
-                }
-                else
-                {
-                    // Otherwise, it missed at least one run, so use the last time it should have run so it runs immediately
-                    // (this means jobs can skip runs when the service is shut down, which is OK, and will at most start
-                    // running jobs from the last time they should have when the service is back on which avoids us constantly
-                    // adding sample data for missed runs, particularly on local developer machines where the service might
-                    // be stopped for long periods of time)
-                    _nextScheduledRunTime = lastTimeShouldHaveRun;
-                }
+                // It ran the last time it should have, so just increment to the next time
+                _nextScheduledRunTime = lastTimeShouldHaveRun.AddMinutes(MinutesBetweenRuns);
+                NextRunTime = _nextScheduledRunTime;
             }
             
-            // Always use the scheduled run time as the next run time initially
-            NextRunTime = _nextScheduledRunTime;
-
             // If we don't have a last scheduled run time, this is the first time the job has run
             IsFirstTimeRunning = lastScheduledRunTime.HasValue == false;
         }
