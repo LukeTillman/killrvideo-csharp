@@ -1,6 +1,9 @@
 # KillrVideo
 A sample video sharing application showing how to use [Apache Cassandra][11] with .NET via [DataStax .NET Driver][1] in the [Microsoft Azure][10] cloud.  The application is based on a [sample schema][2] (that has since been modified) for a video sharing site that Patrick McFadin has been using to demonstrate data modeling techniques with Apache Cassandra.
 
+#### A More In-Depth Introudction
+If you'd like a more in-depth introduction to the applicaiton, including a tour of the code structure, architecture, and some of the motivations, check out my blog post [KillrVideo: Cassandra, C# and Azure][17].  I also have a ongoing series of blog posts on KillrVideo which can be found under the [killrvideo tag][19] on my blog.
+
 #### See the live demo
 A live demo of KillrVideo running on Cassandra in Azure is available at [www.killrvideo.com][16].
 
@@ -8,7 +11,7 @@ A live demo of KillrVideo running on Cassandra in Azure is available at [www.kil
 Once you've cloned the repository, you'll need to do a few things to get up and running locally.
 
 #### Install Cassandra
-You'll need a running Cassandra cluster.  For local development, that cluster can just be a single node running on your local machine.  You can get a copy from [Planet Cassandra][3] (grab the DataStax Community edition).  If you're on Windows, the MSI installer from Planet Cassandra makes installing a node on your local development machine easy.
+You'll need a running Cassandra cluster.  For local development, that cluster can just be a single node running on your local machine.  You can get a copy from [Planet Cassandra][3] (grab the DataStax Community edition).  If you're on Windows, the MSI installer from Planet Cassandra makes installing a node on your local development machine easy.  If you'd like more details on installing and developing with Cassandra on Windows, check out my blog post aptly titled [Developing with Cassandra on Windows][18].
 
 #### Install the Microsoft Azure SDK
 The [Microsoft Azure SDK][5] will allow you to run Azure web/worker roles via an emulator on your local machine.  If you don't already have it, you'll need to install it.
@@ -95,4 +98,7 @@ limitations under the License.
   [14]: https://developers.google.com/youtube/registering_an_application
   [15]: http://www.datastax.com/what-we-offer/products-services/devcenter
   [16]: http://www.killrvideo.com
+  [17]: http://www.luketillman.com/killrvideo-cassandra-csharp-and-azure/
+  [18]: http://www.luketillman.com/developing-with-cassandra-on-windows/
+  [19]: http://www.luketillman.com/tag/killrvideo/
   
