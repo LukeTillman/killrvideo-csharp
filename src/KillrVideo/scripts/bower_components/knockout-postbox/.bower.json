@@ -24,6 +24,6 @@
   },
   "_source": "git://github.com/rniemeyer/knockout-postbox.git",
   "_target": "~0.4.2",
-  "_originalSource": "rniemeyer/knockout-postbox",
+  "_originalSource": "knockout-postbox",
   "_direct": true
 }
