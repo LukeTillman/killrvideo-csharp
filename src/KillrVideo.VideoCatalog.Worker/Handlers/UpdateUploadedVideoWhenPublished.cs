@@ -50,7 +50,7 @@ namespace KillrVideo.VideoCatalog.Worker.Handlers
             var name = videoRow.GetValue<string>("name");
             var description = videoRow.GetValue<string>("description");
             var tags = videoRow.GetValue<IEnumerable<string>>("tags");
-
+            
             // Update the video locations (and write to denormalized tables) via batch
             PreparedStatement[] writePrepared = await _statementCache.NoContext.GetOrAddAllAsync(
                 "UPDATE videos USING TIMESTAMP ? SET location = ?, preview_image_location = ?, added_date = ? WHERE videoid = ?",
@@ -59,7 +59,7 @@ namespace KillrVideo.VideoCatalog.Worker.Handlers
             );
 
             // Calculate date-related data for the video
-            DateTimeOffset addDate = DateTimeOffset.UtcNow;
+            DateTimeOffset addDate = publishedVideo.Timestamp;
             string yyyymmdd = addDate.ToString("yyyyMMdd");
 
             var batch = new BatchStatement();
