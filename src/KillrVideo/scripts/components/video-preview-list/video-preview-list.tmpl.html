@@ -7,14 +7,17 @@
     </div>
     
     <ul class="list-unstyled">
-        <!-- ko foreach: { data: videos, as: 'videopreview' } -->
-        <li class="popout-on-hover">
-            <video-preview params="data: videopreview"></video-preview>
-            
+        <!-- ko foreach: (new Array(pageSize)) -->
+        <li data-bind="if: $index() < $parent.videos().length, css: { 'popout-on-hover': $index() < $parent.videos().length }">
+            <!-- ko with: $parent.videos()[$index()] -->
+            <video-preview params="data: $rawData"></video-preview>
+
             <!-- Shim for holding the width of the li when the video preview is "popped out" on hover in larger viewports -->
             <div class="hidden-xs video-preview-shim"></div>
+            <!-- /ko -->
         </li>
         <!-- /ko -->
+        
         <!-- ko if: nextPageAvailable -->
         <li class="hidden-xs" data-bind="with: firstVideoOfNextPage">
             <video-preview params="data: $data"></video-preview>

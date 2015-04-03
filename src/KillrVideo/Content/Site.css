@@ -337,7 +337,7 @@ html, body {
 .video-preview-list > ul > li {
     position: relative;
     margin-bottom: 0.5em;
-    border: 1px solid #dedede;
+    min-height: 80px;
 }
 
 .video-preview-list > ul > li > .video-preview-list-nextpageoverlay {
@@ -371,8 +371,9 @@ html, body {
     font-size: 86%;
     background-color: #f6f6f6;
     color: #888;
-    padding: 0.25em;
+    padding: 3px;
     cursor: pointer;
+    border: 1px solid #dedede;
 }
     
 .video-preview-image {
@@ -451,13 +452,13 @@ html, body {
             float: left;
             margin: 0;
             width: 20%;
-            border: none;
-            border-right: 1px solid #dedede;
         }
 
     .video-preview {
         padding: 0;
         z-index: 10;
+        border: none;
+        border-right: 1px solid #dedede;
     }
 
     .video-preview-image {
