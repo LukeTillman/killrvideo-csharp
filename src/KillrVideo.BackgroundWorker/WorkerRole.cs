@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -34,6 +35,9 @@ namespace KillrVideo.BackgroundWorker
 
         public override bool OnStart()
         {
+            // Turn down the verbosity of traces written by Azure
+            RoleEnvironment.TraceSource.Switch.Level = SourceLevels.Information;
+
             // Set the maximum number of concurrent connections 
             ServicePointManager.DefaultConnectionLimit = 12;
 

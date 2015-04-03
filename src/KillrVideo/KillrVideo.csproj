@@ -188,6 +188,7 @@
     <Compile Include="App_Start\CassandraWindsorInstaller.cs" />
     <Compile Include="App_Start\MvcWindsorInstaller.cs" />
     <Compile Include="App_Start\NimbusWindsorInstaller.cs" />
+    <Compile Include="App_Start\WebRole.cs" />
     <Compile Include="Authentication\PrincipalExtensions.cs" />
     <Compile Include="Controllers\ConventionControllerBase.cs" />
     <Compile Include="Controllers\PlaybackStatsController.cs" />
