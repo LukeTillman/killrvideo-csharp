@@ -337,7 +337,7 @@ html, body {
 .video-preview-list > ul > li {
     position: relative;
     margin-bottom: 0.5em;
-    min-height: 80px;
+    min-height: 68px;
 }
 
 .video-preview-list > ul > li > .video-preview-list-nextpageoverlay {
@@ -368,7 +368,6 @@ html, body {
     }
 
 .video-preview {
-    font-size: 86%;
     background-color: #f6f6f6;
     color: #888;
     padding: 3px;
@@ -378,8 +377,8 @@ html, body {
     
 .video-preview-image {
     display: block;
-    width: 96px;
-    height: 72px;
+    width: 80px;
+    height: 60px;
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
@@ -390,32 +389,26 @@ html, body {
 .video-preview-info {
 }
 
-.video-preview-info > strong {
+.video-preview-info > h6 {
     display: block;
     overflow: hidden;
-    height: 2.84em;
-    text-transform: uppercase;
+    height: 2.2em;
     text-overflow: ellipsis;
+    font-weight: bold;
+    margin: 0 0 1px;
 }
 
-.video-preview-uploadedby, .video-preview-date, .video-preview-views {
-    font-size: 86%;
-    padding-right: 1em;
-}
-
-.video-preview-uploadedby {
-    display: block;
-}
-
-.video-preview-date {
-    padding-right: 0;
+.video-preview-info > div {
+    overflow: hidden;
+    height: 1.4287em;
+    font-size: 70%;
 }
 
 .video-preview:hover {
     background-color: #222222;
 }
 
-    .video-preview:hover > .video-preview-info > strong {
+    .video-preview:hover > .video-preview-info {
         color: #ffffff;
     }
 
@@ -445,13 +438,13 @@ html, body {
 @media (min-width: 768px) {
     .video-preview-list {
         padding: 0;
-        min-height: 211px;
     }
 
         .video-preview-list > ul > li {
             float: left;
             margin: 0;
             width: 20%;
+            min-height: 200px;
         }
 
     .video-preview {
@@ -473,10 +466,6 @@ html, body {
         padding: 0.5em;
     }
 
-    .video-preview-uploadedby {
-        display: none;
-    }
-
     .video-preview-shim {
         height: 1px;
         background-color: #f6f6f6;
@@ -492,10 +481,6 @@ html, body {
 
     .video-preview-list > ul > li.popout-on-hover:first-child .video-preview:hover {
         left: 0;
-    }
-
-    .video-preview-list > ul > li.popout-on-hover .video-preview:hover .video-preview-uploadedby {
-        display: inline;
     }
 
     .video-preview-list-nav {
@@ -518,23 +503,23 @@ html, body {
 
 /* Medium devices (desktops, 992px and up) */
 @media (min-width: 992px) {
-    .video-preview-list {
-        min-height: 234px;
+    .video-preview-list > ul > li {
+        min-height: 240px;
     }
 
     .video-preview-image {
-        height: 165px;
+        height: 164px;
     }
 }
 
 /* Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-    .video-preview-list {
-        min-height: 272px;
+    .video-preview-list > ul > li {
+        min-height: 280px;
     }
 
     .video-preview-image {
-        height: 203px;
+        height: 204px;
     }
 }
 
