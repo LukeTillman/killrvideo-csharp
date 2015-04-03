@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Thumbnail Rotation="Auto" Size="480,*" Type="Jpeg" 
+           Filename="{OriginalFilename}_{Size}_{ThumbnailTime}_{ThumbnailIndex}_{Date}_{Time}.{DefaultExtension}">
+  <Time Value="10%" Step="10%" Stop="95%"/>
+</Thumbnail>

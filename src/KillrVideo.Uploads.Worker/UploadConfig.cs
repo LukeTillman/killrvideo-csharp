@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text.RegularExpressions;
 
 namespace KillrVideo.Uploads.Worker
@@ -63,9 +64,39 @@ namespace KillrVideo.Uploads.Worker
         /// <summary>
         /// The XML task definition for generating thumbnails in Azure media services.  (Will generate multiple JPG thumbnails at 480px width).
         /// </summary>
-        public const string ThumbnailGenerationXml = @"<?xml version=""1.0"" encoding=""utf-8""?>
-<Thumbnail Size=""480,*"" Type=""Jpeg"" Filename=""{OriginalFilename}_{Size}_{ThumbnailTime}_{ThumbnailIndex}_{Date}_{Time}.{DefaultExtension}"">
-<Time Value=""10%"" Step=""10%"" Stop=""95%""/>
-</Thumbnail>";
+        public static readonly string ThumbnailGenerationXml;
+
+        /// <summary>
+        /// The XML task definition for generating re-encoded videos in Azure Media Services.  Is a modified version of the "H264 Broadband SD 16x9"
+        /// preset with automatic rotation detection enabled to allow for videos shot in portrait mode on a mobile device to be rotated.
+        /// </summary>
+        ///  <see cref="http://msdn.microsoft.com/en-us/library/dn619405.aspx">H264 Broadband SD 16x9</see>
+        /// <see cref="http://azure.microsoft.com/blog/2014/08/21/advanced-encoding-features-in-azure-media-encoder/">Advanced Encoding Features</see>
+        public static readonly string VideoGenerationXml;
+
+        static UploadConfig()
+        {
+            // Load the two XML strings from the embedded resources
+            ThumbnailGenerationXml = ReadEmbeddedResource("ThumbnailGenerationTask.xml");
+            VideoGenerationXml = ReadEmbeddedResource("VideoGenerationTask.xml");
+        }
+
+        private static string ReadEmbeddedResource(string resourceFileName)
+        {
+            var asm = typeof(UploadConfig).Assembly;
+            var resourceNamespace = string.Format("{0}.Resources", asm.GetName().Name);
+
+            string resourceName = string.Format("{0}.{1}", resourceNamespace, resourceFileName);
+            using (Stream stream = asm.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                    throw new InvalidOperationException(string.Format("Cannot load resource {0}", resourceName));
+
+                using (var reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
+        }
     }
 }

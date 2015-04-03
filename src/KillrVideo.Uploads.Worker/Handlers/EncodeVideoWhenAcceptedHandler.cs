@@ -59,7 +59,7 @@ namespace KillrVideo.Uploads.Worker.Handlers
             // Create a job with a single task to encode the video
             string outputAssetName = string.Format("{0}{1}", UploadConfig.EncodedVideoAssetNamePrefix, filename);
             IJob job = _cloudMediaContext.Jobs.CreateWithSingleTask(MediaProcessorNames.WindowsAzureMediaEncoder,
-                                                                    MediaEncoderTaskPresetStrings.H264BroadbandSD16x9, asset,
+                                                                    UploadConfig.VideoGenerationXml, asset,
                                                                     outputAssetName, AssetCreationOptions.None);
 
             // Get a reference to the asset for the encoded file
