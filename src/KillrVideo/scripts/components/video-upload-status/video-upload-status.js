@@ -6,7 +6,7 @@
         self.statusDateFormatted = ko.observable("");
 
         self.isComplete = ko.computed(function () {
-            return self.status() == "Finished";
+            return self.status() == "Ready for Playback";
         });
 
         self.isErrored = ko.computed(function () {
@@ -34,9 +34,9 @@
                 self.status(response.data.status);
                 self.statusDateFormatted(moment(response.data.statusDate).fromNow());
             }).always(function () {
-                // If job is still in progress, refresh again in 20 seconds
+                // If job is still in progress, refresh again in 10 seconds
                 if (self.isInProgress()) {
-                    setTimeout(loadLatestStatus, 20000);
+                    setTimeout(loadLatestStatus, 10000);
                 }
             });
         };

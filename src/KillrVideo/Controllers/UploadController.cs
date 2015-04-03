@@ -89,10 +89,19 @@ namespace KillrVideo.Controllers
             EncodingJobProgress status = await _uploads.GetStatusForVideo(model.VideoId);
 
             // If there isn't a status (yet) just return queued with a timestamp from 30 seconds ago
-            if (status == null)
+            if (status == null || string.IsNullOrEmpty(status.CurrentState))
                 return JsonSuccess(new LatestStatusViewModel {Status = "Queued", StatusDate = DateTimeOffset.UtcNow.AddSeconds(-30)});
 
-            return JsonSuccess(new LatestStatusViewModel {StatusDate = status.StatusDate, Status = status.CurrentState});
+            // If the job is finished, see if the video catalog has a location for the video yet (i.e. knows about it)
+            string currentState = status.CurrentState;
+            if (currentState == "Finished")
+            {
+                VideoDetails videoDetails = await _videoCatalog.GetVideo(model.VideoId);
+                if (videoDetails.Location != null)
+                    currentState = "Ready for Playback";
+            }
+
+            return JsonSuccess(new LatestStatusViewModel {StatusDate = status.StatusDate, Status = currentState});
         }
     }
 }

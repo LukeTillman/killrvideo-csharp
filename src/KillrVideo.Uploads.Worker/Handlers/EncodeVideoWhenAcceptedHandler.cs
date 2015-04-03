@@ -56,44 +56,66 @@ namespace KillrVideo.Uploads.Worker.Handlers
             if (asset == null)
                 throw new InvalidOperationException(string.Format("Could not find asset {0}.", assetId));
 
-            // Create a job with a single task to encode the video
-            string outputAssetName = string.Format("{0}{1}", UploadConfig.EncodedVideoAssetNamePrefix, filename);
-            IJob job = _cloudMediaContext.Jobs.CreateWithSingleTask(MediaProcessorNames.WindowsAzureMediaEncoder,
-                                                                    UploadConfig.VideoGenerationXml, asset,
-                                                                    outputAssetName, AssetCreationOptions.None);
+            // Try to avoid creating a second encoding job for a video if we get this message more than once
+            PreparedStatement prepGetJob = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM uploaded_video_jobs WHERE videoid = ?");
+            RowSet getJobRows = await _session.ExecuteAsync(prepGetJob.Bind(uploadAccepted.VideoId));
+            Row getJobRow = getJobRows.SingleOrDefault();
 
-            // Get a reference to the asset for the encoded file
-            IAsset encodedAsset = job.Tasks.Single().OutputAssets.Single();
+            string jobId = getJobRow == null ? null : getJobRow.GetValue<string>("jobid");
+            if (jobId == null)
+            {
+                // Create a job with a single task to encode the video
+                string outputAssetName = string.Format("{0}{1} ({2})", UploadConfig.EncodedVideoAssetNamePrefix, filename, uploadAccepted.VideoId);
+                IJob job = _cloudMediaContext.Jobs.CreateWithSingleTask(MediaProcessorNames.WindowsAzureMediaEncoder,
+                                                                        UploadConfig.VideoGenerationXml, asset,
+                                                                        outputAssetName, AssetCreationOptions.None);
+                
+                job.Name = string.Format("Encoding {0} ({1})", filename, uploadAccepted.VideoId);
+                ITask encodingTask = job.Tasks.Single();
+                encodingTask.Name = string.Format("Re-encode Video - {0}", filename);
 
-            // Add a task to create thumbnails to the encoding job
-            string taskName = string.Format("Create Thumbnails - {0}", filename);
-            IMediaProcessor processor = _cloudMediaContext.MediaProcessors.GetLatestMediaProcessorByName(MediaProcessorNames.WindowsAzureMediaEncoder);
-            ITask task = job.Tasks.AddNew(taskName, processor, UploadConfig.ThumbnailGenerationXml, TaskOptions.ProtectedConfiguration);
+                // Get a reference to the asset for the re-encoded video
+                IAsset encodedAsset = encodingTask.OutputAssets.Single();
 
-            // The task should use the encoded file from the first task as input and output thumbnails in a new asset
-            task.InputAssets.Add(encodedAsset);
-            task.OutputAssets.AddNew(string.Format("{0}{1}", UploadConfig.ThumbnailAssetNamePrefix, filename), AssetCreationOptions.None);
+                // Add a task to create thumbnails to the encoding job
+                string taskName = string.Format("Create Thumbnails - {0}", filename);
+                IMediaProcessor processor = _cloudMediaContext.MediaProcessors.GetLatestMediaProcessorByName(MediaProcessorNames.WindowsAzureMediaEncoder);
+                ITask task = job.Tasks.AddNew(taskName, processor, UploadConfig.ThumbnailGenerationXml, TaskOptions.ProtectedConfiguration);
 
-            // Get status upades on the job's progress on Azure queue, then start the job
-            job.JobNotificationSubscriptions.AddNew(NotificationJobState.All, _notificationEndPoint);
-            await job.SubmitAsync().ConfigureAwait(false);
+                // The task should use the encoded file from the first task as input and output thumbnails in a new asset
+                task.InputAssets.Add(encodedAsset);
+                task.OutputAssets.AddNew(string.Format("{0}{1} ({2})", UploadConfig.ThumbnailAssetNamePrefix, filename, uploadAccepted.VideoId),
+                                         AssetCreationOptions.None);
 
-            string jobId = job.Id;
+                // Get status upades on the job's progress on Azure queue, then start the job
+                job.JobNotificationSubscriptions.AddNew(NotificationJobState.All, _notificationEndPoint);
+                await job.SubmitAsync().ConfigureAwait(false);
 
-            // Store the job information for the video in Cassandra
-            PreparedStatement[] saveJobInfoPrepared = await _statementCache.NoContext.GetOrAddAllAsync(
-                "INSERT INTO uploaded_video_jobs (videoid, upload_url, jobid) VALUES (?, ?, ?) USING TIMESTAMP ?",
-                "INSERT INTO uploaded_video_jobs_by_jobid (jobid, videoid, upload_url) VALUES (?, ?, ?) USING TIMESTAMP ?");
+                jobId = job.Id;
+
+                // Insert the data into the uploaded_video_jobs table using LWT to ensure only one gets input for a given video id
+                PreparedStatement prepSaveJob = await _statementCache.NoContext.GetOrAddAsync(
+                    "INSERT INTO uploaded_video_jobs (videoid, upload_url, jobid) VALUES (?, ?, ?) IF NOT EXISTS");
+                RowSet saveJobRows =
+                    await _session.ExecuteAsync(prepSaveJob.Bind(uploadAccepted.VideoId, uploadAccepted.UploadUrl, jobId)).ConfigureAwait(false);
+                Row saveJobRow = saveJobRows.Single();
+
+                // If the LWT failed, use the jobid that was already present
+                var applied = saveJobRow.GetValue<bool>("[applied]");
+                if (applied == false)
+                    jobId = saveJobRow.GetValue<string>("jobid");
+            }
 
             DateTimeOffset timestamp = DateTimeOffset.UtcNow;
 
-            var batch = new BatchStatement();
-            batch.Add(saveJobInfoPrepared[0].Bind(uploadAccepted.VideoId, uploadAccepted.UploadUrl, jobId, timestamp.ToMicrosecondsSinceEpoch()));
-            batch.Add(saveJobInfoPrepared[1].Bind(jobId, uploadAccepted.VideoId, uploadAccepted.UploadUrl, timestamp.ToMicrosecondsSinceEpoch()));
+            // Add the job information that exists to the other lookup table (by job id)
+            PreparedStatement prepSaveByJobId = await _statementCache.NoContext.GetOrAddAsync(
+                "INSERT INTO uploaded_video_jobs_by_jobid (jobid, videoid, upload_url) VALUES (?, ?, ?) USING TIMESTAMP ?");
+            BoundStatement boundSaveByJobId = prepSaveByJobId.Bind(jobId, uploadAccepted.VideoId, uploadAccepted.UploadUrl,
+                                                                   timestamp.ToMicrosecondsSinceEpoch());
+            await _session.ExecuteAsync(boundSaveByJobId).ConfigureAwait(false);
 
-            await _session.ExecuteAsync(batch).ConfigureAwait(false);
-
-            // Tell the world an encoding job started
+            // Tell the world about the job
             await _bus.Publish(new UploadedVideoProcessingStarted
             {
                 VideoId = uploadAccepted.VideoId,

@@ -204,7 +204,7 @@ namespace KillrVideo.Uploads.Worker
             RowSet lookupRows = await _session.ExecuteAsync(lookupPrepared.Bind(jobId)).ConfigureAwait(false);
             Row lookupRow = lookupRows.SingleOrDefault();
             if (lookupRow == null)
-                throw new InvalidOperationException(string.Format("Could not find video for job id {0}", jobId));
+                throw new InvalidOperationException(string.Format("Could not find video for job id {0}. Were multiple jobs started for a video?", jobId));
 
             var videoId = lookupRow.GetValue<Guid>("videoid");
 
