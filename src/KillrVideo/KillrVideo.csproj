@@ -266,6 +266,7 @@
   <ItemGroup>
     <Content Include="Content\bootstrap-cosmo\css\bootstrap.css" />
     <Content Include="Content\bootstrap-cosmo\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\killrvideo-icon.png" />
     <Content Include="Content\killrvideo.png" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
