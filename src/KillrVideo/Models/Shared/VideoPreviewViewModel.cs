@@ -32,7 +32,7 @@ namespace KillrVideo.Models.Shared
                 VideoId = preview.VideoId,
                 Name = preview.Name,
                 AddedDate = preview.AddedDate,
-                PreviewImageLocation = preview.PreviewImageLocation,
+                PreviewImageLocation = preview.PreviewImageLocation ?? urlHelper.Content("~/content/upload-preview.png"),
                 AuthorFirstName = author.FirstName,
                 AuthorLastName = author.LastName,
                 AuthorProfileUrl = urlHelper.Action("Info", "Account", new { userId = author.UserId }),

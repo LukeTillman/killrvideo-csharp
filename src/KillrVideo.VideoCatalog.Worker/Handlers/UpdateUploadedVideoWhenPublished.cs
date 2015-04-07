@@ -50,25 +50,25 @@ namespace KillrVideo.VideoCatalog.Worker.Handlers
             var name = videoRow.GetValue<string>("name");
             var description = videoRow.GetValue<string>("description");
             var tags = videoRow.GetValue<IEnumerable<string>>("tags");
+            var addDate = videoRow.GetValue<DateTimeOffset>("added_date");
             
             // Update the video locations (and write to denormalized tables) via batch
             PreparedStatement[] writePrepared = await _statementCache.NoContext.GetOrAddAllAsync(
-                "UPDATE videos USING TIMESTAMP ? SET location = ?, preview_image_location = ?, added_date = ? WHERE videoid = ?",
-                "INSERT INTO user_videos (userid, added_date, videoid, name, preview_image_location) VALUES (?, ?, ?, ?, ?) USING TIMESTAMP ?",
+                "UPDATE videos USING TIMESTAMP ? SET location = ?, preview_image_location = ? WHERE videoid = ?",
+                "UPDATE user_videos USING TIMESTAMP ? SET preview_image_location = ? WHERE userid = ? AND added_date = ? AND videoid = ?",
                 "INSERT INTO latest_videos (yyyymmdd, added_date, videoid, userid, name, preview_image_location) VALUES (?, ?, ?, ?, ?, ?) USING TIMESTAMP ? AND TTL ?"
             );
 
             // Calculate date-related data for the video
-            DateTimeOffset addDate = publishedVideo.Timestamp;
             string yyyymmdd = addDate.ToString("yyyyMMdd");
+            DateTimeOffset timestamp = publishedVideo.Timestamp;
 
             var batch = new BatchStatement();
-            batch.Add(writePrepared[0].Bind(addDate.ToMicrosecondsSinceEpoch(), publishedVideo.VideoUrl, publishedVideo.ThumbnailUrl, addDate,
+            batch.Add(writePrepared[0].Bind(timestamp.ToMicrosecondsSinceEpoch(), publishedVideo.VideoUrl, publishedVideo.ThumbnailUrl,
                                             publishedVideo.VideoId));
-            batch.Add(writePrepared[1].Bind(userId, addDate, publishedVideo.VideoId, name, publishedVideo.ThumbnailUrl,
-                                            addDate.ToMicrosecondsSinceEpoch()));
+            batch.Add(writePrepared[1].Bind(timestamp.ToMicrosecondsSinceEpoch(), publishedVideo.ThumbnailUrl, userId, addDate, publishedVideo.VideoId));
             batch.Add(writePrepared[2].Bind(yyyymmdd, addDate, publishedVideo.VideoId, userId, name, publishedVideo.ThumbnailUrl,
-                                            addDate.ToMicrosecondsSinceEpoch(), VideoCatalogConstants.LatestVideosTtlSeconds));
+                                            timestamp.ToMicrosecondsSinceEpoch(), VideoCatalogConstants.LatestVideosTtlSeconds));
 
             await _session.ExecuteAsync(batch).ConfigureAwait(false);
 
@@ -82,7 +82,8 @@ namespace KillrVideo.VideoCatalog.Worker.Handlers
                 Tags = tags.ToHashSet(),
                 Location = publishedVideo.VideoUrl,
                 PreviewImageLocation = publishedVideo.ThumbnailUrl,
-                Timestamp = addDate
+                AddedDate = addDate,
+                Timestamp = timestamp
             }).ConfigureAwait(false);
         }
     }

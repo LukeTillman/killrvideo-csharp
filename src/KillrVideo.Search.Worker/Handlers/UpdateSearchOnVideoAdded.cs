@@ -36,7 +36,7 @@ namespace KillrVideo.Search.Worker.Handlers
             foreach (string tag in video.Tags)
             {
                 // INSERT INTO videos_by_tag
-                batch.Add(prepared[0].Bind(tag, video.VideoId, video.Timestamp, video.UserId, video.Name, video.PreviewImageLocation, video.Timestamp,
+                batch.Add(prepared[0].Bind(tag, video.VideoId, video.AddedDate, video.UserId, video.Name, video.PreviewImageLocation, video.Timestamp,
                                            video.Timestamp.ToMicrosecondsSinceEpoch()));
 
                 // INSERT INTO tags_by_letter

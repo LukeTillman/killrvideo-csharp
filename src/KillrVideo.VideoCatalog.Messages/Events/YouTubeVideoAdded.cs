@@ -16,6 +16,8 @@ namespace KillrVideo.VideoCatalog.Messages.Events
         public string Location { get; set; }
         public string PreviewImageLocation { get; set; }
         public HashSet<string> Tags { get; set; }
+        public DateTimeOffset AddedDate { get; set; }
+
         public DateTimeOffset Timestamp { get; set; }
 
         public YouTubeVideoAdded()

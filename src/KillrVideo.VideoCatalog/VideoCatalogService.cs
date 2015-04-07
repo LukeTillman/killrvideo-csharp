@@ -38,13 +38,20 @@ namespace KillrVideo.VideoCatalog
             var timestamp = DateTimeOffset.UtcNow;
 
             // Store the information we have now in Cassandra
-            PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync(
-                "INSERT INTO videos (videoid, userid, name, description, tags, location_type, added_date) VALUES (?, ?, ?, ?, ?, ?, ?) USING TIMESTAMP ?");
+            PreparedStatement[] prepared = await _statementCache.NoContext.GetOrAddAllAsync(
+                "INSERT INTO videos (videoid, userid, name, description, tags, location_type, added_date) VALUES (?, ?, ?, ?, ?, ?, ?) USING TIMESTAMP ?",
+                "INSERT INTO user_videos (userid, added_date, videoid, name) VALUES (?, ?, ?, ?) USING TIMESTAMP ?"
+            );
 
-            BoundStatement bound = prepared.Bind(uploadedVideo.VideoId, uploadedVideo.UserId, uploadedVideo.Name, uploadedVideo.Description,
-                                                 uploadedVideo.Tags, VideoCatalogConstants.UploadedVideoType, timestamp,
-                                                 timestamp.ToMicrosecondsSinceEpoch());
-            await _session.ExecuteAsync(bound).ConfigureAwait(false);
+            var batch = new BatchStatement();
+
+            batch.Add(prepared[0].Bind(uploadedVideo.VideoId, uploadedVideo.UserId, uploadedVideo.Name, uploadedVideo.Description,
+                                       uploadedVideo.Tags, VideoCatalogConstants.UploadedVideoType, timestamp,
+                                       timestamp.ToMicrosecondsSinceEpoch()));
+            batch.Add(prepared[1].Bind(uploadedVideo.UserId, timestamp, uploadedVideo.VideoId, uploadedVideo.Name,
+                                       timestamp.ToMicrosecondsSinceEpoch()));
+
+            await _session.ExecuteAsync(batch).ConfigureAwait(false);
 
             // Tell the world we've accepted an uploaded video (it hasn't officially been added until we get a location for the
             // video playback and thumbnail)
@@ -97,6 +104,7 @@ namespace KillrVideo.VideoCatalog
                 Location = location,
                 PreviewImageLocation = previewImageLocation,
                 Tags = youTubeVideo.Tags,
+                AddedDate = addDate,
                 Timestamp = addDate
             }).ConfigureAwait(false);
         }
