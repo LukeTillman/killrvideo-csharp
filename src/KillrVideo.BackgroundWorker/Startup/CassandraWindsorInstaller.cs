@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using Cassandra;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
@@ -38,11 +39,33 @@ namespace KillrVideo.BackgroundWorker.Startup
             string clusterLocation = configRetriever.GetSetting(ClusterLocationAppSettingsKey);
             kernel.ReleaseComponent(configRetriever);
 
+            // Start a cluster builder for connecting to Cassandra
+            Builder builder = Cluster.Builder();
+
             // Allow multiple comma delimited locations to be specified in the configuration
             string[] locations = clusterLocation.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(l => l.Trim()).ToArray();
+            foreach (string location in locations)
+            {
+                string[] hostAndPort = location.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                if (hostAndPort.Length == 1)
+                {
+                    // Just an IP address or host name
+                    builder = builder.AddContactPoint(hostAndPort[0]);
+                }
+                else if (hostAndPort.Length == 2)
+                {
+                    // IP Address plus host name
+                    var ipEndPoint = new IPEndPoint(IPAddress.Parse(hostAndPort[0]), int.Parse(hostAndPort[1]));
+                    builder = builder.AddContactPoint(ipEndPoint);
+                }
+                else
+                {
+                    throw new InvalidOperationException(string.Format("Unable to parse Cassandra cluster location '{0}' from configuration.", location));
+                }
+            }
 
             // Use the Cluster builder to create a cluster
-            Cluster cluster = Cluster.Builder().AddContactPoints(locations).Build();
+            Cluster cluster = builder.Build();
 
             // Use the cluster to connect a session to the appropriate keyspace
             ISession session;
