@@ -54,12 +54,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dtos\GetTagsStartingWith.cs" />
-    <Compile Include="Dtos\GetVideosByTag.cs" />
-    <Compile Include="Dtos\TagsStartingWith.cs" />
+    <Compile Include="Dtos\GetQuerySuggestions.cs" />
+    <Compile Include="Dtos\SearchVideosQuery.cs" />
+    <Compile Include="Dtos\SuggestedQueries.cs" />
     <Compile Include="Dtos\VideoPreview.cs" />
-    <Compile Include="Dtos\VideosByTag.cs" />
-    <Compile Include="ISearchVideosByTag.cs" />
+    <Compile Include="Dtos\VideosForSearchQuery.cs" />
+    <Compile Include="ISearchVideos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchServiceWindsorInstaller.cs" />
     <Compile Include="SearchVideosByTag.cs" />

@@ -3,12 +3,12 @@
 namespace KillrVideo.Search.Dtos
 {
     /// <summary>
-    /// Parameters for requesting a page of videos by tag.
+    /// Parameters for requesting a page of videos for a search query.
     /// </summary>
     [Serializable]
-    public class GetVideosByTag
+    public class SearchVideosQuery
     {
-        public string Tag { get; set; }
+        public string Query { get; set; }
         public int PageSize { get; set; }
         public Guid? FirstVideoOnPageVideoId { get; set; }
     }

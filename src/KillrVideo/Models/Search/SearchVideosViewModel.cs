@@ -1,19 +1,18 @@
 ﻿using System;
 using KillrVideo.Models.Shared;
-using KillrVideo.Models.Videos;
 
 namespace KillrVideo.Models.Search
 {
     /// <summary>
-    /// View model for searching videos by tag.
+    /// View model for searching videos.
     /// </summary>
     [Serializable]
     public class SearchVideosViewModel
     {
         /// <summary>
-        /// The tag to search for.
+        /// The search query.
         /// </summary>
-        public string Tag { get; set; }
+        public string Query { get; set; }
 
         /// <summary>
         /// The number of videos to return.

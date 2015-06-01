@@ -9,8 +9,8 @@ namespace KillrVideo.Models.Search
     public class ShowSearchResultsViewModel
     {
         /// <summary>
-        /// The tag to show results for.
+        /// The query to show results for.
         /// </summary>
-        public string Tag { get; set; }
+        public string Query { get; set; }
     }
 }

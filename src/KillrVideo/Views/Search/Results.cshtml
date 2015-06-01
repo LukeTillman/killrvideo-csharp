@@ -1,23 +1,23 @@
 ﻿@model KillrVideo.Models.Search.ShowSearchResultsViewModel
 
 @{
-    ViewBag.Title = string.Format("Search Results for '{0}'", Model.Tag);
+    ViewBag.Title = string.Format("Search Results for '{0}'", Model.Query);
     ViewBag.RequireJsMain = "app/search/results";
 }
 
-@if (string.IsNullOrWhiteSpace(Model.Tag))
+@if (string.IsNullOrWhiteSpace(Model.Query))
 {
     <h3>No search term entered</h3>
     <p class="alert alert-warning">
-        Enter a tag to search for in the search box to get results.
+        Enter a search term in the search box to get results.
     </p>
 }
 else
 {
-    <input type="hidden" id="tag-searched-for" value="@Model.Tag"/>
+    <input type="hidden" id="searched-for" value="@Model.Query"/>
 
     <h3 class="section-divider">
-        <span><em>@Model.Tag</em> Videos</span>
+        <span><em>@Model.Query</em> Videos</span>
     </h3>
     
     <div id="search-results" data-bind="with: searchResultsList">
@@ -32,7 +32,7 @@ else
         </div>
         
         <p class="alert alert-info" data-bind="visible: !isLoading() && videos().length === 0">
-            There are currently no videos for the tag <strong>@Model.Tag</strong>.  Why don't you <a class="alert-link" href="@Url.Action("Add", "Videos")">add one</a>?
+            There are currently no videos for the tag <strong>@Model.Query</strong>.  Why don't you <a class="alert-link" href="@Url.Action("Add", "Videos")">add one</a>?
         </p>
         
         <div class="row">

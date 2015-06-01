@@ -6,12 +6,12 @@ namespace KillrVideo.Models.Search
     /// View model for requesting tag suggestions.
     /// </summary>
     [Serializable]
-    public class SuggestTagsViewModel
+    public class SuggestQueriesViewModel
     {
         /// <summary>
-        /// The beginning of the tag.
+        /// The currently entered search text.
         /// </summary>
-        public string TagStart { get; set; }
+        public string Query { get; set; }
 
         /// <summary>
         /// The maximum number of tag suggestions to get.

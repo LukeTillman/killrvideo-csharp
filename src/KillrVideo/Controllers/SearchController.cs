@@ -18,11 +18,11 @@ namespace KillrVideo.Controllers
 {
     public class SearchController : ConventionControllerBase
     {
-        private readonly ISearchVideosByTag _searchService;
+        private readonly ISearchVideos _searchService;
         private readonly IUserManagementService _userManagement;
         private readonly IStatisticsService _stats;
 
-        public SearchController(ISearchVideosByTag searchService, IUserManagementService userManagement, IStatisticsService stats)
+        public SearchController(ISearchVideos searchService, IUserManagementService userManagement, IStatisticsService stats)
         {
             if (searchService == null) throw new ArgumentNullException("searchService");
             if (userManagement == null) throw new ArgumentNullException("userManagement");
@@ -47,9 +47,9 @@ namespace KillrVideo.Controllers
         [HttpPost]
         public async Task<JsonNetResult> Videos(SearchVideosViewModel model)
         {
-            VideosByTag videos = await _searchService.GetVideosByTag(new GetVideosByTag
+            VideosForSearchQuery videos = await _searchService.SearchVideos(new SearchVideosQuery
             {
-                Tag = model.Tag,
+                Query = model.Query,
                 PageSize = model.PageSize,
                 FirstVideoOnPageVideoId = model.FirstVideoOnPage == null ? (Guid?) null : model.FirstVideoOnPage.VideoId
             });
@@ -65,7 +65,7 @@ namespace KillrVideo.Controllers
 
             return JsonSuccess(new SearchResultsViewModel
             {
-                Tag = model.Tag,
+                Tag = model.Query,
                 Videos = videos.Videos
                                .Join(authorsTask.Result, vp => vp.UserId, a => a.UserId,
                                      (vp, a) => new { VideoPreview = vp, Author = a })
@@ -76,21 +76,21 @@ namespace KillrVideo.Controllers
         }
 
         /// <summary>
-        /// Searches tags and returns tags suggestions.
+        /// Returns query suggestions for typeahead support in the search box.
         /// </summary>
         [HttpGet, NoCache]
-        public async Task<JsonNetResult> SuggestTags(SuggestTagsViewModel model)
+        public async Task<JsonNetResult> SuggestQueries(SuggestQueriesViewModel model)
         {
-            TagsStartingWith tagsStartingWith = await _searchService.GetTagsStartingWith(new GetTagsStartingWith
+            SuggestedQueries suggestedQueries = await _searchService.GetQuerySuggestions(new GetQuerySuggestions
             {
-                TagStartsWith = model.TagStart,
+                Query = model.Query,
                 PageSize = model.PageSize
             });
 
-            return JsonSuccess(new TagResultsViewModel
+            return JsonSuccess(new QuerySuggestionsViewModel
             {
-                TagStart = tagsStartingWith.TagStartsWith,
-                Tags = tagsStartingWith.Tags
+                Query = suggestedQueries.Query,
+                Suggestions = suggestedQueries.Suggestions
             });
         }
 	}

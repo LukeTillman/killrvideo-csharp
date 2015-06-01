@@ -88,7 +88,7 @@
                     <div class="text-right">
                         @foreach (var tag in Model.Tags)
                         {
-                            <a class="label label-default" href="@Url.Action("Results", "Search", new { tag })">@tag</a>
+                            <a class="label label-default" href="@Url.Action("Results", "Search", new { query = tag })">@tag</a>
                         }
                     </div>
                 </div>

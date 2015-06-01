@@ -10,7 +10,7 @@ namespace KillrVideo.Search
     /// <summary>
     /// Searches for videos by tag in Cassandra.
     /// </summary>
-    public class SearchVideosByTag : ISearchVideosByTag
+    public class SearchVideosByTag : ISearchVideos
     {
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
@@ -24,45 +24,45 @@ namespace KillrVideo.Search
         }
 
         /// <summary>
-        /// Gets a page of videos by tag.
+        /// Gets a page of videos for a search query (looks for videos with that tag).
         /// </summary>
-        public async Task<VideosByTag> GetVideosByTag(GetVideosByTag getVideos)
+        public async Task<VideosForSearchQuery> SearchVideos(SearchVideosQuery searchVideosQuery)
         {
             // If the first video id for the page was specified, use the query for a subsequent page, otherwise use the query for the first page
             PreparedStatement preparedStatement;
             IStatement boundStatement;
-            if (getVideos.FirstVideoOnPageVideoId == null)
+            if (searchVideosQuery.FirstVideoOnPageVideoId == null)
             {
                 preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM videos_by_tag WHERE tag = ? LIMIT ?");
-                boundStatement = preparedStatement.Bind(getVideos.Tag, getVideos.PageSize);
+                boundStatement = preparedStatement.Bind(searchVideosQuery.Query, searchVideosQuery.PageSize);
             }
             else
             {
                 preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM videos_by_tag WHERE tag = ? AND videoid >= ? LIMIT ?");
-                boundStatement = preparedStatement.Bind(getVideos.Tag, getVideos.FirstVideoOnPageVideoId.Value, getVideos.PageSize);
+                boundStatement = preparedStatement.Bind(searchVideosQuery.Query, searchVideosQuery.FirstVideoOnPageVideoId.Value, searchVideosQuery.PageSize);
             }
 
             RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
-            return new VideosByTag
+            return new VideosForSearchQuery
             {
-                Tag = getVideos.Tag,
+                Query = searchVideosQuery.Query,
                 Videos = rows.Select(MapRowToVideoPreview).ToList()
             };
         }
 
         /// <summary>
-        /// Gets a list of tags starting with specified text.
+        /// Gets a list of query suggestions for providing typeahead support.
         /// </summary>
-        public async Task<TagsStartingWith> GetTagsStartingWith(GetTagsStartingWith getTags)
+        public async Task<SuggestedQueries> GetQuerySuggestions(GetQuerySuggestions getSuggestions)
         {
-            string firstLetter = getTags.TagStartsWith.Substring(0, 1);
+            string firstLetter = getSuggestions.Query.Substring(0, 1);
             PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT tag FROM tags_by_letter WHERE first_letter = ? AND tag >= ? LIMIT ?");
-            BoundStatement boundStatement = preparedStatement.Bind(firstLetter, getTags.TagStartsWith, getTags.PageSize);
+            BoundStatement boundStatement = preparedStatement.Bind(firstLetter, getSuggestions.Query, getSuggestions.PageSize);
             RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
-            return new TagsStartingWith
+            return new SuggestedQueries
             {
-                TagStartsWith = getTags.TagStartsWith,
-                Tags = rows.Select(row => row.GetValue<string>("tag")).ToList()
+                Query = getSuggestions.Query,
+                Suggestions = rows.Select(row => row.GetValue<string>("tag")).ToList()
             };
         }
 

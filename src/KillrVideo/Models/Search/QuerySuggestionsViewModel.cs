@@ -7,16 +7,16 @@ namespace KillrVideo.Models.Search
     /// View model of tag suggestions.
     /// </summary>
     [Serializable]
-    public class TagResultsViewModel
+    public class QuerySuggestionsViewModel
     {
         /// <summary>
         /// The start of the tag that was used to search.
         /// </summary>
-        public string TagStart { get; set; }
+        public string Query { get; set; }
 
         /// <summary>
         /// The tag suggestions.
         /// </summary>
-        public IEnumerable<string> Tags { get; set; }
+        public IEnumerable<string> Suggestions { get; set; }
     }
 }

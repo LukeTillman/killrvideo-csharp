@@ -24,9 +24,9 @@
                                 <span class="glyphicon glyphicon-search" title="Search"></span><span class="hidden">Search</span>
                             </button>
                         </span>
-                        <input type="text" class="form-control" name="tag" placeholder="Search"
+                        <input type="text" class="form-control" name="query" placeholder="Search"
                                list="navbar-search-suggestions" data-bind="value: searchValue, valueUpdate: 'input'" />
-                        <datalist id="navbar-search-suggestions" data-bind="foreach: tagSuggestions">
+                        <datalist id="navbar-search-suggestions" data-bind="foreach: querySuggestions">
                             <option data-bind="value: $data"></option>
                         </datalist>
                     </div>

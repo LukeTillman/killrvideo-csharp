@@ -3,12 +3,12 @@
 namespace KillrVideo.Search.Dtos
 {
     /// <summary>
-    /// Parameters for getting tags starting with specified text.
+    /// Parameters for getting search query suggestions.
     /// </summary>
     [Serializable]
-    public class GetTagsStartingWith
+    public class GetQuerySuggestions
     {
-        public string TagStartsWith { get; set; }
+        public string Query { get; set; }
         public int PageSize { get; set; }
     }
 }
