@@ -45,6 +45,6 @@
 
     // Bind the main content area when DOM is ready
     $(function () {
-        ko.applyBindings(new signInViewModel(), $("#body-wrapper").get(0));
+        ko.applyBindings(new signInViewModel(), $("#body-content").get(0));
     });
 });

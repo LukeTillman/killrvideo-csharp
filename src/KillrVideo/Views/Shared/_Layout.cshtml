@@ -30,7 +30,7 @@
     @{ Html.RenderAction("Header", "Home"); }
     
     <div id="body-wrapper">
-        <div class="container body-content">
+        <div id="body-content" class="container" style="display:none" data-bind="visible: true">
             @RenderBody()
         </div>
         <div id="push-footer"></div>

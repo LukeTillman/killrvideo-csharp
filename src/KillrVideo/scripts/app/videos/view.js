@@ -13,6 +13,6 @@
                 ratingsModel: new ratingsModel({ videoId: videoId }),
                 videoCommentsModel: new videoCommentsModel({ videoId: videoId }),
                 addCommentModel: new addCommentModel({ videoId: videoId, isLoggedIn: isLoggedIn })
-            }, $("#body-wrapper").get(0));
+            }, $("#body-content").get(0));
         });
     });

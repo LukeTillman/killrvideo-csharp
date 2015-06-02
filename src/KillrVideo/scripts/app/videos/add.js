@@ -54,7 +54,7 @@
 
     // Bind the main content area when DOM is ready
     $(function () {
-        ko.applyBindings(new addVideoViewModel(), $("#body-wrapper").get(0));
+        ko.applyBindings(new addVideoViewModel(), $("#body-content").get(0));
     });
 });
 

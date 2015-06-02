@@ -15,6 +15,6 @@
             })
         };
 
-        ko.applyBindings(pageModel, $("#body-wrapper").get(0));
+        ko.applyBindings(pageModel, $("#body-content").get(0));
     });
 });

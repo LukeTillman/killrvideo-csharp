@@ -145,6 +145,6 @@
 
     // Bind the main content area when DOM is ready
     $(function () {
-        ko.applyBindings(new addSampleDataViewModel(), $("#body-wrapper").get(0));
+        ko.applyBindings(new addSampleDataViewModel(), $("#body-content").get(0));
     });
 });

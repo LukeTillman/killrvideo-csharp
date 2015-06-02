@@ -66,6 +66,6 @@
 
     // Bind the main content area when DOM is ready
     $(function () {
-        ko.applyBindings(new registerViewModel(), $("#body-wrapper").get(0));
+        ko.applyBindings(new registerViewModel(), $("#body-content").get(0));
     });
 });
