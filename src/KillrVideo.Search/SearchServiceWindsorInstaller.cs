@@ -13,7 +13,8 @@ namespace KillrVideo.Search
         {
             container.Register(
                 // Most components
-                Classes.FromThisAssembly().Pick().WithServiceFirstInterface().LifestyleTransient()
+                // Classes.FromThisAssembly().Pick().WithServiceFirstInterface().LifestyleTransient()
+                Component.For<ISearchVideos>().ImplementedBy<DataStaxEnterpriseSearch>().LifestyleTransient()
             );
         }
     }

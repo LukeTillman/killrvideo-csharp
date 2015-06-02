@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataStaxEnterpriseSearch.cs" />
     <Compile Include="Dtos\GetQuerySuggestions.cs" />
     <Compile Include="Dtos\SearchVideosQuery.cs" />
     <Compile Include="Dtos\SuggestedQueries.cs" />
