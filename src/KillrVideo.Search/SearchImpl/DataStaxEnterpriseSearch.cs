@@ -5,7 +5,7 @@ using Cassandra;
 using KillrVideo.Search.Dtos;
 using KillrVideo.Utils;
 
-namespace KillrVideo.Search
+namespace KillrVideo.Search.SearchImpl
 {
     /// <summary>
     /// Searches videos using DataStax Enterprise search (Solr integration).

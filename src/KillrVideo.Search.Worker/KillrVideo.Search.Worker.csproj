@@ -77,11 +77,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Handlers\SetupDataStaxSearch.cs" />
     <Compile Include="Handlers\UpdateSearchOnVideoAdded.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WorkerRole.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KillrVideo.Search\KillrVideo.Search.csproj">
+      <Project>{3da30c11-33c7-4ee8-aa9e-c18a9483efca}</Project>
+      <Name>KillrVideo.Search</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
       <Project>{9516B3F3-89B7-4343-9F88-FFEE6D74FFFC}</Project>
       <Name>KillrVideo.Utils</Name>

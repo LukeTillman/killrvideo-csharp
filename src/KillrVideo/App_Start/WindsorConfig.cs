@@ -1,4 +1,5 @@
-﻿using Castle.MicroKernel.Registration;
+﻿using Castle.Facilities.TypedFactory;
+using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 using KillrVideo.Utils;
@@ -18,6 +19,7 @@ namespace KillrVideo
         {
             // Create container
             var container = new WindsorContainer();
+            container.AddFacility<TypedFactoryFacility>();
 
             // Add any app level registrations
             container.Register(Component.For<IGetEnvironmentConfiguration>().ImplementedBy<CloudConfigurationProvider>().LifestyleSingleton());

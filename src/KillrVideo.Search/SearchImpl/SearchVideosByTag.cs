@@ -5,7 +5,7 @@ using Cassandra;
 using KillrVideo.Search.Dtos;
 using KillrVideo.Utils;
 
-namespace KillrVideo.Search
+namespace KillrVideo.Search.SearchImpl
 {
     /// <summary>
     /// Searches for videos by tag in Cassandra.
