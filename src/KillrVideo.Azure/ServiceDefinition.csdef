@@ -21,6 +21,7 @@
       <Setting name="YouTubeApiKey" />
       <Setting name="SampleDataEntryEnabled" />
       <Setting name="AnalyticsEnabled" />
+      <Setting name="EnterpriseSearchEnabled" />
     </ConfigurationSettings>
   </WebRole>
   <WorkerRole name="KillrVideo.BackgroundWorker" vmsize="Small">

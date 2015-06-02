@@ -79,8 +79,6 @@
     <Compile Include="Dtos\VideoPreview.cs" />
     <Compile Include="Dtos\VideosForSearchQuery.cs" />
     <Compile Include="SearchImpl\SearchComponentSelector.cs" />
-    <Compile Include="InternalMessages\CheckForEnterpriseSearch.cs" />
-    <Compile Include="InternalMessages\EnterpriseSearchAvailability.cs" />
     <Compile Include="ISearchVideos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchServiceWindsorInstaller.cs" />

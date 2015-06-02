@@ -21,6 +21,9 @@
       
       <!-- Your YouTube API key.  Instructions for creating one: https://developers.google.com/console/help/new/#generatingdevkeys -->
       <sc:Setting name="YouTubeApiKey" value="" xdt:Transform="SetAttributes" xdt:Locator="Match(name)" />
+      
+      <!-- Whether DataStax Enterprise search is enabled or not -->
+      <sc:Setting name="EnterpriseSearchEnabled" value="false" xdt:Transform="SetAttributes" xdt:Locator="Match(name)" />
     </sc:ConfigurationSettings>
   </sc:Role>
 </sc:ServiceConfiguration>

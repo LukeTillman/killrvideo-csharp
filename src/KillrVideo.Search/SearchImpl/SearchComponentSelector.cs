@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Reflection;
-using System.Threading.Tasks;
 using Castle.Facilities.TypedFactory;
-using KillrVideo.Search.InternalMessages;
-using Nimbus;
+using KillrVideo.Utils.Configuration;
 
 namespace KillrVideo.Search.SearchImpl
 {
@@ -12,35 +10,33 @@ namespace KillrVideo.Search.SearchImpl
     /// </summary>
     public class SearchComponentSelector : DefaultTypedFactoryComponentSelector
     {
+        private const string EnterpriseSearchConfigKey = "EnterpriseSearchEnabled";
+
         private static readonly Type EnterpriseSearchType = typeof (DataStaxEnterpriseSearch);
         private static readonly Type TagSearchType = typeof (SearchVideosByTag);
 
-        private readonly IBus _bus;
-        private readonly Lazy<Task<bool>> _useEnterpriseSearch;
+        private readonly IGetEnvironmentConfiguration _configRetriever;
+        private readonly Lazy<bool> _useEnterpriseSearch;
 
-        public SearchComponentSelector(IBus bus)
+        public SearchComponentSelector(IGetEnvironmentConfiguration configRetriever)
         {
-            if (bus == null) throw new ArgumentNullException("bus");
-            _bus = bus;
-            _useEnterpriseSearch = new Lazy<Task<bool>>(CanUseEnterpriseSearch);
+            if (configRetriever == null) throw new ArgumentNullException("configRetriever");
+            _configRetriever = configRetriever;
+            _useEnterpriseSearch = new Lazy<bool>(CanUseEnterpriseSearch);
         }
 
         protected override Type GetComponentType(MethodInfo method, object[] arguments)
         {
-            // If the request to check is still in flight, or if it finished and said enterprise search was not available
-            if (_useEnterpriseSearch.Value.IsCompleted == false || _useEnterpriseSearch.Value.Result == false)
-                return TagSearchType;
-
-            return EnterpriseSearchType;
+            return _useEnterpriseSearch.Value ? EnterpriseSearchType : TagSearchType;
         }
 
-        private async Task<bool> CanUseEnterpriseSearch()
+        private bool CanUseEnterpriseSearch()
         {
             try
             {
-                // Ask the search worker if DSE search is available
-                EnterpriseSearchAvailability response = await _bus.Request(new CheckForEnterpriseSearch(), TimeSpan.FromSeconds(60)).ConfigureAwait(false);
-                return response.IsAvailable;
+                // Use a flag in the configuration settings to determine whether to use DSE search
+                string enabled = _configRetriever.GetSetting(EnterpriseSearchConfigKey);
+                return bool.Parse(enabled);
             }
             catch (Exception)
             {
