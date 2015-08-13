@@ -5,7 +5,7 @@ using Cassandra.Mapping.Attributes;
 namespace KillrVideo.UserManagement.Dtos
 {
     /// <summary>
-    /// Represents a user's profile information.  The Table/Column/PartitionKey attributes are here only for LINQ support (see LinqUserReadModel).
+    /// Represents a user's profile information.  The Table/Column/PartitionKey attributes are here only for LINQ support (see LinqUserManagementService).
     /// </summary>
     [Serializable]
     [Table("users")]

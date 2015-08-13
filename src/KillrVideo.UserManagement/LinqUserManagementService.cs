@@ -21,13 +21,20 @@ namespace KillrVideo.UserManagement
         private readonly TaskCache<string, PreparedStatement> _statementCache;
         private readonly IBus _bus;
 
+        private readonly Table<UserProfile> _userProfileTable;
+        private readonly Table<UserCredentials> _userCredentialsTable; 
+
         public LinqUserManagementService(ISession session, TaskCache<string, PreparedStatement> statementCache, IBus bus)
         {
             if (session == null) throw new ArgumentNullException("session");
             if (statementCache == null) throw new ArgumentNullException("statementCache");
+            if (bus == null) throw new ArgumentNullException("bus");
             _session = session;
             _statementCache = statementCache;
             _bus = bus;
+
+            _userProfileTable = new Table<UserProfile>(session);
+            _userCredentialsTable = new Table<UserCredentials>(session);
         }
 
         /// <summary>
@@ -79,9 +86,8 @@ namespace KillrVideo.UserManagement
         public async Task<Guid?> VerifyCredentials(string emailAddress, string password)
         {
             // Lookup the user by email address
-            IEnumerable<UserCredentials> results = await _session.GetTable<UserCredentials>()
-                                                                 .Where(uc => uc.EmailAddress == emailAddress)
-                                                                 .ExecuteAsync().ConfigureAwait(false);
+            IEnumerable<UserCredentials> results = await _userCredentialsTable.Where(uc => uc.EmailAddress == emailAddress)
+                                                                              .ExecuteAsync().ConfigureAwait(false);
             
             // Make sure we found a user
             UserCredentials credentials = results.SingleOrDefault();
@@ -100,9 +106,8 @@ namespace KillrVideo.UserManagement
         /// </summary>
         public async Task<UserProfile> GetUserProfile(Guid userId)
         {
-            IEnumerable<UserProfile> results = await _session.GetTable<UserProfile>()
-                                                             .Where(up => up.UserId == userId)
-                                                             .ExecuteAsync().ConfigureAwait(false);
+            IEnumerable<UserProfile> results = await _userProfileTable.Where(up => up.UserId == userId)
+                                                                      .ExecuteAsync().ConfigureAwait(false);
             return results.SingleOrDefault();
         }
 
@@ -118,9 +123,8 @@ namespace KillrVideo.UserManagement
             // involve doing a multi-get
             if (userIds.Count > 20) throw new ArgumentOutOfRangeException("userIds", "Cannot do multi-get on more than 20 user id keys.");
 
-            IEnumerable<UserProfile> results = await _session.GetTable<UserProfile>()
-                                                             .Where(up => userIds.Contains(up.UserId))
-                                                             .ExecuteAsync().ConfigureAwait(false);
+            IEnumerable<UserProfile> results = await _userProfileTable.Where(up => userIds.Contains(up.UserId))
+                                                                      .ExecuteAsync().ConfigureAwait(false);
             return results;
         }
     }
