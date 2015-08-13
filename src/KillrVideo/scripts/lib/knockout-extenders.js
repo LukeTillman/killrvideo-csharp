@@ -32,4 +32,27 @@
 
         return plainObservable;
     };
+
+    // An extender that loads/saves observable values to local storage in the browser
+    // (taken from: https://github.com/spoike/knockout.persist)
+    ko.extenders.persist = function (target, key) {
+
+        var initialValue = target();
+
+        // Load existing value from localStorage if set
+        if (key && localStorage.getItem(key) !== null) {
+            try {
+                initialValue = JSON.parse(localStorage.getItem(key));
+            } catch (e) {
+            }
+        }
+        target(initialValue);
+
+        // Subscribe to new values and add them to localStorage
+        target.subscribe(function (newValue) {
+            localStorage.setItem(key, ko.toJSON(newValue));
+        });
+        return target;
+
+    };
 });

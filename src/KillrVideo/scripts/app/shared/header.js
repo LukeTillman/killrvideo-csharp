@@ -22,6 +22,14 @@ define(["knockout", "jquery", "lib/knockout-extenders", "bootstrap", "app/common
             });
         }).extend({ async: [] });
 
+        // Whether or not the site tour is enabled, persisted to local storage so we remember the value across page loads
+        self.tourEnabled = ko.observable(true).extend({ persist: "tourEnabled" });
+
+        // Toggle the site tour on/off
+        self.toggleTour = function() {
+            self.tourEnabled(!self.tourEnabled());
+        };
+
         // Whether or not to show the "What is this?" section
         self.showWhatIsThis = ko.observable(false);
 
