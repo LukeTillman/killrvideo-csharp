@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>2.2</ProductVersion>
+    <ProductVersion>2.7</ProductVersion>
     <ProjectGuid>ec94eb0b-d11c-460a-b64b-64c09596c8a3</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -13,6 +13,7 @@
     <StartDevelopmentStorage>True</StartDevelopmentStorage>
     <Name>KillrVideo.Azure</Name>
     <PackageEnableRemoteDebugger>False</PackageEnableRemoteDebugger>
+    <UseEmulatorExpressByDefault>False</UseEmulatorExpressByDefault>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -70,7 +71,7 @@
   <!-- Import the target files for this project template -->
   <PropertyGroup>
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
-    <CloudExtensionsDir Condition=" '$(CloudExtensionsDir)' == '' ">$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Windows Azure Tools\2.2\</CloudExtensionsDir>
+    <CloudExtensionsDir Condition=" '$(CloudExtensionsDir)' == '' ">$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Windows Azure Tools\2.7\</CloudExtensionsDir>
   </PropertyGroup>
   <Import Project="$(CloudExtensionsDir)Microsoft.WindowsAzure.targets" />
   <!-- Add configuration transform for cscfg files -->
@@ -82,11 +83,7 @@
   </PropertyGroup>
   <UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll" />
   <Target Name="TransformAzureConfiguration" Condition=" Exists('ServiceConfiguration.$(TargetProfile).Transform.cscfg') ">
-
-    <TransformXml Source="@(TargetServiceConfiguration)"
-                  Transform="ServiceConfiguration.$(TargetProfile).Transform.cscfg"
-                  Destination="@(TargetServiceConfiguration)" />
-
+    <TransformXml Source="@(TargetServiceConfiguration)" Transform="ServiceConfiguration.$(TargetProfile).Transform.cscfg" Destination="@(TargetServiceConfiguration)" />
     <Message importance="high" Text="Transformed @(TargetServiceConfiguration) using ServiceConfiguration.$(TargetProfile).Transform.cscfg." />
-  </Target> 
+  </Target>
 </Project>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ServiceDefinition name="KillrVideo.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2013-10.2.2">
+<ServiceDefinition name="KillrVideo.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2015-04.2.6">
   <WebRole name="KillrVideo" vmsize="Small">
     <Sites>
       <Site name="Web">
@@ -12,7 +12,6 @@
       <InputEndpoint name="Endpoint1" protocol="http" port="80" />
     </Endpoints>
     <Imports>
-      <Import moduleName="Diagnostics" />
       <Import moduleName="RemoteAccess" />
     </Imports>
     <ConfigurationSettings>
@@ -22,11 +21,11 @@
       <Setting name="SampleDataEntryEnabled" />
       <Setting name="AnalyticsEnabled" />
       <Setting name="EnterpriseSearchEnabled" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
     </ConfigurationSettings>
   </WebRole>
   <WorkerRole name="KillrVideo.BackgroundWorker" vmsize="Small">
     <Imports>
-      <Import moduleName="Diagnostics" />
       <Import moduleName="RemoteAccess" />
       <Import moduleName="RemoteForwarder" />
     </Imports>
@@ -37,6 +36,7 @@
       <Setting name="AzureStorageConnectionString" />
       <Setting name="AzureServiceBusConnectionString" />
       <Setting name="YouTubeApiKey" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
     </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>
