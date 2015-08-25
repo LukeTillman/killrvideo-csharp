@@ -258,7 +258,6 @@
     <Content Include="Content\upload-preview.png" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <None Include="gulpfile.js" />
     <Content Include="scripts\app\account\info.js" />
     <Content Include="scripts\app\account\register.js" />
     <Content Include="scripts\app\account\signin.js" />
