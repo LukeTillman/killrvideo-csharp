@@ -20,6 +20,7 @@ var require = {
         "bootstrap": {
             deps: ["jquery"],
             exports: "$.fn.popover"
-        }
+        },
+        "jquery-expander": ["jquery"]
     }
 };
