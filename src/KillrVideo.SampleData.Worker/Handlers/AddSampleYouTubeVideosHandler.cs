@@ -6,7 +6,7 @@ using KillrVideo.SampleData.Worker.Components;
 using KillrVideo.SampleData.Worker.Components.YouTube;
 using KillrVideo.VideoCatalog;
 using KillrVideo.VideoCatalog.Dtos;
-using log4net;
+using Serilog;
 using Nimbus.Handlers;
 
 namespace KillrVideo.SampleData.Worker.Handlers
@@ -16,7 +16,7 @@ namespace KillrVideo.SampleData.Worker.Handlers
     /// </summary>
     public class AddSampleYouTubeVideosHandler : IHandleCommand<AddSampleYouTubeVideos>
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (AddSampleYouTubeVideosHandler));
+        private static readonly ILogger Logger = Log.ForContext<AddSampleYouTubeVideosHandler>();
 
         private readonly IGetSampleData _sampleDataRetriever;
         private readonly IManageSampleYouTubeVideos _youTubeManager;
@@ -40,7 +40,7 @@ namespace KillrVideo.SampleData.Worker.Handlers
             List<Guid> userIds = await _sampleDataRetriever.GetRandomSampleUserIds(busCommand.NumberOfVideos).ConfigureAwait(false);
             if (userIds.Count == 0)
             {
-                Logger.Warn("No sample users available.  Cannot add sample YouTube videos.");
+                Logger.Warning("No sample users available, cannot add sample YouTube videos");
                 return;
             }
 

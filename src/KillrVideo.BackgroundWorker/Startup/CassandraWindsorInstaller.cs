@@ -9,7 +9,7 @@ using Castle.Windsor;
 using KillrVideo.BackgroundWorker.Utils;
 using KillrVideo.Utils;
 using KillrVideo.Utils.Configuration;
-using log4net;
+using Serilog;
 
 namespace KillrVideo.BackgroundWorker.Startup
 {
@@ -18,7 +18,7 @@ namespace KillrVideo.BackgroundWorker.Startup
     /// </summary>
     public class CassandraWindsorInstaller : IWindsorInstaller
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (CassandraWindsorInstaller));
+        private static readonly ILogger Logger = Log.ForContext<CassandraWindsorInstaller>();
 
         private const string ClusterLocationAppSettingsKey = "CassandraClusterLocation";
         private const string Keyspace = "killrvideo";
@@ -75,7 +75,7 @@ namespace KillrVideo.BackgroundWorker.Startup
             }
             catch (Exception e)
             {
-                Logger.Error(string.Format("Exception while connecting to keyspace '{0}' using hosts '{1}'", Keyspace, clusterLocation), e);
+                Logger.Error(e, "Exception while connecting to '{Keyspace}' using '{Hosts}'", Keyspace, clusterLocation);
                 throw;
             }
 

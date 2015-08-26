@@ -53,9 +53,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Castle.Windsor.3.3.0\lib\net45\Castle.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="LZ4">
       <HintPath>..\packages\lz4net.1.0.5.93\lib\net40-client\LZ4.dll</HintPath>
     </Reference>
@@ -104,9 +101,6 @@
     </Reference>
     <Reference Include="Serilog.FullNetFx">
       <HintPath>..\packages\Serilog.1.4.113\lib\net45\Serilog.FullNetFx.dll</HintPath>
-    </Reference>
-    <Reference Include="Serilog.Sinks.Log4Net">
-      <HintPath>..\packages\Serilog.Sinks.Log4Net.1.4.113\lib\net45\Serilog.Sinks.Log4Net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -246,7 +240,6 @@
     <Compile Include="Models\YouTube\GetKeyViewModel.cs" />
     <Compile Include="Models\YouTube\YouTubeVideoAddedViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\AzureTraceAppender.cs" />
     <Compile Include="Utils\GlobalConfigs.cs" />
     <Compile Include="Utils\GravatarHasher.cs" />
   </ItemGroup>

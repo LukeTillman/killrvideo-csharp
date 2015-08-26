@@ -7,10 +7,11 @@ using Cassandra;
 using KillrVideo.Uploads.Messages.Events;
 using KillrVideo.Uploads.Worker.InternalEvents;
 using KillrVideo.Utils;
-using log4net;
+using Serilog;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
 using Nimbus;
+using ILogger = Serilog.ILogger;
 
 namespace KillrVideo.Uploads.Worker
 {
@@ -20,7 +21,7 @@ namespace KillrVideo.Uploads.Worker
     /// </summary>
     public class EncodingListenerJob
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (EncodingListenerJob));
+        private static readonly ILogger Logger = Log.ForContext<EncodingListenerJob>();
         private const string PoisionQueueName = UploadConfig.NotificationQueueName + "-errors";
 
         private readonly CloudQueueClient _cloudQueueClient;
@@ -94,7 +95,7 @@ namespace KillrVideo.Uploads.Worker
                 }
                 catch (Exception e)
                 {
-                    Logger.Error("Error while processing job", e);
+                    Logger.Error(e, "Error while processing job");
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(10), cancellationToken).ConfigureAwait(false);
@@ -133,7 +134,7 @@ namespace KillrVideo.Uploads.Worker
                     }
                     catch (Exception e)
                     {
-                        Logger.Warn("Exception while deserializing event, message will be deleted.", e);
+                        Logger.Warning(e, "Exception while deserializing event, message will be deleted");
                     }
 
                     // If there was a problem with deserialization, just assume a poison message and delete it
@@ -159,7 +160,7 @@ namespace KillrVideo.Uploads.Worker
                     }
                     catch (Exception e)
                     {
-                        Logger.Error("Error while handling JobStateChanged message", e);
+                        Logger.Error(e, "Error while handling JobStateChanged message");
                     }
 
                     // If the message was handled successfully, just delete it
@@ -174,7 +175,7 @@ namespace KillrVideo.Uploads.Worker
                     {
                         // Move the message to a poison queue (NOTE: because Add + Delete aren't "transactional" it is possible
                         // a poison message might get added more than once to the poison queue, but that's OK)
-                        Logger.Fatal(string.Format("Giving up on message: {0}", message.AsString));
+                        Logger.Fatal("Giving up on message: {Message}", message.AsString);
                         await _poisonQueue.AddMessageAsync(message, cancellationToken).ConfigureAwait(false);
                         await _queue.DeleteMessageAsync(message, cancellationToken).ConfigureAwait(false);
                         continue;

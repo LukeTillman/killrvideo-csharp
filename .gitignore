@@ -147,6 +147,7 @@ src/packages/*/
 # Windows Azure Build Output
 csx/
 *.build.csdef
+ecf/
 
 # Windows Store app package directory
 AppPackages/

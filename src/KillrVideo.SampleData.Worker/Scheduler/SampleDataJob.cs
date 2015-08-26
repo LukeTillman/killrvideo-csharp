@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
 using KillrVideo.Utils;
-using log4net;
+using Serilog;
 
 namespace KillrVideo.SampleData.Worker.Scheduler
 {
@@ -17,7 +17,7 @@ namespace KillrVideo.SampleData.Worker.Scheduler
         
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
-        private readonly ILog _logger;
+        private readonly ILogger _logger;
         private readonly string _jobName;
 
         private DateTimeOffset _nextScheduledRunTime;
@@ -45,7 +45,7 @@ namespace KillrVideo.SampleData.Worker.Scheduler
             _statementCache = statementCache;
 
             _jobName = GetType().FullName;
-            _logger = LogManager.GetLogger(GetType());
+            _logger = Log.ForContext(GetType());
             NextRunTime = DateTimeOffset.MaxValue;
         }
 
@@ -93,7 +93,7 @@ namespace KillrVideo.SampleData.Worker.Scheduler
             catch (Exception ex)
             {
                 // Log the error and set the next run time to wait a bit before retrying
-                _logger.Error(string.Format("Exception while executing job. Will try again in {0} seconds.", TimeUntilRetry.TotalSeconds), ex);
+                _logger.Error(ex, "Exception while executing job, retry in {RetrySeconds} seconds", TimeUntilRetry.TotalSeconds);
                 NextRunTime = NextRunTime.Add(TimeUntilRetry);
             }
         }
