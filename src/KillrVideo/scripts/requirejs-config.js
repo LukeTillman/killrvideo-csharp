@@ -21,6 +21,9 @@ var require = {
             deps: ["jquery"],
             exports: "$.fn.popover"
         },
-        "jquery-expander": ["jquery"]
+        "jquery-expander": ["jquery"],
+        "perfect-scrollbar": ["jquery"],
+        "bootstrap-select": ["bootstrap"],
+        "bootstrap-tagsinput": ["bootstrap"]
     }
 };
