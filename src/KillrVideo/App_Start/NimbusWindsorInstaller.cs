@@ -9,6 +9,7 @@ using Nimbus.Configuration;
 using Nimbus.Infrastructure;
 using Nimbus.Logger.Serilog;
 using Nimbus.Windsor.Configuration;
+using Serilog;
 
 namespace KillrVideo
 {
@@ -28,7 +29,9 @@ namespace KillrVideo
 
             // Register the bus itself and its logger
             container.Register(
-                Component.For<ILogger>().ImplementedBy<SerilogStaticLogger>().LifestyleSingleton(),
+                Component.For<Nimbus.ILogger>().ImplementedBy<SerilogLogger>()
+                         .DependsOn(Dependency.OnValue<Serilog.ILogger>(new LoggerConfiguration().MinimumLevel.Warning().WriteTo.Trace().CreateLogger()))
+                         .LifestyleSingleton(),
                 Component.For<IBus>().UsingFactoryMethod(() => CreateBus(container, typeProvider)).LifestyleSingleton()
             );
         }

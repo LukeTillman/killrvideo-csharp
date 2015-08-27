@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -29,7 +28,10 @@ namespace KillrVideo.BackgroundWorker
             ServicePointManager.DefaultConnectionLimit = 12;
 
             // Bootstrap Serilog logger
-            Log.Logger = new LoggerConfiguration().WriteTo.Trace().CreateLogger();
+            // Bootstrap serilog logging
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information().WriteTo.Trace()
+                .CreateLogger();
 
             Log.Information("KillrVideo.BackgroundWorker is starting");
 

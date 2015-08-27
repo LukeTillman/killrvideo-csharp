@@ -15,7 +15,9 @@ namespace KillrVideo
         protected void Application_Start()
         {
             // Bootstrap serilog logging
-            Log.Logger = new LoggerConfiguration().WriteTo.Trace().CreateLogger();
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information().WriteTo.Trace()
+                .CreateLogger();
 
             Log.Information("KillrVideo is starting");
             
