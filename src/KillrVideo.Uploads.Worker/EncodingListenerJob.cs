@@ -59,46 +59,39 @@ namespace KillrVideo.Uploads.Worker
             await Task.WhenAll(_queue.CreateIfNotExistsAsync(), _poisonQueue.CreateIfNotExistsAsync()).ConfigureAwait(false);
             _initialized = true;
         }
-
-        /// <summary>
-        /// Starts the encoding listener job.
-        /// </summary>
-        public void Start()
-        {
-            
-        }
-
-        /// <summary>
-        /// Stops the encoding listener job.
-        /// </summary>
-        public void Stop()
-        {
-            
-        }
-
+        
         /// <summary>
         /// Executes the job.
         /// </summary>
         public async Task Execute(CancellationToken cancellationToken)
         {
-            while (true)
+            while (cancellationToken.IsCancellationRequested == false)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-
                 try
                 {
                     await ExecuteImpl(cancellationToken).ConfigureAwait(false);
                 }
                 catch (OperationCanceledException)
                 {
-                    throw;
+                    break;
                 }
                 catch (Exception e)
                 {
                     Logger.Error(e, "Error while processing job");
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(10), cancellationToken).ConfigureAwait(false);
+                try
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(10), cancellationToken).ConfigureAwait(false);
+                }
+                catch (TaskCanceledException)
+                {
+                    break;
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e, "Error while waiting to process job");
+                }
             }
         }
 

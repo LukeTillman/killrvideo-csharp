@@ -10,9 +10,13 @@ namespace KillrVideo.Utils.WorkerComposition
     public interface ILogicalWorkerRole
     {
         /// <summary>
-        /// Called when the physical worker role is starting.  The cancellation token will be used when stopping
-        /// the physical worker role.
+        /// Called when the physical worker role is starting.
         /// </summary>
-        Task OnStart(CancellationToken cancellationToken);
+        Task OnStart();
+
+        /// <summary>
+        /// Called when the physical worker role is stopping.
+        /// </summary>
+        Task OnStop();
     }
 }

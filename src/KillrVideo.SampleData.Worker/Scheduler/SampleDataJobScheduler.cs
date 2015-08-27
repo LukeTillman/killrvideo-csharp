@@ -55,6 +55,7 @@ namespace KillrVideo.SampleData.Worker.Scheduler
                 }
                 catch (OperationCanceledException)
                 {
+                    break;
                 }
                 catch (Exception ex)
                 {
@@ -62,9 +63,20 @@ namespace KillrVideo.SampleData.Worker.Scheduler
                     waitOnException = true;
                 }
 
-                // If something bad happened, wait a bit before retrying
-                if (waitOnException)
-                    await Task.Delay(RetryOnExceptionWaitTime, cancellationToken).ConfigureAwait(false);
+                try
+                {
+                    // If something bad happened, wait a bit before retrying
+                    if (waitOnException)
+                        await Task.Delay(RetryOnExceptionWaitTime, cancellationToken).ConfigureAwait(false);
+                }
+                catch (TaskCanceledException)
+                {
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, "Unexpected exception while waiting to try again");
+                }
             }
         }
 

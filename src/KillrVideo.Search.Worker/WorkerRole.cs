@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Castle.Windsor;
 using KillrVideo.Utils.WorkerComposition;
@@ -13,21 +12,24 @@ namespace KillrVideo.Search.Worker
     public class WorkerRole : ILogicalWorkerRole
     {
         private readonly IWindsorContainer _container;
+        private Bus _bus;
 
         public WorkerRole(IWindsorContainer container)
         {
             if (container == null) throw new ArgumentNullException("container");
             _container = container;
         }
-        
-        public Task OnStart(CancellationToken cancellationToken)
+
+        public Task OnStart()
         {
             // Make sure the bus is started
-            var bus = _container.Resolve<Bus>();
-            bus.Start();
+            _bus = _container.Resolve<Bus>();
+            return _bus.Start();
+        }
 
-            // Just return a completed Task since we don't have anything else to do
-            return Task.Delay(0, cancellationToken);
+        public Task OnStop()
+        {
+            return _bus.Stop();
         }
     }
 }

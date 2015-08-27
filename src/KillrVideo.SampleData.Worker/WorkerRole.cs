@@ -13,22 +13,38 @@ namespace KillrVideo.SampleData.Worker
     /// </summary>
     public class WorkerRole : ILogicalWorkerRole
     {
-        private readonly IWindsorContainer _windsorContainer;
+        private readonly IWindsorContainer _container;
+        private readonly CancellationTokenSource _cancelTokenSource;
 
-        public WorkerRole(IWindsorContainer windsorContainer)
+        private Bus _bus;
+        private Task _schedulerExecution;
+
+        public WorkerRole(IWindsorContainer container)
         {
-            if (windsorContainer == null) throw new ArgumentNullException("windsorContainer");
-            _windsorContainer = windsorContainer;
+            if (container == null) throw new ArgumentNullException("container");
+            _container = container;
+            _cancelTokenSource = new CancellationTokenSource();
         }
-        
-        public Task OnStart(CancellationToken cancellationToken)
+
+        public Task OnStart()
         {
             // Make sure the bus is started
-            var bus = _windsorContainer.Resolve<Bus>();
-            bus.Start();
+            _bus = _container.Resolve<Bus>();
+            Task startBus = _bus.Start();
 
-            // Start the sample data scheduler and return it
-            return _windsorContainer.Resolve<SampleDataJobScheduler>().Run(cancellationToken);
+            // Execute the scheduler that we can cancel on stop
+            _schedulerExecution = _container.Resolve<SampleDataJobScheduler>().Run(_cancelTokenSource.Token);
+
+            return startBus;
+        }
+
+        public Task OnStop()
+        {
+            // Cancel the scheduler
+            _cancelTokenSource.Cancel();
+
+            // Stopped once the bus and the scheduler are stopped
+            return Task.WhenAll(_bus.Stop(), _schedulerExecution);
         }
     }
 }
