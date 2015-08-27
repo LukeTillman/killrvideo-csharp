@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using KillrVideo.ActionFilters;
 
 namespace KillrVideo
 {
@@ -6,6 +7,7 @@ namespace KillrVideo
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
+            filters.Add(new LogExceptionsFilter());
             filters.Add(new HandleErrorAttribute());
         }
     }

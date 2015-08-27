@@ -37,7 +37,7 @@ namespace KillrVideo.BackgroundWorker
             // Set the maximum number of concurrent connections 
             ServicePointManager.DefaultConnectionLimit = 12;
 
-            // Bootstrap Log4net logging and serilog logger
+            // Bootstrap Serilog logger
             Log.Logger = new LoggerConfiguration().WriteTo.Trace().CreateLogger();
 
             Log.Information("KillrVideo.BackgroundWorker is starting");
