@@ -11,5 +11,6 @@ namespace KillrVideo.Search.Dtos
     {
         public string Query { get; set; }
         public IEnumerable<VideoPreview> Videos { get; set; }
+        public string PagingState { get; set; }
     }
 }

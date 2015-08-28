@@ -10,6 +10,6 @@ namespace KillrVideo.Search.Dtos
     {
         public string Query { get; set; }
         public int PageSize { get; set; }
-        public Guid? FirstVideoOnPageVideoId { get; set; }
+        public string PagingState { get; set; }
     }
 }
