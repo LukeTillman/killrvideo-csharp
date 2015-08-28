@@ -20,30 +20,34 @@ else
         <span><em>@Model.Query</em> Videos</span>
     </h3>
     
-    <div id="search-results" data-bind="with: searchResultsList">
-        <h4 data-bind="visible: isLoading">
+    <div id="search-results">
+        <h4 data-bind="visible: isLoading() && videos().length === 0">
             <i class="fa fa-spinner fa-spin"></i> Searching...
         </h4>
-        
-        <div class="row" data-bind="visible: !isLoading(), foreach: { data: videos, as: 'videopreview' }">
+
+        <p class="alert alert-info" data-bind="visible: loadedEmptyPage">
+            There are no more videos for <strong>@Model.Query</strong>. Why don't you <a class="alert-link" href="@Url.Action("Add", "Videos")">add one</a>?
+        </p>
+
+        <p class="alert alert-info" data-bind="visible: !isLoading() && videos().length === 0">
+            There are currently no videos for <strong>@Model.Query</strong>. Why don't you <a class="alert-link" href="@Url.Action("Add", "Videos")">add one</a>?
+        </p>
+
+        <div class="row" data-bind="foreach: { data: videos, as: 'videopreview' }">
             <div class="col-sm-3">
                 <video-preview params="data: videopreview"></video-preview>
             </div>
         </div>
         
-        <p class="alert alert-info" data-bind="visible: !isLoading() && videos().length === 0">
-            There are currently no videos for the tag <strong>@Model.Query</strong>.  Why don't you <a class="alert-link" href="@Url.Action("Add", "Videos")">add one</a>?
-        </p>
-        
         <div class="row">
             <div class="col-sm-6">
-                <button type="button" class="btn btn-default navbar-btn" data-bind="visible: previousPageAvailable, click: previousPage">
+                <button type="button" class="btn btn-default navbar-btn" data-bind="visible: previousPageAvailable, click: previousPage, disable: isLoading">
                     <i class="fa fa-chevron-circle-left"></i> Previous Page
                 </button>
             </div>
             <div class="col-sm-6 text-right">
-                <button type="button" class="btn btn-default navbar-btn" data-bind="visible: nextPageAvailable, click: nextPage">
-                    Next Page <i class="fa fa-chevron-circle-right"></i>
+                <button type="button" class="btn btn-default navbar-btn" data-bind="visible: nextPageAvailable, click: nextPage, disable: isLoading">
+                    Next Page <i class="fa fa-chevron-circle-right" data-bind="visible: !isLoading()"></i><i class="fa fa-spinner fa-spin" data-bind="visible: isLoading"></i>
                 </button>
             </div>
         </div>

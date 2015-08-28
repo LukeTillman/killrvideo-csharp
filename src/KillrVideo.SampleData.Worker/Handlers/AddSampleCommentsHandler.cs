@@ -6,7 +6,7 @@ using KillrVideo.Comments;
 using KillrVideo.Comments.Dtos;
 using KillrVideo.SampleData.Dtos;
 using KillrVideo.SampleData.Worker.Components;
-using log4net;
+using Serilog;
 using Nimbus.Handlers;
 using NLipsum.Core;
 
@@ -17,7 +17,7 @@ namespace KillrVideo.SampleData.Worker.Handlers
     /// </summary>
     public class AddSampleCommentsHandler : IHandleCommand<AddSampleComments>
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (AddSampleCommentsHandler));
+        private static readonly ILogger Logger = Log.ForContext<AddSampleCommentsHandler>();
 
         private static readonly Func<string>[] LipsumSources = new Func<string>[]
         {
@@ -51,7 +51,7 @@ namespace KillrVideo.SampleData.Worker.Handlers
             List<Guid> userIds = await _sampleDataRetriever.GetRandomSampleUserIds(busCommand.NumberOfComments).ConfigureAwait(false);
             if (userIds.Count == 0)
             {
-                Logger.Warn("No sample users available.  Cannot add sample comments.");
+                Logger.Warning("No sample users available, cannot add sample comments");
                 return;
             }
 
@@ -59,7 +59,7 @@ namespace KillrVideo.SampleData.Worker.Handlers
             List<Guid> videoIds = await _sampleDataRetriever.GetRandomVideoIds(busCommand.NumberOfComments).ConfigureAwait(false);
             if (videoIds.Count == 0)
             {
-                Logger.Warn("No sample videos available.  Cannot add sample comments.");
+                Logger.Warning("No sample videos available, cannot add sample comments");
                 return;
             }
 

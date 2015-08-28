@@ -1,5 +1,4 @@
 ﻿using System;
-using KillrVideo.Models.Shared;
 
 namespace KillrVideo.Models.Search
 {
@@ -20,8 +19,8 @@ namespace KillrVideo.Models.Search
         public int PageSize { get; set; }
 
         /// <summary>
-        /// The first video on the page to retrieve (will be null the first time a page is requested).
+        /// The paging state (used to retrieve subsequent pages of videos after the initial page).
         /// </summary>
-        public VideoPreviewViewModel FirstVideoOnPage { get; set; }
+        public string PagingState { get; set; }
     }
 }

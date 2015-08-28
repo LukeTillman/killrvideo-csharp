@@ -61,12 +61,8 @@
     <Folder Include="KillrVideoContent\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="KillrVideo.BackgroundWorkerContent\diagnostics.wadcfg">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="KillrVideoContent\diagnostics.wadcfg">
-      <SubType>Content</SubType>
-    </Content>
+    <DiagnosticsConfiguration Include="KillrVideo.BackgroundWorkerContent\diagnostics.wadcfgx" />
+    <DiagnosticsConfiguration Include="KillrVideoContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>

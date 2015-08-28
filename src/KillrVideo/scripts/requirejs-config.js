@@ -25,6 +25,10 @@ var require = {
         "bootstrap-tour": {
             deps: ["bootstrap", "jquery"],
             exports: "Tour"
-        }
+        },
+        "jquery-expander": ["jquery"],
+        "perfect-scrollbar": ["jquery"],
+        "bootstrap-select": ["bootstrap"],
+        "bootstrap-tagsinput": ["bootstrap"]
     }
 };

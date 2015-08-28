@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cassandra;
 using KillrVideo.Utils;
-using log4net;
+using Serilog;
 
 namespace KillrVideo.SampleData.Worker.Scheduler
 {
@@ -14,7 +14,7 @@ namespace KillrVideo.SampleData.Worker.Scheduler
     /// </summary>
     public class LeaseManager
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(LeaseManager));
+        private static readonly ILogger Logger = Log.ForContext<LeaseManager>();
         private static readonly TimeSpan MaxLeaseTime = TimeSpan.FromSeconds(180);
         private static readonly TimeSpan RetryOnExceptionWaitTime = TimeSpan.FromSeconds(5);
 
@@ -59,8 +59,8 @@ namespace KillrVideo.SampleData.Worker.Scheduler
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error(string.Format("Unexpected exception while acquiring lease. Trying again in {0} seconds.",
-                                               RetryOnExceptionWaitTime.TotalSeconds), ex);
+                    Logger.Error(ex, "Unexpected exception while acquiring lease, retrying in {RetrySeconds} seconds",
+                                 RetryOnExceptionWaitTime.TotalSeconds);
                 }
 
                 // Wait before trying again (cancellation exceptions are OK here)

@@ -34,14 +34,25 @@ namespace KillrVideo.Search.SearchImpl
             // More info on ExtendedDisMax: http://wiki.apache.org/solr/ExtendedDisMax
             string solrQuery = "{ \"q\": \"{!edismax qf=\\\"name^2 tags^1 description\\\"}" + searchVideosQuery.Query + "\" }";
             
-            // TODO: Update model to support paging with a cursor/token (DataStax driver now supports manual paging also)
             PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync(
-                "SELECT videoid, userid, name, preview_image_location, added_date FROM videos WHERE solr_query=? LIMIT ?");
-            RowSet rows = await _session.ExecuteAsync(prepared.Bind(solrQuery, searchVideosQuery.PageSize));
+                "SELECT videoid, userid, name, preview_image_location, added_date FROM videos WHERE solr_query=?");
+
+            // The driver's built-in paging feature just works with DSE Search Solr paging which is pretty cool
+            IStatement bound = prepared.Bind(solrQuery)
+                                       .SetAutoPage(false)
+                                       .SetPageSize(searchVideosQuery.PageSize);
+
+            // The initial query won't have a paging state, but subsequent calls should if there are more pages
+            if (string.IsNullOrEmpty(searchVideosQuery.PagingState) == false)
+                bound.SetPagingState(Convert.FromBase64String(searchVideosQuery.PagingState));
+
+            RowSet rows = await _session.ExecuteAsync(bound).ConfigureAwait(false);
+            
             return new VideosForSearchQuery
             {
                 Query = searchVideosQuery.Query,
-                Videos = rows.Select(MapRowToVideoPreview).ToList()
+                Videos = rows.Select(MapRowToVideoPreview).ToList(),
+                PagingState = rows.PagingState != null && rows.PagingState.Length > 0 ? Convert.ToBase64String(rows.PagingState) : null
             };
         }
 

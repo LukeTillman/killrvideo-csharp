@@ -28,25 +28,22 @@ namespace KillrVideo.Search.SearchImpl
         /// </summary>
         public async Task<VideosForSearchQuery> SearchVideos(SearchVideosQuery searchVideosQuery)
         {
-            // If the first video id for the page was specified, use the query for a subsequent page, otherwise use the query for the first page
-            PreparedStatement preparedStatement;
-            IStatement boundStatement;
-            if (searchVideosQuery.FirstVideoOnPageVideoId == null)
-            {
-                preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM videos_by_tag WHERE tag = ? LIMIT ?");
-                boundStatement = preparedStatement.Bind(searchVideosQuery.Query, searchVideosQuery.PageSize);
-            }
-            else
-            {
-                preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM videos_by_tag WHERE tag = ? AND videoid >= ? LIMIT ?");
-                boundStatement = preparedStatement.Bind(searchVideosQuery.Query, searchVideosQuery.FirstVideoOnPageVideoId.Value, searchVideosQuery.PageSize);
-            }
+            // Use the driver's built-in paging feature to get only a page of rows
+            PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM videos_by_tag WHERE tag = ?");
+            IStatement boundStatement = preparedStatement.Bind(searchVideosQuery.Query)
+                                                         .SetAutoPage(false)
+                                                         .SetPageSize(searchVideosQuery.PageSize);
+
+            // The initial query won't have a paging state, but subsequent calls should if there are more pages
+            if (string.IsNullOrEmpty(searchVideosQuery.PagingState) == false)
+                boundStatement.SetPagingState(Convert.FromBase64String(searchVideosQuery.PagingState));
 
             RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
             return new VideosForSearchQuery
             {
                 Query = searchVideosQuery.Query,
-                Videos = rows.Select(MapRowToVideoPreview).ToList()
+                Videos = rows.Select(MapRowToVideoPreview).ToList(),
+                PagingState = rows.PagingState != null && rows.PagingState.Length > 0 ? Convert.ToBase64String(rows.PagingState) : null
             };
         }
 

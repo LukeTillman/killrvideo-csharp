@@ -51,7 +51,7 @@ namespace KillrVideo.Controllers
             {
                 Query = model.Query,
                 PageSize = model.PageSize,
-                FirstVideoOnPageVideoId = model.FirstVideoOnPage == null ? (Guid?) null : model.FirstVideoOnPage.VideoId
+                PagingState = model.PagingState
             });
 
             // TODO:  Better solution than client-side JOINs
@@ -65,7 +65,8 @@ namespace KillrVideo.Controllers
 
             return JsonSuccess(new SearchResultsViewModel
             {
-                Tag = model.Query,
+                Query = videos.Query,
+                PagingState = videos.PagingState,
                 Videos = videos.Videos
                                .Join(authorsTask.Result, vp => vp.UserId, a => a.UserId,
                                      (vp, a) => new { VideoPreview = vp, Author = a })

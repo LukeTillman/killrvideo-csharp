@@ -1,15 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 using Castle.Windsor;
 using KillrVideo.BackgroundWorker.Startup;
 using KillrVideo.Utils.WorkerComposition;
-using log4net;
-using log4net.Config;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Serilog;
 
@@ -20,18 +16,8 @@ namespace KillrVideo.BackgroundWorker
     /// </summary>
     public class WorkerRole : RoleEntryPoint
     {
-        private ILog _logger;
-
-        private readonly CancellationTokenSource _cancellationTokenSource;
-        private readonly List<Task> _logicalWorkerTasks;
-
         private IWindsorContainer _windsorContainer;
-
-        public WorkerRole()
-        {
-            _logicalWorkerTasks = new List<Task>();
-            _cancellationTokenSource = new CancellationTokenSource();
-        }
+        private ILogicalWorkerRole[] _logicalWorkers;
 
         public override bool OnStart()
         {
@@ -41,20 +27,21 @@ namespace KillrVideo.BackgroundWorker
             // Set the maximum number of concurrent connections 
             ServicePointManager.DefaultConnectionLimit = 12;
 
-            // Bootstrap Log4net logging and serilog logger
-            XmlConfigurator.Configure();
-            _logger = LogManager.GetLogger(typeof (WorkerRole));
-            Log.Logger = new LoggerConfiguration().WriteTo.Log4Net().CreateLogger();
+            // Bootstrap Serilog logger
+            // Bootstrap serilog logging
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information().WriteTo.Trace()
+                .CreateLogger();
 
-            _logger.Info("KillrVideo.BackgroundWorker is starting");
+            Log.Information("KillrVideo.BackgroundWorker is starting");
 
             try
             {
                 // Initialize the Windsor container
                 _windsorContainer = WindsorBootstrapper.CreateContainer();
 
-                // Create the logical worker instances
-                var logicalWorkers = new ILogicalWorkerRole[]
+                // Create the logical worker instances and fire async OnStart
+                _logicalWorkers = new ILogicalWorkerRole[]
                 {
                     new VideoCatalog.Worker.WorkerRole(_windsorContainer),
                     new Search.Worker.WorkerRole(_windsorContainer),
@@ -62,42 +49,49 @@ namespace KillrVideo.BackgroundWorker
                     new SampleData.Worker.WorkerRole(_windsorContainer)
                 };
 
-                // Fire OnStart on all the logical workers
-                CancellationToken token = _cancellationTokenSource.Token;
-                foreach (ILogicalWorkerRole worker in logicalWorkers)
-                {
-                    ILogicalWorkerRole worker1 = worker;
-                    _logicalWorkerTasks.Add(Task.Run(() => worker1.OnStart(token), token));
-                }
-                
-                return base.OnStart();
-            }
-            catch (Exception e)
-            {
-                _logger.Error("Exception in BackgroundWorker OnStart", e);
-                throw;
-            }
-        }
-        
-        public override void OnStop()
-        {
-            _logger.Info("KillrVideo.BackgroundWorker is stopping");
+                Task[] startTasks = _logicalWorkers.Select(w => Task.Run(() => w.OnStart())).ToArray();
 
-            try
-            {
-                // Cancel the logical worker tasks, then wait for them to finish
-                _cancellationTokenSource.Cancel();
-                Task.WhenAll(_logicalWorkerTasks).Wait();
+                // Wait for all workers to start
+                Task.WaitAll(startTasks);
+
+                return base.OnStart();
             }
             catch (AggregateException ae)
             {
-                // Log any exceptions that aren't OperationCanceled, which we expect
-                foreach(var exception in ae.Flatten().InnerExceptions.Where(e => e is OperationCanceledException == false))
-                    _logger.Error("Unexpected exception while cancelling Tasks in BackgroundWorker stop", exception);
+                foreach (var exception in ae.Flatten().InnerExceptions)
+                    Log.Fatal(exception, "Unexpected exception while starting background worker");
+
+                throw new Exception("Background worker failed to start", ae);
             }
             catch (Exception e)
             {
-                _logger.Error("Unexpected error during BackgroundWorker stop", e);
+                Log.Fatal(e, "Unexpected exception while starting background worker");
+                throw;
+            }
+        }
+
+        public override void OnStop()
+        {
+            Log.Information("KillrVideo.BackgroundWorker is stopping");
+
+            // Stop all logical workers
+            if (_logicalWorkers != null)
+            {
+                try
+                {
+                    Task[] stopTasks = _logicalWorkers.Select(w => w.OnStop()).ToArray();
+                    Task.WaitAll(stopTasks);
+                }
+                catch (AggregateException ae)
+                {
+                    // Log any exceptions
+                    foreach (var exception in ae.Flatten().InnerExceptions)
+                        Log.Error(exception, "Unexpected exception while cancelling Tasks in BackgroundWorker stop");
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e, "Unexpected error during BackgroundWorker stop");
+                }
             }
 
             // Dispose of Windsor container

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
+using Serilog;
 
 namespace KillrVideo.SampleData.Worker.Scheduler
 {
@@ -12,7 +12,7 @@ namespace KillrVideo.SampleData.Worker.Scheduler
     /// </summary>
     public class SampleDataJobScheduler
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (SampleDataJobScheduler));
+        private static readonly ILogger Logger = Log.ForContext<SampleDataJobScheduler>();
         private static readonly TimeSpan RetryOnExceptionWaitTime = TimeSpan.FromSeconds(5);
         private static readonly TimeSpan TimeBeforeExpirationToRenew = TimeSpan.FromSeconds(20);
 
@@ -55,16 +55,28 @@ namespace KillrVideo.SampleData.Worker.Scheduler
                 }
                 catch (OperationCanceledException)
                 {
+                    break;
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error(string.Format("Unexpected exception.  Waiting {0} seconds to continue.", RetryOnExceptionWaitTime.TotalSeconds), ex);
+                    Logger.Error(ex, "Unexpected exception, waiting {RetrySeconds} seconds to continue", RetryOnExceptionWaitTime.TotalSeconds);
                     waitOnException = true;
                 }
 
-                // If something bad happened, wait a bit before retrying
-                if (waitOnException)
-                    await Task.Delay(RetryOnExceptionWaitTime, cancellationToken).ConfigureAwait(false);
+                try
+                {
+                    // If something bad happened, wait a bit before retrying
+                    if (waitOnException)
+                        await Task.Delay(RetryOnExceptionWaitTime, cancellationToken).ConfigureAwait(false);
+                }
+                catch (TaskCanceledException)
+                {
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, "Unexpected exception while waiting to try again");
+                }
             }
         }
 
