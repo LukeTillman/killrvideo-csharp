@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<schema name="autoSolrSchema" version="1.5">
+<types>
+<fieldType class="org.apache.solr.schema.TrieDateField" name="TrieDateField"/>
+<fieldType class="org.apache.solr.schema.TextField" name="TextField">
+<analyzer>
+<tokenizer class="solr.StandardTokenizerFactory"/>
+<filter class="solr.LowerCaseFilterFactory"/>
+</analyzer>
+</fieldType>
+<fieldType class="org.apache.solr.schema.UUIDField" name="UUIDField"/>
+<fieldType class="org.apache.solr.schema.TrieIntField" name="TrieIntField"/>
+</types>
+<fields>
+<field indexed="true" multiValued="false" name="added_date" stored="true" type="TrieDateField"/>
+<field indexed="true" multiValued="false" name="location" stored="true" type="TextField"/>
+<field indexed="true" multiValued="false" name="preview_image_location" stored="true" type="TextField"/>
+<field indexed="true" multiValued="false" name="name" stored="true" type="TextField"/>
+<field indexed="true" multiValued="true" name="tags" stored="true" type="TextField"/>
+<field indexed="true" multiValued="false" name="userid" stored="true" type="UUIDField"/>
+<field indexed="true" multiValued="false" name="videoid" stored="true" type="UUIDField"/>
+<field indexed="true" multiValued="false" name="location_type" stored="true" type="TrieIntField"/>
+<field indexed="true" multiValued="false" name="description" stored="true" type="TextField"/>
+</fields>
+<uniqueKey>videoid</uniqueKey>
+</schema>
