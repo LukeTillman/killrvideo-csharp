@@ -15,16 +15,13 @@ var require = {
         "jquery-expander": "bower_components/jquery-expander/jquery.expander",
         "bootstrap-select": "bower_components/bootstrap-select/dist/js/bootstrap-select",
         "bootstrap-tagsinput": "bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput",
-        "bootstrap-tour": "bower_components/bootstrap-tour/build/js/bootstrap-tour.min",
+        "hopscotch": "bower_components/hopscotch/dist/js/hopscotch.min",
+        "arrive": "bower_components/arrive/minified/arrive.min"
     },
     shim: {
         "bootstrap": {
             deps: ["jquery"],
             exports: "$.fn.popover"
-        },
-        "bootstrap-tour": {
-            deps: ["bootstrap", "jquery"],
-            exports: "Tour"
         },
         "jquery-expander": ["jquery"],
         "perfect-scrollbar": ["jquery"],

@@ -29,6 +29,7 @@
     "jquery-expander": "~1.4.11",
     "bootstrap-select": "~1.6.3",
     "knockout-postbox": "~0.4.2",
-    "hopscotch": "~0.2.5"
+    "hopscotch": "~0.2.5",
+    "arrive": "~2.2.0"
   }
 }

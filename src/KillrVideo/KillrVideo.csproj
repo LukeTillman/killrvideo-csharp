@@ -260,6 +260,7 @@
     <Content Include="scripts\app\common.js" />
     <Content Include="scripts\app\sampledata\index.js" />
     <Content Include="scripts\app\search\results.js" />
+    <Content Include="scripts\app\shared\guided-tour.js" />
     <Content Include="scripts\app\shared\header.js" />
     <Content Include="scripts\app\videos\view.js" />
     <Content Include="scripts\components\uimessages\uimessages.js" />

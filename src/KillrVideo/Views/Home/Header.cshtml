@@ -34,8 +34,8 @@
             
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a id="tour-enabled" href="#" data-bind="css: { enabled: tourEnabled }, click: toggleTour" title="Click to toggle the Guide on or off.">
-                            <i class="fa fa-question-circle fa-fw"></i> Guide: <span data-bind="text: tourEnabled() ? 'On' : 'Off'"></span>
+                        <a id="tour-enabled" href="#" data-bind="css: { enabled: tour.enabled }, click: tour.toggleEnabled" title="Click to toggle the Guided Tour on or off.">
+                            <i class="fa fa-question-circle fa-fw"></i> Tour: <span data-bind="text: tour.enabled() ? 'On' : 'Off'"></span>
                         </a>
                     </li>
                     <li>
