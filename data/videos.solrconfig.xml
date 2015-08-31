@@ -77,7 +77,7 @@
   <dataDir>${solr.data.dir}</dataDir>
   -->
 
-
+  <requestHandler name="/mlt" class="solr.MoreLikeThisHandler"></requestHandler>
   <!-- The DirectoryFactory to use for indexes.
 
        solr.StandardDirectoryFactory, the default, is filesystem
