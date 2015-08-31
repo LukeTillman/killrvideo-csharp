@@ -72,7 +72,8 @@
     <Compile Include="MLT\MLTResponseHeader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SuggestedVideosServiceWindsorInstaller.cs" />
-    <Compile Include="SuggestVideos.cs" />
+    <Compile Include="SuggestionImpl\SuggestVideosByTag.cs" />
+    <Compile Include="SuggestionImpl\SuggestVideos.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

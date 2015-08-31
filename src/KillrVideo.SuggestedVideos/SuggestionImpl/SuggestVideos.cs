@@ -8,7 +8,8 @@ using KillrVideo.Utils;
 using RestSharp;
 using Newtonsoft.Json;
 using KillrVideo.SuggestedVideos.MLT;
-namespace KillrVideo.SuggestedVideos
+
+namespace KillrVideo.SuggestedVideos.SuggestionImpl
 {
     /// <summary>
     /// Makes video suggestions based on data in Cassandra.
