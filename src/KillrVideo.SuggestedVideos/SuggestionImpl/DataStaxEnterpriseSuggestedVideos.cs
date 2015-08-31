@@ -7,6 +7,7 @@ using KillrVideo.SuggestedVideos.Dtos;
 using KillrVideo.SuggestedVideos.MLT;
 using KillrVideo.Utils;
 using RestSharp;
+using Serilog;
 
 namespace KillrVideo.SuggestedVideos.SuggestionImpl
 {
@@ -15,6 +16,8 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
     /// </summary>
     public class DataStaxEnterpriseSuggestedVideos : ISuggestVideos
     {
+        private static readonly ILogger Logger = Log.ForContext<DataStaxEnterpriseSuggestedVideos>();
+
         private readonly ISession _session;
         private readonly IRestClient _restClient;
 
@@ -54,14 +57,15 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
             // Check for network/timeout errors
             if (response.ResponseStatus != ResponseStatus.Completed)
             {
-                // TODO: Logging
+                Logger.Error(response.ErrorException, "Error while querying Solr video suggestions from {host} for {videoId}", nodeIp, videoId);
                 return new RelatedVideos { VideoId = videoId, Videos = Enumerable.Empty<VideoPreview>() };
             }
 
             // Check for HTTP error codes
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                // TODO: Logging
+                Logger.Error("HTTP status code {code} while querying Solr video suggestions from {host} for {videoId}", (int) response.StatusCode,
+                             nodeIp, videoId);
                 return new RelatedVideos { VideoId = videoId, Videos = Enumerable.Empty<VideoPreview>() };
             }
 
