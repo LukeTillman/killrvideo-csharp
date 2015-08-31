@@ -16,7 +16,6 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
     public class DataStaxEnterpriseSuggestedVideos : ISuggestVideos
     {
         private readonly ISession _session;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
         private readonly IRestClient _restClient;
 
         public DataStaxEnterpriseSuggestedVideos(ISession session, TaskCache<string, PreparedStatement> statementCache, IRestClient restClient)
@@ -24,7 +23,6 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
             if (session == null) throw new ArgumentNullException("session");
             if (statementCache == null) throw new ArgumentNullException("statementCache");
             _session = session;
-            _statementCache = statementCache;
             _restClient = restClient;
         }
 
@@ -33,34 +31,23 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
         /// </summary>
         public async Task<RelatedVideos> GetRelatedVideos(Guid videoId)
         {
-            // Lookup the name for the video
-            PreparedStatement nameforVideoPrepared = await _statementCache.NoContext.GetOrAddAsync("SELECT name FROM videos WHERE videoid = ?");
-            BoundStatement nameForVideoBound = nameforVideoPrepared.Bind(videoId);
-            RowSet nameRows = await _session.ExecuteAsync(nameForVideoBound).ConfigureAwait(false);
-            Row nameRow = nameRows.FirstOrDefault();
-            if (nameRow == null)
-                return new RelatedVideos { VideoId = videoId, Videos = Enumerable.Empty<VideoPreview>() };
-
-            string name = nameRow.GetValue<string>("name");
-
             // Set the base URL of the REST client to use the first node in the Cassandra cluster
             string nodeIp = _session.Cluster.AllHosts().First().Address.Address.ToString();
             _restClient.BaseUrl = new Uri(string.Format("http://{0}:8983/solr", nodeIp));
             
-            //WebRequest mltRequest = WebRequest.Create("http://127.0.2.15:8983/solr/killrvideo.videos/select?q=name%3ALast&wt=json&indent=true&qt=mlt&mlt.fl=name&mlt.mindf=1&mlt.mintf=1");
-            var request = new RestRequest("killrvideo.videos/select");
-            request.AddParameter("q", "name:\"" + name + "\"");
+            //WebRequest mltRequest = WebRequest.Create("http://127.0.2.15:8983/solr/killrvideo.videos/mlt?q=videoid%3Asome-uuid&wt=json&indent=true&qt=mlt&mlt.fl=name&mlt.mindf=1&mlt.mintf=1");
+            var request = new RestRequest("killrvideo.videos/mlt");
+            request.AddParameter("q", string.Format("videoid:\"{0}\"", videoId));
             request.AddParameter("wt", "json");
-            request.AddParameter("qt", "mlt");
 
             //MLT Fields to Consider
-            request.AddParameter("mlt.fl", "name");
+            request.AddParameter("mlt.fl", "name,description,tags");
 
             //MLT Minimum Document Frequency - the frequency at which words will be ignored which do not occur in at least this many docs.
-            request.AddParameter("mlt.mindf", 1);
+            request.AddParameter("mlt.mindf", 2);
 
             //MLT Minimum Term Frequency - the frequency below which terms will be ignored in the source doc.
-            request.AddParameter("mlt.mintf", 1);
+            request.AddParameter("mlt.mintf", 2);
 
             IRestResponse response = _restClient.Execute(request);
             var mltQuery = JsonConvert.DeserializeObject<MLTQuery>(response.Content);
@@ -69,21 +56,6 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
                 return new RelatedVideos { VideoId = videoId, Videos = mltQuery.response.docs };
             
             return new RelatedVideos { VideoId = videoId, Videos = Enumerable.Empty<VideoPreview>() };
-        }
-
-        /// <summary>
-        /// Maps a row to a VideoPreview object.
-        /// </summary>
-        private static VideoPreview MapRowToVideoPreview(Row row)
-        {
-            return new VideoPreview
-            {
-                VideoId = row.GetValue<Guid>("videoid"),
-                AddedDate = row.GetValue<DateTimeOffset>("added_date"),
-                Name = row.GetValue<string>("name"),
-                PreviewImageLocation = row.GetValue<string>("preview_image_location"),
-                UserId = row.GetValue<Guid>("userid")
-            };
         }
     }
 }
