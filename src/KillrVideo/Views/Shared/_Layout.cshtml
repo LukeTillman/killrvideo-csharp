@@ -27,47 +27,53 @@
     @RenderSection("htmlhead", required: false)
 </head>
 <body>
-    @{ Html.RenderAction("Header", "Home"); }
-    
-    <div id="body-wrapper">
-        <div id="body-content" class="container" style="display:none" data-bind="visible: true">
-            @RenderBody()
-        </div>
-        <div id="push-footer"></div>
+
+@{ Html.RenderPartial("Header"); }
+
+<div id="body-wrapper">
+    <div id="body-content" class="container" style="display: none" data-bind="visible: true">
+        @RenderBody()
     </div>
-    
-    <footer class="small">
-        <div id="footer-main">
-            <div class="container">
-                <ul class="list-inline pull-left">
-                    @if (GlobalConfigs.SampleDataEntryEnabled)
-                    {
-                        <li><a href="@Url.Action("Index", "SampleData")">Add Sample Data</a></li>
-                    }
-                </ul>
-                <div class="pull-right">
-                    &copy; @DateTime.Now.Year - KillrVideo
-                </div>
+    <div id="push-footer"></div>
+</div>
+
+<footer class="small">
+    <div id="footer-main">
+        <div class="container">
+            <ul class="list-inline pull-left">
+                @if (GlobalConfigs.SampleDataEntryEnabled)
+                {
+                    <li><a href="@Url.Action("Index", "SampleData")">Add Sample Data</a></li>
+                }
+            </ul>
+            <div class="pull-right">
+                &copy; @DateTime.Now.Year - KillrVideo
             </div>
         </div>
-    </footer>
-    
-    @RenderSection("scripts", required: false)
-    
-    @if (GlobalConfigs.AnalyticsEnabled)
-    {
-        <script>
-            (function (i, s, o, g, r, a, m) {
-                i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date(); a = s.createElement(o),
-                    m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    </div>
+</footer>
 
-            ga('create', 'UA-54473346-1', 'auto');
-            ga('send', 'pageview');
+@RenderSection("scripts", required: false)
 
-        </script>
-    }
+@if (GlobalConfigs.AnalyticsEnabled)
+{
+    <script>
+        (function(i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-54473346-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+}
 </body>
 </html>

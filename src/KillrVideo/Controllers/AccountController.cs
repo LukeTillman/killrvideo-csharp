@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Security;
+using KillrVideo.ActionFilters;
 using KillrVideo.ActionResults;
 using KillrVideo.Authentication;
 using KillrVideo.Models.Account;
@@ -137,6 +138,28 @@ namespace KillrVideo.Controllers
                 UserProfile = UserProfileViewModel.FromDataModel(profile),
                 IsCurrentlyLoggedInUser = isCurrentlyLoggedInUser
             });
+        }
+
+        /// <summary>
+        /// Gets the account information for the currently logged in user.
+        /// </summary>
+        [HttpGet, NoCache]
+        public async Task<JsonNetResult> Current()
+        {
+            var currentAccount = new CurrentAccountViewModel { IsLoggedIn = false };
+
+            Guid? userId = User.GetCurrentUserId();
+            if (userId.HasValue == false) 
+                return JsonSuccess(currentAccount);
+
+            UserProfile user = await _userManagement.GetUserProfile(userId.Value);
+            if (user == null) 
+                return JsonSuccess(currentAccount);
+
+            // We have a logged in user
+            currentAccount.IsLoggedIn = true;
+            currentAccount.Profile = UserProfileViewModel.FromDataModel(user);
+            return JsonSuccess(currentAccount);
         }
 	}
 }

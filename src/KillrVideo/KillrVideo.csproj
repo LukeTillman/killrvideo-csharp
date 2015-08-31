@@ -180,6 +180,7 @@
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\YouTubeController.cs" />
     <Compile Include="Models\Account\AccountInfoViewModel.cs" />
+    <Compile Include="Models\Account\CurrentAccountViewModel.cs" />
     <Compile Include="Models\Account\GetAccountInfoViewModel.cs" />
     <Compile Include="Models\Account\SignInUserViewModel.cs" />
     <Compile Include="Models\Account\UserSignedInViewModel.cs" />
@@ -189,7 +190,6 @@
     <Compile Include="Models\Comments\UserCommentViewModel.cs" />
     <Compile Include="Models\Comments\VideoCommentsViewModel.cs" />
     <Compile Include="Models\Comments\VideoCommentViewModel.cs" />
-    <Compile Include="Models\Home\ViewNavbarViewModel.cs" />
     <Compile Include="Models\PlaybackStats\StartedViewModel.cs" />
     <Compile Include="Models\SampleData\AddCommentsViewModel.cs" />
     <Compile Include="Models\SampleData\AddUsersViewModel.cs" />
@@ -321,7 +321,7 @@
     <Content Include="Views\Account\SignIn.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Home\Header.cshtml" />
+    <Content Include="Views\Shared\Header.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Search\Results.cshtml" />

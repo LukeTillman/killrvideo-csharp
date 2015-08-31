@@ -32,6 +32,22 @@ define(["knockout", "jquery", "app/shared/guided-tour", "lib/knockout-extenders"
         self.toggleWhatIsThis = function() {
             self.showWhatIsThis(!self.showWhatIsThis());
         };
+
+        var defaultUser = {
+            isLoggedIn: false,
+            profile: null
+        };
+
+        // The currently logged in user
+        self.loggedInUser = ko.computed(function() {
+            return $.getJSON("/account/current").then(function (response) {
+                // If we failed for some reason, just return the default user
+                if (!response.success)
+                    return defaultUser;
+
+                return response.data;
+            });
+        }).extend({ async: defaultUser });
     }
 
 
