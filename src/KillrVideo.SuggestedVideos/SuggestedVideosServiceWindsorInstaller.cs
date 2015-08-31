@@ -4,6 +4,7 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using KillrVideo.SuggestedVideos.SuggestionImpl;
+using RestSharp;
 
 namespace KillrVideo.SuggestedVideos
 {
@@ -32,7 +33,10 @@ namespace KillrVideo.SuggestedVideos
                 Component.For<Func<ISuggestVideos>>().AsFactory(c => c.SelectedWith<SuggestedVideosComponentSelector>()).LifestyleSingleton(),
 
                 // When resolving the search service, use the factory method
-                Component.For<ISuggestVideos>().UsingFactoryMethod(k => k.Resolve<Func<ISuggestVideos>>().Invoke()).LifestyleTransient()
+                Component.For<ISuggestVideos>().UsingFactoryMethod(k => k.Resolve<Func<ISuggestVideos>>().Invoke()).LifestyleTransient(),
+
+                // RestSharp client
+                Component.For<IRestClient>().ImplementedBy<RestClient>().LifestyleTransient()
             );
         }
     }

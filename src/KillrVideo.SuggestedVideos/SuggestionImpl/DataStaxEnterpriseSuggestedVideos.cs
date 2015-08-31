@@ -17,13 +17,15 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
     {
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly IRestClient _restClient;
 
-        public DataStaxEnterpriseSuggestedVideos(ISession session, TaskCache<string, PreparedStatement> statementCache)
+        public DataStaxEnterpriseSuggestedVideos(ISession session, TaskCache<string, PreparedStatement> statementCache, IRestClient restClient)
         {
             if (session == null) throw new ArgumentNullException("session");
             if (statementCache == null) throw new ArgumentNullException("statementCache");
             _session = session;
             _statementCache = statementCache;
+            _restClient = restClient;
         }
 
         /// <summary>
@@ -40,10 +42,12 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
                 return new RelatedVideos { VideoId = videoId, Videos = Enumerable.Empty<VideoPreview>() };
 
             string name = nameRow.GetValue<string>("name");
+
+            // Set the base URL of the REST client to use the first node in the Cassandra cluster
             string nodeIp = _session.Cluster.AllHosts().First().Address.Address.ToString();
+            _restClient.BaseUrl = new Uri(string.Format("http://{0}:8983/solr", nodeIp));
             
             //WebRequest mltRequest = WebRequest.Create("http://127.0.2.15:8983/solr/killrvideo.videos/select?q=name%3ALast&wt=json&indent=true&qt=mlt&mlt.fl=name&mlt.mindf=1&mlt.mintf=1");
-            var client = new RestClient(string.Format("http://{0}:8983/solr", nodeIp));
             var request = new RestRequest("killrvideo.videos/select");
             request.AddParameter("q", "name:\"" + name + "\"");
             request.AddParameter("wt", "json");
@@ -58,9 +62,9 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
             //MLT Minimum Term Frequency - the frequency below which terms will be ignored in the source doc.
             request.AddParameter("mlt.mintf", 1);
 
-            var response = client.Execute(request);
-            var content = response.Content;
-            var mltQuery = JsonConvert.DeserializeObject<MLTQuery>(content);
+            IRestResponse response = _restClient.Execute(request);
+            var mltQuery = JsonConvert.DeserializeObject<MLTQuery>(response.Content);
+
             if (mltQuery.responseHeader.status != 0)
                 return new RelatedVideos { VideoId = videoId, Videos = mltQuery.response.docs };
             
