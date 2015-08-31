@@ -6,7 +6,6 @@ using Cassandra;
 using KillrVideo.SuggestedVideos.Dtos;
 using KillrVideo.SuggestedVideos.MLT;
 using KillrVideo.Utils;
-using Newtonsoft.Json;
 using RestSharp;
 
 namespace KillrVideo.SuggestedVideos.SuggestionImpl
