@@ -1,5 +1,8 @@
-﻿@using System
-@using KillrVideo.Utils
+﻿@using KillrVideo.Utils
+@{
+    // Calculate the name of the current view
+    string viewName = ((RazorView) ViewContext.View).ViewPath.Replace("~/Views", string.Empty).Replace(".cshtml", string.Empty).ToLowerInvariant();
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,13 +19,9 @@
 
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/content/Site.css")" />
     <link rel="icon" type="image/png" href="@Url.Content("~/content/killrvideo-icon.png")"/>
-    
-    <script type="text/javascript" src="@Url.Content("~/scripts/requirejs-config.js")"></script>
 
-    @if (ViewBag.RequireJsMain != null)
-    {
-        <script type="text/javascript" data-main="@ViewBag.RequireJsMain" src="@Url.Content("~/scripts/bower_components/requirejs/require.js")"></script>
-    }
+    <script type="text/javascript" id="requirejs-script" data-main="/scripts/app/main" data-view="@viewName"
+            src="@Url.Content("~/scripts/bower_components/requirejs/require.js")"></script>
     
     @RenderSection("htmlhead", required: false)
 </head>

@@ -1,7 +1,7 @@
 ﻿// The header functionality on all pages (requires bootstrap for the logged in user dropdown which may be present)
-define(["knockout", "jquery", "app/shared/guided-tour", "lib/knockout-extenders", "bootstrap", "app/common"], function (ko, $, guidedTour) {
+define(["knockout", "jquery", "app/shared/guided-tour", "lib/knockout-extenders", "bootstrap"], function (ko, $, guidedTour) {
     // A view model for the header/navbar
-    function headerViewModel() {
+    return function headerViewModel() {
         var self = this;
 
         // The value in the search box, throttled so that we don't constantly update as they are typing
@@ -13,7 +13,7 @@ define(["knockout", "jquery", "app/shared/guided-tour", "lib/knockout-extenders"
             if (search.length === 0)
                 return [];
 
-            return $.getJSON("/search/suggestqueries", { query: search, pageSize: 10 }).then(function (response) {
+            return $.getJSON("/search/suggestqueries", { query: search, pageSize: 10 }).then(function(response) {
                 // If we failed for some reason, just return an empty array
                 if (!response.success)
                     return [];
@@ -40,7 +40,7 @@ define(["knockout", "jquery", "app/shared/guided-tour", "lib/knockout-extenders"
 
         // The currently logged in user
         self.loggedInUser = ko.computed(function() {
-            return $.getJSON("/account/current").then(function (response) {
+            return $.getJSON("/account/current").then(function(response) {
                 // If we failed for some reason, just return the default user
                 if (!response.success)
                     return defaultUser;
@@ -48,11 +48,5 @@ define(["knockout", "jquery", "app/shared/guided-tour", "lib/knockout-extenders"
                 return response.data;
             });
         }).extend({ async: defaultUser });
-    }
-
-
-    // Bind the search box when dom is ready
-    $(function () {
-        ko.applyBindings(new headerViewModel(), $("#header").get(0));
-    });
+    };
 });

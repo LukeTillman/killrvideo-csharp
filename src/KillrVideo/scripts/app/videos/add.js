@@ -1,6 +1,6 @@
-﻿require(["knockout", "jquery", "knockout-validation", "knockout-postbox", "lib/knockout-bootstrap-select", "lib/knockout-bootstrap-tagsinput", "app/common", "app/shared/header"], function (ko, $) {
+﻿define(["knockout", "jquery", "knockout-validation", "knockout-postbox", "lib/knockout-bootstrap-select", "lib/knockout-bootstrap-tagsinput"], function (ko, $) {
     // ViewModel for the add video page
-    function addVideoViewModel() {
+    return function addVideoViewModel() {
         var self = this;
 
         // Common video details
@@ -51,10 +51,5 @@
             ko.postbox.publish(queueName, videoDetails);
         };
     };
-
-    // Bind the main content area when DOM is ready
-    $(function () {
-        ko.applyBindings(new addVideoViewModel(), $("#body-content").get(0));
-    });
 });
 

@@ -1,5 +1,5 @@
 ﻿// Common configuration for RequireJS
-var require = {
+requirejs.config({
     baseUrl: "/scripts",
     paths: {
         "jquery": "bower_components/jquery/dist/jquery.min",
@@ -28,4 +28,31 @@ var require = {
         "bootstrap-select": ["bootstrap"],
         "bootstrap-tagsinput": ["bootstrap"]
     }
-};
+});
+
+// Start the app
+requirejs(["knockout", "jquery", "require"], function (ko, $, require) {
+    // Register some KO components
+    var components = [
+        "uimessages", "video-preview-list", "user-videos-table", "user-comments-list", "add-upload", "add-youtube", "related-videos",
+        "video-upload-status", "video-preview", "view-youtube", "view-upload"
+    ];
+
+    for (var i = 0; i < components.length; i++) {
+        // Most components should follow this convention
+        var name = components[i];
+        ko.components.register(name, { require: "components/" + name + "/" + name });
+    }
+
+    // Load the model for the current view
+    var viewName = $("#requirejs-script").data("view");
+    require(["app/shared/header", "app" + viewName], function (headerViewModel, pageViewModel) {
+        // Apply KO bindings on DOM ready
+        $(function () {
+            // Bind the header
+            ko.applyBindings(new headerViewModel(), $("#header").get(0));
+            // Bind the page
+            ko.applyBindings(new pageViewModel(), $("#body-content").get(0));
+        });
+    });
+});

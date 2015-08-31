@@ -1,7 +1,8 @@
-﻿require(["knockout", "jquery", "app/common", "app/shared/header"], function (ko, $) {
+﻿define(["knockout", "jquery"], function (ko, $) {
     // View model for the search results page
-    function searchResultsModel(query) {
-        var self = this;
+    return function searchResultsModel() {
+        var self = this,
+            query = $("#searched-for").val();
 
         var allVideos = [],
             ajaxData = {
@@ -62,7 +63,7 @@
         });
 
         // Go to the next page if available
-        self.nextPage = function () {
+        self.nextPage = function() {
             // See if we already have data for the next page
             var nextPage = self.currentPage() + 1;
             if (nextPage <= lastPageLoaded) {
@@ -79,7 +80,7 @@
                 data: JSON.stringify(ajaxData),
                 contentType: "application/json",
                 dataType: "json"
-            }).then(function (response) {
+            }).then(function(response) {
                 if (!response.success)
                     return;
 
@@ -97,11 +98,11 @@
                     var video = response.data.videos[i];
                     allVideos.push(video);
                 }
-                
+
                 // Change the current page and increment the pages we've loaded from the server
                 lastPageLoaded++;
                 self.currentPage(nextPage);
-            }).always(function () {
+            }).always(function() {
                 // Always indicate we're finished loading
                 self.isLoading(false);
             });
@@ -109,12 +110,5 @@
 
         // Get the initial page on creation
         self.nextPage();
-    }
-
-    // Bind the main content area when DOM is ready
-    $(function () {
-        // Include the query that was searched for
-        var query = $("#searched-for").val();
-        ko.applyBindings(new searchResultsModel(query), $("#body-content").get(0));
-    });
+    };
 });

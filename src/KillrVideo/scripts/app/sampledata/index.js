@@ -1,4 +1,4 @@
-﻿require(["knockout", "jquery", , "lib/knockout-bootstrap-select", "app/common", "app/shared/header"], function (ko, $) {
+﻿define(["knockout", "jquery", , "lib/knockout-bootstrap-select"], function (ko, $) {
     function sampleUsersViewModel() {
         var self = this;
 
@@ -87,7 +87,7 @@
     }
 
     // The page view model for adding sample data
-    function addSampleDataViewModel() {
+    return function addSampleDataViewModel() {
         var self = this;
 
         // The currently selected sample data type
@@ -100,18 +100,18 @@
                 return null;
 
             switch (selectedType) {
-                case "users":
-                    return new sampleUsersViewModel();
-                case "youtube":
-                    return new sampleYouTubeVideosViewModel();
-                case "comments":
-                    return new sampleCommentsViewModel();
-                case "videoratings":
-                    return new sampleVideoRatingsViewModel();
-                case "videoviews":
-                    return new sampleVideoViewsViewModel();
-                default:
-                    return null;
+            case "users":
+                return new sampleUsersViewModel();
+            case "youtube":
+                return new sampleYouTubeVideosViewModel();
+            case "comments":
+                return new sampleCommentsViewModel();
+            case "videoratings":
+                return new sampleVideoRatingsViewModel();
+            case "videoviews":
+                return new sampleVideoViewsViewModel();
+            default:
+                return null;
             }
         });
 
@@ -122,7 +122,7 @@
         self.dataAdded = ko.observable(false);
 
         // Adds sample data
-        self.addSampleData = function () {
+        self.addSampleData = function() {
             self.dataAdded(false);
 
             var childModel = self.selectedSampleDataTypeModel();
@@ -141,10 +141,5 @@
                 self.saving(false);
             });
         };
-    }
-
-    // Bind the main content area when DOM is ready
-    $(function () {
-        ko.applyBindings(new addSampleDataViewModel(), $("#body-content").get(0));
-    });
+    };
 });

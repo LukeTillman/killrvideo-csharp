@@ -1,6 +1,6 @@
-﻿require(["knockout", "jquery", "knockout-validation", "app/common", "app/shared/header"], function (ko, $) {
-    // Return view model
-    function signInViewModel() {
+﻿define(["knockout", "jquery", "knockout-validation"], function (ko, $) {
+    // Return view model for sign in page
+    return function signInViewModel() {
         var self = this;
 
         self.emailAddress = ko.observable("").extend({ required: true, email: true });
@@ -41,10 +41,5 @@
                     self.inProgress(false);
                 });
         };
-    }
-
-    // Bind the main content area when DOM is ready
-    $(function () {
-        ko.applyBindings(new signInViewModel(), $("#body-content").get(0));
-    });
+    };
 });

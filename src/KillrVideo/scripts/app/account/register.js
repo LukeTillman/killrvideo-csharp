@@ -1,6 +1,6 @@
-﻿require(["knockout", "jquery", "knockout-validation", "app/common", "app/shared/header"], function (ko, $) {
+﻿define(["knockout", "jquery", "knockout-validation"], function (ko, $) {
     // ViewModel for registration page
-    function registerViewModel() {
+    return function registerViewModel() {
         var self = this;
 
         // Information about the new user
@@ -31,7 +31,7 @@
         self.registerUrl = "/account/registeruser";
 
         // Saves the new user's registration via AJAX call
-        self.registerUser = function () {
+        self.registerUser = function() {
             // Check for any validation problems
             if (self.validationErrors().length > 0) {
                 self.validationErrors.showAllMessages();
@@ -62,10 +62,5 @@
                     self.saving(false);
                 });
         };
-    }
-
-    // Bind the main content area when DOM is ready
-    $(function () {
-        ko.applyBindings(new registerViewModel(), $("#body-content").get(0));
-    });
+    };
 });
