@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
 using KillrVideo.SuggestedVideos.Dtos;
-using KillrVideo.Utils;
-using RestSharp;
-using Newtonsoft.Json;
 using KillrVideo.SuggestedVideos.MLT;
+using KillrVideo.Utils;
+using Newtonsoft.Json;
+using RestSharp;
 
 namespace KillrVideo.SuggestedVideos.SuggestionImpl
 {
@@ -16,8 +15,6 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
     /// </summary>
     public class DataStaxEnterpriseSuggestedVideos : ISuggestVideos
     {
-        private const int RelatedVideosToReturn = 4;
-
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
 
@@ -34,28 +31,30 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
         /// </summary>
         public async Task<RelatedVideos> GetRelatedVideos(Guid videoId)
         {
-            // Lookup the tags for the video
-            PreparedStatement nameforVideoPrepared = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM videos WHERE videoid = ?");
+            // Lookup the name for the video
+            PreparedStatement nameforVideoPrepared = await _statementCache.NoContext.GetOrAddAsync("SELECT name FROM videos WHERE videoid = ?");
             BoundStatement nameForVideoBound = nameforVideoPrepared.Bind(videoId);
             RowSet nameRows = await _session.ExecuteAsync(nameForVideoBound).ConfigureAwait(false);
             Row nameRow = nameRows.FirstOrDefault();
             if (nameRow == null)
                 return new RelatedVideos { VideoId = videoId, Videos = Enumerable.Empty<VideoPreview>() };
-            VideoPreview preview = MapRowToVideoPreview(nameRow);
 
-
-            var node_ip = _session.Cluster.AllHosts().ElementAt(0).Address.Address.ToString();
+            string name = nameRow.GetValue<string>("name");
+            string nodeIp = _session.Cluster.AllHosts().First().Address.Address.ToString();
+            
             //WebRequest mltRequest = WebRequest.Create("http://127.0.2.15:8983/solr/killrvideo.videos/select?q=name%3ALast&wt=json&indent=true&qt=mlt&mlt.fl=name&mlt.mindf=1&mlt.mintf=1");
-
-            var client = new RestClient("http://" + node_ip + ":8983/solr");
+            var client = new RestClient(string.Format("http://{0}:8983/solr", nodeIp));
             var request = new RestRequest("killrvideo.videos/select");
-            request.AddParameter("q", "name:\"" + preview.Name + "\"");
+            request.AddParameter("q", "name:\"" + name + "\"");
             request.AddParameter("wt", "json");
             request.AddParameter("qt", "mlt");
+
             //MLT Fields to Consider
             request.AddParameter("mlt.fl", "name");
+
             //MLT Minimum Document Frequency - the frequency at which words will be ignored which do not occur in at least this many docs.
             request.AddParameter("mlt.mindf", 1);
+
             //MLT Minimum Term Frequency - the frequency below which terms will be ignored in the source doc.
             request.AddParameter("mlt.mintf", 1);
 
@@ -63,14 +62,9 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
             var content = response.Content;
             var mltQuery = JsonConvert.DeserializeObject<MLTQuery>(content);
             if (mltQuery.responseHeader.status != 0)
-                return new RelatedVideos
-                {
-                    VideoId = videoId,
-                    Videos = mltQuery.response.docs
-                };
-            else
-                return new RelatedVideos { VideoId = videoId, Videos = Enumerable.Empty<VideoPreview>() };
-
+                return new RelatedVideos { VideoId = videoId, Videos = mltQuery.response.docs };
+            
+            return new RelatedVideos { VideoId = videoId, Videos = Enumerable.Empty<VideoPreview>() };
         }
 
         /// <summary>

@@ -3,7 +3,7 @@
 namespace KillrVideo.SuggestedVideos.MLT
 {
     /// <summary>
-    /// ViewModel for recording video playback starting.
+    /// The response from issuing a MoreLikeThis query to DSE Search.
     /// </summary>
     [Serializable]
     public class MLTQuery
