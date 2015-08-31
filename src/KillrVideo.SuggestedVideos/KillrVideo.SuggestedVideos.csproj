@@ -72,6 +72,7 @@
     <Compile Include="MLT\MLTResponseHeader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SuggestedVideosServiceWindsorInstaller.cs" />
+    <Compile Include="SuggestionImpl\SuggestedVideosComponentSelector.cs" />
     <Compile Include="SuggestionImpl\SuggestVideosByTag.cs" />
     <Compile Include="SuggestionImpl\DataStaxEnterpriseSuggestedVideos.cs" />
   </ItemGroup>
