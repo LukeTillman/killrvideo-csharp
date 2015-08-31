@@ -101,11 +101,11 @@ namespace KillrVideo.Controllers
         /// <summary>
         /// Signs a user out.
         /// </summary>
-        [HttpGet]
+        [HttpGet, NoCache]
         public ActionResult SignOut()
         {
             FormsAuthentication.SignOut();
-            return RedirectToAction("Index", "Home");
+            return JsonSuccess();
         }
 
         /// <summary>

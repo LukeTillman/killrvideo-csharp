@@ -48,5 +48,21 @@ define(["knockout", "jquery", "app/shared/guided-tour", "lib/knockout-extenders"
                 return response.data;
             });
         }).extend({ async: defaultUser });
+
+        // Logs a user out
+        self.logoutUser = function() {
+            $.getJSON("/account/signout").then(function (response) {
+                // If we failed for some reason, just bail
+                if (!response.success)
+                    return;
+
+                // Redirect to the home page
+                if (window.location.pathname === "/") {
+                    window.location.reload();
+                } else {
+                    window.location.href = "/";
+                }
+            });
+        };
     };
 });

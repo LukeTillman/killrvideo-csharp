@@ -11,7 +11,8 @@
             home: "/",
             viewVideo: new RegExp("\/view\/"),
             userProfile: new RegExp("\/account\/info"),
-            register: "/account/register"
+            register: "/account/register",
+            signIn: "/account/signin"
         };
             
         // Create the tour
@@ -173,7 +174,8 @@
                     page: pages.userProfile,
                     target: "#user-profile-header",
                     placement: "right",
-                    content: "To look a user up by id, we can query the <code>users</code> table like this:<br/><br/>" +
+                    content: "Since the <code>users</code> table has the <code>PRIMARY KEY</code> defined as the <code>userid</code> column, Cassandra allows us to look users " +
+                        "up by unique id like this:<br/><br/>" +
                         "<pre><code>" +
                         "SELECT * FROM users\r\n" +
                         "WHERE userid = ?;" +
@@ -183,6 +185,7 @@
                 {
                     page: pages.userProfile,
                     target: "#register",
+                    waitForTargetOn: "#navbar-main",
                     placement: "bottom",
                     xOffset: -220,
                     arrowOffset: 250,
@@ -197,12 +200,13 @@
                         });
                     }
                 },
+                // User registration page (unauthenticated)
                 {
                     page: pages.register,
                     target: "#register-account form",
                     placement: "right",
-                    content: "This is the user registration form for KillrVideo. It probably looks a lot like the forms you've filled out before on most web sites, " +
-                        "collecting basic information like your name and email address.",
+                    content: "This is the user registration form for KillrVideo. It probably looks like many of the forms you've filled out before to register for a web " +
+                        "site. Here we collect basic information like your name and email address.",
                     onPrev: function () {
                         // Go back to the previous page
                         window.history.back();
@@ -219,7 +223,117 @@
                         "  userid, firstname, lastname, email, created_date)\r\n" +
                         "VALUES (?, ?, ?, ?, ?);" +
                         "</code></pre>"
-                }
+                },
+                {
+                    page: pages.register,
+                    target: "#sign-in",
+                    placement: "bottom", // TODO: Alignment with button
+                    content: "You might have noticed that our <code>users</code> table doesn't have a <code>password</code> column and so the <code>INSERT</code> " +
+                        "statement we just showed you isn't capturing that value from the form. Why not? Let's take a look at the Sign In page for an explanation. " +
+                        "Click the Sign In button to continue.",
+                    showNextButton: false,
+                    multipage: true,
+                    onShow: function () {
+                        // Listen for clicks on the login link and advance the tour
+                        $eventEl.one("click.guidedtour", "#sign-in", function () {
+                            hs.nextStep();
+                        });
+                    }
+                },
+                // Sign In page (unauthenticated)
+                {
+                    page: pages.signIn,
+                    target: "#signin-account",
+                    placement: "right",
+                    content: "This is the sign in form for KillrVideo. Once a user enters their credentials, we'll need to look them up by email address and verify " +
+                        "their password.",
+                    onPrev: function () {
+                        // Go back to the previous page
+                        window.history.back();
+                    }
+                },
+                {
+                    page: pages.signIn,
+                    target: "#signin-email",
+                    placement: "right",
+                    content: "If our <code>users</code> table had a <code>password</code> column in it, you might be tempted to try a query like this to look a user up by email " +
+                        "address:<br/><br/>" +
+                        "<pre><code>" +
+                        "SELECT password FROM users\r\n" +
+                        "WHERE email = ?;" +
+                        "</code></pre>" +
+                        "But if we try to execute that query, Cassandra will give us an <code>InvalidQuery</code> error. Why is that?"
+                },
+                {
+                    page: pages.signIn,
+                    target: "#signin-account",
+                    placement: "right",
+                    content: "In Cassandra, the <code>WHERE</code> clause of your query is limited to columns that are part of the <code>PRIMARY KEY</code> of the table. You'll " +
+                        "remember that in our <code>users</code> table, this was the <code>userid</code> column (so that we could look users up by unique id on the user profile " +
+                        "page). So how do we do a query to look a user up by email address so we can log them in?"
+                },
+                {
+                    page: pages.signIn,
+                    target: "#signin-email",
+                    placement: "right",
+                    content: "To solve this problem we'll create a second table in Cassandra for storing user data and make sure that it has the appropriate <code>PRIMARY KEY</code> " +
+                        "definition for querying users by email address. In KillrVideo, that table looks like this:<br/><br/>" +
+                        "<pre><code>" +
+                        "CREATE TABLE user_credentials (\r\n" +
+                        "  email text,\r\n" +
+                        "  password text,\r\n" +
+                        "  userid uuid\r\n" +
+                        "  PRIMARY KEY (email)\r\n" +
+                        ");</code></pre>"
+                },
+                {
+                    page: pages.signIn,
+                    target: "#signin-account",
+                    placement: "right",
+                    content: "When a user registers for the site, we'll insert the data captured into both the <code>users</code> and <code>user_credentials</code> tables. This is a " +
+                        "data modeling technique called <strong>denormalization</strong> and is something that you'll use a lot when working with Cassandra."
+                },
+                {
+                    page: pages.signIn,
+                    target: "#signin-account button.btn-primary",
+                    placement: "right",
+                    content: "Now that we have a <code>user_credentials</code> table, we can do a query like this to look a user up by email address and verify their password:<br/><br/>" +
+                        "<pre><code>" +
+                        "SELECT password FROM user_credentials\r\n" +
+                        "WHERE email = ?;" +
+                        "</code></pre>" +
+                        "Let's sign into KillrVideo. We've filled in the form with some sample user credentials. Click the Sign In button to continue.",
+                    showNextButton: false,
+                    multipage: true,
+                    onShow: function () {
+                        // Fill in some sample user credentials
+                        $("#signin-email").val("guidedtour@killrvideo.com").change();
+                        $("#signin-password").val("guidedtour").change();
+
+                        // Listen for clicks on the sign in button and advance the tour
+                        $eventEl.one("click.guidedtour", "#signin-account button.btn-primary", function () {
+                            hs.nextStep();
+                        });
+                    },
+                    onPrev: function() {
+                        // Clear the credentials if we go back a step
+                        $("#signin-email").val("").change();
+                        $("#signin-password").val("").change();
+                    }
+                },
+                // Home page (authenticated)
+                {
+                    page: pages.home,
+                    target: "#body-content",
+                    placement: "bottom",
+                    content: "Yay! Back home!",
+                    onPrev: function () {
+                        // Log the user out, then go to the previous page
+                        $.getJSON("/account/signout").then(function() {
+                            window.history.back();
+                        });
+                    }
+                },
             ]
         };
 
@@ -259,7 +373,7 @@
                     : currentStep.page.test(window.location.pathname.toLowerCase());
                 
                 if (onCorrectPage) {
-                    if (currentStep.waitForTargetOn) {
+                    if (currentStep.waitForTargetOn && $(currentStep.target).length === 0) {
                         // The target element is dynamic and might not be on the page yet, so wait for it before starting the tour
                         $(currentStep.waitForTargetOn).arrive(currentStep.target, { onceOnly: true }, function () {
                             hs.startTour(tour);
