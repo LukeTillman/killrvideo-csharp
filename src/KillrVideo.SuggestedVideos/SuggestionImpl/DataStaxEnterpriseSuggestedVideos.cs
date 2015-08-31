@@ -14,14 +14,14 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
     /// <summary>
     /// Makes video suggestions based on data in Cassandra.
     /// </summary>
-    public class SuggestVideos : ISuggestVideos
+    public class DataStaxEnterpriseSuggestedVideos : ISuggestVideos
     {
         private const int RelatedVideosToReturn = 4;
 
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
 
-        public SuggestVideos(ISession session, TaskCache<string, PreparedStatement> statementCache)
+        public DataStaxEnterpriseSuggestedVideos(ISession session, TaskCache<string, PreparedStatement> statementCache)
         {
             if (session == null) throw new ArgumentNullException("session");
             if (statementCache == null) throw new ArgumentNullException("statementCache");
