@@ -257,7 +257,7 @@
     <Content Include="scripts\app\account\info.js" />
     <Content Include="scripts\app\account\register.js" />
     <Content Include="scripts\app\account\signin.js" />
-    <Content Include="scripts\app\common.js" />
+    <Content Include="scripts\app\main.js" />
     <Content Include="scripts\app\sampledata\index.js" />
     <Content Include="scripts\app\search\results.js" />
     <Content Include="scripts\app\shared\guided-tour.js" />
@@ -268,7 +268,7 @@
     <Content Include="scripts\components\add-upload\add-upload.js" />
     <Content Include="scripts\components\add-youtube\add-youtube.js" />
     <Content Include="scripts\app\videos\add.js" />
-    <Content Include="scripts\app\index.js" />
+    <Content Include="scripts\app\home\index.js" />
     <Content Include="scripts\components\user-comments-list\user-comments-list.js" />
     <Content Include="scripts\components\user-comments-list\user-comments-list.tmpl.html" />
     <Content Include="scripts\components\user-videos-table\user-videos-table.js" />
@@ -292,7 +292,6 @@
     <Content Include="scripts\lib\knockout-expander.js" />
     <Content Include="scripts\lib\knockout-perfect-scrollbar.js" />
     <Content Include="scripts\lib\knockout-extenders.js" />
-    <Content Include="scripts\requirejs-config.js" />
     <Content Include="scripts\components\uimessages\uimessages.tmpl.html" />
     <Content Include="scripts\components\add-upload\add-upload.tmpl.html" />
     <Content Include="scripts\components\add-youtube\add-youtube.tmpl.html" />
