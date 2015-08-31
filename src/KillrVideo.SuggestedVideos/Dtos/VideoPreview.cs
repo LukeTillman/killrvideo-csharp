@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+
 namespace KillrVideo.SuggestedVideos.Dtos
 {
     /// <summary>
@@ -11,7 +11,6 @@ namespace KillrVideo.SuggestedVideos.Dtos
         public Guid VideoId { get; set; }
         public DateTimeOffset AddedDate { get; set; }
         public string Name { get; set; }
-        [JsonProperty("preview_image_location")]
         public string PreviewImageLocation { get; set; }
         public Guid UserId { get; set; }
     }

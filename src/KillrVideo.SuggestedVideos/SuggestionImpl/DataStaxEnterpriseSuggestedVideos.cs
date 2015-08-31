@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Cassandra;
 using KillrVideo.SuggestedVideos.Dtos;
@@ -49,13 +50,24 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
             //MLT Minimum Term Frequency - the frequency below which terms will be ignored in the source doc.
             request.AddParameter("mlt.mintf", 2);
 
-            IRestResponse response = _restClient.Execute(request);
-            var mltQuery = JsonConvert.DeserializeObject<MLTQuery>(response.Content);
+            IRestResponse<MLTQueryResult> response = await _restClient.ExecuteTaskAsync<MLTQueryResult>(request).ConfigureAwait(false);
 
-            if (mltQuery.responseHeader.status != 0)
-                return new RelatedVideos { VideoId = videoId, Videos = mltQuery.response.docs };
-            
-            return new RelatedVideos { VideoId = videoId, Videos = Enumerable.Empty<VideoPreview>() };
+            // Check for network/timeout errors
+            if (response.ResponseStatus != ResponseStatus.Completed)
+            {
+                // TODO: Logging
+                return new RelatedVideos { VideoId = videoId, Videos = Enumerable.Empty<VideoPreview>() };
+            }
+
+            // Check for HTTP error codes
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                // TODO: Logging
+                return new RelatedVideos { VideoId = videoId, Videos = Enumerable.Empty<VideoPreview>() };
+            }
+
+            // Success
+            return new RelatedVideos { VideoId = videoId, Videos = response.Data.Response.Docs };
         }
     }
 }

@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using KillrVideo.SuggestedVideos.Dtos;
-namespace KillrVideo.SuggestedVideos.MLT
 
-{
+namespace KillrVideo.SuggestedVideos.MLT
+{    
     /// <summary>
-    /// ViewModel for recording video playback starting.
+    /// The response content of a MLTQueryResult. Contains the actual videos found.
     /// </summary>
     [Serializable]
     public class MLTResponse
     {
-        public int numFound { get; set; }
-        public int start { get; set; }
-        public IEnumerable<VideoPreview> docs { get; set; }
+        public int NumFound { get; set; }
+        public int Start { get; set; }
+        public List<VideoPreview> Docs { get; set; }
     }
 }

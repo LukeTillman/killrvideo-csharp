@@ -65,11 +65,8 @@
     <Compile Include="Dtos\RelatedVideos.cs" />
     <Compile Include="Dtos\VideoPreview.cs" />
     <Compile Include="ISuggestVideos.cs" />
-    <Compile Include="MLT\MLTDocument.cs" />
-    <Compile Include="MLT\MLTMatch.cs" />
-    <Compile Include="MLT\MLTQuery.cs" />
+    <Compile Include="MLT\MLTQueryResult.cs" />
     <Compile Include="MLT\MLTResponse.cs" />
-    <Compile Include="MLT\MLTResponseHeader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SuggestedVideosServiceWindsorInstaller.cs" />
     <Compile Include="SuggestionImpl\SuggestedVideosComponentSelector.cs" />
