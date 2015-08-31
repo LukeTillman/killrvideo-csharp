@@ -1,4 +1,4 @@
-﻿define(["knockout", "jquery", "hopscotch", "arrive", "lib/knockout-extenders"], function (ko, $, hs) {
+﻿define(["knockout", "jquery", "hopscotch", "bootstrap", "arrive", "lib/knockout-extenders"], function (ko, $, hs) {
 
     // Return a view mdoel for the guided tour
     return function guidedTourModel() {
@@ -12,7 +12,9 @@
             viewVideo: new RegExp("\/view\/"),
             userProfile: new RegExp("\/account\/info"),
             register: "/account/register",
-            signIn: "/account/signin"
+            signIn: "/account/signin",
+            addVideo: "/videos/add",
+            searchResults: new RegExp("\/search\/results")
         };
             
         // Create the tour
@@ -324,9 +326,12 @@
                 // Home page (authenticated)
                 {
                     page: pages.home,
-                    target: "#body-content",
-                    placement: "bottom",
-                    content: "Yay! Back home!",
+                    target: "#recent-videos-header > span",
+                    placement: "right",
+                    content: "Now that you know a little bit more about querying and data modeling with Cassandra, let's talk about this Recent Videos section. If you remember our " +
+                        "<code>videos</code> table when we were discussing the video catalog, you'll recall that it had a <code>PRIMARY KEY</code> of <code>videoid</code> for " +
+                        "looking videos up by unique identifier. As you can probably guess, that table isn't going to help us for this section where we need to show the latest " +
+                        "videos added to the site.",
                     onPrev: function () {
                         // Log the user out, then go to the previous page
                         $.getJSON("/account/signout").then(function() {
@@ -334,6 +339,220 @@
                         });
                     }
                 },
+                {
+                    page: pages.home,
+                    target: "#recent-videos-header > span",
+                    placement: "right",
+                    content: "But by leveraging denormalization again, we can create a table that allows us to query the video data added to the site by time. In KillrVideo, the table " +
+                        "looks like this:<br/><br/>" +
+                        "<pre><code>" +
+                        "CREATE TABLE latest_videos (\r\n" +
+                        "  yyyymmdd text,\r\n" +
+                        "  added_date timestamp,\r\n" +
+                        "  videoid uuid,\r\n" +
+                        "  userid uuid,\r\n" +
+                        "  name text,\r\n" +
+                        "  preview_image_location text,\r\n" +
+                        "  PRIMARY KEY (yyyymmdd, added_date, videoid)\r\n" +
+                        ") WITH CLUSTERING ORDER BY (\r\n" +
+                        "  added_date DESC, videoid ASC);" +
+                        "</code></pre>"
+                },
+                {
+                    page: pages.home,
+                    target: "#recent-videos-header > span",
+                    placement: "right",
+                    content: "This is a really simple example of a <strong>time series data model</strong>. Cassandra is great at storing time series data and lots of companies " +
+                        "use DataStax Enterprise for use cases like the Internet of Things (IoT) which are often collecting a lot of time series data from a multitude of " +
+                        "sensors or devices."
+                },
+                {
+                    page: pages.home,
+                    target: "#recent-videos-list",
+                    placement: "bottom",
+                    content: "One interesting thing about the <code>latest_videos</code> table is how we go about inserting data into it. In KillrVideo, we decided that the Recent " +
+                        "Videos list should only ever show videos from <em>at most</em> the last 7 days. As a result, we don't really need to retain any data that's older than " +
+                        "7 days. While we could write some kind of background job to delete old data from that table on a regular basis, instead we're leveraging Cassandra's " +
+                        "ability to specify a <strong>TTL</strong> or <strong>Time to Live</strong> when inserting data to that table."
+                },
+                {
+                    page: pages.home,
+                    target: "#recent-videos-list",
+                    placement: "bottom",
+                    content: "Here's what an <code>INSERT</code> statement into the <code>latest_videos</code> table looks like:<br/><br/>" +
+                        "<pre><code>" +
+                        "INSERT INTO latest_videos (\r\n" +
+                        "  yyyymmdd, added_date, videoid,\r\n" +
+                        "  userid, name, preview_image_location)\r\n" +
+                        "VALUES (?, ?, ?, ?, ?, ?)\r\n" +
+                        "USING TTL 604800;" +
+                        "</code></pre>" +
+                        "By specifying <code>USING TTL 604800</code>, we are telling Cassandra to automatically expire or delete that record after 604,800 seconds (or 7 days)."
+                },
+                // TODO: Add video page next?
+                {
+                    page: pages.home,
+                    target: "#recent-videos-list ul.list-unstyled li:first-child div.video-preview",
+                    waitForTargetOn: "#recent-videos-list",
+                    placement: "bottom",
+                    content: "Let's look at a few other things we can do now that we're signed in to the site. Click on a video to continue.",
+                    showNextButton: false,
+                    multipage: true,
+                    onShow: function () {
+                        // Listen for clicks on any of the video previews and advance the tour
+                        $eventEl.one("click.guidedtour", "#recent-videos-list div.video-preview", function () {
+                            hs.nextStep();
+                        });
+                    }
+                },
+                // View video page (authenticated)
+                {
+                    page: pages.viewVideo,
+                    target: "div.video-rating-and-sharing",
+                    placement: "bottom",
+                    content: "Since we're signed in, we can now rate videos as we watch them on the site. The overall rating for a video is calculated using the values " +
+                        "from two <code>counter</code> columns stored in Cassandra. Here's what the table looks like:<br/><br/>" +
+                        "<pre><code>" +
+                        "CREATE TABLE video_ratings (\r\n" +
+                        "  videoid uuid,\r\n" +
+                        "  rating_counter counter,\r\n" +
+                        "  rating_total counter,\r\n" +
+                        "  PRIMARY KEY (videoid)\r\n" +
+                        ");</code></pre>" +
+                        "Columns of type <code>counter</code> are a special Cassandra column type that allow operations like increment/decrement and are great for storing " +
+                        "approximate counts.",
+                    onPrev: function () {
+                        window.history.back();
+                    }
+                },
+                {
+                    page: pages.viewVideo,
+                    target: "#view-video-comments",
+                    placement: "left",
+                    content: "The latest comments for a video are also displayed and now that we're signed in, we can leave comments of our own. Comments are another simple " +
+                        "example of a <strong>time series data model</strong>."
+                },
+                {
+                    page: pages.viewVideo,
+                    target: "#view-video-tags",
+                    placement: "bottom",
+                    content: "When users add videos to the catalog, we ask them to provide tags for the video they are adding. These are just keywords that apply to the content " +
+                        "of the video. Clicking on a tag is the same as using the search box in the header to search for videos with that keyword. Let's see how search works. " +
+                        "Click on a tag to continue.",
+                    showNextButton: false,
+                    multipage: true,
+                    onShow: function () {
+                        // Listen for clicks on any of the video tags and advance the tour
+                        $eventEl.one("click.guidedtour", "#view-video-tags a", function () {
+                            hs.nextStep();
+                        });
+                    }
+                },
+                // Search results page (authenticated)
+                {
+                    page: pages.searchResults,
+                    target: "#body-content h3.section-divider > span",
+                    placement: "right",
+                    content: "Here we see can see the search results for the keyword we clicked on. Searching for videos on KillrVideo is powered by the Search feature of " +
+                        "DataStax Enterprise. This feature creates indexes that allow us to do powerful Lucene queries on our video catalog data that are not possible to do " +
+                        "with just CQL. The indexes are automatically updated in the background as new data is added to our catalog tables in Cassandra.",
+                    onPrev: function () {
+                        window.history.back();
+                    }
+                },
+                {
+                    page: pages.searchResults,
+                    target: "#body-content h3.section-divider > span",
+                    placement: "right",
+                    content: "On KillrVideo, we've enabled DataStax Enterprise Search on our <code>videos</code> table which holds our video catalog. When a user searches for " +
+                        "videos, we're then able to issue a Lucene query that searches for relevant videos. For example, we could use a Lucene query " +
+                        "like this to search for videos with the word <em>cassandra</em> in the <code>description</code> column:<br/><br/>" +
+                        "<pre><code>" +
+                        "description:cassandra" +
+                        "</code></pre>"
+                },
+                {
+                    page: pages.searchResults,
+                    target: "#body-content h3.section-divider > span",
+                    placement: "right",
+                    content: "Lucene queries in DataStax Enterprise are also integrated with CQL, so I can get data from the <code>videos</code> table using that query like this:<br/><br/>" +
+                        "<pre><code>" +
+                        "SELECT * FROM videos\r\n" +
+                        "WHERE solr_query = 'description:cassandra';" +
+                        "</code></pre>"
+                },
+                {
+                    page: pages.searchResults,
+                    target: "#body-content h3.section-divider > span",
+                    placement: "right",
+                    content: "But we're not limited to just querying on a single field. Since DataStax Enterprise Search is powered by Solr, we have all that power available " +
+                        "to us as well. The query we issue to return search results on this page for <em>cassandra</em> actually looks like this:<br/><br/>" +
+                        "<pre><code>" +
+                        "{ 'q': '{!edismax qf=\"name^2 tags^1 description\"}cassandra' }" +
+                        "</code></pre>" +
+                        "This uses Solr's ExtendedDisMax parser to search across multiple columns and gives a boost to search results with <em>cassandra</em> in the <code>name</code> " +
+                        "or <code>tags</code> columns over just the <code>description</code> column."
+                },
+                {
+                    page: pages.searchResults,
+                    target: "#search-results div.video-preview:first-child",
+                    placement: "bottom",
+                    content: "There are some other cool things we can do with DataStax Enterprise Search beyond just full-text searching. Let's look at a video again to check out " +
+                        "another KillrVideo feature powered by DSE Search. Click on a video to continue.",
+                    showNextButton: false,
+                    multipage: true,
+                    onShow: function () {
+                        // Listen for clicks on any of the videos and advance the tour
+                        $eventEl.one("click.guidedtour", "div.video-preview", function () {
+                            hs.nextStep();
+                        });
+                    }
+                },
+                // View video page (authenticated)
+                {
+                    page: pages.viewVideo,
+                    target: "#view-video-related",
+                    placement: "top",
+                    content: "Down here we see a list of videos that are related to the one we're currently viewing. This list is also powered by DataStax Enterprise Search. By " +
+                        "turning on Solr's MoreLikeThis feature in DSE, we can issue queries that will return videos with similar terms (in their titles, descriptions, etc.) to the " +
+                        "video we're currently viewing.",
+                    onPrev: function () {
+                        window.history.back();
+                    }
+                },
+                {
+                    page: pages.viewVideo,
+                    target: "#logo",
+                    placement: "bottom",
+                    content: "DataStax Enterprise also offers some other interesting features beyond just Search. Let's go back to the home page to take a look at another one of those. " +
+                        "Click on the KillrVideo logo to continue.",
+                    showNextButton: false,
+                    multipage: true,
+                    onShow: function () {
+                        // Listen for clicks on any of the videos and advance the tour
+                        $eventEl.one("click.guidedtour", "#logo", function () {
+                            hs.nextStep();
+                        });
+                    }
+                },
+                // Home page (authenticated)
+                {
+                    page: pages.home,
+                    target: "#body-content",
+                    placement: "left",
+                    content: "TODO: Video recommendations with Spark.",
+                    onPrev: function () {
+                        window.history.back();
+                    }
+                },
+                {
+                    page: pages.home,
+                    target: "#logo",
+                    placement: "bottom",
+                    content: "Thanks for taking the time to learn more about KillrVideo! Remember, KillrVideo is completely open source, so check it out on GitHub " +
+                        "to dig deeper into how things work. There's also great self-paced training courses for DataStax Enterprise available online at the DataStax " +
+                        "Academy web site. If you're new to Cassandra, be sure to check that out as well."
+                }
             ]
         };
 

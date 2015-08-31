@@ -52,19 +52,18 @@
 
                     <!-- Menu for users that are logged in -->
                     <li class="dropdown" data-bind="if: loggedInUser().profile, visible: true" style="display: none;">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <a id="loggedin-user" href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <span data-bind="text: loggedInUser().profile.firstName"></span> <span data-bind="text: loggedInUser().profile.lastName"></span>
                             <img data-bind="attr: { src: loggedInUser().profile.profileImageUrl }" alt="Profile image" class="img-circle user-gravatar" />
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="@Url.Action("Info", "Account")"><i class="fa fa-cog fa-fw"></i> My Account</a></li>
-                            <li><a href="@Url.Action("Add", "Videos")"><i class="fa fa-video-camera fa-fw"></i> Add a video</a></li>
+                            <li><a id="my-account" href="@Url.Action("Info", "Account")"><i class="fa fa-cog fa-fw"></i> My Account</a></li>
+                            <li><a id="add-video-link" href="@Url.Action("Add", "Videos")"><i class="fa fa-video-camera fa-fw"></i> Add a Video</a></li>
                             <li class="divider"></li>
                             <li><a href="#" data-bind="click: logoutUser"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
                         </ul>
                     </li>
-                    
                 </ul>
             </div>
         </div>

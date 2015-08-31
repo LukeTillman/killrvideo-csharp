@@ -104,7 +104,7 @@
             </div>
 
             <!-- View Video Comments -->
-            <div data-bind="with: videoCommentsModel">
+            <div id="view-video-comments" data-bind="with: videoCommentsModel">
                 <h5>Latest Comments</h5>
                 <ul data-bind="foreach: { data: comments, as: 'singleComment' }" class="video-comments list-unstyled">
                     <li class="clearfix">
@@ -153,4 +153,4 @@
 </div>
 
 <!-- Related videos -->
-<video-preview-list params="url: '/videos/related', ajaxData: { videoId: '@Model.VideoId' }, pagingDisabled: true"></video-preview-list>
+<video-preview-list id="view-video-related" params="url: '/videos/related', ajaxData: { videoId: '@Model.VideoId' }, pagingDisabled: true"></video-preview-list>

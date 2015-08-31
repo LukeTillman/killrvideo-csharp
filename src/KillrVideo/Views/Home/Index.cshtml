@@ -2,7 +2,7 @@
     ViewBag.Title = "Home Page";
 }
 
-<h3 class="section-divider">
+<h3 class="section-divider" id="recent-videos-header">
     <span><em>Recent</em> Videos</span>
 </h3>
 
@@ -10,7 +10,7 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <h3 class="section-divider">
+    <h3 class="section-divider" id="my-videos-header">
         <span><em>My</em> Videos</span>
     </h3>
 
