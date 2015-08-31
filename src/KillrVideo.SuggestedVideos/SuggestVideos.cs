@@ -61,14 +61,15 @@ namespace KillrVideo.SuggestedVideos
             var response = client.Execute(request);
             var content = response.Content;
             var mltQuery = JsonConvert.DeserializeObject<MLTQuery>(content);
+            if (mltQuery.responseHeader.status != 0)
+                return new RelatedVideos
+                {
+                    VideoId = videoId,
+                    Videos = mltQuery.response.docs
+                };
+            else
+                return new RelatedVideos { VideoId = videoId, Videos = Enumerable.Empty<VideoPreview>() };
 
-
-
-            return new RelatedVideos
-            {
-                VideoId = videoId,
-                Videos = mltQuery.response.docs
-            };
         }
 
         /// <summary>
