@@ -99,7 +99,12 @@ namespace KillrVideo.Controllers
         [HttpPost]
         public async Task<JsonNetResult> Related(GetRelatedVideosViewModel model)
         {
-            RelatedVideos relatedVideos = await _suggestions.GetRelatedVideos(model.VideoId);
+            RelatedVideos relatedVideos = await _suggestions.GetRelatedVideos(new RelatedVideosQuery
+            {
+                VideoId = model.VideoId,
+                PagingState = model.PagingState,
+                PageSize = model.PageSize
+            });
 
             // TODO:  Better solution than client-side JOINs
             var authorIds = new HashSet<Guid>(relatedVideos.Videos.Select(v => v.UserId));
@@ -112,12 +117,14 @@ namespace KillrVideo.Controllers
 
             return JsonSuccess(new RelatedVideosViewModel
             {
+                VideoId = relatedVideos.VideoId,
                 Videos = relatedVideos.Videos
-                                     .Join(authorsTask.Result, vp => vp.UserId, a => a.UserId,
-                                           (vp, a) => new { VideoPreview = vp, Author = a })
-                                     .Join(statsTask.Result, vpa => vpa.VideoPreview.VideoId, s => s.VideoId,
-                                           (vpa, s) => VideoPreviewViewModel.FromDataModel(vpa.VideoPreview, vpa.Author, s, Url))
-                                     .ToList()
+                                      .Join(authorsTask.Result, vp => vp.UserId, a => a.UserId,
+                                            (vp, a) => new { VideoPreview = vp, Author = a })
+                                      .Join(statsTask.Result, vpa => vpa.VideoPreview.VideoId, s => s.VideoId,
+                                            (vpa, s) => VideoPreviewViewModel.FromDataModel(vpa.VideoPreview, vpa.Author, s, Url))
+                                      .ToList(),
+                PagingState = relatedVideos.PagingState
             });
         }
 
@@ -139,8 +146,7 @@ namespace KillrVideo.Controllers
             {
                 UserId = userId.Value,
                 PageSize = model.PageSize,
-                FirstVideoOnPageAddedDate = model.FirstVideoOnPage == null ? (DateTimeOffset?) null : model.FirstVideoOnPage.AddedDate,
-                FirstVideoOnPageVideoId = model.FirstVideoOnPage == null ? (Guid?) null : model.FirstVideoOnPage.VideoId
+                PagingState = model.PagingState
             });
 
             // TODO:  Better solution than client-side JOINs
@@ -156,7 +162,8 @@ namespace KillrVideo.Controllers
                 UserId = userVideos.UserId,
                 Videos = userVideos.Videos.Join(statsTask.Result, v => v.VideoId, s => s.VideoId,
                                                 (v, s) => VideoPreviewViewModel.FromDataModel(v, authorTask.Result, s, Url))
-                                   .ToList()
+                                   .ToList(),
+                PagingState = userVideos.PagingState
             });
         }
 
@@ -169,8 +176,7 @@ namespace KillrVideo.Controllers
             LatestVideos recentVideos = await _videoCatalog.GetLastestVideos(new GetLatestVideos
             {
                 PageSize = model.PageSize,
-                FirstVideoOnPageDate = model.FirstVideoOnPage == null ? (DateTimeOffset?) null : model.FirstVideoOnPage.AddedDate,
-                FirstVideoOnPageVideoId = model.FirstVideoOnPage == null ? (Guid?) null : model.FirstVideoOnPage.VideoId
+                PagingState = model.PagingState
             });
 
             // TODO:  Better solution than client-side JOINs
@@ -189,7 +195,8 @@ namespace KillrVideo.Controllers
                                            (vp, a) => new { VideoPreview = vp, Author = a })
                                      .Join(statsTask.Result, vpa => vpa.VideoPreview.VideoId, s => s.VideoId,
                                            (vpa, s) => VideoPreviewViewModel.FromDataModel(vpa.VideoPreview, vpa.Author, s, Url))
-                                     .ToList()
+                                     .ToList(),
+                PagingState = recentVideos.PagingState
             });
         }
 

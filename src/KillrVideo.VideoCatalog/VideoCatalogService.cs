@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Cassandra;
 using KillrVideo.Utils;
@@ -16,6 +17,7 @@ namespace KillrVideo.VideoCatalog
     public class VideoCatalogService : IVideoCatalogService
     {
         private const int MaxDaysInPastForLatestVideos = 7;
+        private static readonly Regex ParseLatestPagingState = new Regex("([0-9]{8}){8}([0-9]{1})(.*)", RegexOptions.Compiled | RegexOptions.Singleline);
         
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
@@ -149,61 +151,71 @@ namespace KillrVideo.VideoCatalog
         /// </summary>
         public async Task<LatestVideos> GetLastestVideos(GetLatestVideos getVideos)
         {
-            // We may need multiple queries to fill the quota
-            var results = new List<VideoPreview>();
+            string[] buckets;
+            int bucketIndex;
+            string rowPagingState;
 
-            // Generate a list of all the possibly bucket dates by truncating now to the day, then subtracting days from that day
-            // going back as many days as we're allowed to query back
-            DateTimeOffset nowToTheDay = DateTimeOffset.UtcNow.Truncate(TimeSpan.TicksPerDay);
-            var bucketDates = Enumerable.Range(0, MaxDaysInPastForLatestVideos + 1)
-                                        .Select(day => nowToTheDay.Subtract(TimeSpan.FromDays(day)));
-
-            // If we're going to include paging parameters for the first query, filter out any bucket dates that are more recent
-            // than the first video on the page
-            bool pageFirstQuery = getVideos.FirstVideoOnPageDate.HasValue && getVideos.FirstVideoOnPageVideoId.HasValue;
-            if (pageFirstQuery)
+            // See if we have paging state from a previous page of videos
+            if (TryParsePagingState(getVideos.PagingState, out buckets, out bucketIndex, out rowPagingState) == false)
             {
-                DateTimeOffset maxBucketToTheDay = getVideos.FirstVideoOnPageDate.Value.Truncate(TimeSpan.TicksPerDay);
-                bucketDates = bucketDates.Where(bucketToTheDay => bucketToTheDay <= maxBucketToTheDay);
+                // Generate a list of all the possibly bucket dates by truncating now to the day, then subtracting days from that day
+                // going back as many days as we're allowed to query back
+                DateTimeOffset nowToTheDay = DateTimeOffset.UtcNow.Truncate(TimeSpan.TicksPerDay);
+                buckets = Enumerable.Range(0, MaxDaysInPastForLatestVideos + 1)
+                                    .Select(day => nowToTheDay.Subtract(TimeSpan.FromDays(day)).ToString("yyyyMMdd"))
+                                    .ToArray();
+                bucketIndex = 0;
+                rowPagingState = null;
             }
+            
+            // We may need multiple queries to fill the quota so build up a list of results
+            var results = new List<VideoPreview>();
+            string nextPageState = null;
 
-            DateTimeOffset[] bucketDatesArray = bucketDates.ToArray();
-
-            // TODO: Run queries in parallel instead of sequentially?
-            for (var i = 0; i < bucketDatesArray.Length; i++)
+            // TODO: Run queries in parallel?
+            while (bucketIndex < buckets.Length)
             {
                 int recordsStillNeeded = getVideos.PageSize - results.Count;
+                string bucket = buckets[bucketIndex];
 
-                string bucket = bucketDatesArray[i].ToString("yyyyMMdd");
+                // Get a page of records but don't automatically load more pages when enumerating the RowSet
+                PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM latest_videos WHERE yyyymmdd = ?");
+                IStatement boundStatement = preparedStatement.Bind(bucket)
+                                                             .SetAutoPage(false)
+                                                             .SetPageSize(recordsStillNeeded);
 
-                // If we're processing a paged request, use the appropriate statement
-                PreparedStatement preparedStatement;
-                IStatement boundStatement;
-                if (pageFirstQuery && i == 0)
-                {
-                    preparedStatement = await _statementCache.NoContext.GetOrAddAsync(
-                        "SELECT * FROM latest_videos WHERE yyyymmdd = ? AND (added_date, videoid) <= (?, ?) LIMIT ?");
-                    boundStatement = preparedStatement.Bind(bucket, getVideos.FirstVideoOnPageDate.Value, getVideos.FirstVideoOnPageVideoId.Value,
-                                                            recordsStillNeeded);
-                }
-                else
-                {
-                    preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM latest_videos WHERE yyyymmdd = ? LIMIT ?");
-                    boundStatement = preparedStatement.Bind(bucket, recordsStillNeeded);
-                }
+                // Start from where we left off in this bucket
+                if (string.IsNullOrEmpty(rowPagingState) == false)
+                    boundStatement.SetPagingState(Convert.FromBase64String(rowPagingState));
 
                 RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
-
                 results.AddRange(rows.Select(MapRowToVideoPreview));
 
-                // If we've got all the records we need, we can quit querying
-                if (results.Count >= getVideos.PageSize)
-                    break;
-            }
+                // See if we can stop querying
+                if (results.Count == getVideos.PageSize)
+                {
+                    // Are there more rows in the current bucket?
+                    if (rows.PagingState != null && rows.PagingState.Length > 0)
+                    {
+                        // Start from where we left off in this bucket if we get the next page
+                        nextPageState = CreatePagingState(buckets, bucketIndex, Convert.ToBase64String(rows.PagingState));
+                    }
+                    else if (bucketIndex != buckets.Length - 1)
+                    {
+                        // Start from the beginning of the next bucket since we're out of rows in this one
+                        nextPageState = CreatePagingState(buckets, bucketIndex + 1, string.Empty);
+                    }
 
+                    break;
+                }
+
+                bucketIndex++;
+            }
+            
             return new LatestVideos
             {
-                Videos = results
+                Videos = results,
+                PagingState = nextPageState
             };
         }
 
@@ -213,26 +225,21 @@ namespace KillrVideo.VideoCatalog
         public async Task<UserVideos> GetUserVideos(GetUserVideos getVideos)
         {
             // Figure out if we're getting first page or subsequent page
-            PreparedStatement preparedStatement;
-            IStatement boundStatement;
-            if (getVideos.FirstVideoOnPageAddedDate.HasValue && getVideos.FirstVideoOnPageVideoId.HasValue)
-            {
-                preparedStatement = await _statementCache.NoContext.GetOrAddAsync(
-                    "SELECT * FROM user_videos WHERE userid = ? AND (added_date, videoid) <= (?, ?) LIMIT ?");
-                boundStatement = preparedStatement.Bind(getVideos.UserId, getVideos.FirstVideoOnPageAddedDate.Value,
-                                                        getVideos.FirstVideoOnPageVideoId.Value, getVideos.PageSize);
-            }
-            else
-            {
-                preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM user_videos WHERE userid = ? LIMIT ?");
-                boundStatement = preparedStatement.Bind(getVideos.UserId, getVideos.PageSize);
-            }
+            PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM user_videos WHERE userid = ?");
+            IStatement boundStatement = preparedStatement.Bind(getVideos.UserId)
+                                                         .SetAutoPage(false)
+                                                         .SetPageSize(getVideos.PageSize);
+
+            // The initial query won't have a paging state, but subsequent calls should if there are more pages
+            if (string.IsNullOrEmpty(getVideos.PagingState) == false)
+                boundStatement.SetPagingState(Convert.FromBase64String(getVideos.PagingState));
 
             RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
             return new UserVideos
             {
                 UserId = getVideos.UserId,
-                Videos = rows.Select(MapRowToVideoPreview).ToList()
+                Videos = rows.Select(MapRowToVideoPreview).ToList(),
+                PagingState = rows.PagingState != null && rows.PagingState.Length > 0 ? Convert.ToBase64String(rows.PagingState) : null
             };
         }
         
@@ -270,6 +277,38 @@ namespace KillrVideo.VideoCatalog
                 PreviewImageLocation = row.GetValue<string>("preview_image_location"),
                 UserId = row.GetValue<Guid>("userid")
             };
+        }
+
+        /// <summary>
+        /// Creates a string representation of the paging state for the GetLatestVideos query from the inputs provided.
+        /// </summary>
+        private static string CreatePagingState(string[] buckets, int bucketIndex, string rowsPagingState)
+        {
+            return string.Format("{0}{1}{2}", string.Join(string.Empty, buckets), bucketIndex, rowsPagingState);
+        }
+
+        /// <summary>
+        /// Tries to parse a paging state string created by the CreatePagingState method into the constituent parts.
+        /// </summary>
+        private static bool TryParsePagingState(string pagingState, out string[] buckets, out int bucketIndex, out string rowsPagingState)
+        {
+            buckets = new string[] { };
+            bucketIndex = 0;
+            rowsPagingState = null;
+
+            if (string.IsNullOrEmpty(pagingState))
+                return false;
+
+            // Use Regex to parse string (should be 8 buckets in yyyyMMdd format, followed by 1 bucket index, followed by 0 or 1 paging state string)
+            Match match = ParseLatestPagingState.Match(pagingState);
+            if (match.Success == false)
+                return false;
+
+            // Match group 0 will be the entire string that matched, so start at index 1
+            buckets = match.Groups[1].Captures.Cast<Capture>().Select(c => c.Value).ToArray();
+            bucketIndex = int.Parse(match.Groups[2].Value);
+            rowsPagingState = match.Groups.Count == 4 ? match.Groups[3].Value : null;
+            return true;
         }
     }
 }

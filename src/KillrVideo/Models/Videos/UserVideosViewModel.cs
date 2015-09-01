@@ -4,6 +4,9 @@ using KillrVideo.Models.Shared;
 
 namespace KillrVideo.Models.Videos
 {
+    /// <summary>
+    /// The results of getting a page of videos for a user.
+    /// </summary>
     [Serializable]
     public class UserVideosViewModel
     {
@@ -16,5 +19,10 @@ namespace KillrVideo.Models.Videos
         /// The page of videos for the user.
         /// </summary>
         public IEnumerable<VideoPreviewViewModel> Videos { get; set; }
+
+        /// <summary>
+        /// The page state token for retrieving the next page of records.
+        /// </summary>
+        public string PagingState { get; set; }
     }
 }

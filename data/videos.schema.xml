@@ -15,12 +15,12 @@
 <field indexed="true" multiValued="false" name="added_date" stored="true" type="TrieDateField"/>
 <field indexed="true" multiValued="false" name="location" stored="true" type="TextField"/>
 <field indexed="true" multiValued="false" name="preview_image_location" stored="true" type="TextField"/>
-<field indexed="true" multiValued="false" name="name" stored="true" type="TextField"/>
-<field indexed="true" multiValued="true" name="tags" stored="true" type="TextField"/>
+<field indexed="true" multiValued="false" name="name" termVectors="true" stored="true" type="TextField"/>
+<field indexed="true" multiValued="true" name="tags" termVectors="true" stored="true" type="TextField"/>
 <field indexed="true" multiValued="false" name="userid" stored="true" type="UUIDField"/>
 <field indexed="true" multiValued="false" name="videoid" stored="true" type="UUIDField"/>
 <field indexed="true" multiValued="false" name="location_type" stored="true" type="TrieIntField"/>
-<field indexed="true" multiValued="false" name="description" stored="true" type="TextField"/>
+<field indexed="true" multiValued="false" name="description" termVectors="true" stored="true" type="TextField"/>
 </fields>
 <uniqueKey>videoid</uniqueKey>
 </schema>

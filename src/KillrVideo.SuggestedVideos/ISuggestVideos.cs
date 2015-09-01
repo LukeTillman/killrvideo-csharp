@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using KillrVideo.SuggestedVideos.Dtos;
 
 namespace KillrVideo.SuggestedVideos
@@ -10,8 +9,8 @@ namespace KillrVideo.SuggestedVideos
     public interface ISuggestVideos
     {
         /// <summary>
-        /// Gets the first 5 videos related to the specified video.
+        /// Gets the videos related to the specified video.
         /// </summary>
-        Task<RelatedVideos> GetRelatedVideos(Guid videoId);
+        Task<RelatedVideos> GetRelatedVideos(RelatedVideosQuery query);
     }
 }

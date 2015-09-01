@@ -77,7 +77,6 @@
   <dataDir>${solr.data.dir}</dataDir>
   -->
 
-
   <!-- The DirectoryFactory to use for indexes.
 
        solr.StandardDirectoryFactory, the default, is filesystem
@@ -513,7 +512,12 @@
        not be initialized until the first request that uses it.
 
     -->
-
+    
+  <!-- MoreLikeThis
+  
+       Enable searches for similar documents based on the content of a source documents.
+  -->
+  <requestHandler name="/mlt" class="solr.MoreLikeThisHandler"></requestHandler>
 
   <!-- SearchHandler
 

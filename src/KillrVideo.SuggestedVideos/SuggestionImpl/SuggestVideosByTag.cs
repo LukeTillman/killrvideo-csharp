@@ -6,19 +6,19 @@ using Cassandra;
 using KillrVideo.SuggestedVideos.Dtos;
 using KillrVideo.Utils;
 
-namespace KillrVideo.SuggestedVideos
+namespace KillrVideo.SuggestedVideos.SuggestionImpl
 {
     /// <summary>
-    /// Makes video suggestions based on data in Cassandra.
+    /// Searches the videos_by_tag table to offer suggestions for related videos. Does not support paging currently.
     /// </summary>
-    public class SuggestVideos : ISuggestVideos
+    public class SuggestVideosByTag : ISuggestVideos
     {
         private const int RelatedVideosToReturn = 4;
 
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
 
-        public SuggestVideos(ISession session, TaskCache<string, PreparedStatement> statementCache)
+        public SuggestVideosByTag(ISession session, TaskCache<string, PreparedStatement> statementCache)
         {
             if (session == null) throw new ArgumentNullException("session");
             if (statementCache == null) throw new ArgumentNullException("statementCache");
@@ -27,24 +27,24 @@ namespace KillrVideo.SuggestedVideos
         }
 
         /// <summary>
-        /// Gets the first 5 videos related to the specified video.
+        /// Gets the first 4 videos related to the specified video. Does not support paging.
         /// </summary>
-        public async Task<RelatedVideos> GetRelatedVideos(Guid videoId)
+        public async Task<RelatedVideos> GetRelatedVideos(RelatedVideosQuery queryParams)
         {
             // Lookup the tags for the video
             PreparedStatement tagsForVideoPrepared = await _statementCache.NoContext.GetOrAddAsync("SELECT tags FROM videos WHERE videoid = ?");
-            BoundStatement tagsForVideoBound = tagsForVideoPrepared.Bind(videoId);
+            BoundStatement tagsForVideoBound = tagsForVideoPrepared.Bind(queryParams.VideoId);
             RowSet tagRows = await _session.ExecuteAsync(tagsForVideoBound).ConfigureAwait(false);
             Row tagRow = tagRows.SingleOrDefault();
             if (tagRow == null)
-                return new RelatedVideos { VideoId = videoId, Videos = Enumerable.Empty<VideoPreview>() };
+                return new RelatedVideos { VideoId = queryParams.VideoId, Videos = Enumerable.Empty<VideoPreview>(), PagingState = null };
 
             var tagsValue = tagRow.GetValue<IEnumerable<string>>("tags");
             var tags = tagsValue == null ? new List<string>() : tagsValue.ToList();
 
             // If there are no tags, we can't find related videos
             if (tags.Count == 0)
-                return new RelatedVideos { VideoId = videoId, Videos = Enumerable.Empty<VideoPreview>() };
+                return new RelatedVideos { VideoId = queryParams.VideoId, Videos = Enumerable.Empty<VideoPreview>(), PagingState = null };
 
             var relatedVideos = new Dictionary<Guid, VideoPreview>();
             PreparedStatement videosForTagPrepared = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM videos_by_tag WHERE tag = ? LIMIT ?");
@@ -73,7 +73,7 @@ namespace KillrVideo.SuggestedVideos
                             VideoPreview preview = MapRowToVideoPreview(row);
 
                             // Skip self
-                            if (preview.VideoId == videoId)
+                            if (preview.VideoId == queryParams.VideoId)
                                 continue;
 
                             // Skip videos we already have in the results
@@ -104,8 +104,9 @@ namespace KillrVideo.SuggestedVideos
 
             return new RelatedVideos
             {
-                VideoId = videoId,
-                Videos = relatedVideos.Values
+                VideoId = queryParams.VideoId,
+                Videos = relatedVideos.Values,
+                PagingState = null
             };
         }
 

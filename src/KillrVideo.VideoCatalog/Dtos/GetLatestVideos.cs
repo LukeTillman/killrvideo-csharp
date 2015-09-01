@@ -9,7 +9,6 @@ namespace KillrVideo.VideoCatalog.Dtos
     public class GetLatestVideos
     {
         public int PageSize { get; set; }
-        public Guid? FirstVideoOnPageVideoId { get; set; }
-        public DateTimeOffset? FirstVideoOnPageDate { get; set; }
+        public string PagingState { get; set; }
     }
 }

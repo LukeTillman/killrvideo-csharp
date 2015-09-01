@@ -1,15 +1,15 @@
 ﻿using System;
 
-namespace KillrVideo.Models.Videos
+namespace KillrVideo.SuggestedVideos.Dtos
 {
     /// <summary>
-    /// Request for getting related videos.
+    /// Represents request parameters for getting related videos.
     /// </summary>
     [Serializable]
-    public class GetRelatedVideosViewModel
+    public class RelatedVideosQuery
     {
         /// <summary>
-        /// The video Id to get related videos for.
+        /// The video Id to search for related videos.
         /// </summary>
         public Guid VideoId { get; set; }
 
@@ -19,7 +19,7 @@ namespace KillrVideo.Models.Videos
         public int PageSize { get; set; }
 
         /// <summary>
-        /// The current paging state. Will be null on initial load, then may have a value for subsequent pages.
+        /// A string token representing the paging state.
         /// </summary>
         public string PagingState { get; set; }
     }

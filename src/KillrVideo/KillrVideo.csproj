@@ -264,7 +264,6 @@
     <Content Include="scripts\app\shared\header.js" />
     <Content Include="scripts\app\videos\view.js" />
     <Content Include="scripts\components\uimessages\uimessages.js" />
-    <Content Include="scripts\app\shared\video-preview-pager.js" />
     <Content Include="scripts\components\add-upload\add-upload.js" />
     <Content Include="scripts\components\add-youtube\add-youtube.js" />
     <Content Include="scripts\app\videos\add.js" />
@@ -290,6 +289,7 @@
     <Content Include="scripts\lib\knockout-bootstrap-tagsinput.js" />
     <Content Include="scripts\lib\knockout-file-drop.js" />
     <Content Include="scripts\lib\knockout-expander.js" />
+    <Content Include="scripts\lib\knockout-moment-text.js" />
     <Content Include="scripts\lib\knockout-perfect-scrollbar.js" />
     <Content Include="scripts\lib\knockout-extenders.js" />
     <Content Include="scripts\components\uimessages\uimessages.tmpl.html" />
