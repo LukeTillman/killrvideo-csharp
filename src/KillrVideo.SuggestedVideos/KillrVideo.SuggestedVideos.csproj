@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dtos\RelatedVideos.cs" />
+    <Compile Include="Dtos\RelatedVideosQuery.cs" />
     <Compile Include="Dtos\VideoPreview.cs" />
     <Compile Include="ISuggestVideos.cs" />
     <Compile Include="MLT\MLTQueryResult.cs" />

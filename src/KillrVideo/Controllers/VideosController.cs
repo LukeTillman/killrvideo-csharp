@@ -99,7 +99,12 @@ namespace KillrVideo.Controllers
         [HttpPost]
         public async Task<JsonNetResult> Related(GetRelatedVideosViewModel model)
         {
-            RelatedVideos relatedVideos = await _suggestions.GetRelatedVideos(model.VideoId);
+            RelatedVideos relatedVideos = await _suggestions.GetRelatedVideos(new RelatedVideosQuery
+            {
+                VideoId = model.VideoId,
+                PagingState = model.PagingState,
+                PageSize = model.PageSize
+            });
 
             // TODO:  Better solution than client-side JOINs
             var authorIds = new HashSet<Guid>(relatedVideos.Videos.Select(v => v.UserId));
@@ -112,12 +117,14 @@ namespace KillrVideo.Controllers
 
             return JsonSuccess(new RelatedVideosViewModel
             {
+                VideoId = relatedVideos.VideoId,
                 Videos = relatedVideos.Videos
-                                     .Join(authorsTask.Result, vp => vp.UserId, a => a.UserId,
-                                           (vp, a) => new { VideoPreview = vp, Author = a })
-                                     .Join(statsTask.Result, vpa => vpa.VideoPreview.VideoId, s => s.VideoId,
-                                           (vpa, s) => VideoPreviewViewModel.FromDataModel(vpa.VideoPreview, vpa.Author, s, Url))
-                                     .ToList()
+                                      .Join(authorsTask.Result, vp => vp.UserId, a => a.UserId,
+                                            (vp, a) => new { VideoPreview = vp, Author = a })
+                                      .Join(statsTask.Result, vpa => vpa.VideoPreview.VideoId, s => s.VideoId,
+                                            (vpa, s) => VideoPreviewViewModel.FromDataModel(vpa.VideoPreview, vpa.Author, s, Url))
+                                      .ToList(),
+                PagingState = relatedVideos.PagingState
             });
         }
 
