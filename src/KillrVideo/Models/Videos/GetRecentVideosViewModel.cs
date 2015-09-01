@@ -1,5 +1,4 @@
 using System;
-using KillrVideo.Models.Shared;
 
 namespace KillrVideo.Models.Videos
 {
@@ -15,8 +14,8 @@ namespace KillrVideo.Models.Videos
         public int PageSize { get; set; }
 
         /// <summary>
-        /// The first video on the page of records to show.
+        /// The current page state. Will be null on initial page request, then may have a value on subsequent requests.
         /// </summary>
-        public VideoPreviewViewModel FirstVideoOnPage { get; set; }
+        public string PagingState { get; set; }
     }
 }

@@ -11,5 +11,6 @@ namespace KillrVideo.VideoCatalog.Dtos
     {
         public Guid UserId { get; set; }
         public IEnumerable<VideoPreview> Videos { get; set; }
+        public string PagingState { get; set; }
     }
 }

@@ -10,5 +10,6 @@ namespace KillrVideo.VideoCatalog.Dtos
     public class LatestVideos
     {
         public IEnumerable<VideoPreview> Videos { get; set; }
+        public string PagingState { get; set; }
     }
 }
