@@ -185,7 +185,7 @@ namespace KillrVideo.VideoCatalog
                                                              .SetPageSize(recordsStillNeeded);
 
                 // Start from where we left off in this bucket
-                if (rowPagingState != null)
+                if (string.IsNullOrEmpty(rowPagingState) == false)
                     boundStatement.SetPagingState(Convert.FromBase64String(rowPagingState));
 
                 RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
@@ -304,9 +304,10 @@ namespace KillrVideo.VideoCatalog
             if (match.Success == false)
                 return false;
 
-            buckets = match.Groups[0].Captures.Cast<Capture>().Select(c => c.Value).ToArray();
-            bucketIndex = int.Parse(match.Groups[1].Value);
-            rowsPagingState = match.Groups.Count == 3 ? match.Groups[2].Value : null;
+            // Match group 0 will be the entire string that matched, so start at index 1
+            buckets = match.Groups[1].Captures.Cast<Capture>().Select(c => c.Value).ToArray();
+            bucketIndex = int.Parse(match.Groups[2].Value);
+            rowsPagingState = match.Groups.Count == 4 ? match.Groups[3].Value : null;
             return true;
         }
     }
