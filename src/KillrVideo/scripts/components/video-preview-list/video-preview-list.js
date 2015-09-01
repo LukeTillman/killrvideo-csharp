@@ -19,9 +19,6 @@
         // The number of records to show per page (not counting the preview video for the next page)
         self.pageSize = 4;
 
-        // Whether or not our request for a next page loaded an empty page
-        self.loadedEmptyPage = ko.observable(false);
-
         // The current page index (zero based)
         self.currentPage = ko.observable(-1);
 
@@ -56,7 +53,6 @@
             var currentPage = self.currentPage();
             if (currentPage > 0) {
                 self.currentPage(currentPage - 1);
-                self.loadedEmptyPage(false);
             }
         };
 
@@ -90,12 +86,6 @@
 
                 // Save paging state for possible next page request
                 ajaxData.pagingState = response.data.pagingState;
-
-                // It's possible to get back an empty page if we're out of search results but the server gave us a paging state
-                if (nextPageNumber > 0 && response.data.videos.length === 0) {
-                    self.loadedEmptyPage(true);
-                    return;
-                }
 
                 // Add videos to the all videos array
                 for (var i = 0; i < response.data.videos.length; i++) {

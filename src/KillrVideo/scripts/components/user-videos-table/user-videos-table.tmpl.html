@@ -9,9 +9,9 @@
     <tbody data-bind="foreach: videos, visible: !isLoading()">
         <tr>
             <td>
-                <a data-bind="text: name, attr: { href: videoUrl }" target="_blank"></a>
+                <a data-bind="text: name, attr: { href: '/view/' + videoId }" target="_blank"></a>
             </td>
-            <td data-bind="text: addedDatePretty"></td>
+            <td data-bind="momentText: { text: addedDate, format: 'LLL' }"></td>
         </tr>
     </tbody>
     <!-- Loading Icon -->
