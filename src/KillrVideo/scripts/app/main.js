@@ -15,7 +15,6 @@ requirejs.config({
         "jquery-expander": "bower_components/jquery-expander/jquery.expander",
         "bootstrap-select": "bower_components/bootstrap-select/dist/js/bootstrap-select",
         "bootstrap-tagsinput": "bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput",
-        "hopscotch": "bower_components/hopscotch/dist/js/hopscotch.min",
         "arrive": "bower_components/arrive/minified/arrive.min"
     },
     shim: {
@@ -47,12 +46,14 @@ requirejs(["knockout", "jquery", "require"], function (ko, $, require) {
     // Load the model for the current view
     var viewName = $("#requirejs-script").data("view");
     require(["app/shared/header", "app" + viewName], function (headerViewModel, pageViewModel) {
+        // Create model instances
+        var headerModel = new headerViewModel();
+        var pageModel = new pageViewModel();
+
         // Apply KO bindings on DOM ready
-        $(function () {
-            // Bind the header
-            ko.applyBindings(new headerViewModel(), $("#header").get(0));
-            // Bind the page
-            ko.applyBindings(new pageViewModel(), $("#body-content").get(0));
+        $(function() {
+            ko.applyBindings(headerModel, $("#header").get(0));
+            ko.applyBindings(pageModel, $("#body-content").get(0));
         });
     });
 });

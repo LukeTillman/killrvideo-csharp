@@ -213,6 +213,15 @@ ul.uimessage > li {
     height: auto;
 }
 
+/* Tour styles */
+div.tour {
+    min-width: 244px;
+}
+
+div.tour > div.tour-buttons {
+    margin-top: 1em;
+}
+
 /* ------------------------------------------------------------
     Site Header
    ------------------------------------------------------------ */

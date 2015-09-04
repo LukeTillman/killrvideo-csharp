@@ -260,8 +260,9 @@
     <Content Include="scripts\app\main.js" />
     <Content Include="scripts\app\sampledata\index.js" />
     <Content Include="scripts\app\search\results.js" />
-    <Content Include="scripts\app\shared\guided-tour.js" />
     <Content Include="scripts\app\shared\header.js" />
+    <Content Include="scripts\app\shared\main-tour.js" />
+    <Content Include="scripts\app\shared\tour.js" />
     <Content Include="scripts\app\videos\view.js" />
     <Content Include="scripts\components\uimessages\uimessages.js" />
     <Content Include="scripts\components\add-upload\add-upload.js" />
@@ -295,6 +296,7 @@
     <Content Include="scripts\components\uimessages\uimessages.tmpl.html" />
     <Content Include="scripts\components\add-upload\add-upload.tmpl.html" />
     <Content Include="scripts\components\add-youtube\add-youtube.tmpl.html" />
+    <Content Include="scripts\lib\knockout-tour.js" />
     <Content Include="scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Views\Web.config" />
