@@ -46,13 +46,14 @@
             } catch (e) {
             }
         }
+
         target(initialValue);
+        localStorage.setItem(key, ko.toJSON(initialValue));
 
         // Subscribe to new values and add them to localStorage
         target.subscribe(function (newValue) {
             localStorage.setItem(key, ko.toJSON(newValue));
         });
         return target;
-
     };
 });

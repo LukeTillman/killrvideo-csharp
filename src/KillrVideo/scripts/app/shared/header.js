@@ -28,7 +28,7 @@ define(["knockout", "jquery", "app/shared/tour", "app/shared/main-tour", "lib/kn
 
             // Handler for when the enable/disable tour UI is clicked on
             self.tourClick = function() {
-                self.tour.userEnabled(!self.tour.userEnabled());
+                self.tour.enabled(!self.tour.enabled());
             };
             
             // Whether or not to show the "What is this?" section

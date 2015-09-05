@@ -12,17 +12,23 @@
         // The index of the current step
         self.currentStepIndex = ko.observable(0).extend({ persist: self.tourId + ".index" });
 
-        // The step object for the current step
-        self.currentStep = ko.pureComputed(function() {
+        // Whether or not we're on the correct page for the current step
+        self.onCorrectPage = ko.pureComputed(function () {
             var idx = self.currentStepIndex();
             var step = steps[idx];
 
             // See if we're on the correct page for the step, possibly by running a RegEx
-            var onPage = (typeof step.page === "string")
+            return (typeof step.page === "string")
                 ? step.page === window.location.pathname.toLowerCase()
                 : step.page.test(window.location.pathname.toLowerCase());
+        });
 
-            return onPage ? step : null;
+        // The step object for the current step
+        self.currentStep = ko.pureComputed(function () {
+            var rightPage = self.onCorrectPage();
+            if (!rightPage) return null;
+
+            return steps[self.currentStepIndex()];
         });
 
         // Go to next step
@@ -48,22 +54,31 @@
             }
         };
 
-        // Whether or not the tour is enabled by the user
-        self.userEnabled = ko.observable(true).extend({ persist: self.tourId + ".userEnabled" });
+        // Whether or not the tour is enabled
+        self.enabled = ko.observable(true).extend({ persist: self.tourId + ".enabled" });
 
-        // Sets user enabled to true
-        self.enable = function () {
-            self.userEnabled(true);
+        // Restart the tour from the beginning
+        self.restart = function() {
+            self.currentStepIndex(0);
+            self.enabled(true);
+            window.location.href = "/"; // TODO: Logout?
         };
 
-        // Sets user enabled to false
-        self.disable = function () {
-            self.userEnabled(false);
+        // The last correct page for the user was on
+        self.resumeUrl = ko.observable("").extend({ persist: self.tourId + ".resumeUrl" });
+
+        // Resume the tour from where you left off
+        self.resume = function() {
+            self.enabled(true);
+            window.location.href = self.resumeUrl();
         };
 
-        // Overall whether the tour is enabled
-        self.enabled = ko.pureComputed(function () {
-            return self.userEnabled();
-        });
+        // If we're not on the correct page when the model is initially loaded, disable the tour
+        if (self.onCorrectPage() === false) {
+            self.enabled(false);
+        } else if (self.enabled() === true) {
+            // If we're on the correct page and enabled, save the URL so the tour can be resumed
+            self.resumeUrl(window.location.href);
+        }
     };
 });
