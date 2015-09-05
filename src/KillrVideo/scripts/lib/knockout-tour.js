@@ -17,7 +17,7 @@ define(["knockout", "jquery", "bootstrap"], function (ko, $) {
             "    </div>" +
             "  </div>" +
             "</div>"
-        ).on("click", "button", $.proxy(this.handleTourClick, this));
+        );
 
         this.$nextButton = this.$tourContentWrapper.find(".tour-buttons-next");
         this.$previousButton = this.$tourContentWrapper.find(".tour-buttons-previous");
@@ -35,9 +35,6 @@ define(["knockout", "jquery", "bootstrap"], function (ko, $) {
 
         // Reject before show deferred from previous step (no op if already resolved)
         this.beforeShowDeferred.reject();
-
-        // Remove any previous tour click handlers
-        $("body").off("click.tour");
 
         // Create a promise that the old UI will be torn down
         var tearDownOldUi = $.Deferred();
@@ -73,12 +70,7 @@ define(["knockout", "jquery", "bootstrap"], function (ko, $) {
                 return self.beforeShowDeferred;
             })
             .then(function () {
-                // Attach next click handler if present
-                if (self.currentStep.nextOnClick) {
-                    $("body").one("click.tour", self.currentStep.nextOnClick, $.proxy(self.handleTourClick, self));
-                }
-
-                // Create the new UI and return the element
+                // Create the new UI
                 self.setContentForStep();
 
                 var $el = $(self.currentStep.target);
@@ -90,6 +82,18 @@ define(["knockout", "jquery", "bootstrap"], function (ko, $) {
                     trigger: "manual",
                     container: "body"
                 });
+
+                // When shown/hidden attach and detach event handlers
+                $el.on("shown.bs.popover", function() {
+                    self.$tourContentWrapper.on("click.tour", "button", $.proxy(self.handleTourClick, self));
+                    if (self.currentStep.nextOnClick) {
+                        $("body").one("click.tour", self.currentStep.nextOnClick, $.proxy(self.handleTourClick, self));
+                    }
+                }).on("hidden.bs.popover", function() {
+                    self.$tourContentWrapper.off("click.tour");
+                    $("body").off("click.tour");
+                });
+
                 return $el;
             });
 
