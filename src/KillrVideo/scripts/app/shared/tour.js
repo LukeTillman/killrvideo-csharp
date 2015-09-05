@@ -12,9 +12,17 @@
         // The index of the current step
         self.currentStepIndex = ko.observable(0).extend({ persist: self.tourId + ".index" });
 
+        // The step object for the current step
         self.currentStep = ko.pureComputed(function() {
             var idx = self.currentStepIndex();
-            return steps[idx];
+            var step = steps[idx];
+
+            // See if we're on the correct page for the step, possibly by running a RegEx
+            var onPage = (typeof step.page === "string")
+                ? step.page === window.location.pathname.toLowerCase()
+                : step.page.test(window.location.pathname.toLowerCase());
+
+            return onPage ? step : null;
         });
 
         // Go to next step
@@ -29,7 +37,14 @@
         self.previous = function () {
             var curIdx = self.currentStepIndex();
             if (curIdx > 0) {
-                self.currentStepIndex(curIdx - 1);
+                // Set current step state
+                var newIdx = curIdx - 1;
+                self.currentStepIndex(newIdx);
+
+                // Do back button navigation if necessary
+                if (steps[curIdx].page !== steps[newIdx].page) {
+                    window.history.back();
+                }
             }
         };
 
@@ -46,18 +61,9 @@
             self.userEnabled(false);
         };
 
-        // Whether or not we're on the correct page for the current tour step
-        self.onCorrectPage = ko.pureComputed(function() {
-            // Test the page property of the current step, possibly by running a RegEx
-            var currentStep = self.currentStep();
-            return (typeof currentStep.page === "string")
-                ? currentStep.page === window.location.pathname.toLowerCase()
-                : currentStep.page.test(window.location.pathname.toLowerCase());
-        });
-
         // Overall whether the tour is enabled
         self.enabled = ko.pureComputed(function () {
-            return self.userEnabled() && self.onCorrectPage();
+            return self.userEnabled();
         });
     };
 });

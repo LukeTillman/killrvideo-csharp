@@ -60,6 +60,13 @@ define(["knockout", "jquery", "bootstrap"], function (ko, $) {
             .then(function() {
                 // Store a deferred that can be cancelled to wait on the before show promise for the current step
                 self.beforeShowDeferred = $.Deferred();
+
+                // If no current step (i.e. null), just reject since we won't have any UI to show until we have a step
+                if (!self.currentStep) {
+                    return self.beforeShowDeferred.reject();
+                }
+
+                // See if the step has a beforeShowPromise method defined
                 if (self.currentStep.beforeShowPromise) {
                     self.currentStep.beforeShowPromise().done(function() {
                         self.beforeShowDeferred.resolve();
