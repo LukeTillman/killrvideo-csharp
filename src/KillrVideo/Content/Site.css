@@ -284,15 +284,23 @@ div.tour > div.tour-buttons {
                 margin-top: -6px;
             }
 
-    #navbar-main #tour-enabled.enabled > i,
-    #navbar-main #tour-enabled.enabled > span {
+    #navbar-main #tour-enabled .enabled > i,
+    #navbar-main #tour-enabled .enabled > span {
         color: #3fb618;
     }
 
-    #navbar-main #tour-enabled.enabled > i {
+    #navbar-main #tour-enabled .enabled > i {
         text-shadow: 0 0 10px #2f8912;
     }
 
+    #navbar-main #tour-enabled ul.dropdown-menu > li > div {
+        white-space: nowrap;
+        padding: 5px 3px 5px 10px;
+    }
+
+    #navbar-main #tour-enabled ul.dropdown-menu > li > div > a {
+        margin-right: 7px;
+    }
 
 #what-is-this {
     padding-top: 60px;

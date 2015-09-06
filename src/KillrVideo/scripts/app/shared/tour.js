@@ -57,11 +57,19 @@
         // Whether or not the tour is enabled
         self.enabled = ko.observable(true).extend({ persist: self.tourId + ".enabled" });
 
+        // Disable the tour
+        self.disable = function() {
+            self.enabled(false);
+        };
+
         // Restart the tour from the beginning
         self.restart = function() {
             self.currentStepIndex(0);
             self.enabled(true);
-            window.location.href = "/"; // TODO: Logout?
+
+            if (window.location.pathname !== "/") {
+                window.location.href = "/"; // TODO: Logout?
+            }
         };
 
         // The last correct page for the user was on
@@ -70,7 +78,11 @@
         // Resume the tour from where you left off
         self.resume = function() {
             self.enabled(true);
-            window.location.href = self.resumeUrl();
+
+            var resumeUrl = self.resumeUrl();
+            if (window.location.href !== resumeUrl) {
+                window.location.href = self.resumeUrl();
+            }
         };
 
         // If we're not on the correct page when the model is initially loaded, disable the tour
