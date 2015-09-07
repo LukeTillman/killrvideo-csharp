@@ -34,7 +34,7 @@ requirejs(["knockout", "jquery", "require"], function (ko, $, require) {
     // Register some KO components
     var components = [
         "uimessages", "video-preview-list", "user-videos-table", "user-comments-list", "add-upload", "add-youtube", "related-videos",
-        "video-upload-status", "video-preview", "view-youtube", "view-upload"
+        "video-upload-status", "video-preview", "view-youtube", "view-upload", "tour"
     ];
 
     for (var i = 0; i < components.length; i++) {

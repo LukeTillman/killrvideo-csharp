@@ -11,20 +11,41 @@
         searchResults: new RegExp("\/search\/results")
     };
 
+    // A resolved promise
     var resolvedPromise = $.Deferred().resolve().promise();
 
-    function waitForElementIfNotPresent(selector, ancestor) {
-        if ($(selector).length > 0) {
-            return resolvedPromise;
-        }
-
-        var defer = $.Deferred();
-        $(ancestor).arrive(selector, { onceOnly: true }, function () {
+    // A promise that will resolve when the DOM is ready
+    var domReadyPromise = $.Deferred(function(defer) {
+        $(function() {
             defer.resolve();
         });
-        return defer.promise();
+    }).promise();
+
+    // Returns a promise that will wait for an element to arrive in the DOM if it's not currently present
+    function waitForElementIfNotPresent(selector, ancestor) {
+        return domReadyPromise.then(function() {
+            if ($(selector).length > 0) {
+                return resolvedPromise;
+            }
+
+            var defer = $.Deferred();
+            $(ancestor).arrive(selector, { onceOnly: true }, function() {
+                defer.resolve();
+            });
+            return defer.promise();
+        });
     };
 
+    function addNextOnClickHandler(selector, tour) {
+        $("body").one("click.tour", selector, function() {
+            tour.next();
+        });
+    }
+
+    function removeNextOnClickHandler() {
+        $("body").off("click.tour");
+    }
+    
     // Return the tour definition
     return {
         tourId: "KillrVideo",
@@ -63,7 +84,8 @@
                 callToAction: "Click on a video to continue.",
                 beforeShowPromise: function () { return waitForElementIfNotPresent(this.target, "#recent-videos-list"); },
                 showNextButton: false,
-                nextOnClick: "#recent-videos-list div.video-preview"
+                onShow: function(tour) { addNextOnClickHandler("#recent-videos-list div.video-preview", tour); },
+                onHide: function() { removeNextOnClickHandler(); }
             },
             // View video page (unauthenticated)
             {
@@ -73,11 +95,7 @@
                 content: "This is the View Video page where users can playback videos added to the site. Details like the video's description and name " +
                     "are stored in a catalog in Cassandra, similar to how a Product Catalog might work on an e-commerce site. Cassandra Query Language or " +
                     "CQL makes it easy to store this information. If you're experienced with SQL syntax from working with relational databases, it will " +
-                    "look very familiar to you.",
-                onPrev: function() {
-                    // Go back to the previous page
-                    window.history.back();
-                }
+                    "look very familiar to you."
             },
             {
                 page: pages.viewVideo,
@@ -118,7 +136,8 @@
                 content: "Videos are added to the catalog by users on the site. Let's take a look at this user's profile.",
                 callToAction: "Click on the author for this video to continue.",
                 showNextButton: false,
-                nextOnClick: "#view-video-author > a"
+                onShow: function(tour) { addNextOnClickHandler("#view-video-author > a", tour); },
+                onHide: function() { removeNextOnClickHandler(); }
             },
             // View user profile (unauthenicated)
             {
@@ -126,11 +145,7 @@
                 target: "#logo",    // TODO: Make window?
                 placement: "bottom",
                 content: "This is the user profile page. Here you can see basic information about a user, along with any comments they've made on the site and " +
-                    "any videos they've added to the catalog.",
-                onPrev: function() {
-                    // Go back to the previous page
-                    window.history.back();
-                }
+                    "any videos they've added to the catalog."
             },
             {
                 page: pages.userProfile,
@@ -169,7 +184,8 @@
                     "be logged in as a registered user. Let's take a look at the user registration process.",
                 callToAction: "Click on the Register button to continue.",
                 showNextButton: false,
-                nextOnClick: "#register"
+                onShow: function(tour) { addNextOnClickHandler("#register", tour); },
+                onHide: function() { removeNextOnClickHandler(); }
             },
             // User registration page (unauthenticated)
             {
@@ -177,11 +193,7 @@
                 target: "#register-account form",
                 placement: "right",
                 content: "This is the user registration form for KillrVideo. It probably looks like many of the forms you've filled out before to register for a web " +
-                    "site. Here we collect basic information like your name and email address.",
-                onPrev: function() {
-                    // Go back to the previous page
-                    window.history.back();
-                }
+                    "site. Here we collect basic information like your name and email address."
             },
             {
                 page: pages.register,
@@ -203,7 +215,8 @@
                     "statement we just showed you isn't capturing that value from the form. Why not? Let's take a look at the Sign In page for an explanation.",
                 callToAction: "Click the Sign In button to continue.",
                 showNextButton: false,
-                nextOnClick: "#sign-in"
+                onShow: function(tour) { addNextOnClickHandler("#sign-in", tour); },
+                onHide: function() { removeNextOnClickHandler(); }
             },
             // Sign In page (unauthenticated)
             {
@@ -211,11 +224,7 @@
                 target: "#signin-account",
                 placement: "right",
                 content: "This is the sign in form for KillrVideo. Once a user enters their credentials, we'll need to look them up by email address and verify " +
-                    "their password.",
-                onPrev: function() {
-                    // Go back to the previous page
-                    window.history.back();
-                }
+                    "their password."
             },
             {
                 page: pages.signIn,
@@ -269,14 +278,15 @@
                     "</code></pre>" +
                     "Let's sign into KillrVideo. We've filled in the form with some sample user credentials.",
                 callToAction: "Click the Sign In button to continue.",
-                beforeShowPromise: function() {
+                showNextButton: false,
+                onShow: function (tour) {
                     // Fill in some sample user credentials
                     $("#signin-email").val("guidedtour@killrvideo.com").change();
                     $("#signin-password").val("guidedtour").change();
-                    return resolvedPromise;
-                },
-                showNextButton: false,
-                nextOnClick: "#signin-account button.btn-primary" // TODO: Next on valid authentication, not just click
+
+                    addNextOnClickHandler("#signin-account button.btn-primary", tour);  // TODO: Next on valid authentication, not just click
+                }, 
+                onHide: function() { removeNextOnClickHandler(); }
             },
             // Home page (authenticated)
             {
@@ -286,13 +296,7 @@
                 content: "Now that you know a little bit more about querying and data modeling with Cassandra, let's talk about this Recent Videos section. If you remember our " +
                     "<code>videos</code> table when we were discussing the video catalog, you'll recall that it had a <code>PRIMARY KEY</code> of <code>videoid</code> for " +
                     "looking videos up by unique identifier. As you can probably guess, that table isn't going to help us for this section where we need to show the latest " +
-                    "videos added to the site.",
-                onPrev: function() {
-                    // Log the user out, then go to the previous page
-                    $.getJSON("/account/signout").then(function() {
-                        window.history.back();
-                    });
-                }
+                    "videos added to the site."
             },
             {
                 page: pages.home,
@@ -354,7 +358,8 @@
                 callToAction: "Click on a video to continue.",
                 beforeShowPromise: function() { return waitForElementIfNotPresent(this.target, "#recent-videos-list"); },
                 showNextButton: false,
-                nextOnClick:"#recent-videos-list div.video-preview"
+                onShow: function (tour) { addNextOnClickHandler("#recent-videos-list div.video-preview", tour); }, 
+                onHide: function() { removeNextOnClickHandler(); }
             },
             // View video page (authenticated)
             {
@@ -371,10 +376,7 @@
                     "  PRIMARY KEY (videoid)\r\n" +
                     ");</code></pre>" +
                     "Columns of type <code>counter</code> are a special Cassandra column type that allow operations like increment/decrement and are great for storing " +
-                    "approximate counts.",
-                onPrev: function() {
-                    window.history.back();
-                }
+                    "approximate counts."
             },
             {
                 page: pages.viewVideo,
@@ -391,7 +393,8 @@
                     "of the video. Clicking on a tag is the same as using the search box in the header to search for videos with that keyword. Let's see how search works.",
                 callToAction: "Click on a tag to continue.",
                 showNextButton: false,
-                nextOnClick: "#view-video-tags a"
+                onShow: function (tour) { addNextOnClickHandler("#view-video-tags a", tour); }, 
+                onHide: function() { removeNextOnClickHandler(); }
             },
             // Search results page (authenticated)
             {
@@ -400,10 +403,7 @@
                 placement: "right",
                 content: "Here we see can see the search results for the keyword we clicked on. Searching for videos on KillrVideo is powered by the Search feature of " +
                     "DataStax Enterprise. This feature creates indexes that allow us to do powerful Lucene queries on our video catalog data that are not possible to do " +
-                    "with just CQL. The indexes are automatically updated in the background as new data is added to our catalog tables in Cassandra.",
-                onPrev: function() {
-                    window.history.back();
-                }
+                    "with just CQL. The indexes are automatically updated in the background as new data is added to our catalog tables in Cassandra."
             },
             {
                 page: pages.searchResults,
@@ -446,7 +446,8 @@
                     "another KillrVideo feature powered by DSE Search.",
                 callToAction: "Click on a video to continue.",
                 showNextButton: false,
-                nextOnClick: "div.video-preview"
+                onShow: function (tour) { addNextOnClickHandler("div.video-preview", tour); }, 
+                onHide: function() { removeNextOnClickHandler(); }
             },
             // View video page (authenticated)
             {
@@ -456,10 +457,7 @@
                 content: "Down here we see a list of videos that are related to the one we're currently viewing. This list is also powered by DataStax Enterprise Search. By " +
                     "turning on Solr's MoreLikeThis feature in DSE, we can issue queries that will return videos with similar terms (in their titles, descriptions, etc.) to the " +
                     "video we're currently viewing.",
-                beforeShowPromise: function() { return waitForElementIfNotPresent(this.target, "#view-video-related"); },
-                onPrev: function() {
-                    window.history.back();
-                }
+                beforeShowPromise: function() { return waitForElementIfNotPresent(this.target, "#view-video-related"); }
             },
             {
                 page: pages.viewVideo,
@@ -468,17 +466,15 @@
                 content: "DataStax Enterprise also offers some other interesting features beyond just Search. Let's go back to the home page to take a look at another one of those.",
                 callToAction: "Click on the KillrVideo logo to continue.",
                 showNextButton: false,
-                nextOnClick: "#logo"
+                onShow: function (tour) { addNextOnClickHandler("#logo", tour); }, 
+                onHide: function() { removeNextOnClickHandler(); }
             },
             // Home page (authenticated)
             {
                 page: pages.home,
                 target: "#logo",
                 placement: "bottom",
-                content: "TODO: Video recommendations with Spark.",
-                onPrev: function() {
-                    window.history.back();
-                }
+                content: "TODO: Video recommendations with Spark."
             },
             {
                 page: pages.home,

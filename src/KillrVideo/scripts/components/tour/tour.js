@@ -1,13 +1,28 @@
-﻿define(["knockout", "lib/knockout-extenders"], function (ko) {
-    // Return a view model for the tour
-    return function tourViewModel(params) {
+﻿define(["knockout", "jquery", "text!./tour.tmpl.html", "./main-tour", "lib/knockout-extenders", "lib/knockout-popover", "bootstrap"], function (ko, $, htmlString, mainTour) {
+    function tourViewModel(params) {
         var self = this;
 
-        // An array of tour step definitions
-        var steps = params.steps;
+        // An array of tour step definitions (normalized with some default properties if not set)
+        var steps = $.map(mainTour.steps, function(step) {
+            var stepWithDefaults = $.extend({
+                showNextButton: true,
+                showPreviousButton: true,
+                callToAction: null
+            }, step);
+
+            if (step.onShow) {
+                stepWithDefaults.onShow = $.proxy(step.onShow, stepWithDefaults, self);
+            }
+
+            if (step.onHide) {
+                stepWithDefaults.onHide = $.proxy(step.onHide, stepWithDefaults, self);
+            }
+
+            return stepWithDefaults;
+        });
 
         // A unique identifier for the tour
-        self.tourId = params.tourId;
+        self.tourId = mainTour.tourId;
 
         // The index of the current step
         self.currentStepIndex = ko.observable(0).extend({ persist: self.tourId + ".index" });
@@ -28,8 +43,12 @@
             var rightPage = self.onCorrectPage();
             if (!rightPage) return null;
 
-            return steps[self.currentStepIndex()];
-        });
+            // See if the step has a promsie to be fulfilled first
+            var step = steps[self.currentStepIndex()];
+            if (!step.beforeShowPromise) return step;
+
+            return step.beforeShowPromise().then(function() { return step; });
+        }).extend({ async: null });
 
         // Go to next step
         self.next = function () {
@@ -58,12 +77,12 @@
         self.enabled = ko.observable(true).extend({ persist: self.tourId + ".enabled" });
 
         // Disable the tour
-        self.disable = function() {
+        self.disable = function () {
             self.enabled(false);
         };
 
         // Restart the tour from the beginning
-        self.restart = function() {
+        self.restart = function () {
             self.currentStepIndex(0);
             self.enabled(true);
 
@@ -76,7 +95,7 @@
         self.resumeUrl = ko.observable("").extend({ persist: self.tourId + ".resumeUrl" });
 
         // Resume the tour from where you left off
-        self.resume = function() {
+        self.resume = function () {
             self.enabled(true);
 
             var resumeUrl = self.resumeUrl();
@@ -92,5 +111,8 @@
             // If we're on the correct page and enabled, save the URL so the tour can be resumed
             self.resumeUrl(window.location.href);
         }
-    };
+    }
+
+    // Return KO component definition
+    return { viewModel: tourViewModel, template: htmlString };
 });

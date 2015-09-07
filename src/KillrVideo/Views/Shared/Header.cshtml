@@ -1,8 +1,8 @@
 ﻿@{
     Layout = null;  // Since this will be used by the shared layout, it shouldn't use one
 }
-
-<div id="header" data-bind="tour: tour">
+<!-- data-bind="tour: tour" -->
+<div id="header">
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="navbar-main">
         <div class="container">
             <div class="navbar-header">
@@ -32,25 +32,8 @@
                 </form>
             
                 <ul class="nav navbar-nav navbar-right">
-                    <li id="tour-enabled">
-                        <a href="#" class="enabled" data-bind="visible: tour.enabled, click: tour.disable" style="display: none">
-                            <i class="fa fa-question-circle fa-fw"></i> Tour: <span>On</span>
-                        </a>
-                        <a href="#" data-toggle="dropdown" data-bind="visible: !tour.enabled()" style="display:none">
-                            <i class="fa fa-question-circle fa-fw"></i> Tour: <span>Off</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <div class="small">
-                                    <a href="#" data-bind="click: tour.restart" class="btn btn-default" title="Restart the tour from the beginning">
-                                        <i class="fa fa-circle-o-notch"></i> Restart
-                                    </a>
-                                    <a href="#" data-bind="click: tour.resume" class="btn btn-primary" title="Resume the tour from where you left off">
-                                        <i class="fa fa-play"></i> Resume
-                                    </a>
-                                </div>
-                            </li>
-                        </ul>
+                    <li id="tour-enabled" data-bind="component: 'tour'">
+                        
                     </li>
                     <li>
                         <a href="#" data-bind="click: toggleWhatIsThis, css: { dropup: showWhatIsThis }" data-toggle="collapse"

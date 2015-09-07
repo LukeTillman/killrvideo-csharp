@@ -1,6 +1,6 @@
 ﻿// The header functionality on all pages (requires bootstrap for the logged in user dropdown which may be present)
-define(["knockout", "jquery", "app/shared/tour", "app/shared/main-tour", "lib/knockout-extenders", "bootstrap", "lib/knockout-tour"],
-    function(ko, $, tourViewModel, mainTourDefinition) {
+define(["knockout", "jquery", "lib/knockout-extenders", "bootstrap"],
+    function(ko, $) {
         // A view model for the header/navbar
         return function headerViewModel() {
             var self = this;
@@ -23,14 +23,6 @@ define(["knockout", "jquery", "app/shared/tour", "app/shared/main-tour", "lib/kn
                 });
             }).extend({ async: [] });
 
-            // The guided tour model
-            self.tour = new tourViewModel(mainTourDefinition);
-
-            // Handler for when the enable/disable tour UI is clicked on
-            self.tourClick = function() {
-                self.tour.enabled(!self.tour.enabled());
-            };
-            
             // Whether or not to show the "What is this?" section
             self.showWhatIsThis = ko.observable(false);
 

@@ -1,0 +1,35 @@
+﻿<a href="#" class="enabled" data-bind="visible: enabled, click: disable" style="display: none">
+    <i class="fa fa-question-circle fa-fw"></i> Tour: <span>On</span>
+</a>
+<a href="#" data-toggle="dropdown" data-bind="visible: !enabled()" style="display:none">
+    <i class="fa fa-question-circle fa-fw"></i> Tour: <span>Off</span>
+</a>
+<ul class="dropdown-menu">
+    <li>
+        <div class="small">
+            <a href="#" data-bind="click: restart" class="btn btn-default" title="Restart the tour from the beginning">
+                <i class="fa fa-circle-o-notch"></i> Restart
+            </a>
+            <a href="#" data-bind="click: resume" class="btn btn-primary" title="Resume the tour from where you left off">
+                <i class="fa fa-play"></i> Resume
+            </a>
+        </div>
+    </li>
+</ul>
+
+<div data-bind="popover: currentStep, popoverVisible: enabled">
+    <div class="tour small" data-bind="if: $rawData">
+        <p class="tour-content" data-bind="html: content"></p>
+        <p class="text-info" data-bind="visible: callToAction, html: callToAction"></p>
+        <div class="tour-buttons clearfix">
+            <button class="btn btn-sm btn-default tour-buttons-previous" data-bind="visible: showPreviousButton, click: $parent.previous">
+                <i class="fa fa-chevron-circle-left"></i> Back
+            </button>
+            <div class="pull-right">
+                <button class="btn btn-sm btn-primary tour-buttons-next" data-bind="visible: showNextButton, click: $parent.next">
+                    Next <i class="fa fa-chevron-circle-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
