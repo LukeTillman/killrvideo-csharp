@@ -19,7 +19,7 @@
 
 <div data-bind="popover: currentStep, popoverVisible: enabled">
     <div class="tour small" data-bind="if: $rawData">
-        <p class="tour-content" data-bind="html: content"></p>
+        <p class="tour-content" data-bind="html: content, css: contentClass"></p>
         <p class="text-info" data-bind="visible: callToAction, html: callToAction"></p>
         <div class="tour-buttons clearfix">
             <button class="btn btn-sm btn-default tour-buttons-previous" data-bind="visible: showPreviousButton, click: $parent.previous">

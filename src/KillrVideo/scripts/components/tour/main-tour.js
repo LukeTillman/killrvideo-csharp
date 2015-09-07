@@ -114,7 +114,8 @@
                     "  tags set&lt;text&gt;,\r\n" +
                     "  added_date timestamp,\r\n" +
                     "  PRIMARY KEY (videoid)\r\n" +
-                    ");</code></pre>"
+                    ");</code></pre>",
+                contentClass: "wide"
             },
             {
                 page: pages.viewVideo,
@@ -203,9 +204,11 @@
                     "statement to add data to our <code>users</code> table:<br/><br/>" +
                     "<pre><code>" +
                     "INSERT INTO users (\r\n" +
-                    "  userid, firstname, lastname, email, created_date)\r\n" +
+                    "  userid, firstname, lastname,\r\n" +
+                    "  email, created_date)\r\n" +
                     "VALUES (?, ?, ?, ?, ?);" +
-                    "</code></pre>"
+                    "</code></pre>",
+                contentClass: "wide"
             },
             {
                 page: pages.register,
@@ -258,7 +261,8 @@
                     "  password text,\r\n" +
                     "  userid uuid\r\n" +
                     "  PRIMARY KEY (email)\r\n" +
-                    ");</code></pre>"
+                    ");</code></pre>",
+                contentClass: "wide"
             },
             {
                 page: pages.signIn,
@@ -273,7 +277,8 @@
                 placement: "right",
                 content: "Now that we have a <code>user_credentials</code> table, we can do a query like this to look a user up by email address and verify their password:<br/><br/>" +
                     "<pre><code>" +
-                    "SELECT password FROM user_credentials\r\n" +
+                    "SELECT password\r\n" +
+                    "FROM user_credentials\r\n" +
                     "WHERE email = ?;" +
                     "</code></pre>" +
                     "Let's sign into KillrVideo. We've filled in the form with some sample user credentials.",
@@ -302,8 +307,8 @@
                 page: pages.home,
                 target: "#recent-videos-header > span",
                 placement: "right",
-                content: "But by leveraging denormalization again, we can create a table that allows us to query the video data added to the site by time. In KillrVideo, the table " +
-                    "looks like this:<br/><br/>" +
+                content: "But by leveraging denormalization again, we can create a table that allows us to query the video data added to the site by time. In KillrVideo, the" +
+                    "<code>latest_videos</code> table looks like this:<br/><br/>" +
                     "<pre><code>" +
                     "CREATE TABLE latest_videos (\r\n" +
                     "  yyyymmdd text,\r\n" +
@@ -312,10 +317,12 @@
                     "  userid uuid,\r\n" +
                     "  name text,\r\n" +
                     "  preview_image_location text,\r\n" +
-                    "  PRIMARY KEY (yyyymmdd, added_date, videoid)\r\n" +
+                    "  PRIMARY KEY (\r\n" +
+                    "    yyyymmdd, added_date, videoid)\r\n" +
                     ") WITH CLUSTERING ORDER BY (\r\n" +
                     "  added_date DESC, videoid ASC);" +
-                    "</code></pre>"
+                    "</code></pre>",
+                contentClass: "wide"
             },
             {
                 page: pages.home,
@@ -327,26 +334,31 @@
             },
             {
                 page: pages.home,
-                target: "#recent-videos-list",
+                target: "#recent-videos-list > div",
                 placement: "bottom",
                 content: "One interesting thing about the <code>latest_videos</code> table is how we go about inserting data into it. In KillrVideo, we decided that the Recent " +
                     "Videos list should only ever show videos from <em>at most</em> the last 7 days. As a result, we don't really need to retain any data that's older than " +
                     "7 days. While we could write some kind of background job to delete old data from that table on a regular basis, instead we're leveraging Cassandra's " +
-                    "ability to specify a <strong>TTL</strong> or <strong>Time to Live</strong> when inserting data to that table."
+                    "ability to specify a <strong>TTL</strong> or <strong>Time to Live</strong> when inserting data to that table.",
+                contentClass: "wide",
+                beforeShowPromise: function () { return waitForElementIfNotPresent("#recent-videos-list ul.list-unstyled li:first-child div.video-preview", "#recent-videos-list"); }
             },
             {
                 page: pages.home,
-                target: "#recent-videos-list",
+                target: "#recent-videos-list > div",
                 placement: "bottom",
                 content: "Here's what an <code>INSERT</code> statement into the <code>latest_videos</code> table looks like:<br/><br/>" +
                     "<pre><code>" +
                     "INSERT INTO latest_videos (\r\n" +
                     "  yyyymmdd, added_date, videoid,\r\n" +
-                    "  userid, name, preview_image_location)\r\n" +
+                    "  userid, name,\r\n" +
+                    "  preview_image_location)\r\n" +
                     "VALUES (?, ?, ?, ?, ?, ?)\r\n" +
                     "USING TTL 604800;" +
                     "</code></pre>" +
-                    "By specifying <code>USING TTL 604800</code>, we are telling Cassandra to automatically expire or delete that record after 604,800 seconds (or 7 days)."
+                    "By specifying <code>USING TTL 604800</code>, we are telling Cassandra to automatically expire or delete that record after 604,800 seconds (or 7 days).",
+                contentClass: "wide",
+                beforeShowPromise: function () { return waitForElementIfNotPresent("#recent-videos-list ul.list-unstyled li:first-child div.video-preview", "#recent-videos-list"); }
             },
             // TODO: Add video page next?
             {
@@ -376,11 +388,12 @@
                     "  PRIMARY KEY (videoid)\r\n" +
                     ");</code></pre>" +
                     "Columns of type <code>counter</code> are a special Cassandra column type that allow operations like increment/decrement and are great for storing " +
-                    "approximate counts."
+                    "approximate counts.",
+                contentClass: "wide"
             },
             {
                 page: pages.viewVideo,
-                target: "#view-video-comments",
+                target: "#view-video-comments > h5",
                 placement: "left",
                 content: "The latest comments for a video are also displayed and now that we're signed in, we can leave comments of our own. Comments are another simple " +
                     "example of a <strong>time series data model</strong>."
@@ -423,7 +436,8 @@
                 content: "Lucene queries in DataStax Enterprise are also integrated with CQL, so I can get data from the <code>videos</code> table using that query like this:<br/><br/>" +
                     "<pre><code>" +
                     "SELECT * FROM videos\r\n" +
-                    "WHERE solr_query = 'description:cassandra';" +
+                    "WHERE solr_query =\r\n" +
+                    "  'description:cassandra';" +
                     "</code></pre>"
             },
             {
@@ -436,7 +450,8 @@
                     "{ 'q': '{!edismax qf=\"name^2 tags^1 description\"}cassandra' }" +
                     "</code></pre>" +
                     "This uses Solr's ExtendedDisMax parser to search across multiple columns and gives a boost to search results with <em>cassandra</em> in the <code>name</code> " +
-                    "or <code>tags</code> columns over just the <code>description</code> column."
+                    "or <code>tags</code> columns over just the <code>description</code> column.",
+                contentClass: "wide"
             },
             {
                 page: pages.searchResults,

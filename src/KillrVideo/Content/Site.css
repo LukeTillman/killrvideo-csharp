@@ -214,8 +214,17 @@ ul.uimessage > li {
 }
 
 /* Tour styles */
-div.tour {
-    min-width: 244px;
+.popover {
+    max-width: 326px;   /* Allow popovers to be larger than BS defaults by 50px */
+}
+
+
+p.tour-content {
+    max-width: 244px;
+}
+
+p.tour-content.wide {
+    max-width: 294px;
 }
 
 div.tour > div.tour-buttons {

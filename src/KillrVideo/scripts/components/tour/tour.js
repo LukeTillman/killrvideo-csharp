@@ -7,7 +7,8 @@
             var stepWithDefaults = $.extend({
                 showNextButton: true,
                 showPreviousButton: true,
-                callToAction: null
+                callToAction: null,
+                contentClass: null
             }, step);
 
             if (step.onShow) {
