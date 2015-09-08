@@ -1,4 +1,4 @@
-﻿define(["knockout", "jquery", "text!./tour.tmpl.html", "./main-tour", "lib/knockout-extenders", "lib/knockout-popover", "bootstrap"], function (ko, $, htmlString, mainTour) {
+﻿define(["knockout", "jquery", "text!./tour.tmpl.html", "./main-tour", "lib/knockout-extenders", "lib/knockout-popover", "bootstrap", "knockout-postbox"], function (ko, $, htmlString, mainTour) {
     function tourViewModel(params) {
         var self = this;
 
@@ -28,6 +28,9 @@
         // An object with properties representing the different pages on the tour
         self.pages = mainTour.pages;
 
+        // The currently logged in user (the header model publishes this value)
+        self.loggedInUser = ko.observable().subscribeTo("loggedInUser", true);
+
         // The index of the current step
         self.currentStepIndex = ko.observable(0).extend({ persist: self.tourId + ".index" });
 
@@ -37,12 +40,12 @@
             var step = steps[idx];
 
             // Get the page by name (key)
-            var page = self.pages[step.page];
+            var pageUrl = self.pages[step.page].url;
 
             // See if we're on the correct page for the step, possibly by running a RegEx
-            return (typeof page === "string")
-                ? page === window.location.pathname.toLowerCase()
-                : page.test(window.location.pathname.toLowerCase());
+            return (typeof pageUrl === "string")
+                ? pageUrl === window.location.pathname.toLowerCase()
+                : pageUrl.test(window.location.pathname.toLowerCase());
         });
 
         // The step object for the current step
@@ -74,10 +77,8 @@
                 self.currentStepIndex(newIdx);
 
                 // Navigate to previous page if necessary
-                var prevPageKey = steps[newIdx].page;
-                if (prevPageKey !== steps[curIdx].page) {
-                    var prevUrl = self.pageUrls()[prevPageKey];
-                    window.location.href = prevUrl;
+                if (steps[newIdx].page !== steps[curIdx].page) {
+                    self.navigateToCurrentPage(false);
                 }
             }
         };
@@ -93,9 +94,7 @@
         // Restart the tour from the beginning
         self.restart = function () {
             self.currentStepIndex(0);
-            self.enabled(true);
-
-            window.location.href = "/"; // TODO: Logout?
+            self.navigateToCurrentPage(true);
         };
 
         // URLs the user has visited for various pages
@@ -103,11 +102,37 @@
 
         // Resume the tour from where you left off
         self.resume = function () {
-            self.enabled(true);
+            self.navigateToCurrentPage(true);
+        };
 
+        self.navigateToCurrentPage = function(enable) {
+            // Get the URL we'll be going to
             var pageKey = steps[self.currentStepIndex()].page;
-            var resumeUrl = self.pageUrls()[pageKey];
-            window.location.href = resumeUrl;
+            var pageUrl = self.pageUrls()[pageKey];
+
+            // Make sure authentication state is correct before navigating
+            var page = self.pages[pageKey];
+            var isLoggedIn = self.loggedInUser().isLoggedIn;
+            if (page.authenticated && isLoggedIn === false) {
+                // Log them in before going to the page
+                $.post("/account/signinuser", { emailAddress: "guidedtour@killrvideo.com", password: "guidedtour" }).done(function () {
+                    if (enable) self.enabled(true);
+                    window.location.href = pageUrl;
+                });
+            } else if (page.authenticated === false && isLoggedIn) {
+                // Log them out before going to the page
+                $.get("/account/signout").done(function () {
+                    if (enable) self.enabled(true);
+                    window.location.href = pageUrl;
+                });
+            } else {
+                if (enable) self.enabled(true);
+
+                // Just go to the page if not already there
+                if (window.location.href !== pageUrl) {
+                    window.location.href = pageUrl;
+                }
+            }
         };
 
         // If we're not on the correct page when the model is initially loaded, disable the tour

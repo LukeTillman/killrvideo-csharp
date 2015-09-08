@@ -1,5 +1,5 @@
 ﻿// The header functionality on all pages (requires bootstrap for the logged in user dropdown which may be present)
-define(["knockout", "jquery", "lib/knockout-extenders", "bootstrap"],
+define(["knockout", "jquery", "lib/knockout-extenders", "bootstrap", "knockout-postbox"],
     function(ko, $) {
         // A view model for the header/navbar
         return function headerViewModel() {
@@ -45,7 +45,7 @@ define(["knockout", "jquery", "lib/knockout-extenders", "bootstrap"],
 
                     return response.data;
                 });
-            }).extend({ async: defaultUser });
+            }).extend({ async: defaultUser }).publishOn("loggedInUser");
 
             // Logs a user out
             self.logoutUser = function() {
@@ -55,11 +55,7 @@ define(["knockout", "jquery", "lib/knockout-extenders", "bootstrap"],
                         return;
 
                     // Redirect to the home page
-                    if (window.location.pathname === "/") {
-                        window.location.reload();
-                    } else {
-                        window.location.href = "/";
-                    }
+                    window.location.href = "/";
                 });
             };
         };
