@@ -4,7 +4,10 @@ using System.Threading.Tasks;
 using Cassandra;
 using KillrVideo.Search.Dtos;
 using KillrVideo.Utils;
-
+using RestSharp;
+using System.Net;
+using Serilog;
+using System.Collections.Generic;
 namespace KillrVideo.Search.SearchImpl
 {
     /// <summary>
@@ -14,13 +17,16 @@ namespace KillrVideo.Search.SearchImpl
     {
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly IRestClient _restClient;
 
-        public DataStaxEnterpriseSearch(ISession session, TaskCache<string, PreparedStatement> statementCache)
+        public DataStaxEnterpriseSearch(ISession session, TaskCache<string, PreparedStatement> statementCache, IRestClient restClient)
         {
             if (session == null) throw new ArgumentNullException("session");
             if (statementCache == null) throw new ArgumentNullException("statementCache");
             _session = session;
             _statementCache = statementCache;
+            _restClient = restClient;
+
         }
 
         /// <summary>
@@ -59,14 +65,44 @@ namespace KillrVideo.Search.SearchImpl
         /// <summary>
         /// Gets a list of query suggestions for providing typeahead support.
         /// </summary>
-        public Task<SuggestedQueries> GetQuerySuggestions(GetQuerySuggestions getSuggestions)
+        public async Task<SuggestedQueries> GetQuerySuggestions(GetQuerySuggestions getSuggestions)
         {
             // TODO: Implement typeahead support
-            return Task.FromResult(new SuggestedQueries
+            // Set the base URL of the REST client to use the first node in the Cassandra cluster
+             string nodeIp = _session.Cluster.AllHosts().First().Address.Address.ToString();
+            _restClient.BaseUrl = new Uri(string.Format("http://{0}:8983/solr", nodeIp));
+
+            //WebRequest mltRequest = WebRequest.Create("http://127.0.2.15:8983/solr/killrvideo.videos/mlt?q=videoid%3Asome-uuid&wt=json&indent=true&qt=mlt&mlt.fl=name&mlt.mindf=1&mlt.mintf=1");
+            var request = new RestRequest("killrvideo.videos/suggest");
+            request.AddParameter("q", getSuggestions.Query);
+            request.AddParameter("wt", "json");
+
+            IRestResponse<SearchSuggestionResult> response = await _restClient.ExecuteTaskAsync<SearchSuggestionResult>(request).ConfigureAwait(false);
+
+            // Check for network/timeout errors
+            if (response.ResponseStatus != ResponseStatus.Completed)
+            {
+                //Logger.Error(response.ErrorException, "Error while querying Solr search suggestions from {host} for {query}", nodeIp, getSuggestions.Query);
+                return new SuggestedQueries { Query = getSuggestions.Query, Suggestions = Enumerable.Empty<string>() };
+            }
+
+            // Check for HTTP error codes
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                //Logger.Error("HTTP status code {code} while querying Solr video suggestions from {host} for {query}", (int)response.StatusCode, nodeIp, getSuggestions.Query);
+                return new SuggestedQueries { Query = getSuggestions.Query, Suggestions = Enumerable.Empty<string>() };
+            }
+            // Success
+            //    int nextPageStartIndex = response.Data.Response.Start + response.Data.Response.Docs.Count;
+            //string pagingState = nextPageStartIndex == response.Data.Response.NumFound ? null : nextPageStartIndex.ToString();
+            return new SuggestedQueries { Query = getSuggestions.Query, Suggestions = response.Data.Spellcheck.Suggestions };
+
+            //return new RelatedVideos { VideoId = query.VideoId, Videos = response.Data.Response.Docs, PagingState = pagingState };
+            return new SuggestedQueries
             {
                 Query = getSuggestions.Query,
                 Suggestions = Enumerable.Empty<string>()
-            });
+            };
         }
 
         private static VideoPreview MapRowToVideoPreview(Row row)
