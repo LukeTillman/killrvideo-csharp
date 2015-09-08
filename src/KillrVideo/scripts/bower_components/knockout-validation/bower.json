@@ -24,15 +24,5 @@
   },
   "dependencies": {
     "knockout": ">=2.3.0"
-  },
-  "_release": "2.0.3",
-  "_resolution": {
-    "type": "version",
-    "tag": "2.0.3",
-    "commit": "e3916b04418ee313f0de06906a342e8609a5d05d"
-  },
-  "_source": "git://github.com/Knockout-Contrib/Knockout-Validation.git",
-  "_target": "~2.0.3",
-  "_originalSource": "knockout-validation",
-  "_direct": true
+  }
 }

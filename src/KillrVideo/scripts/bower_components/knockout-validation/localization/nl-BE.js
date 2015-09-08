@@ -1,5 +1,5 @@
 /**
- * Localization file for Dutch - The Netherlands (nl-NL)
+ * Localization file for Dutch - Belgium (nl-BE)
  */
 (function(factory) {
     // Module systems magic dance.
@@ -18,10 +18,10 @@
     if (!kv || typeof kv.defineLocale !== 'function') {
         throw new Error('Knockout-Validation is required, please ensure it is loaded before this localization file');
     }
-	return kv.defineLocale('nl-NL', {
+	return kv.defineLocale('nl-BE', {
 		required: 'Dit veld is verplicht.',
-		min: 'Vul een waarde in groter of gelijk aan {0}.',
-		max: 'Vul een waarde in kleiner of gelijk aan {0}.',
+		min: 'Vul een waarde in groter dan of gelijk aan {0}.',
+		max: 'Vul een waarde in kleiner dan of gelijk aan {0}.',
 		minLength: 'Vul ten minste {0} tekens in.',
 		maxLength: 'Vul ten hoogste {0} tekens in.',
 		pattern: 'Vul een correcte waarde in.',

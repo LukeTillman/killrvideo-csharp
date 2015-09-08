@@ -23,12 +23,15 @@
     "requirejs-domready": "~2.0.1",
     "moment": "~2.8.3",
     "videojs": "~4.8.2",
-    "knockout-validation": "~1.0.2",
+    "knockout-validation": "~2.0.3",
     "fontawesome": "~4.2.0",
     "perfect-scrollbar": "~0.5.1",
     "jquery-expander": "~1.4.11",
     "bootstrap-select": "~1.6.3",
     "knockout-postbox": "~0.4.2",
     "arrive": "~2.2.0"
+  },
+  "resolutions": {
+    "knockout-validation": "~2.0.3"
   }
 }
