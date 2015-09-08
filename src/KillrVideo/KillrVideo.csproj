@@ -298,7 +298,7 @@
     <Content Include="scripts\components\add-upload\add-upload.tmpl.html" />
     <Content Include="scripts\components\add-youtube\add-youtube.tmpl.html" />
     <Content Include="scripts\lib\knockout-popover.js" />
-    <Content Include="scripts\lib\knockout-tour.js" />
+    <Content Include="scripts\lib\knockout-viewport-width.js" />
     <Content Include="scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Views\Web.config" />

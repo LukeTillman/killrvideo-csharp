@@ -1,5 +1,5 @@
 ﻿// The header functionality on all pages (requires bootstrap for the logged in user dropdown which may be present)
-define(["knockout", "jquery", "lib/knockout-extenders", "bootstrap", "knockout-postbox"],
+define(["knockout", "jquery", "lib/knockout-extenders", "bootstrap", "knockout-postbox", "lib/knockout-viewport-width"],
     function(ko, $) {
         // A view model for the header/navbar
         return function headerViewModel() {
@@ -22,6 +22,9 @@ define(["knockout", "jquery", "lib/knockout-extenders", "bootstrap", "knockout-p
                     return response.data.suggestions;
                 });
             }).extend({ async: [] });
+
+            // The current viewport width
+            self.viewportWidth = ko.observable(0);
 
             // Whether or not to show the "What is this?" section
             self.showWhatIsThis = ko.observable(false);
