@@ -71,7 +71,11 @@
                 placement: "bottom",
                 content: "This tour will walk you through some of the features of the site. Along the way we'll point out some of the " +
                     "interesting technical things going on behind the scenes and provide you with links for learning more about those " +
-                    "topics."
+                    "topics.",
+                links: [
+                    { label: "KillrVideo on GitHub", url: "https://github.com/luketillman/killrvideo-csharp" },
+                    { label: "DataStax Enterprise", url: "http://www.datastax.com/products/datastax-enterprise" }
+                ]
             },
             {
                 page: "home",
@@ -99,7 +103,10 @@
                 content: "This is the View Video page where users can playback videos added to the site. Details like the video's description and name " +
                     "are stored in a catalog in Cassandra, similar to how a Product Catalog might work on an e-commerce site. Cassandra Query Language or " +
                     "CQL makes it easy to store this information. If you're experienced with SQL syntax from working with relational databases, it will " +
-                    "look very familiar to you."
+                    "look very familiar to you.",
+                links: [
+                    { label: "Product Catalogs using Cassandra", url: "http://www.planetcassandra.org/blog/functional_use_cases/product-catalogs-playlists/" }
+                ]
             },
             {
                 page: "viewVideo",
@@ -119,7 +126,11 @@
                     "  added_date timestamp,\r\n" +
                     "  PRIMARY KEY (videoid)\r\n" +
                     ");</code></pre>",
-                contentClass: "wide"
+                contentClass: "wide",
+                links: [
+                    { label: "Creating a Table with CQL", url: "http://docs.datastax.com/en/cql/3.3/cql/cql_using/useCreateTableTOC.html" },
+                    { label: "CREATE TABLE reference", url: "http://docs.datastax.com/en/cql/3.3/cql/cql_reference/create_table_r.html" }
+                ]
             },
             {
                 page: "viewVideo",
@@ -132,7 +143,11 @@
                     "WHERE videoid = ?;" +
                     "</code></pre>" +
                     "In CQL, the <code>?</code> character is used as a placeholder for bind variable values. If you've ever done parameterized SQL queries before, the idea " +
-                    "is the same."
+                    "is the same.",
+                links: [
+                    { label: "Querying Tables with CQL", url: "http://docs.datastax.com/en/cql/3.3/cql/cql_using/useQueryDataTOC.html" },
+                    { label: "SELECT statement reference", url: "http://docs.datastax.com/en/cql/3.3/cql/cql_reference/select_r.html" }
+                ]
             },
             {
                 page: "viewVideo",
@@ -178,7 +193,10 @@
                     "SELECT * FROM users\r\n" +
                     "WHERE userid = ?;" +
                     "</code></pre>" +
-                    "Pretty straightforward, right?"
+                    "Pretty straightforward, right?",
+                links: [
+                    { label: "Simple Primary Keys with CQL", url: "http://docs.datastax.com/en/cql/3.3/cql/cql_using/useSimplePrimaryKeyConcept.html" }
+                ]
             },
             {
                 page: "userProfile",
@@ -212,7 +230,11 @@
                     "  email, created_date)\r\n" +
                     "VALUES (?, ?, ?, ?, ?);" +
                     "</code></pre>",
-                contentClass: "wide"
+                contentClass: "wide",
+                links: [
+                    { label: "Inserting and Updating Data with CQL", url: "http://docs.datastax.com/en/cql/3.3/cql/cql_using/useInsertDataTOC.html" },
+                    { label: "INSERT statement reference", url: "http://docs.datastax.com/en/cql/3.3/cql/cql_reference/insert_r.html" }
+                ]
             },
             {
                 page: "register",
@@ -251,7 +273,10 @@
                 placement: "right",
                 content: "In Cassandra, the <code>WHERE</code> clause of your query is limited to columns that are part of the <code>PRIMARY KEY</code> of the table. You'll " +
                     "remember that in our <code>users</code> table, this was the <code>userid</code> column (so that we could look users up by unique id on the user profile " +
-                    "page). So how do we do a query to look a user up by email address so we can log them in?"
+                    "page). So how do we do a query to look a user up by email address so we can log them in?",
+                links: [
+                    { label: "Filtering Data using WHERE in CQL", url: "http://docs.datastax.com/en/cql/3.3/cql/cql_reference/select_r.html?scroll=reference_ds_d35_v2q_xj__filtering-data-using-where" }
+                ]
             },
             {
                 page: "signIn",
@@ -273,7 +298,11 @@
                 target: "#signin-account",
                 placement: "right",
                 content: "When a user registers for the site, we'll insert the data captured into both the <code>users</code> and <code>user_credentials</code> tables. This is a " +
-                    "data modeling technique called <strong>denormalization</strong> and is something that you'll use a lot when working with Cassandra."
+                    "data modeling technique called <strong>denormalization</strong> and is something that you'll use a lot when working with Cassandra.",
+                links: [
+                    { label: "DS220: Data Modeling Course", url: "https://academy.datastax.com/courses/ds220-data-modeling" },
+                    { label: "Data Modeling with CQL", url: "http://docs.datastax.com/en/cql/3.3/cql/ddl/ddlCQLDataModelingTOC.html" }
+                ]
             },
             {
                 page: "signIn",
@@ -296,8 +325,6 @@
                     addNextOnClickHandler("#signin-account button.btn-primary", tour);  // TODO: Next on valid authentication, not just click
                 }, 
                 onHide: function() {
-                    $("#signin-email").val("").change();
-                    $("#signin-password").val("").change();
                     removeNextOnClickHandler();
                 }
             },
@@ -330,7 +357,10 @@
                     ") WITH CLUSTERING ORDER BY (\r\n" +
                     "  added_date DESC, videoid ASC);" +
                     "</code></pre>",
-                contentClass: "wide"
+                contentClass: "wide",
+                links: [
+                    { label: "Compound Primary Keys with CQL", url: "http://docs.datastax.com/en/cql/3.3/cql/cql_using/useCompoundPrimaryKeyConcept.html" }
+                ]
             },
             {
                 page: "homeAuthenticated",
@@ -338,7 +368,10 @@
                 placement: "right",
                 content: "This is a really simple example of a <strong>time series data model</strong>. Cassandra is great at storing time series data and lots of companies " +
                     "use DataStax Enterprise for use cases like the Internet of Things (IoT) which are often collecting a lot of time series data from a multitude of " +
-                    "sensors or devices."
+                    "sensors or devices.",
+                links: [
+                    { label: "Cassandra for IoT and Sensor Data", url: "http://www.planetcassandra.org/blog/functional_use_cases/internet-of-things-sensor-data/" }
+                ]
             },
             {
                 page: "homeAuthenticated",
@@ -366,6 +399,9 @@
                     "</code></pre>" +
                     "By specifying <code>USING TTL 604800</code>, we are telling Cassandra to automatically expire or delete that record after 604,800 seconds (or 7 days).",
                 contentClass: "wide",
+                links: [
+                    { label: "Expiring Data with Time-To-Live", url: "http://docs.datastax.com/en/cql/3.3/cql/cql_using/useExpire.html" }
+                ],
                 beforeShowPromise: function () { return waitForElementIfNotPresent("#recent-videos-list ul.list-unstyled li:first-child div.video-preview", "#recent-videos-list"); }
             },
             // TODO: Add video page next?
@@ -397,7 +433,10 @@
                     ");</code></pre>" +
                     "Columns of type <code>counter</code> are a special Cassandra column type that allow operations like increment/decrement and are great for storing " +
                     "approximate counts.",
-                contentClass: "wide"
+                contentClass: "wide",
+                links: [
+                    { label: "Creating a Counter table with CQL", url: "http://docs.datastax.com/en/cql/3.3/cql/cql_using/useCountersConcept.html" }
+                ]
             },
             {
                 page: "viewVideoAuthenticated",
@@ -424,7 +463,10 @@
                 placement: "right",
                 content: "Here we see can see the search results for the keyword we clicked on. Searching for videos on KillrVideo is powered by the Search feature of " +
                     "DataStax Enterprise. This feature creates indexes that allow us to do powerful Lucene queries on our video catalog data that are not possible to do " +
-                    "with just CQL. The indexes are automatically updated in the background as new data is added to our catalog tables in Cassandra."
+                    "with just CQL. The indexes are automatically updated in the background as new data is added to our catalog tables in Cassandra.",
+                links: [
+                    { label: "DataStax Enterprise Search", url: "http://www.datastax.com/products/datastax-enterprise-search" }
+                ]
             },
             {
                 page: "searchResultsAuthenticated",
@@ -435,7 +477,10 @@
                     "like this to search for videos with the word <em>cassandra</em> in the <code>description</code> column:<br/><br/>" +
                     "<pre><code>" +
                     "description:cassandra" +
-                    "</code></pre>"
+                    "</code></pre>",
+                links: [
+                    { label: "Queries in DSE Search", url: "http://docs.datastax.com/en/datastax_enterprise/4.7/datastax_enterprise/srch/srchQry.html" }
+                ]
             },
             {
                 page: "searchResultsAuthenticated",
@@ -446,7 +491,10 @@
                     "SELECT * FROM videos\r\n" +
                     "WHERE solr_query =\r\n" +
                     "  'description:cassandra';" +
-                    "</code></pre>"
+                    "</code></pre>",
+                links: [
+                    { label: "CQL Solr Queries in DSE Search", url: "http://docs.datastax.com/en/datastax_enterprise/4.7/datastax_enterprise/srch/srchCql.html" }
+                ]
             },
             {
                 page: "searchResultsAuthenticated",
@@ -457,9 +505,13 @@
                     "<pre><code>" +
                     "{ 'q': '{!edismax qf=\"name^2 tags^1 description\"}cassandra' }" +
                     "</code></pre>" +
-                    "This uses Solr's ExtendedDisMax parser to search across multiple columns and gives a boost to search results with <em>cassandra</em> in the <code>name</code> " +
+                    "This uses Solr's Extended DisMax parser to search across multiple columns and gives a boost to search results with <em>cassandra</em> in the <code>name</code> " +
                     "or <code>tags</code> columns over just the <code>description</code> column.",
-                contentClass: "wide"
+                contentClass: "wide",
+                links: [
+                    { label: "JSON Queries in DSE Search", url: "http://docs.datastax.com/en/datastax_enterprise/4.7/datastax_enterprise/srch/srchJSON.html" },
+                    { label: "Extended DisMax Parser", url: "https://cwiki.apache.org/confluence/display/solr/The+Extended+DisMax+Query+Parser" },
+                ]
             },
             {
                 page: "searchResultsAuthenticated",
@@ -480,7 +532,10 @@
                 content: "Down here we see a list of videos that are related to the one we're currently viewing. This list is also powered by DataStax Enterprise Search. By " +
                     "turning on Solr's MoreLikeThis feature in DSE, we can issue queries that will return videos with similar terms (in their titles, descriptions, etc.) to the " +
                     "video we're currently viewing.",
-                beforeShowPromise: function() { return waitForElementIfNotPresent(this.target, "#view-video-related"); }
+                beforeShowPromise: function () { return waitForElementIfNotPresent(this.target, "#view-video-related"); },
+                links: [
+                    { label: "MoreLikeThis Component", url: "https://cwiki.apache.org/confluence/display/solr/MoreLikeThis" }
+                ]
             },
             {
                 page: "viewVideoAuthenticated",
@@ -497,7 +552,7 @@
                 page: "homeAuthenticated",
                 target: "#logo",
                 placement: "bottom",
-                content: "TODO: Video recommendations with Spark."
+                content: "Coming soon, video recommendations with DSE Analytics and Spark."
             },
             {
                 page: "homeAuthenticated",
@@ -506,7 +561,14 @@
                 content: "Thanks for taking the time to learn more about KillrVideo! Remember, KillrVideo is completely open source, so check it out on GitHub " +
                     "to dig deeper into how things work. There's also great self-paced training courses for DataStax Enterprise available online at the DataStax " +
                     "Academy web site. If you're new to Cassandra, be sure to check that out as well.",
-                showNextButton: false
+                contentClass: "wide",
+                showNextButton: false,
+                links: [
+                    { label: "KillrVideo on GitHub", url: "https://github.com/luketillman/killrvideo-csharp" },
+                    { label: "Free Online Courses at DataStax Academy", url: "https://academy.datastax.com/" },
+                    { label: "Planet Cassandra", url: "http://www.planetcassandra.org/" },
+                    { label: "Companies Using DataStax Enterprise", url: "http://www.datastax.com/customers" }
+                ]
             }
         ]
     };

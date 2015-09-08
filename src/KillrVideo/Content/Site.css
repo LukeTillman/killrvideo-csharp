@@ -219,11 +219,11 @@ ul.uimessage > li {
 }
 
 
-p.tour-content {
+div.tour {
     max-width: 244px;
 }
 
-p.tour-content.wide {
+div.tour.wide {
     max-width: 294px;
 }
 

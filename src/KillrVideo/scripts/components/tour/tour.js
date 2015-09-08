@@ -8,7 +8,8 @@
                 showNextButton: true,
                 showPreviousButton: true,
                 callToAction: null,
-                contentClass: null
+                contentClass: null,
+                links: null
             }, step);
 
             if (step.onShow) {
