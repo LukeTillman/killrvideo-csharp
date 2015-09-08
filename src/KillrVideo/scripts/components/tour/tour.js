@@ -25,6 +25,9 @@
         // A unique identifier for the tour
         self.tourId = mainTour.tourId;
 
+        // An object with properties representing the different pages on the tour
+        self.pages = mainTour.pages;
+
         // The index of the current step
         self.currentStepIndex = ko.observable(0).extend({ persist: self.tourId + ".index" });
 
@@ -33,10 +36,13 @@
             var idx = self.currentStepIndex();
             var step = steps[idx];
 
+            // Get the page by name (key)
+            var page = self.pages[step.page];
+
             // See if we're on the correct page for the step, possibly by running a RegEx
-            return (typeof step.page === "string")
-                ? step.page === window.location.pathname.toLowerCase()
-                : step.page.test(window.location.pathname.toLowerCase());
+            return (typeof page === "string")
+                ? page === window.location.pathname.toLowerCase()
+                : page.test(window.location.pathname.toLowerCase());
         });
 
         // The step object for the current step
@@ -67,9 +73,11 @@
                 var newIdx = curIdx - 1;
                 self.currentStepIndex(newIdx);
 
-                // Do back button navigation if necessary
-                if (steps[curIdx].page !== steps[newIdx].page) {
-                    window.history.back();
+                // Navigate to previous page if necessary
+                var prevPageKey = steps[newIdx].page;
+                if (prevPageKey !== steps[curIdx].page) {
+                    var prevUrl = self.pageUrls()[prevPageKey];
+                    window.location.href = prevUrl;
                 }
             }
         };
@@ -87,30 +95,31 @@
             self.currentStepIndex(0);
             self.enabled(true);
 
-            if (window.location.pathname !== "/") {
-                window.location.href = "/"; // TODO: Logout?
-            }
+            window.location.href = "/"; // TODO: Logout?
         };
 
-        // The last correct page for the user was on
-        self.resumeUrl = ko.observable("").extend({ persist: self.tourId + ".resumeUrl" });
+        // URLs the user has visited for various pages
+        self.pageUrls = ko.observable({}).extend({ persist: self.tourId + ".pageUrls" });
 
         // Resume the tour from where you left off
         self.resume = function () {
             self.enabled(true);
 
-            var resumeUrl = self.resumeUrl();
-            if (window.location.href !== resumeUrl) {
-                window.location.href = self.resumeUrl();
-            }
+            var pageKey = steps[self.currentStepIndex()].page;
+            var resumeUrl = self.pageUrls()[pageKey];
+            window.location.href = resumeUrl;
         };
 
         // If we're not on the correct page when the model is initially loaded, disable the tour
         if (self.onCorrectPage() === false) {
             self.enabled(false);
         } else if (self.enabled() === true) {
-            // If we're on the correct page and enabled, save the URL so the tour can be resumed
-            self.resumeUrl(window.location.href);
+            // If we're on the correct page and enabled, save the URL so the page can be navigated to if resumed or previous button is used
+            var stepIdx = self.currentStepIndex();
+            var pageKey = steps[stepIdx].page;
+            var urls = self.pageUrls();
+            urls[pageKey] = window.location.href;
+            self.pageUrls(urls);
         }
     }
 

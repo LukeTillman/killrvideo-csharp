@@ -1,16 +1,4 @@
 ﻿define(["jquery", "arrive"], function ($) {
-    // The various pages on the site either as a path or RegExp, used by the steps to test if a user
-    // is on the correct page
-    var pages = {
-        home: "/",
-        viewVideo: new RegExp("\/view\/"),
-        userProfile: new RegExp("\/account\/info"),
-        register: "/account/register",
-        signIn: "/account/signin",
-        addVideo: "/videos/add",
-        searchResults: new RegExp("\/search\/results")
-    };
-
     // A resolved promise
     var resolvedPromise = $.Deferred().resolve().promise();
 
@@ -48,11 +36,25 @@
     
     // Return the tour definition
     return {
+        // Unique Id for the tour
         tourId: "KillrVideo",
+
+        // The various pages on the site either as a path or RegExp, used by the steps to test if a user
+        // is on the correct page
+        pages: {
+            home: "/",
+            viewVideo: new RegExp("\/view\/"),
+            userProfile: new RegExp("\/account\/info"),
+            register: "/account/register",
+            signIn: "/account/signin",
+            searchResults: new RegExp("\/search\/results")
+        },
+
+        // The tour step definitions
         steps: [
             // Starting on the Home Page (Unauthenticated)
             {
-                page: pages.home,
+                page: "home",
                 target: "#logo",
                 placement: "bottom",
                 title: "Welcome to KillrVideo!",
@@ -62,7 +64,7 @@
                 showPreviousButton: false
             },
             {
-                page: pages.home,
+                page: "home",
                 target: "#logo",
                 placement: "bottom",
                 content: "This tour will walk you through some of the features of the site. Along the way we'll point out some of the " +
@@ -70,14 +72,14 @@
                     "topics."
             },
             {
-                page: pages.home,
+                page: "home",
                 target: "#tour-enabled",
                 placement: "bottom",
                 content: "You can toggle this guided tour off at any time using this button. Turning it back on will take you to the home page and " +
                     "restart the tour from the beginning."
             },
             {
-                page: pages.home,
+                page: "home",
                 target: "#recent-videos-list ul.list-unstyled li:first-child div.video-preview",
                 placement: "bottom",
                 content: "Let's get started by looking at a video.",
@@ -89,7 +91,7 @@
             },
             // View video page (unauthenticated)
             {
-                page: pages.viewVideo,
+                page: "viewVideo",
                 target: "#logo",    // TODO: Make window?
                 placement: "bottom",
                 content: "This is the View Video page where users can playback videos added to the site. Details like the video's description and name " +
@@ -98,7 +100,7 @@
                     "look very familiar to you."
             },
             {
-                page: pages.viewVideo,
+                page: "viewVideo",
                 target: "#logo",    // TODO: Make window?
                 placement: "bottom",
                 content: "Here's what the <code>videos</code> table for the catalog looks like in CQL:<br/><br/>" +
@@ -118,7 +120,7 @@
                 contentClass: "wide"
             },
             {
-                page: pages.viewVideo,
+                page: "viewVideo",
                 target: "#view-video-title",
                 placement: "bottom",
                 content: "Querying the data from that <code>videos</code> table to show things like the video title is also easy with CQL. Here's what the query looks like " +
@@ -131,7 +133,7 @@
                     "is the same."
             },
             {
-                page: pages.viewVideo,
+                page: "viewVideo",
                 target: "#view-video-author",
                 placement: "bottom",
                 content: "Videos are added to the catalog by users on the site. Let's take a look at this user's profile.",
@@ -142,14 +144,14 @@
             },
             // View user profile (unauthenicated)
             {
-                page: pages.userProfile,
+                page: "userProfile",
                 target: "#logo",    // TODO: Make window?
                 placement: "bottom",
                 content: "This is the user profile page. Here you can see basic information about a user, along with any comments they've made on the site and " +
                     "any videos they've added to the catalog."
             },
             {
-                page: pages.userProfile,
+                page: "userProfile",
                 target: "#user-profile-header",
                 placement: "right",
                 content: "Just like the video catalog data, basic profile information for a user is stored in a CQL table and users can be looked up by unique " +
@@ -165,7 +167,7 @@
                     ");</code></pre>"
             },
             {
-                page: pages.userProfile,
+                page: "userProfile",
                 target: "#user-profile-header",
                 placement: "right",
                 content: "Since the <code>users</code> table has the <code>PRIMARY KEY</code> defined as the <code>userid</code> column, Cassandra allows us to look users " +
@@ -177,7 +179,7 @@
                     "Pretty straightforward, right?"
             },
             {
-                page: pages.userProfile,
+                page: "userProfile",
                 target: "#register",
                 waitForTargetOn: "#navbar-main",
                 placement: "bottom",
@@ -190,14 +192,14 @@
             },
             // User registration page (unauthenticated)
             {
-                page: pages.register,
+                page: "register",
                 target: "#register-account form",
                 placement: "right",
                 content: "This is the user registration form for KillrVideo. It probably looks like many of the forms you've filled out before to register for a web " +
                     "site. Here we collect basic information like your name and email address."
             },
             {
-                page: pages.register,
+                page: "register",
                 target: "#register-account form button.btn-primary",
                 placement: "top",
                 content: "When a user submits the form, we insert the data into Cassandra. Here's what it looks like to use a CQL <code>INSERT</code> " +
@@ -211,7 +213,7 @@
                 contentClass: "wide"
             },
             {
-                page: pages.register,
+                page: "register",
                 target: "#sign-in",
                 placement: "bottom",
                 content: "You might have noticed that our <code>users</code> table doesn't have a <code>password</code> column and so the <code>INSERT</code> " +
@@ -223,14 +225,14 @@
             },
             // Sign In page (unauthenticated)
             {
-                page: pages.signIn,
+                page: "signIn",
                 target: "#signin-account",
                 placement: "right",
                 content: "This is the sign in form for KillrVideo. Once a user enters their credentials, we'll need to look them up by email address and verify " +
                     "their password."
             },
             {
-                page: pages.signIn,
+                page: "signIn",
                 target: "#signin-email",
                 placement: "right",
                 content: "If our <code>users</code> table had a <code>password</code> column in it, you might be tempted to try a query like this to look a user up by email " +
@@ -242,7 +244,7 @@
                     "But if we try to execute that query, Cassandra will give us an <code>InvalidQuery</code> error. Why is that?"
             },
             {
-                page: pages.signIn,
+                page: "signIn",
                 target: "#signin-account",
                 placement: "right",
                 content: "In Cassandra, the <code>WHERE</code> clause of your query is limited to columns that are part of the <code>PRIMARY KEY</code> of the table. You'll " +
@@ -250,7 +252,7 @@
                     "page). So how do we do a query to look a user up by email address so we can log them in?"
             },
             {
-                page: pages.signIn,
+                page: "signIn",
                 target: "#signin-email",
                 placement: "right",
                 content: "To solve this problem we'll create a second table in Cassandra for storing user data and make sure that it has the appropriate <code>PRIMARY KEY</code> " +
@@ -265,14 +267,14 @@
                 contentClass: "wide"
             },
             {
-                page: pages.signIn,
+                page: "signIn",
                 target: "#signin-account",
                 placement: "right",
                 content: "When a user registers for the site, we'll insert the data captured into both the <code>users</code> and <code>user_credentials</code> tables. This is a " +
                     "data modeling technique called <strong>denormalization</strong> and is something that you'll use a lot when working with Cassandra."
             },
             {
-                page: pages.signIn,
+                page: "signIn",
                 target: "#signin-account button.btn-primary",
                 placement: "right",
                 content: "Now that we have a <code>user_credentials</code> table, we can do a query like this to look a user up by email address and verify their password:<br/><br/>" +
@@ -295,7 +297,7 @@
             },
             // Home page (authenticated)
             {
-                page: pages.home,
+                page: "home",
                 target: "#recent-videos-header > span",
                 placement: "right",
                 content: "Now that you know a little bit more about querying and data modeling with Cassandra, let's talk about this Recent Videos section. If you remember our " +
@@ -304,7 +306,7 @@
                     "videos added to the site."
             },
             {
-                page: pages.home,
+                page: "home",
                 target: "#recent-videos-header > span",
                 placement: "right",
                 content: "But by leveraging denormalization again, we can create a table that allows us to query the video data added to the site by time. In KillrVideo, the" +
@@ -325,7 +327,7 @@
                 contentClass: "wide"
             },
             {
-                page: pages.home,
+                page: "home",
                 target: "#recent-videos-header > span",
                 placement: "right",
                 content: "This is a really simple example of a <strong>time series data model</strong>. Cassandra is great at storing time series data and lots of companies " +
@@ -333,7 +335,7 @@
                     "sensors or devices."
             },
             {
-                page: pages.home,
+                page: "home",
                 target: "#recent-videos-list > div",
                 placement: "bottom",
                 content: "One interesting thing about the <code>latest_videos</code> table is how we go about inserting data into it. In KillrVideo, we decided that the Recent " +
@@ -344,7 +346,7 @@
                 beforeShowPromise: function () { return waitForElementIfNotPresent("#recent-videos-list ul.list-unstyled li:first-child div.video-preview", "#recent-videos-list"); }
             },
             {
-                page: pages.home,
+                page: "home",
                 target: "#recent-videos-list > div",
                 placement: "bottom",
                 content: "Here's what an <code>INSERT</code> statement into the <code>latest_videos</code> table looks like:<br/><br/>" +
@@ -362,7 +364,7 @@
             },
             // TODO: Add video page next?
             {
-                page: pages.home,
+                page: "home",
                 target: "#recent-videos-list ul.list-unstyled li:first-child div.video-preview",
                 waitForTargetOn: "#recent-videos-list",
                 placement: "bottom",
@@ -375,7 +377,7 @@
             },
             // View video page (authenticated)
             {
-                page: pages.viewVideo,
+                page: "viewVideo",
                 target: "div.video-rating-and-sharing",
                 placement: "bottom",
                 content: "Since we're signed in, we can now rate videos as we watch them on the site. The overall rating for a video is calculated using the values " +
@@ -392,14 +394,14 @@
                 contentClass: "wide"
             },
             {
-                page: pages.viewVideo,
+                page: "viewVideo",
                 target: "#view-video-comments > h5",
                 placement: "left",
                 content: "The latest comments for a video are also displayed and now that we're signed in, we can leave comments of our own. Comments are another simple " +
                     "example of a <strong>time series data model</strong>."
             },
             {
-                page: pages.viewVideo,
+                page: "viewVideo",
                 target: "#view-video-tags",
                 placement: "bottom",
                 content: "When users add videos to the catalog, we ask them to provide tags for the video they are adding. These are just keywords that apply to the content " +
@@ -411,7 +413,7 @@
             },
             // Search results page (authenticated)
             {
-                page: pages.searchResults,
+                page: "searchResults",
                 target: "#body-content h3.section-divider > span",
                 placement: "right",
                 content: "Here we see can see the search results for the keyword we clicked on. Searching for videos on KillrVideo is powered by the Search feature of " +
@@ -419,7 +421,7 @@
                     "with just CQL. The indexes are automatically updated in the background as new data is added to our catalog tables in Cassandra."
             },
             {
-                page: pages.searchResults,
+                page: "searchResults",
                 target: "#body-content h3.section-divider > span",
                 placement: "right",
                 content: "On KillrVideo, we've enabled DataStax Enterprise Search on our <code>videos</code> table which holds our video catalog. When a user searches for " +
@@ -430,7 +432,7 @@
                     "</code></pre>"
             },
             {
-                page: pages.searchResults,
+                page: "searchResults",
                 target: "#body-content h3.section-divider > span",
                 placement: "right",
                 content: "Lucene queries in DataStax Enterprise are also integrated with CQL, so I can get data from the <code>videos</code> table using that query like this:<br/><br/>" +
@@ -441,7 +443,7 @@
                     "</code></pre>"
             },
             {
-                page: pages.searchResults,
+                page: "searchResults",
                 target: "#body-content h3.section-divider > span",
                 placement: "right",
                 content: "But we're not limited to just querying on a single field. Since DataStax Enterprise Search is powered by Solr, we have all that power available " +
@@ -454,7 +456,7 @@
                 contentClass: "wide"
             },
             {
-                page: pages.searchResults,
+                page: "searchResults",
                 target: "#search-results div.row div.col-sm-3:first-child div.video-preview",
                 placement: "bottom",
                 content: "There are some other cool things we can do with DataStax Enterprise Search beyond just full-text searching. Let's look at a video again to check out " +
@@ -466,7 +468,7 @@
             },
             // View video page (authenticated)
             {
-                page: pages.viewVideo,
+                page: "viewVideo",
                 target: "#view-video-related div.video-preview-list",
                 placement: "top",
                 content: "Down here we see a list of videos that are related to the one we're currently viewing. This list is also powered by DataStax Enterprise Search. By " +
@@ -475,7 +477,7 @@
                 beforeShowPromise: function() { return waitForElementIfNotPresent(this.target, "#view-video-related"); }
             },
             {
-                page: pages.viewVideo,
+                page: "viewVideo",
                 target: "#logo",
                 placement: "bottom",
                 content: "DataStax Enterprise also offers some other interesting features beyond just Search. Let's go back to the home page to take a look at another one of those.",
@@ -486,13 +488,13 @@
             },
             // Home page (authenticated)
             {
-                page: pages.home,
+                page: "home",
                 target: "#logo",
                 placement: "bottom",
                 content: "TODO: Video recommendations with Spark."
             },
             {
-                page: pages.home,
+                page: "home",
                 target: "#logo",
                 placement: "bottom",
                 content: "Thanks for taking the time to learn more about KillrVideo! Remember, KillrVideo is completely open source, so check it out on GitHub " +
