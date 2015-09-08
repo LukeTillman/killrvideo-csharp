@@ -423,7 +423,13 @@
                 target: "div.video-rating-and-sharing",
                 placement: "bottom",
                 content: "Since we're signed in, we can now rate videos as we watch them on the site. The overall rating for a video is calculated using the values " +
-                    "from two <code>counter</code> columns stored in Cassandra. Here's what the table looks like:<br/><br/>" +
+                    "from two <code>counter</code> columns stored in Cassandra."
+            },
+            {
+                page: "viewVideoAuthenticated",
+                target: "div.video-rating-and-sharing",
+                placement: "bottom",
+                content: "Here's what the <code>video_ratings</code> table looks like:<br/><br/>" +
                     "<pre><code>" +
                     "CREATE TABLE video_ratings (\r\n" +
                     "  videoid uuid,\r\n" +
@@ -447,7 +453,7 @@
             },
             {
                 page: "viewVideoAuthenticated",
-                target: "#view-video-tags",
+                target: "#view-video-tags a:first-child",
                 placement: "bottom",
                 content: "When users add videos to the catalog, we ask them to provide tags for the video they are adding. These are just keywords that apply to the content " +
                     "of the video. Clicking on a tag is the same as using the search box in the header to search for videos with that keyword. Let's see how search works.",
@@ -560,7 +566,7 @@
                 placement: "bottom",
                 content: "Thanks for taking the time to learn more about KillrVideo! Remember, KillrVideo is completely open source, so check it out on GitHub " +
                     "to dig deeper into how things work. There's also great self-paced training courses for DataStax Enterprise available online at the DataStax " +
-                    "Academy web site. If you're new to Cassandra, be sure to check that out as well.",
+                    "Academy web site.",
                 contentClass: "wide",
                 showNextButton: false,
                 links: [
