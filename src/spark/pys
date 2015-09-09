@@ -1,0 +1,3 @@
+#!/bin/bash
+
+pyspark --jars  $SPARK_CONNECTOR_JAR --driver-class-path $SPARK_CONNECTOR_JAR --conf spark.cassandra.connection.host=127.0.0.1 --master local[2] 
