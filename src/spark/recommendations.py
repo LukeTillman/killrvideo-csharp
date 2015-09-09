@@ -29,6 +29,7 @@ user_map = user_ids.map(lambda (x, y): Row(u=x.userid, iu=y)).toDF().cache()
 video_ids = ratings.distinct().rdd.zipWithUniqueId().cache()
 video_map = video_ids.map(lambda (x, y): Row(v=x.videoid, iv=y)).toDF().cache()
 
+
 training_data = ratings.join(video_map, ratings.videoid == video_map.v).\
                 join(user_map, ratings.userid == user_map.u).\
                 select(video_map.iv.alias('item'),
@@ -37,18 +38,9 @@ training_data = ratings.join(video_map, ratings.videoid == video_map.v).\
 
 model = ALS.train(training_data, 10)
 
-# recommendations = ALS(rank=10, userCol="u", itemCol="v")
-# model = recommendations.fit(training_data)
-# model = ALS.train(training_data, 10)
+model.save(sc, "/tmp/recommendations")
 
-# model.userFactors
-
-# ratings.join(video_ids, "video", "v", "videoid")
-# print user_map
-
-# def get_recs(user):
-#     # recs = model.recommendProducts(user.userid, 20)
-#     # persist to db
-#     print "Saving recommendations for " + user.userid
-#
-# users.foreach(get_recs)
+for user in user_map.collect():
+    products = model.recommendProducts(user.iu, 30)
+    userid = user.u
+    print userid
