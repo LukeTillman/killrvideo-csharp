@@ -4,7 +4,11 @@ using System.Threading.Tasks;
 using Cassandra;
 using KillrVideo.Search.Dtos;
 using KillrVideo.Utils;
-
+using RestSharp;
+using Newtonsoft.Json;
+using System.Net;
+using Serilog;
+using System.Collections.Generic;
 namespace KillrVideo.Search.SearchImpl
 {
     /// <summary>
@@ -14,13 +18,16 @@ namespace KillrVideo.Search.SearchImpl
     {
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly IRestClient _restClient;
 
-        public DataStaxEnterpriseSearch(ISession session, TaskCache<string, PreparedStatement> statementCache)
+        public DataStaxEnterpriseSearch(ISession session, TaskCache<string, PreparedStatement> statementCache, IRestClient restClient)
         {
             if (session == null) throw new ArgumentNullException("session");
             if (statementCache == null) throw new ArgumentNullException("statementCache");
             _session = session;
             _statementCache = statementCache;
+            _restClient = restClient;
+
         }
 
         /// <summary>
@@ -59,14 +66,56 @@ namespace KillrVideo.Search.SearchImpl
         /// <summary>
         /// Gets a list of query suggestions for providing typeahead support.
         /// </summary>
-        public Task<SuggestedQueries> GetQuerySuggestions(GetQuerySuggestions getSuggestions)
+        public async Task<SuggestedQueries> GetQuerySuggestions(GetQuerySuggestions getSuggestions)
         {
-            // TODO: Implement typeahead support
-            return Task.FromResult(new SuggestedQueries
+
+            // Set the base URL of the REST client to use the first node in the Cassandra cluster
+             string nodeIp = _session.Cluster.AllHosts().First().Address.Address.ToString();
+            _restClient.BaseUrl = new Uri(string.Format("http://{0}:8983/solr", nodeIp));
+
+          
+
+            var request = new RestRequest("killrvideo.videos/suggest");
+            request.Method = Method.POST;
+            request.AddParameter("wt", "json");
+            // Requires a build after new names are added, added on a safe side.
+            request.AddParameter("spellcheck.build", "true");
+            request.AddParameter("spellcheck.q", getSuggestions.Query);
+            IRestResponse<SearchSuggestionResult> response = await _restClient.ExecuteTaskAsync<SearchSuggestionResult>(request).ConfigureAwait(false);
+
+
+
+            // Check for network/timeout errors
+            if (response.ResponseStatus != ResponseStatus.Completed)
+            {
+                //Logger.Error(response.ErrorException, "Error while querying Solr search suggestions from {host} for {query}", nodeIp, getSuggestions.Query);
+                return new SuggestedQueries { Query = getSuggestions.Query, Suggestions = Enumerable.Empty<string>() };
+            }
+
+            // Check for HTTP error codes
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                //Logger.Error("HTTP status code {code} while querying Solr video suggestions from {host} for {query}", (int)response.StatusCode, nodeIp, getSuggestions.Query);
+                return new SuggestedQueries { Query = getSuggestions.Query, Suggestions = Enumerable.Empty<string>() };
+            }
+            // Success
+
+            // Json embeds another json object within an array.
+            // Ensures we receive data
+            if (response.Data.Spellcheck.Suggestions.Count >= 2)
+            {
+                // Deserialize the embedded object
+                var suggestions = JsonConvert.DeserializeObject<SearchSpellcheckSuggestions>(response.Data.Spellcheck.Suggestions.Last());
+                // Ensure the object deserialized correctly
+                if (suggestions.Suggestion != null)
+                    return new SuggestedQueries { Query = getSuggestions.Query, Suggestions = suggestions.Suggestion };
+            }
+
+            return new SuggestedQueries
             {
                 Query = getSuggestions.Query,
                 Suggestions = Enumerable.Empty<string>()
-            });
+            };
         }
 
         private static VideoPreview MapRowToVideoPreview(Row row)

@@ -10,17 +10,24 @@
 </fieldType>
 <fieldType class="org.apache.solr.schema.UUIDField" name="UUIDField"/>
 <fieldType class="org.apache.solr.schema.TrieIntField" name="TrieIntField"/>
+<fieldType class="solr.TextField" name="text_auto">
+ <analyzer>
+  <tokenizer class="solr.KeywordTokenizerFactory"/>
+ </analyzer>
+</fieldType>
 </types>
 <fields>
 <field indexed="true" multiValued="false" name="added_date" stored="true" type="TrieDateField"/>
 <field indexed="true" multiValued="false" name="location" stored="true" type="TextField"/>
 <field indexed="true" multiValued="false" name="preview_image_location" stored="true" type="TextField"/>
 <field indexed="true" multiValued="false" name="name" termVectors="true" stored="true" type="TextField"/>
+<field name="name_autocomplete" type="text_auto" indexed="true" stored="true" multiValued="false" />
 <field indexed="true" multiValued="true" name="tags" termVectors="true" stored="true" type="TextField"/>
 <field indexed="true" multiValued="false" name="userid" stored="true" type="UUIDField"/>
 <field indexed="true" multiValued="false" name="videoid" stored="true" type="UUIDField"/>
 <field indexed="true" multiValued="false" name="location_type" stored="true" type="TrieIntField"/>
 <field indexed="true" multiValued="false" name="description" termVectors="true" stored="true" type="TextField"/>
+<copyField source="name" dest="name_autocomplete" />
 </fields>
 <uniqueKey>videoid</uniqueKey>
 </schema>
