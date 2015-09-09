@@ -96,6 +96,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Nimbus.Windsor.2.0.0.87\lib\net45\Nimbus.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Serilog, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.1.5.9\lib\net45\Serilog.dll</HintPath>
       <Private>True</Private>
@@ -171,6 +175,7 @@
     <Compile Include="App_Start\CassandraWindsorInstaller.cs" />
     <Compile Include="App_Start\MvcWindsorInstaller.cs" />
     <Compile Include="App_Start\NimbusWindsorInstaller.cs" />
+    <Compile Include="App_Start\RestSharpWindsorInstaller.cs" />
     <Compile Include="App_Start\WebRole.cs" />
     <Compile Include="Authentication\PrincipalExtensions.cs" />
     <Compile Include="Controllers\ConventionControllerBase.cs" />
