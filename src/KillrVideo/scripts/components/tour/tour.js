@@ -7,6 +7,7 @@
             var stepWithDefaults = $.extend({
                 showNextButton: true,
                 showPreviousButton: true,
+                showEndButton: false,
                 callToAction: null,
                 contentClass: null,
                 links: null
@@ -106,6 +107,7 @@
             self.navigateToCurrentPage(true);
         };
 
+        // Navigate to the page for the current step (taking into account authentication) and optionally enable the tour
         self.navigateToCurrentPage = function(enable) {
             // Get the URL we'll be going to
             var pageKey = steps[self.currentStepIndex()].page;

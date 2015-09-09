@@ -569,6 +569,7 @@
                     "Academy web site.",
                 contentClass: "wide",
                 showNextButton: false,
+                showEndButton: true,
                 links: [
                     { label: "KillrVideo on GitHub", url: "https://github.com/luketillman/killrvideo-csharp" },
                     { label: "Free Online Courses at DataStax Academy", url: "https://academy.datastax.com/" },
