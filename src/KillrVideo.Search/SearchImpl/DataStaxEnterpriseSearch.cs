@@ -5,6 +5,7 @@ using Cassandra;
 using KillrVideo.Search.Dtos;
 using KillrVideo.Utils;
 using RestSharp;
+using Newtonsoft.Json;
 using System.Net;
 using Serilog;
 using System.Collections.Generic;
@@ -67,17 +68,22 @@ namespace KillrVideo.Search.SearchImpl
         /// </summary>
         public async Task<SuggestedQueries> GetQuerySuggestions(GetQuerySuggestions getSuggestions)
         {
-            // TODO: Implement typeahead support
+
             // Set the base URL of the REST client to use the first node in the Cassandra cluster
              string nodeIp = _session.Cluster.AllHosts().First().Address.Address.ToString();
             _restClient.BaseUrl = new Uri(string.Format("http://{0}:8983/solr", nodeIp));
 
-            //WebRequest mltRequest = WebRequest.Create("http://127.0.2.15:8983/solr/killrvideo.videos/mlt?q=videoid%3Asome-uuid&wt=json&indent=true&qt=mlt&mlt.fl=name&mlt.mindf=1&mlt.mintf=1");
-            var request = new RestRequest("killrvideo.videos/suggest");
-            request.AddParameter("q", getSuggestions.Query);
-            request.AddParameter("wt", "json");
+          
 
+            var request = new RestRequest("killrvideo.videos/suggest");
+            request.Method = Method.POST;
+            request.AddParameter("wt", "json");
+            // Requires a build after new names are added, added on a safe side.
+            request.AddParameter("spellcheck.build", "true");
+            request.AddParameter("spellcheck.q", getSuggestions.Query);
             IRestResponse<SearchSuggestionResult> response = await _restClient.ExecuteTaskAsync<SearchSuggestionResult>(request).ConfigureAwait(false);
+
+
 
             // Check for network/timeout errors
             if (response.ResponseStatus != ResponseStatus.Completed)
@@ -93,11 +99,18 @@ namespace KillrVideo.Search.SearchImpl
                 return new SuggestedQueries { Query = getSuggestions.Query, Suggestions = Enumerable.Empty<string>() };
             }
             // Success
-            //    int nextPageStartIndex = response.Data.Response.Start + response.Data.Response.Docs.Count;
-            //string pagingState = nextPageStartIndex == response.Data.Response.NumFound ? null : nextPageStartIndex.ToString();
-            return new SuggestedQueries { Query = getSuggestions.Query, Suggestions = response.Data.Spellcheck.Suggestions };
 
-            //return new RelatedVideos { VideoId = query.VideoId, Videos = response.Data.Response.Docs, PagingState = pagingState };
+            // Json embeds another json object within an array.
+            // Ensures we receive data
+            if (response.Data.Spellcheck.Suggestions.Count >= 2)
+            {
+                // Deserialize the embedded object
+                var suggestions = JsonConvert.DeserializeObject<SearchSpellcheckSuggestions>(response.Data.Spellcheck.Suggestions.Last());
+                // Ensure the object deserialized correctly
+                if (suggestions.Suggestion != null)
+                    return new SuggestedQueries { Query = getSuggestions.Query, Suggestions = suggestions.Suggestion };
+            }
+
             return new SuggestedQueries
             {
                 Query = getSuggestions.Query,
