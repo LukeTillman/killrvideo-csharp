@@ -7,11 +7,15 @@ from uuid import UUID
 class UUIDType(types.AtomicType):
     pass
 
+import sys
+
+print sys.path
+print sys.executable
+
 types.UUIDType = UUIDType
 types._type_mappings[UUID] = UUIDType
 types._atomic_types.append(UUIDType)
 types._all_atomic_types = dict((t.typeName(), t) for t in types._atomic_types)
-
 
 
 sc = SparkContext()
