@@ -13,6 +13,7 @@
 <fieldType class="solr.TextField" name="text_auto">
  <analyzer>
   <tokenizer class="solr.KeywordTokenizerFactory"/>
+  <filter class="solr.LowerCaseFilterFactory"/>
  </analyzer>
 </fieldType>
 </types>
