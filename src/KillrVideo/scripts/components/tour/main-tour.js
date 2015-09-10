@@ -90,7 +90,7 @@
                 placement: "bottom",
                 content: "Let's get started by looking at a video.",
                 callToAction: "Click on a video to continue.",
-                beforeShowPromise: function () { return waitForElementIfNotPresent(this.target, "#recent-videos-list"); },
+                beforeShowPromise: function() { return waitForElementIfNotPresent(this.target, "#recent-videos-list"); },
                 showNextButton: false,
                 onShow: function(tour) { addNextOnClickHandler("#recent-videos-list div.video-preview", tour); },
                 onHide: function() { removeNextOnClickHandler(); }
@@ -98,7 +98,7 @@
             // View video page (unauthenticated)
             {
                 page: "viewVideo",
-                target: "#logo",    // TODO: Make window?
+                target: "#logo", // TODO: Make window?
                 placement: "bottom",
                 content: "This is the View Video page where users can playback videos added to the site. Details like the video's description and name " +
                     "are stored in a catalog in Cassandra, similar to how a Product Catalog might work on an e-commerce site. Cassandra Query Language or " +
@@ -110,7 +110,7 @@
             },
             {
                 page: "viewVideo",
-                target: "#logo",    // TODO: Make window?
+                target: "#logo", // TODO: Make window?
                 placement: "bottom",
                 content: "Here's what the <code>videos</code> table for the catalog looks like in CQL:<br/><br/>" +
                     "<pre><code>" +
@@ -162,7 +162,7 @@
             // View user profile (unauthenicated)
             {
                 page: "userProfile",
-                target: "#logo",    // TODO: Make window?
+                target: "#logo", // TODO: Make window?
                 placement: "bottom",
                 content: "This is the user profile page. Here you can see basic information about a user, along with any comments they've made on the site and " +
                     "any videos they've added to the catalog."
@@ -317,13 +317,13 @@
                     "Let's sign into KillrVideo. We've filled in the form with some sample user credentials.",
                 callToAction: "Click the Sign In button to continue.",
                 showNextButton: false,
-                onShow: function (tour) {
+                onShow: function(tour) {
                     // Fill in some sample user credentials
                     $("#signin-email").val("guidedtour@killrvideo.com").change();
                     $("#signin-password").val("guidedtour").change();
 
-                    addNextOnClickHandler("#signin-account button.btn-primary", tour);  // TODO: Next on valid authentication, not just click
-                }, 
+                    addNextOnClickHandler("#signin-account button.btn-primary", tour); // TODO: Next on valid authentication, not just click
+                },
                 onHide: function() {
                     removeNextOnClickHandler();
                 }
@@ -382,7 +382,7 @@
                     "7 days. While we could write some kind of background job to delete old data from that table on a regular basis, instead we're leveraging Cassandra's " +
                     "ability to specify a <strong>TTL</strong> or <strong>Time to Live</strong> when inserting data to that table.",
                 contentClass: "wide",
-                beforeShowPromise: function () { return waitForElementIfNotPresent("#recent-videos-list ul.list-unstyled li:first-child div.video-preview", "#recent-videos-list"); }
+                beforeShowPromise: function() { return waitForElementIfNotPresent("#recent-videos-list ul.list-unstyled li:first-child div.video-preview", "#recent-videos-list"); }
             },
             {
                 page: "homeAuthenticated",
@@ -402,7 +402,7 @@
                 links: [
                     { label: "Expiring Data with Time-To-Live", url: "http://docs.datastax.com/en/cql/3.3/cql/cql_using/useExpire.html" }
                 ],
-                beforeShowPromise: function () { return waitForElementIfNotPresent("#recent-videos-list ul.list-unstyled li:first-child div.video-preview", "#recent-videos-list"); }
+                beforeShowPromise: function() { return waitForElementIfNotPresent("#recent-videos-list ul.list-unstyled li:first-child div.video-preview", "#recent-videos-list"); }
             },
             // TODO: Add video page next?
             {
@@ -414,7 +414,7 @@
                 callToAction: "Click on a video to continue.",
                 beforeShowPromise: function() { return waitForElementIfNotPresent(this.target, "#recent-videos-list"); },
                 showNextButton: false,
-                onShow: function (tour) { addNextOnClickHandler("#recent-videos-list div.video-preview", tour); }, 
+                onShow: function(tour) { addNextOnClickHandler("#recent-videos-list div.video-preview", tour); },
                 onHide: function() { removeNextOnClickHandler(); }
             },
             // View video page (authenticated)
@@ -459,7 +459,7 @@
                     "of the video. Clicking on a tag is the same as using the search box in the header to search for videos with that keyword. Let's see how search works.",
                 callToAction: "Click on a tag to continue.",
                 showNextButton: false,
-                onShow: function (tour) { addNextOnClickHandler("#view-video-tags a", tour); }, 
+                onShow: function(tour) { addNextOnClickHandler("#view-video-tags a", tour); },
                 onHide: function() { removeNextOnClickHandler(); }
             },
             // Search results page (authenticated)
@@ -517,6 +517,17 @@
                 links: [
                     { label: "JSON Queries in DSE Search", url: "http://docs.datastax.com/en/datastax_enterprise/4.7/datastax_enterprise/srch/srchJSON.html" },
                     { label: "Extended DisMax Parser", url: "https://cwiki.apache.org/confluence/display/solr/The+Extended+DisMax+Query+Parser" },
+                ]
+            },
+            {
+                page: "searchResultsAuthenticated",
+                target: "#search-box",
+                placement: "right",
+                content: "Search suggestions are also powered by DataStax Enterprise. If you start to enter a search term into the search box, you'll get video names " +
+                    "that match your search terms as suggestions. Try typing <em>cassandra</em> into the search box to see an example. This is done by enabling the Solr " +
+                    "Suggester component in DSE Search.",
+                links: [
+                    { label: "Suggester - a flexible autocomplete component", url: "https://cwiki.apache.org/confluence/display/solr/Suggester" }
                 ]
             },
             {
