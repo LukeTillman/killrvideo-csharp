@@ -190,3 +190,7 @@ FakesAssemblies/
 
 # MonoDevelop userprefs
 *.userprefs
+
+
+.ipynb_checkpoints
+src/spark/*.ipynb
