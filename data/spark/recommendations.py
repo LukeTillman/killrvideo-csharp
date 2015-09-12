@@ -26,18 +26,18 @@ ratings = ratings.select(ratings.userid.cast("string").alias("userid"),
 
 # the ML libraries require integers, so we need to create keys for the users & videos temporarily
 user_ids = ratings.select("userid").distinct().rdd.zipWithUniqueId()
-user_map = user_ids.map(lambda (x, y): Row(u=x.userid, iu=y)).toDF().cache()
+user_map = user_ids.map(lambda (x, y): Row(userid=x.userid, userid_int=y)).toDF().cache()
 
 # same as above - this is a UUID/int mapping
 video_ids = ratings.select("videoid").distinct().rdd.zipWithUniqueId().cache()
-video_map = video_ids.map(lambda (x, y): Row(v=x.videoid, iv=y)).toDF().cache()
+video_map = video_ids.map(lambda (x, y): Row(videoid=x.videoid, videoid_int=y)).toDF().cache()
 
 # lets join the mapping tables to the original data, and swap our UUIDS for the int ids
 
-training_data = ratings.join(video_map, ratings.videoid == video_map.v).\
-                join(user_map, ratings.userid == user_map.u).\
-                select(user_map.iu.alias('user'),
-                       video_map.iv.alias('product'),
+training_data = ratings.join(video_map, ratings.videoid == video_map.videoid).\
+                join(user_map, ratings.userid == user_map.userid).\
+                select(user_map.userid_int.alias("user"),
+                       video_map.videoid_int.alias("product"),
                        "rating")
 
 model = ALS.train(training_data, 10)
@@ -49,17 +49,17 @@ model = ALS.train(training_data, 10)
 # TODO only get recommendations for users who have less than 20
 # sadly, we have to do this in the driver.  the model can't be distributed
 for user in user_map.collect():
-    products = model.recommendProducts(user.iu, 30)
+    products = model.recommendProducts(user.userid_int, 30)
     products = sql.createDataFrame(products)
 
-    recs = products.join(video_map, video_map.iv == products.product).\
-            join(user_map, user_map.iu == products.user).\
-            select(user_map.u.alias("userid"), video_map.v.alias("videoid"), "rating")
+    recs = products.join(video_map, video_map.videoid_int == products.product).\
+            join(user_map, user_map.userid_int == products.user).\
+            select(user_map.userid, video_map.videoid, "rating")
 
     recs.write.format("org.apache.spark.sql.cassandra").\
         options(keyspace="killrvideo", table="video_recommendations").\
         save(mode="append")
 
     print products
-    userid = user.u
+    userid = user.userid
     print userid
