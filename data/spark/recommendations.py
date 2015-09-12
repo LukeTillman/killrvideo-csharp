@@ -36,8 +36,8 @@ video_map = video_ids.map(lambda (x, y): Row(v=x.videoid, iv=y)).toDF().cache()
 
 training_data = ratings.join(video_map, ratings.videoid == video_map.v).\
                 join(user_map, ratings.userid == user_map.u).\
-                select(video_map.iv.alias('item'),
-                       user_map.iu.alias('user'),
+                select(user_map.iu.alias('user'),
+                       video_map.iv.alias('product'),
                        "rating")
 
 model = ALS.train(training_data, 10)
