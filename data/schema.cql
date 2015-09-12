@@ -82,6 +82,18 @@ CREATE TABLE video_playback_stats (
     PRIMARY KEY (videoid)
 );
 
+// Recommendations by user (powered by Spark), with the newest videos added to the site always first
+CREATE TABLE video_recommendations ( 
+  userid uuid,
+  added_date timestamp,
+  videoid uuid,
+  rating float,
+  authorid uuid,
+  name text,
+  preview_image_location text,
+  PRIMARY KEY(userid, added_date, videoid)
+) WITH CLUSTERING ORDER BY (added_date DESC, videoid ASC);
+
 // Index for tag keywords
 CREATE TABLE videos_by_tag (
     tag text,

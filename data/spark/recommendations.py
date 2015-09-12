@@ -33,7 +33,6 @@ video_ids = ratings.select("videoid").distinct().rdd.zipWithUniqueId().cache()
 video_map = video_ids.map(lambda (x, y): Row(videoid=x.videoid, videoid_int=y)).toDF().cache()
 
 # lets join the mapping tables to the original data, and swap our UUIDS for the int ids
-
 training_data = ratings.join(video_map, ratings.videoid == video_map.videoid).\
                 join(user_map, ratings.userid == user_map.userid).\
                 select(user_map.userid_int.alias("user"),
@@ -41,6 +40,12 @@ training_data = ratings.join(video_map, ratings.videoid == video_map.videoid).\
                        "rating")
 
 model = ALS.train(training_data, 10)
+
+# Get the catalog of videos, casting UUIDs to strings
+video_catalog = sql.read.format("org.apache.spark.sql.cassandra").load(keyspace="killrvideo", table="videos")
+video_catalog = video_catalog.select(video_catalog.videoid.cast("string").alias("videoid"),
+                                     video_catalog.userid.cast("string").alias("authorid"),
+                                     video_catalog.added_date, video_catalog.name, video_catalog.preview_image_location)
 
 # later we're going to want to save the model and the 2 mappings
 # but not just yet
@@ -53,8 +58,10 @@ for user in user_map.collect():
     products = sql.createDataFrame(products)
 
     recs = products.join(video_map, video_map.videoid_int == products.product).\
+            join(video_catalog, video_map.videoid == video_catalog.videoid).\
             join(user_map, user_map.userid_int == products.user).\
-            select(user_map.userid, video_map.videoid, "rating")
+            select(user_map.userid, video_catalog.added_date, video_map.videoid, "rating",
+                   video_catalog.authorid, video_catalog.name, video_catalog.preview_image_location)
 
     recs.write.format("org.apache.spark.sql.cassandra").\
         options(keyspace="killrvideo", table="video_recommendations").\
