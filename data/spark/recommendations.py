@@ -41,12 +41,6 @@ training_data = ratings.join(video_map, ratings.videoid == video_map.videoid).\
 
 model = ALS.train(training_data, 10)
 
-# Get the catalog of videos, casting UUIDs to strings
-video_catalog = sql.read.format("org.apache.spark.sql.cassandra").load(keyspace="killrvideo", table="videos")
-video_catalog = video_catalog.select(video_catalog.videoid.cast("string").alias("videoid"),
-                                     video_catalog.userid.cast("string").alias("authorid"),
-                                     video_catalog.added_date, video_catalog.name, video_catalog.preview_image_location)
-
 # later we're going to want to save the model and the 2 mappings
 # but not just yet
 # model.save(sc, "/tmp/recommendations")
@@ -58,15 +52,42 @@ for user in user_map.collect():
     products = sql.createDataFrame(products)
 
     recs = products.join(video_map, video_map.videoid_int == products.product).\
-            join(video_catalog, video_map.videoid == video_catalog.videoid).\
             join(user_map, user_map.userid_int == products.user).\
-            select(user_map.userid, video_catalog.added_date, video_map.videoid, "rating",
-                   video_catalog.authorid, video_catalog.name, video_catalog.preview_image_location)
+            select(user_map.userid, video_map.videoid, "rating")
 
     recs.write.format("org.apache.spark.sql.cassandra").\
-        options(keyspace="killrvideo", table="video_recommendations").\
+        options(keyspace="killrvideo", table="video_recommendations_by_video").\
         save(mode="append")
 
     print products
     userid = user.userid
     print userid
+
+# We need to include video catalog information with the recommendations (video name, added date, etc)
+# so let's find videos in the table we just wrote to without that catalog information
+recs_by_video = sql.read.format("org.apache.spark.sql.cassandra").load(keyspace="killrvideo", table="video_recommendations_by_video")
+
+# Ideally we wouldn't need to include userid since we're just saving static column values below, 
+# but save doesn't work unless a userid column is present
+missing_catalog_info = recs_by_video.select(recs_by_video.videoid.cast("string").alias("videoid"), recs_by_video.name, 
+                                            recs_by_video.userid.cast("string").alias("userid")).\
+                        dropDuplicates(["videoid"]).\
+                        where("name IS NULL")
+                        
+# Write the catalog information that's missing
+video_catalog = sql.read.format("org.apache.spark.sql.cassandra").load(keyspace="killrvideo", table="videos")
+video_catalog = video_catalog.select(video_catalog.videoid.cast("string").alias("videoid"),
+                                     video_catalog.userid.cast("string").alias("authorid"),
+                                     video_catalog.added_date, video_catalog.name, video_catalog.preview_image_location)
+
+missing_catalog_info.join(video_catalog, "videoid").\
+    select(missing_catalog_info.videoid, missing_catalog_info.userid, video_catalog.authorid, video_catalog.added_date, 
+           video_catalog.name, video_catalog.preview_image_location).\
+    write.format("org.apache.spark.sql.cassandra").\
+    options(keyspace="killrvideo", table="video_recommendations_by_video").\
+    save(mode="append")
+    
+# Now take the recommendations by video and copy them to a table keyed by user so we can look recs up by user
+recs_by_video.write.format("org.apache.spark.sql.cassandra").\
+    options(keyspace="killrvideo", table="video_recommendations").\
+    save(mode="append")
