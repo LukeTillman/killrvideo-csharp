@@ -72,7 +72,7 @@ recs_by_video = sql.read.format("org.apache.spark.sql.cassandra").load(keyspace=
 missing_catalog_info = recs_by_video.select(recs_by_video.videoid.cast("string").alias("videoid"), recs_by_video.name, 
                                             recs_by_video.userid.cast("string").alias("userid")).\
                         dropDuplicates(["videoid"]).\
-                        where("name IS NULL")
+                        where("name IS NULL").cache()
                         
 # Write the catalog information that's missing
 video_catalog = sql.read.format("org.apache.spark.sql.cassandra").load(keyspace="killrvideo", table="videos")
@@ -80,7 +80,7 @@ video_catalog = video_catalog.select(video_catalog.videoid.cast("string").alias(
                                      video_catalog.userid.cast("string").alias("authorid"),
                                      video_catalog.added_date, video_catalog.name, video_catalog.preview_image_location)
 
-missing_catalog_info.join(video_catalog, "videoid").\
+missing_catalog_info.join(video_catalog, video_catalog.videoid == missing_catalog_info.videoid).\
     select(missing_catalog_info.videoid, missing_catalog_info.userid, video_catalog.authorid, video_catalog.added_date, 
            video_catalog.name, video_catalog.preview_image_location).\
     write.format("org.apache.spark.sql.cassandra").\
