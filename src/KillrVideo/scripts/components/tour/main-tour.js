@@ -567,9 +567,41 @@
             // Home page (authenticated)
             {
                 page: "homeAuthenticated",
-                target: "#logo",
-                placement: "bottom",
-                content: "Coming soon, video recommendations with DSE Analytics and Spark."
+                target: "#recommended-videos-header",
+                placement: "top",
+                content: "Here, you see <strong>personalized recommendations</strong> for videos on the site that you might be interested in watching. This list of videos is " +
+                    "driven by DataStax Enterprise Analytics. DSE Analytics enables you to run analytics workloads with Apache Spark or Hadoop on top of your transactional " +
+                    "data stored in Cassandra.",
+                links: [
+                    { label: "DataStax Enterprise Analytics", url: "http://www.datastax.com/products/datastax-enterprise-analytics" }
+                ]
+            },
+            {
+                page: "homeAuthenticated",
+                target: "#recommended-videos-header",
+                placement: "top",
+                content: "As you watch and rate videos on KillrVideo, we record those ratings in Cassandra. Here's what the <code>video_ratings_by_user</code> table looks like " +
+                    "where we store that information:<br/><br/>" +
+                    "<pre><code>" +
+                    "CREATE TABLE video_ratings_by_user (\r\n" +
+                    "  videoid uuid,\r\n" +
+                    "  userid uuid,\r\n" +
+                    "  rating int,\r\n" +
+                    "  PRIMARY KEY (videoid, userid)\r\n" +
+                    ");</code></pre>",
+                contentClass: "wide"
+            },
+            {
+                page: "homeAuthenticated",
+                target: "#recommended-videos-header",
+                placement: "top",
+                content: "Using DSE Analytics integration with Apache Spark, we're able to write a simple recommendation engine that leverages Spark's MLlib Machine Learning library " +
+                    "to consume the data in that table and output video recommendations based on the ratings you and other users on the site have given. Amazingly, the Spark job to do " +
+                    "this is less than 100 lines of code.",
+                links: [
+                    { label: "Apache Spark MLlib", url: "http://spark.apache.org/docs/latest/mllib-guide.html" },
+                    { label: "KillrVideo Recommendations Spark Job Code", url: "https://github.com/LukeTillman/killrvideo-csharp/tree/master/data/spark" }
+                ]
             },
             {
                 page: "homeAuthenticated",
