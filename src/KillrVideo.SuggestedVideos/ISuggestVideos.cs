@@ -12,5 +12,10 @@ namespace KillrVideo.SuggestedVideos
         /// Gets the videos related to the specified video.
         /// </summary>
         Task<RelatedVideos> GetRelatedVideos(RelatedVideosQuery query);
+
+        /// <summary>
+        /// Gets the personalized video suggestions for a specific user.
+        /// </summary>
+        Task<Dtos.SuggestedVideos> GetSuggestions(SuggestedVideosQuery query);
     }
 }

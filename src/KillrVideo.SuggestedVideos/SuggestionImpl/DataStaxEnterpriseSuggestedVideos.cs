@@ -19,13 +19,16 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
         private static readonly ILogger Logger = Log.ForContext<DataStaxEnterpriseSuggestedVideos>();
 
         private readonly ISession _session;
+        private readonly TaskCache<string, PreparedStatement> _statementCache;
         private readonly IRestClient _restClient;
 
         public DataStaxEnterpriseSuggestedVideos(ISession session, TaskCache<string, PreparedStatement> statementCache, IRestClient restClient)
         {
             if (session == null) throw new ArgumentNullException("session");
             if (statementCache == null) throw new ArgumentNullException("statementCache");
+            if (restClient == null) throw new ArgumentNullException("restClient");
             _session = session;
+            _statementCache = statementCache;
             _restClient = restClient;
         }
 
@@ -81,6 +84,46 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
             int nextPageStartIndex = response.Data.Response.Start + response.Data.Response.Docs.Count;
             string pagingState = nextPageStartIndex == response.Data.Response.NumFound ? null : nextPageStartIndex.ToString();
             return new RelatedVideos { VideoId = query.VideoId, Videos = response.Data.Response.Docs, PagingState = pagingState };
+        }
+
+        /// <summary>
+        /// Gets the personalized video suggestions for a specific user.
+        /// </summary>
+        public async Task<Dtos.SuggestedVideos> GetSuggestions(SuggestedVideosQuery query)
+        {
+            // Return the output of a Spark job that runs periodically in the background to populate the video_recommendations table
+            // (see the /data/spark folder in the repo for more information)
+            PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync(
+                "SELECT videoid, authorid, name, added_date, preview_image_location FROM video_recommendations WHERE userid=?");
+
+            IStatement bound = prepared.Bind(query.UserId)
+                                       .SetAutoPage(false)
+                                       .SetPageSize(query.PageSize);
+
+            // The initial query won't have a paging state, but subsequent calls should if there are more pages
+            if (string.IsNullOrEmpty(query.PagingState) == false)
+                bound.SetPagingState(Convert.FromBase64String(query.PagingState));
+
+            RowSet rows = await _session.ExecuteAsync(bound).ConfigureAwait(false);
+
+            return new Dtos.SuggestedVideos()
+            {
+                UserId = query.UserId,
+                Videos = rows.Select(MapRowToVideoPreview).ToList(),
+                PagingState = rows.PagingState != null && rows.PagingState.Length > 0 ? Convert.ToBase64String(rows.PagingState) : null
+            };
+        }
+
+        private static VideoPreview MapRowToVideoPreview(Row row)
+        {
+            return new VideoPreview
+            {
+                VideoId = row.GetValue<Guid>("videoid"),
+                AddedDate = row.GetValue<DateTimeOffset>("added_date"),
+                Name = row.GetValue<string>("name"),
+                PreviewImageLocation = row.GetValue<string>("preview_image_location"),
+                UserId = row.GetValue<Guid>("authorid")
+            };
         }
     }
 }

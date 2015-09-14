@@ -201,6 +201,48 @@ namespace KillrVideo.Controllers
         }
 
         /// <summary>
+        /// Gets videos recommended for the currently logged in user.
+        /// </summary>
+        [HttpPost]
+        public async Task<JsonNetResult> Recommended(GetRecommendedVideosViewModel model)
+        {
+            // If no user was specified, default to the current logged in user
+            Guid? userId = User.GetCurrentUserId();
+            if (userId == null)
+            {
+                ModelState.AddModelError(string.Empty, "No user currently logged in.");
+                return JsonFailure();
+            }
+
+            SuggestedVideos.Dtos.SuggestedVideos suggestions = await _suggestions.GetSuggestions(new SuggestedVideosQuery
+            {
+                UserId = userId.Value,
+                PagingState = model.PagingState,
+                PageSize = model.PageSize
+            });
+
+            // TODO:  Better solution than client-side JOINs
+            var authorIds = new HashSet<Guid>(suggestions.Videos.Select(v => v.UserId));
+            Task<IEnumerable<UserProfile>> authorsTask = _userManagement.GetUserProfiles(authorIds);
+
+            var videoIds = new HashSet<Guid>(suggestions.Videos.Select(v => v.VideoId));
+            Task<IEnumerable<PlayStats>> statsTask = _stats.GetNumberOfPlays(videoIds);
+
+            await Task.WhenAll(authorsTask, statsTask);
+
+            return JsonSuccess(new RecommendedVideosViewModel
+            {
+                Videos = suggestions.Videos
+                                    .Join(authorsTask.Result, vp => vp.UserId, a => a.UserId,
+                                          (vp, a) => new { VideoPreview = vp, Author = a })
+                                    .Join(statsTask.Result, vpa => vpa.VideoPreview.VideoId, s => s.VideoId,
+                                          (vpa, s) => VideoPreviewViewModel.FromDataModel(vpa.VideoPreview, vpa.Author, s, Url))
+                                    .ToList(),
+                PagingState = suggestions.PagingState
+            });
+        }
+
+        /// <summary>
         /// Get the ratings data for a video.
         /// </summary>
         [HttpGet, NoCache]

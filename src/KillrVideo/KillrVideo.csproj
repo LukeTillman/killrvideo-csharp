@@ -212,6 +212,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WindsorConfig.cs" />
+    <Compile Include="Models\Videos\GetRecommendedVideosViewModel.cs" />
+    <Compile Include="Models\Videos\RecommendedVideosViewModel.cs" />
     <Compile Include="Utils\CloudConfigurationProvider.cs" />
     <Compile Include="Utils\PreparedStatementCache.cs" />
     <Compile Include="Utils\WindsorControllerFactory.cs" />

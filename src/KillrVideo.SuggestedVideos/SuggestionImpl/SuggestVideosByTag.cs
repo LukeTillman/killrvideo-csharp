@@ -111,6 +111,22 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
         }
 
         /// <summary>
+        /// Gets the personalized video suggestions for a specific user.
+        /// </summary>
+        public Task<Dtos.SuggestedVideos> GetSuggestions(SuggestedVideosQuery query)
+        {
+            // TODO: Can we implement suggestions without DSE and Spark?
+            var result = new Dtos.SuggestedVideos()
+            {
+                UserId = query.UserId,
+                Videos = Enumerable.Empty<VideoPreview>(),
+                PagingState = null
+            };
+
+            return Task.FromResult(result);
+        }
+
+        /// <summary>
         /// Maps a row to a VideoPreview object.
         /// </summary>
         private static VideoPreview MapRowToVideoPreview(Row row)
