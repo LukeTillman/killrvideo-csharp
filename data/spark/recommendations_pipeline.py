@@ -32,6 +32,8 @@ user_map = user_ids.map(lambda (x, y): Row(userid=x.userid, userid_int=y)).toDF(
 video_ids = ratings.select("videoid").distinct().rdd.zipWithUniqueId().cache()
 video_map = video_ids.map(lambda (x, y): Row(videoid=x.videoid, videoid_int=y)).toDF().cache()
 
+print "Recommending based on {0} users and {1} videos.".format(user_map.count(), video_map.count())
+
 training_data = ratings.join(user_map, ratings.userid == user_map.userid).\
                     join(video_map, ratings.videoid == video_map.videoid).\
                     select(user_map.userid, user_map.userid_int, video_map.videoid, video_map.videoid_int, "rating")
@@ -56,7 +58,7 @@ for user in users:
         save(mode="append")
         
     count += 1
-    print "{} ({}/{})".format(user.userid, count, length)
+    print "{0} ({1}/{2})".format(user.userid, count, length)
 
 video_map.unpersist()
 
