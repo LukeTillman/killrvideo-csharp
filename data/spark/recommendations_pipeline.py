@@ -32,8 +32,6 @@ user_map = user_ids.map(lambda (x, y): Row(userid=x.userid, userid_int=y)).toDF(
 video_ids = ratings.select("videoid").distinct().rdd.zipWithUniqueId().cache()
 video_map = video_ids.map(lambda (x, y): Row(videoid=x.videoid, videoid_int=y)).toDF().cache()
 
-print "Recommending based on {} users and {} videos.".format(user_map.count(), video_map.count())
-
 training_data = ratings.join(user_map, ratings.userid == user_map.userid).\
                     join(video_map, ratings.videoid == video_map.videoid).\
                     select(user_map.userid, user_map.userid_int, video_map.videoid, video_map.videoid_int, "rating")
@@ -59,4 +57,35 @@ for user in users:
         
     count += 1
     print "{} ({}/{})".format(user.userid, count, length)
+
+video_map.unpersist()
+
+# We need to include video catalog information with the recommendations (video name, added date, etc)
+# so let's find videos in the table we just wrote to without that catalog information
+recs_by_video = sql.read.format("org.apache.spark.sql.cassandra").load(keyspace="killrvideo", table="video_recommendations_by_video")
+
+# Ideally we wouldn't need to include userid since we're just saving static column values below, 
+# but save doesn't work unless a userid column is present
+missing_catalog_info = recs_by_video.select(recs_by_video.videoid.cast("string").alias("videoid"), recs_by_video.name, 
+                                            recs_by_video.userid.cast("string").alias("userid")).\
+                        dropDuplicates(["videoid"]).\
+                        where("name IS NULL").cache()
+                        
+# Write the catalog information that's missing
+video_catalog = sql.read.format("org.apache.spark.sql.cassandra").load(keyspace="killrvideo", table="videos")
+video_catalog = video_catalog.select(video_catalog.videoid.cast("string").alias("videoid"),
+                                     video_catalog.userid.cast("string").alias("authorid"),
+                                     video_catalog.added_date, video_catalog.name, video_catalog.preview_image_location)
+
+missing_catalog_info.join(video_catalog, video_catalog.videoid == missing_catalog_info.videoid).\
+    select(missing_catalog_info.videoid, missing_catalog_info.userid, video_catalog.authorid, video_catalog.added_date, 
+           video_catalog.name, video_catalog.preview_image_location).\
+    write.format("org.apache.spark.sql.cassandra").\
+    options(keyspace="killrvideo", table="video_recommendations_by_video").\
+    save(mode="append")
+    
+# Now take the recommendations by video and copy them to a table keyed by user so we can look recs up by user
+recs_by_video.write.format("org.apache.spark.sql.cassandra").\
+    options(keyspace="killrvideo", table="video_recommendations").\
+    save(mode="append")
 
