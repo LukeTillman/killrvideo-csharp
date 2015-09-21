@@ -17,6 +17,11 @@ namespace KillrVideo.Utils
         /// </summary>
         public static readonly bool SampleDataEntryEnabled;
 
+        /// <summary>
+        /// Whether or not to show the personalized recommendations UI.
+        /// </summary>
+        public static readonly bool RecommendationsEnabled;
+
         static GlobalConfigs()
         {
             // See if analytics are enabled in the configuration file
@@ -26,6 +31,10 @@ namespace KillrVideo.Utils
             // See if sample data entry is enabled in the configuration file
             const string sampleDataEntryEnabledKey = "SampleDataEntryEnabled";
             SampleDataEntryEnabled = GetBoolConfigValue(sampleDataEntryEnabledKey);
+
+            // See if we should show the personalized recommendations UI
+            const string recommendationsEnabledKey = "RecommendationsEnabled";
+            RecommendationsEnabled = GetBoolConfigValue(recommendationsEnabledKey);
         }
 
         private static bool GetBoolConfigValue(string key)

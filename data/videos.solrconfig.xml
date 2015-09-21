@@ -512,7 +512,7 @@
        not be initialized until the first request that uses it.
 
     -->
-    <searchComponent class="solr.SpellCheckComponent" name="suggest">
+  <searchComponent class="solr.SpellCheckComponent" name="suggest">
     <lst name="spellchecker">
       <str name="name">suggest</str>
       <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>

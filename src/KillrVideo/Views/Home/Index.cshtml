@@ -1,4 +1,5 @@
-﻿@{
+﻿@using KillrVideo.Utils
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -10,12 +11,15 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <h3 class="section-divider" id="recommended-videos-header">
-        <span><em>Recommended</em> for You</span>
-    </h3>
+    if (GlobalConfigs.RecommendationsEnabled)
+    {
+        <h3 class="section-divider" id="recommended-videos-header">
+            <span><em>Recommended</em> for You</span>
+        </h3>
 
-    <video-preview-list params="url: '/videos/recommended'" id="recommended-videos-list"></video-preview-list>
-
+        <video-preview-list params="url: '/videos/recommended'" id="recommended-videos-list"></video-preview-list>
+    }
+    
     <h3 class="section-divider" id="my-videos-header">
         <span><em>My</em> Videos</span>
     </h3>

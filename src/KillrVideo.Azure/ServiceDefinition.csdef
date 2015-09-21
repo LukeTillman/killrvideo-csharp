@@ -21,6 +21,7 @@
       <Setting name="SampleDataEntryEnabled" />
       <Setting name="AnalyticsEnabled" />
       <Setting name="EnterpriseSearchEnabled" />
+      <Setting name="RecommendationsEnabled" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
     </ConfigurationSettings>
   </WebRole>

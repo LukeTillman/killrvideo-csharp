@@ -10,6 +10,7 @@
       <Setting name="SampleDataEntryEnabled" value="true" />
       <Setting name="AnalyticsEnabled" value="false" />
       <Setting name="EnterpriseSearchEnabled" value="" />
+      <Setting name="RecommendationsEnabled" value="" />
       
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="false" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="" />
