@@ -90,10 +90,6 @@
       <Project>{9516B3F3-89B7-4343-9F88-FFEE6D74FFFC}</Project>
       <Name>KillrVideo.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.VideoCatalog.Messages\KillrVideo.VideoCatalog.Messages.csproj">
-      <Project>{A8DABF0A-03FE-4EA2-A1B3-FB5720A0B878}</Project>
-      <Name>KillrVideo.VideoCatalog.Messages</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

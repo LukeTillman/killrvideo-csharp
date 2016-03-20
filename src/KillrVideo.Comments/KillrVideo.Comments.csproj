@@ -97,10 +97,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KillrVideo.Comments.Messages\KillrVideo.Comments.Messages.csproj">
-      <Project>{92b7eb7e-890c-4f34-87fe-8f3b15c77241}</Project>
-      <Name>KillrVideo.Comments.Messages</Name>
-    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
       <Project>{9516b3f3-89b7-4343-9f88-ffee6d74fffc}</Project>
       <Name>KillrVideo.Utils</Name>

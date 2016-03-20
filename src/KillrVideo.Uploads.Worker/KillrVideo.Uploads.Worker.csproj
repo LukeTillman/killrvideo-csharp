@@ -136,10 +136,6 @@
     <Compile Include="WorkerRole.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KillrVideo.Uploads.Messages\KillrVideo.Uploads.Messages.csproj">
-      <Project>{C51CF234-ECE1-4EDC-93E2-844E88999825}</Project>
-      <Name>KillrVideo.Uploads.Messages</Name>
-    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Uploads\KillrVideo.Uploads.csproj">
       <Project>{249AC1EB-7035-4E88-A311-C683E049A0EA}</Project>
       <Name>KillrVideo.Uploads</Name>
@@ -147,10 +143,6 @@
     <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
       <Project>{9516B3F3-89B7-4343-9F88-FFEE6D74FFFC}</Project>
       <Name>KillrVideo.Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.VideoCatalog.Messages\KillrVideo.VideoCatalog.Messages.csproj">
-      <Project>{A8DABF0A-03FE-4EA2-A1B3-FB5720A0B878}</Project>
-      <Name>KillrVideo.VideoCatalog.Messages</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
