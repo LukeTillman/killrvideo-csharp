@@ -78,18 +78,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dtos\AddSampleComments.cs" />
-    <Compile Include="Dtos\AddSampleRatings.cs" />
-    <Compile Include="Dtos\AddSampleUsers.cs" />
-    <Compile Include="Dtos\AddSampleVideoViews.cs" />
-    <Compile Include="Dtos\AddSampleYouTubeVideos.cs" />
-    <Compile Include="Dtos\RefreshYouTubeSources.cs" />
-    <Compile Include="ISampleDataService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="protos\SampleDataService.generated.cs" />
     <Compile Include="protos\SampleDataServiceGrpc.cs" />
     <Compile Include="SampleDataService.cs" />
-    <Compile Include="SampleDataServiceWindsorInstaller.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\lib\killrvideo-service-protos\src\sample-data\sample_data_service.proto">
