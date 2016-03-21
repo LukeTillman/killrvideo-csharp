@@ -85,6 +85,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="protos\RatingsEvents.generated.cs" />
+    <Compile Include="protos\RatingsService.generated.cs" />
+    <Compile Include="protos\RatingsServiceGrpc.cs" />
     <Compile Include="RatingsServiceWindsorInstaller.cs" />
     <Compile Include="Dtos\RateVideo.cs" />
     <Compile Include="Dtos\UserVideoRating.cs" />

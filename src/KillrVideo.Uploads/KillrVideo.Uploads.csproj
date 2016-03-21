@@ -95,6 +95,9 @@
     <Compile Include="Dtos\UploadDestination.cs" />
     <Compile Include="IUploadsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="protos\UploadsEvents.generated.cs" />
+    <Compile Include="protos\UploadsService.generated.cs" />
+    <Compile Include="protos\UploadsServiceGrpc.cs" />
     <Compile Include="UploadsService.cs" />
     <Compile Include="UploadsServiceWindsorInstaller.cs" />
   </ItemGroup>

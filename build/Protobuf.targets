@@ -14,7 +14,7 @@
     <!-- Commandline options for the Protobuf Compiler -->
     <ProtobufPathOptions>-I=$(KillrVideoImportsPath) -I=$(ProtobufCompilerPath)</ProtobufPathOptions>
     <ProtobufCsharpOptions>--csharp_out=$(MSBuildProjectDirectory)\protos --csharp_opt=file_extension=.generated.cs</ProtobufCsharpOptions>
-    <ProtobufPluginOptions>--grpc_out=$(MSBuildProjectDirectory) --plugin=protoc-gen-grpc=$(GrpcPluginPath)\grpc_csharp_plugin.exe</ProtobufPluginOptions>
+    <ProtobufPluginOptions>--grpc_out=$(MSBuildProjectDirectory)\protos --plugin=protoc-gen-grpc=$(GrpcPluginPath)\grpc_csharp_plugin.exe</ProtobufPluginOptions>
   </PropertyGroup>
 
   <Target Name="CompileProtos">

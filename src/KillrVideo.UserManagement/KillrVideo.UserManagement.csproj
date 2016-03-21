@@ -93,6 +93,9 @@
     <Compile Include="LinqUserManagementService.cs" />
     <Compile Include="PasswordHash.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="protos\UserManagementEvents.generated.cs" />
+    <Compile Include="protos\UserManagementService.generated.cs" />
+    <Compile Include="protos\UserManagementServiceGrpc.cs" />
     <Compile Include="UserManagementService.cs" />
     <Compile Include="UserManagementServiceWindsorInstaller.cs" />
   </ItemGroup>

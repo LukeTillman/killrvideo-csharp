@@ -103,6 +103,8 @@
   <ItemGroup>
     <Compile Include="Dtos\SearchSpellcheckSuggestions.cs" />
     <Compile Include="Dtos\SearchSpellcheck.cs" />
+    <Compile Include="protos\SearchService.generated.cs" />
+    <Compile Include="protos\SearchServiceGrpc.cs" />
     <Compile Include="SearchImpl\DataStaxEnterpriseSearch.cs" />
     <Compile Include="Dtos\GetQuerySuggestions.cs" />
     <Compile Include="Dtos\SearchVideosQuery.cs" />
