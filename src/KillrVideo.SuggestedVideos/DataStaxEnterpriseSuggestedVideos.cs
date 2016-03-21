@@ -3,7 +3,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.SuggestedVideos.Dtos;
 using KillrVideo.SuggestedVideos.MLT;
 using KillrVideo.Utils;
 using RestSharp;

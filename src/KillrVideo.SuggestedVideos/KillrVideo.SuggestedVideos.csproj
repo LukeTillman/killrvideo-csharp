@@ -79,21 +79,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dtos\RelatedVideos.cs" />
-    <Compile Include="Dtos\RelatedVideosQuery.cs" />
-    <Compile Include="Dtos\SuggestedVideos.cs" />
-    <Compile Include="Dtos\SuggestedVideosQuery.cs" />
-    <Compile Include="Dtos\VideoPreview.cs" />
-    <Compile Include="ISuggestVideos.cs" />
     <Compile Include="MLT\MLTQueryResult.cs" />
     <Compile Include="MLT\MLTResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="protos\SuggestedVideosService.generated.cs" />
     <Compile Include="protos\SuggestedVideosServiceGrpc.cs" />
-    <Compile Include="SuggestedVideosServiceWindsorInstaller.cs" />
-    <Compile Include="SuggestionImpl\SuggestedVideosComponentSelector.cs" />
-    <Compile Include="SuggestionImpl\SuggestVideosByTag.cs" />
-    <Compile Include="SuggestionImpl\DataStaxEnterpriseSuggestedVideos.cs" />
+    <Compile Include="SuggestVideosByTag.cs" />
+    <Compile Include="DataStaxEnterpriseSuggestedVideos.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\lib\killrvideo-service-protos\src\suggested-videos\suggested_videos_service.proto">
