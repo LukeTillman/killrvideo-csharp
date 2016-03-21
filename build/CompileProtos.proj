@@ -5,6 +5,7 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.Protobuf\KillrVideo.Protobuf.csproj" />
     <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.Comments\KillrVideo.Comments.csproj" />
     <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.Ratings\KillrVideo.Ratings.csproj" />
     <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.SampleData\KillrVideo.SampleData.csproj" />

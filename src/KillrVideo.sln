@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A5939168-C879-4C7E-90AB-F4040C8D0ED8}"
 	ProjectSection(SolutionItems) = preProject
@@ -38,6 +38,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{B35E0A26
 		..\build\CompileProtos.proj = ..\build\CompileProtos.proj
 		..\build\Protobuf.targets = ..\build\Protobuf.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.Protobuf", "KillrVideo.Protobuf\KillrVideo.Protobuf.csproj", "{4A41C0C8-6A27-4728-B596-B64227A26FB6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +87,10 @@ Global
 		{F7088371-8ED3-4827-B15A-05F598C27399}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7088371-8ED3-4827-B15A-05F598C27399}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7088371-8ED3-4827-B15A-05F598C27399}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A41C0C8-6A27-4728-B596-B64227A26FB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A41C0C8-6A27-4728-B596-B64227A26FB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A41C0C8-6A27-4728-B596-B64227A26FB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A41C0C8-6A27-4728-B596-B64227A26FB6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,6 +105,7 @@ Global
 		{37BB374E-2E30-4F9D-8F1D-6982116A07B0} = {B70BBD28-B0F5-4642-B08A-3BA9C0D103AD}
 		{846E5D96-7F24-4CAA-8DDE-90F36DAE7E06} = {B70BBD28-B0F5-4642-B08A-3BA9C0D103AD}
 		{F7088371-8ED3-4827-B15A-05F598C27399} = {B70BBD28-B0F5-4642-B08A-3BA9C0D103AD}
+		{4A41C0C8-6A27-4728-B596-B64227A26FB6} = {B70BBD28-B0F5-4642-B08A-3BA9C0D103AD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\TransientFaultHandling.Core.5.1.1209.1\lib\NET4
