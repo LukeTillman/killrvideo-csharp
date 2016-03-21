@@ -1,5 +1,7 @@
 syntax = "proto3";
-package killrvideo.search.service;
+
+package killrvideo.search;
+option csharp_namespace = "KillrVideo.Search";
 
 import "google/protobuf/timestamp.proto";
 import "common/common_types.proto";
@@ -29,11 +31,11 @@ message SearchVideosResponse {
 
 // A video preview returned in search results
 message SearchResultsVideoPreview {
-  Uuid video_id = 1;
-  Timestamp added_date = 2;
+  killrvideo.common.Uuid video_id = 1;
+  google.protobuf.Timestamp added_date = 2;
   string name = 3;
   string preview_image_location = 4;
-  Uuid user_id = 5;
+  killrvideo.common.Uuid user_id = 5;
 }
 
 // Request for getting query suggestions based on some user input
