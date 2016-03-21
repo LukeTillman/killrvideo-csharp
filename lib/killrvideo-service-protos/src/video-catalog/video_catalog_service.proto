@@ -1,5 +1,7 @@
 syntax = "proto3";
-package killrvideo.video_catalog.service;
+
+package killrvideo.video_catalog;
+option csharp_namespace = "KillrVideo.VideoCatalog";
 
 import "google/protobuf/timestamp.proto";
 import "common/common_types.proto";
@@ -27,8 +29,8 @@ service VideoCatalogService {
 
 // Request to submit a new uploaded video to the catalog
 message SubmitUploadedVideoRequest {
-  Uuid video_id = 1;
-  Uuid user_id = 2;
+  killrvideo.common.Uuid video_id = 1;
+  killrvideo.common.Uuid user_id = 2;
   string name = 3;
   string description = 4;
   repeated string tags = 5;
@@ -41,8 +43,8 @@ message SubmitUploadedVideoResponse {
 
 // Request to submit a new YouTube video to the catalog
 message SubmitYouTubeVideoRequest {
-  Uuid video_id = 1;
-  Uuid user_id = 2;
+  killrvideo.common.Uuid video_id = 1;
+  killrvideo.common.Uuid user_id = 2;
   string name = 3;
   string description = 4;
   repeated string tags = 5;
@@ -55,19 +57,19 @@ message SubmitYouTubeVideoResponse {
 
 // Request to get a video and all its details from the catalog
 message GetVideoRequest {
-  Uuid video_id = 1;
+  killrvideo.common.Uuid video_id = 1;
 }
 
 // Response when getting a video and all its details from the catalog
 message GetVideoResponse {
-  Uuid video_id = 1;
-  Uuid user_id = 2;
+  killrvideo.common.Uuid video_id = 1;
+  killrvideo.common.Uuid user_id = 2;
   string name = 3;
   string description = 4;
   string location = 5;
   VideoLocationType location_type = 6;
   repeated string tags = 7;
-  Timestamp added_date = 8;
+  google.protobuf.Timestamp added_date = 8;
 }
 
 // Enum representing what kind of video location is present for a video
@@ -78,7 +80,7 @@ enum VideoLocationType {
 
 // Request for getting some video previews by the video ids
 message GetVideoPreviewsRequest {
-  repeated Uuid video_ids = 1;
+  repeated killrvideo.common.Uuid video_ids = 1;
 }
 
 // Response when getting some video previews by their ids
@@ -88,11 +90,11 @@ message GetVideoPreviewsResponse {
 
 // A video preview (i.e. limited details about a video)
 message VideoPreview {
-  Uuid video_id = 1;
-  Timestamp added_date = 2;
+  killrvideo.common.Uuid video_id = 1;
+  google.protobuf.Timestamp added_date = 2;
   string name = 3;
   string preview_image_location = 4;
-  Uuid user_id = 5;
+  killrvideo.common.Uuid user_id = 5;
 }
 
 // Request for getting a page of the latest (i.e. newest) videos in the catalog
@@ -109,14 +111,14 @@ message GetLatestVideoPreviewsResponse {
 
 // Request for getting videos a particular user has added to the catalog
 message GetUserVideoPreviewsRequest {
-  Uuid user_id = 1;
+  killrvideo.common.Uuid user_id = 1;
   int32 page_size = 2;
   string paging_state = 16;
 }
 
 // Response when getting videos for a particular user
 message GetUserVideoPreviewsResponse {
-  Uuid user_id = 1;
+  killrvideo.common.Uuid user_id = 1;
   repeated VideoPreview video_previews = 2;
   string paging_state = 3;
 }

@@ -1,5 +1,7 @@
 syntax = "proto3";
-package killrvideo.uploads.service;
+
+package killrvideo.uploads;
+option csharp_namespace = "KillrVideo.Uploads";
 
 import "google/protobuf/timestamp.proto";
 import "common/common_types.proto";
@@ -37,11 +39,11 @@ message MarkUploadCompleteResponse {
 
 // Get the current status of an uploaded video
 message GetStatusOfVideoRequest {
-  Uuid video_id = 1;
+  killrvideo.common.Uuid video_id = 1;
 }
 
 // Response with the current status of an uploaded video
 message GetStatusOfVideoResponse {
-  Timestamp status_date = 1;
+  google.protobuf.Timestamp status_date = 1;
   string current_state = 2;
 }

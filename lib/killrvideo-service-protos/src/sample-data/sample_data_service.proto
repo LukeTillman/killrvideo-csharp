@@ -1,5 +1,7 @@
 syntax = "proto3";
-package killrvideo.sample_data.service;
+
+package killrvideo.sample_data;
+option csharp_namespace = "KillrVideo.SampleData";
 
 // Service for managing sample data on the site
 service SampleDataService {
