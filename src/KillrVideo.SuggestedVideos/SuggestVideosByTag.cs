@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.SuggestedVideos.Dtos;
+using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
+using KillrVideo.Protobuf;
 using KillrVideo.Utils;
 
-namespace KillrVideo.SuggestedVideos.SuggestionImpl
+namespace KillrVideo.SuggestedVideos
 {
     /// <summary>
     /// Searches the videos_by_tag table to offer suggestions for related videos. Does not support paging currently.
     /// </summary>
-    public class SuggestVideosByTag : ISuggestVideos
+    public class SuggestVideosByTag : SuggestedVideoService.ISuggestedVideoService
     {
         private const int RelatedVideosToReturn = 4;
 
@@ -20,8 +22,8 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
 
         public SuggestVideosByTag(ISession session, TaskCache<string, PreparedStatement> statementCache)
         {
-            if (session == null) throw new ArgumentNullException("session");
-            if (statementCache == null) throw new ArgumentNullException("statementCache");
+            if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             _session = session;
             _statementCache = statementCache;
         }
@@ -29,24 +31,28 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
         /// <summary>
         /// Gets the first 4 videos related to the specified video. Does not support paging.
         /// </summary>
-        public async Task<RelatedVideos> GetRelatedVideos(RelatedVideosQuery queryParams)
+        public async Task<GetRelatedVideosResponse> GetRelatedVideos(GetRelatedVideosRequest request, ServerCallContext context)
         {
             // Lookup the tags for the video
             PreparedStatement tagsForVideoPrepared = await _statementCache.NoContext.GetOrAddAsync("SELECT tags FROM videos WHERE videoid = ?");
-            BoundStatement tagsForVideoBound = tagsForVideoPrepared.Bind(queryParams.VideoId);
+            BoundStatement tagsForVideoBound = tagsForVideoPrepared.Bind(request.VideoId.ToGuid());
             RowSet tagRows = await _session.ExecuteAsync(tagsForVideoBound).ConfigureAwait(false);
+
+            // Start with an empty response
+            var response = new GetRelatedVideosResponse { VideoId = request.VideoId };
+            
             Row tagRow = tagRows.SingleOrDefault();
             if (tagRow == null)
-                return new RelatedVideos { VideoId = queryParams.VideoId, Videos = Enumerable.Empty<VideoPreview>(), PagingState = null };
+                return response;
 
             var tagsValue = tagRow.GetValue<IEnumerable<string>>("tags");
-            var tags = tagsValue == null ? new List<string>() : tagsValue.ToList();
+            var tags = tagsValue?.ToList() ?? new List<string>();
 
             // If there are no tags, we can't find related videos
             if (tags.Count == 0)
-                return new RelatedVideos { VideoId = queryParams.VideoId, Videos = Enumerable.Empty<VideoPreview>(), PagingState = null };
+                return response;
 
-            var relatedVideos = new Dictionary<Guid, VideoPreview>();
+            var relatedVideos = new Dictionary<Uuid, SuggestedVideoPreview>();
             PreparedStatement videosForTagPrepared = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM videos_by_tag WHERE tag = ? LIMIT ?");
 
             var inFlightQueries = new List<Task<RowSet>>();
@@ -70,10 +76,10 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
                     {
                         foreach (Row row in rowSet)
                         {
-                            VideoPreview preview = MapRowToVideoPreview(row);
+                            SuggestedVideoPreview preview = MapRowToVideoPreview(row);
 
                             // Skip self
-                            if (preview.VideoId == queryParams.VideoId)
+                            if (preview.VideoId.Equals(request.VideoId))
                                 continue;
 
                             // Skip videos we already have in the results
@@ -102,42 +108,33 @@ namespace KillrVideo.SuggestedVideos.SuggestionImpl
                 }
             }
 
-            return new RelatedVideos
-            {
-                VideoId = queryParams.VideoId,
-                Videos = relatedVideos.Values,
-                PagingState = null
-            };
+            // Add any videos found to the response and return
+            response.Videos.Add(relatedVideos.Values);
+            return response;
         }
 
         /// <summary>
         /// Gets the personalized video suggestions for a specific user.
         /// </summary>
-        public Task<Dtos.SuggestedVideos> GetSuggestions(SuggestedVideosQuery query)
+        public Task<GetSuggestedForUserResponse> GetSuggestedForUser(GetSuggestedForUserRequest request, ServerCallContext context)
         {
-            // TODO: Can we implement suggestions without DSE and Spark?
-            var result = new Dtos.SuggestedVideos()
-            {
-                UserId = query.UserId,
-                Videos = Enumerable.Empty<VideoPreview>(),
-                PagingState = null
-            };
-
-            return Task.FromResult(result);
+            // TODO: Can we implement suggestions without DSE and Spark? (Yeah, probably not)
+            var response = new GetSuggestedForUserResponse { UserId = request.UserId };
+            return Task.FromResult(response);
         }
 
         /// <summary>
         /// Maps a row to a VideoPreview object.
         /// </summary>
-        private static VideoPreview MapRowToVideoPreview(Row row)
+        private static SuggestedVideoPreview MapRowToVideoPreview(Row row)
         {
-            return new VideoPreview
+            return new SuggestedVideoPreview
             {
-                VideoId = row.GetValue<Guid>("videoid"),
-                AddedDate = row.GetValue<DateTimeOffset>("added_date"),
+                VideoId = row.GetValue<Guid>("videoid").ToUuid(),
+                AddedDate = row.GetValue<DateTimeOffset>("added_date").ToTimestamp(),
                 Name = row.GetValue<string>("name"),
                 PreviewImageLocation = row.GetValue<string>("preview_image_location"),
-                UserId = row.GetValue<Guid>("userid")
+                UserId = row.GetValue<Guid>("userid").ToUuid()
             };
         }
     }

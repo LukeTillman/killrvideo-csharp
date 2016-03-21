@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using KillrVideo.SuggestedVideos.Dtos;
 
 namespace KillrVideo.SuggestedVideos.MLT
 {    
@@ -12,6 +11,6 @@ namespace KillrVideo.SuggestedVideos.MLT
     {
         public int NumFound { get; set; }
         public int Start { get; set; }
-        public List<VideoPreview> Docs { get; set; }
+        public List<MLTVideoPreview> Docs { get; set; }
     }
 }
