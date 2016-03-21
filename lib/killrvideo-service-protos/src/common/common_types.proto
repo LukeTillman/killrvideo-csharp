@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package killrvideo.common;
-option csharp_namespace = "KillrVideo.Common";
+option csharp_namespace = "KillrVideo.Protobuf";
 
 // Represents a v4 UUID/GUID
 message Uuid {
