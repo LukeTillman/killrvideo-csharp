@@ -1,0 +1,13 @@
+syntax = "proto3";
+package killrvideo.ratings.service;
+
+import "common/common_types.proto";
+import "google/protobuf/timestamp.proto";
+
+// Event published when a user rates a video
+message UserRatedVideo {
+  Uuid video_id = 1;
+  Uuid user_id = 2;
+  int32 rating = 3;
+  Timestamp rating_timestamp = 4;
+}

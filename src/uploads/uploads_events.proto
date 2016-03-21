@@ -1,0 +1,31 @@
+syntax = "proto3";
+package killrvideo.uploads.events;
+
+import "google/protobuf/timestamp.proto";
+import "common/common_types.proto";
+
+// Event that's published when there's a problem processing an uploaded video
+message UploadedVideoProcessingFailed {
+  Uuid video_id = 1;
+  Timestamp timestamp = 2;
+}
+
+// Event that's published when an uploaded video has started being processed
+message UploadedVideoProcessingStarted {
+  Uuid video_id = 1;
+  Timestamp timestamp = 2;
+}
+
+// Event that's published when an uploaded video has been successfully processed
+message UploadedVideoProcessingSucceeded {
+  Uuid video_id = 1;
+  Timestamp timestamp = 2;
+}
+
+// Event that's published when an uploaded video is available and ready for playback
+message UploadedVideoPublished {
+  Uuid video_id = 1;
+  Timestamp timestamp = 2;
+  string video_url = 3;
+  string thumbnail_url = 4;
+}

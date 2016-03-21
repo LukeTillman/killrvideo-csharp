@@ -1,0 +1,14 @@
+syntax = "proto3";
+package killrvideo.user_management.events;
+
+import "google/protobuf/timestamp.proto";
+import "common/common_types.proto";
+
+// Event published when a new user is created
+message UserCreated {
+  Uuid user_id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string email = 4;
+  Timestamp timestamp = 5;
+}
