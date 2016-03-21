@@ -32,7 +32,7 @@ namespace KillrVideo.UserManagement.Events {
             "KAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQiOqAiBLaWxsclZpZGVv",
             "LlVzZXJNYW5hZ2VtZW50LkV2ZW50c2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::KillrVideo.Common.CommonTypesReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::KillrVideo.Protobuf.CommonTypesReflection.Descriptor, },
           new pbr::GeneratedCodeInfo(null, new pbr::GeneratedCodeInfo[] {
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.UserManagement.Events.UserCreated), global::KillrVideo.UserManagement.Events.UserCreated.Parser, new[]{ "UserId", "FirstName", "LastName", "Email", "Timestamp" }, null, null, null)
           }));
@@ -77,8 +77,8 @@ namespace KillrVideo.UserManagement.Events {
 
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 1;
-    private global::KillrVideo.Common.Uuid userId_;
-    public global::KillrVideo.Common.Uuid UserId {
+    private global::KillrVideo.Protobuf.Uuid userId_;
+    public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
         userId_ = value;
@@ -207,7 +207,7 @@ namespace KillrVideo.UserManagement.Events {
       }
       if (other.userId_ != null) {
         if (userId_ == null) {
-          userId_ = new global::KillrVideo.Common.Uuid();
+          userId_ = new global::KillrVideo.Protobuf.Uuid();
         }
         UserId.MergeFrom(other.UserId);
       }
@@ -237,7 +237,7 @@ namespace KillrVideo.UserManagement.Events {
             break;
           case 10: {
             if (userId_ == null) {
-              userId_ = new global::KillrVideo.Common.Uuid();
+              userId_ = new global::KillrVideo.Protobuf.Uuid();
             }
             input.ReadMessage(userId_);
             break;

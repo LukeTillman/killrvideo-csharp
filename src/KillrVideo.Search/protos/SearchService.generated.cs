@@ -45,7 +45,7 @@ namespace KillrVideo.Search {
             "LkdldFF1ZXJ5U3VnZ2VzdGlvbnNSZXNwb25zZUIUqgIRS2lsbHJWaWRlby5T",
             "ZWFyY2hiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::KillrVideo.Common.CommonTypesReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::KillrVideo.Protobuf.CommonTypesReflection.Descriptor, },
           new pbr::GeneratedCodeInfo(null, new pbr::GeneratedCodeInfo[] {
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Search.SearchVideosRequest), global::KillrVideo.Search.SearchVideosRequest.Parser, new[]{ "Query", "PageSize", "PagingState" }, null, null, null),
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Search.SearchVideosResponse), global::KillrVideo.Search.SearchVideosResponse.Parser, new[]{ "Query", "Videos", "PagingState" }, null, null, null),
@@ -406,8 +406,8 @@ namespace KillrVideo.Search {
 
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
-    private global::KillrVideo.Common.Uuid videoId_;
-    public global::KillrVideo.Common.Uuid VideoId {
+    private global::KillrVideo.Protobuf.Uuid videoId_;
+    public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
         videoId_ = value;
@@ -446,8 +446,8 @@ namespace KillrVideo.Search {
 
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 5;
-    private global::KillrVideo.Common.Uuid userId_;
-    public global::KillrVideo.Common.Uuid UserId {
+    private global::KillrVideo.Protobuf.Uuid userId_;
+    public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
         userId_ = value;
@@ -536,7 +536,7 @@ namespace KillrVideo.Search {
       }
       if (other.videoId_ != null) {
         if (videoId_ == null) {
-          videoId_ = new global::KillrVideo.Common.Uuid();
+          videoId_ = new global::KillrVideo.Protobuf.Uuid();
         }
         VideoId.MergeFrom(other.VideoId);
       }
@@ -554,7 +554,7 @@ namespace KillrVideo.Search {
       }
       if (other.userId_ != null) {
         if (userId_ == null) {
-          userId_ = new global::KillrVideo.Common.Uuid();
+          userId_ = new global::KillrVideo.Protobuf.Uuid();
         }
         UserId.MergeFrom(other.UserId);
       }
@@ -569,7 +569,7 @@ namespace KillrVideo.Search {
             break;
           case 10: {
             if (videoId_ == null) {
-              videoId_ = new global::KillrVideo.Common.Uuid();
+              videoId_ = new global::KillrVideo.Protobuf.Uuid();
             }
             input.ReadMessage(videoId_);
             break;
@@ -591,7 +591,7 @@ namespace KillrVideo.Search {
           }
           case 42: {
             if (userId_ == null) {
-              userId_ = new global::KillrVideo.Common.Uuid();
+              userId_ = new global::KillrVideo.Protobuf.Uuid();
             }
             input.ReadMessage(userId_);
             break;

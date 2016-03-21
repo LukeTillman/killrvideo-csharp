@@ -52,7 +52,7 @@ namespace KillrVideo.SuggestedVideos {
             "ZWRGb3JVc2VyUmVzcG9uc2VCHaoCGktpbGxyVmlkZW8uU3VnZ2VzdGVkVmlk",
             "ZW9zYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::KillrVideo.Common.CommonTypesReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::KillrVideo.Protobuf.CommonTypesReflection.Descriptor, },
           new pbr::GeneratedCodeInfo(null, new pbr::GeneratedCodeInfo[] {
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest), global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest.Parser, new[]{ "VideoId", "PageSize", "PagingState" }, null, null, null),
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse), global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse.Parser, new[]{ "VideoId", "Videos", "PagingState" }, null, null, null),
@@ -99,8 +99,8 @@ namespace KillrVideo.SuggestedVideos {
 
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
-    private global::KillrVideo.Common.Uuid videoId_;
-    public global::KillrVideo.Common.Uuid VideoId {
+    private global::KillrVideo.Protobuf.Uuid videoId_;
+    public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
         videoId_ = value;
@@ -191,7 +191,7 @@ namespace KillrVideo.SuggestedVideos {
       }
       if (other.videoId_ != null) {
         if (videoId_ == null) {
-          videoId_ = new global::KillrVideo.Common.Uuid();
+          videoId_ = new global::KillrVideo.Protobuf.Uuid();
         }
         VideoId.MergeFrom(other.VideoId);
       }
@@ -212,7 +212,7 @@ namespace KillrVideo.SuggestedVideos {
             break;
           case 10: {
             if (videoId_ == null) {
-              videoId_ = new global::KillrVideo.Common.Uuid();
+              videoId_ = new global::KillrVideo.Protobuf.Uuid();
             }
             input.ReadMessage(videoId_);
             break;
@@ -265,8 +265,8 @@ namespace KillrVideo.SuggestedVideos {
 
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
-    private global::KillrVideo.Common.Uuid videoId_;
-    public global::KillrVideo.Common.Uuid VideoId {
+    private global::KillrVideo.Protobuf.Uuid videoId_;
+    public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
         videoId_ = value;
@@ -351,7 +351,7 @@ namespace KillrVideo.SuggestedVideos {
       }
       if (other.videoId_ != null) {
         if (videoId_ == null) {
-          videoId_ = new global::KillrVideo.Common.Uuid();
+          videoId_ = new global::KillrVideo.Protobuf.Uuid();
         }
         VideoId.MergeFrom(other.VideoId);
       }
@@ -370,7 +370,7 @@ namespace KillrVideo.SuggestedVideos {
             break;
           case 10: {
             if (videoId_ == null) {
-              videoId_ = new global::KillrVideo.Common.Uuid();
+              videoId_ = new global::KillrVideo.Protobuf.Uuid();
             }
             input.ReadMessage(videoId_);
             break;
@@ -423,8 +423,8 @@ namespace KillrVideo.SuggestedVideos {
 
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 1;
-    private global::KillrVideo.Common.Uuid userId_;
-    public global::KillrVideo.Common.Uuid UserId {
+    private global::KillrVideo.Protobuf.Uuid userId_;
+    public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
         userId_ = value;
@@ -515,7 +515,7 @@ namespace KillrVideo.SuggestedVideos {
       }
       if (other.userId_ != null) {
         if (userId_ == null) {
-          userId_ = new global::KillrVideo.Common.Uuid();
+          userId_ = new global::KillrVideo.Protobuf.Uuid();
         }
         UserId.MergeFrom(other.UserId);
       }
@@ -536,7 +536,7 @@ namespace KillrVideo.SuggestedVideos {
             break;
           case 10: {
             if (userId_ == null) {
-              userId_ = new global::KillrVideo.Common.Uuid();
+              userId_ = new global::KillrVideo.Protobuf.Uuid();
             }
             input.ReadMessage(userId_);
             break;
@@ -589,8 +589,8 @@ namespace KillrVideo.SuggestedVideos {
 
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 1;
-    private global::KillrVideo.Common.Uuid userId_;
-    public global::KillrVideo.Common.Uuid UserId {
+    private global::KillrVideo.Protobuf.Uuid userId_;
+    public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
         userId_ = value;
@@ -675,7 +675,7 @@ namespace KillrVideo.SuggestedVideos {
       }
       if (other.userId_ != null) {
         if (userId_ == null) {
-          userId_ = new global::KillrVideo.Common.Uuid();
+          userId_ = new global::KillrVideo.Protobuf.Uuid();
         }
         UserId.MergeFrom(other.UserId);
       }
@@ -694,7 +694,7 @@ namespace KillrVideo.SuggestedVideos {
             break;
           case 10: {
             if (userId_ == null) {
-              userId_ = new global::KillrVideo.Common.Uuid();
+              userId_ = new global::KillrVideo.Protobuf.Uuid();
             }
             input.ReadMessage(userId_);
             break;
@@ -749,8 +749,8 @@ namespace KillrVideo.SuggestedVideos {
 
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
-    private global::KillrVideo.Common.Uuid videoId_;
-    public global::KillrVideo.Common.Uuid VideoId {
+    private global::KillrVideo.Protobuf.Uuid videoId_;
+    public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
         videoId_ = value;
@@ -789,8 +789,8 @@ namespace KillrVideo.SuggestedVideos {
 
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 5;
-    private global::KillrVideo.Common.Uuid userId_;
-    public global::KillrVideo.Common.Uuid UserId {
+    private global::KillrVideo.Protobuf.Uuid userId_;
+    public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
         userId_ = value;
@@ -879,7 +879,7 @@ namespace KillrVideo.SuggestedVideos {
       }
       if (other.videoId_ != null) {
         if (videoId_ == null) {
-          videoId_ = new global::KillrVideo.Common.Uuid();
+          videoId_ = new global::KillrVideo.Protobuf.Uuid();
         }
         VideoId.MergeFrom(other.VideoId);
       }
@@ -897,7 +897,7 @@ namespace KillrVideo.SuggestedVideos {
       }
       if (other.userId_ != null) {
         if (userId_ == null) {
-          userId_ = new global::KillrVideo.Common.Uuid();
+          userId_ = new global::KillrVideo.Protobuf.Uuid();
         }
         UserId.MergeFrom(other.UserId);
       }
@@ -912,7 +912,7 @@ namespace KillrVideo.SuggestedVideos {
             break;
           case 10: {
             if (videoId_ == null) {
-              videoId_ = new global::KillrVideo.Common.Uuid();
+              videoId_ = new global::KillrVideo.Protobuf.Uuid();
             }
             input.ReadMessage(videoId_);
             break;
@@ -934,7 +934,7 @@ namespace KillrVideo.SuggestedVideos {
           }
           case 42: {
             if (userId_ == null) {
-              userId_ = new global::KillrVideo.Common.Uuid();
+              userId_ = new global::KillrVideo.Protobuf.Uuid();
             }
             input.ReadMessage(userId_);
             break;

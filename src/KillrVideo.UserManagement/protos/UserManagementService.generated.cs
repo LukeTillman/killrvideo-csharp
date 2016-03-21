@@ -49,7 +49,7 @@ namespace KillrVideo.UserManagement {
             "UmVzcG9uc2VCHKoCGUtpbGxyVmlkZW8uVXNlck1hbmFnZW1lbnRiBnByb3Rv",
             "Mw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::KillrVideo.Common.CommonTypesReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::KillrVideo.Protobuf.CommonTypesReflection.Descriptor, },
           new pbr::GeneratedCodeInfo(null, new pbr::GeneratedCodeInfo[] {
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.UserManagement.CreateUserRequest), global::KillrVideo.UserManagement.CreateUserRequest.Parser, new[]{ "UserId", "FirstName", "LastName", "Email", "Password" }, null, null, null),
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.UserManagement.CreateUserResponse), global::KillrVideo.UserManagement.CreateUserResponse.Parser, null, null, null, null),
@@ -100,8 +100,8 @@ namespace KillrVideo.UserManagement {
 
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 1;
-    private global::KillrVideo.Common.Uuid userId_;
-    public global::KillrVideo.Common.Uuid UserId {
+    private global::KillrVideo.Protobuf.Uuid userId_;
+    public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
         userId_ = value;
@@ -230,7 +230,7 @@ namespace KillrVideo.UserManagement {
       }
       if (other.userId_ != null) {
         if (userId_ == null) {
-          userId_ = new global::KillrVideo.Common.Uuid();
+          userId_ = new global::KillrVideo.Protobuf.Uuid();
         }
         UserId.MergeFrom(other.UserId);
       }
@@ -257,7 +257,7 @@ namespace KillrVideo.UserManagement {
             break;
           case 10: {
             if (userId_ == null) {
-              userId_ = new global::KillrVideo.Common.Uuid();
+              userId_ = new global::KillrVideo.Protobuf.Uuid();
             }
             input.ReadMessage(userId_);
             break;
@@ -528,8 +528,8 @@ namespace KillrVideo.UserManagement {
 
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 1;
-    private global::KillrVideo.Common.Uuid userId_;
-    public global::KillrVideo.Common.Uuid UserId {
+    private global::KillrVideo.Protobuf.Uuid userId_;
+    public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
         userId_ = value;
@@ -582,7 +582,7 @@ namespace KillrVideo.UserManagement {
       }
       if (other.userId_ != null) {
         if (userId_ == null) {
-          userId_ = new global::KillrVideo.Common.Uuid();
+          userId_ = new global::KillrVideo.Protobuf.Uuid();
         }
         UserId.MergeFrom(other.UserId);
       }
@@ -597,7 +597,7 @@ namespace KillrVideo.UserManagement {
             break;
           case 10: {
             if (userId_ == null) {
-              userId_ = new global::KillrVideo.Common.Uuid();
+              userId_ = new global::KillrVideo.Protobuf.Uuid();
             }
             input.ReadMessage(userId_);
             break;
@@ -640,10 +640,10 @@ namespace KillrVideo.UserManagement {
 
     /// <summary>Field number for the "user_ids" field.</summary>
     public const int UserIdsFieldNumber = 1;
-    private static readonly pb::FieldCodec<global::KillrVideo.Common.Uuid> _repeated_userIds_codec
-        = pb::FieldCodec.ForMessage(10, global::KillrVideo.Common.Uuid.Parser);
-    private readonly pbc::RepeatedField<global::KillrVideo.Common.Uuid> userIds_ = new pbc::RepeatedField<global::KillrVideo.Common.Uuid>();
-    public pbc::RepeatedField<global::KillrVideo.Common.Uuid> UserIds {
+    private static readonly pb::FieldCodec<global::KillrVideo.Protobuf.Uuid> _repeated_userIds_codec
+        = pb::FieldCodec.ForMessage(10, global::KillrVideo.Protobuf.Uuid.Parser);
+    private readonly pbc::RepeatedField<global::KillrVideo.Protobuf.Uuid> userIds_ = new pbc::RepeatedField<global::KillrVideo.Protobuf.Uuid>();
+    public pbc::RepeatedField<global::KillrVideo.Protobuf.Uuid> UserIds {
       get { return userIds_; }
     }
 
@@ -839,8 +839,8 @@ namespace KillrVideo.UserManagement {
 
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 1;
-    private global::KillrVideo.Common.Uuid userId_;
-    public global::KillrVideo.Common.Uuid UserId {
+    private global::KillrVideo.Protobuf.Uuid userId_;
+    public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
         userId_ = value;
@@ -950,7 +950,7 @@ namespace KillrVideo.UserManagement {
       }
       if (other.userId_ != null) {
         if (userId_ == null) {
-          userId_ = new global::KillrVideo.Common.Uuid();
+          userId_ = new global::KillrVideo.Protobuf.Uuid();
         }
         UserId.MergeFrom(other.UserId);
       }
@@ -974,7 +974,7 @@ namespace KillrVideo.UserManagement {
             break;
           case 10: {
             if (userId_ == null) {
-              userId_ = new global::KillrVideo.Common.Uuid();
+              userId_ = new global::KillrVideo.Protobuf.Uuid();
             }
             input.ReadMessage(userId_);
             break;

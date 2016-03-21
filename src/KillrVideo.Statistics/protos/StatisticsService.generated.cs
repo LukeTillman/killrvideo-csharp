@@ -40,7 +40,7 @@ namespace KillrVideo.Statistics {
             "UmVxdWVzdBovLmtpbGxydmlkZW8uc3RhdGlzdGljcy5HZXROdW1iZXJPZlBs",
             "YXlzUmVzcG9uc2VCGKoCFUtpbGxyVmlkZW8uU3RhdGlzdGljc2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::KillrVideo.Common.CommonTypesReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::KillrVideo.Protobuf.CommonTypesReflection.Descriptor, },
           new pbr::GeneratedCodeInfo(null, new pbr::GeneratedCodeInfo[] {
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Statistics.RecordPlaybackStartedRequest), global::KillrVideo.Statistics.RecordPlaybackStartedRequest.Parser, new[]{ "VideoId" }, null, null, null),
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Statistics.RecordPlaybackStartedResponse), global::KillrVideo.Statistics.RecordPlaybackStartedResponse.Parser, null, null, null, null),
@@ -85,8 +85,8 @@ namespace KillrVideo.Statistics {
 
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
-    private global::KillrVideo.Common.Uuid videoId_;
-    public global::KillrVideo.Common.Uuid VideoId {
+    private global::KillrVideo.Protobuf.Uuid videoId_;
+    public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
         videoId_ = value;
@@ -139,7 +139,7 @@ namespace KillrVideo.Statistics {
       }
       if (other.videoId_ != null) {
         if (videoId_ == null) {
-          videoId_ = new global::KillrVideo.Common.Uuid();
+          videoId_ = new global::KillrVideo.Protobuf.Uuid();
         }
         VideoId.MergeFrom(other.VideoId);
       }
@@ -154,7 +154,7 @@ namespace KillrVideo.Statistics {
             break;
           case 10: {
             if (videoId_ == null) {
-              videoId_ = new global::KillrVideo.Common.Uuid();
+              videoId_ = new global::KillrVideo.Protobuf.Uuid();
             }
             input.ReadMessage(videoId_);
             break;
@@ -276,10 +276,10 @@ namespace KillrVideo.Statistics {
 
     /// <summary>Field number for the "video_ids" field.</summary>
     public const int VideoIdsFieldNumber = 1;
-    private static readonly pb::FieldCodec<global::KillrVideo.Common.Uuid> _repeated_videoIds_codec
-        = pb::FieldCodec.ForMessage(10, global::KillrVideo.Common.Uuid.Parser);
-    private readonly pbc::RepeatedField<global::KillrVideo.Common.Uuid> videoIds_ = new pbc::RepeatedField<global::KillrVideo.Common.Uuid>();
-    public pbc::RepeatedField<global::KillrVideo.Common.Uuid> VideoIds {
+    private static readonly pb::FieldCodec<global::KillrVideo.Protobuf.Uuid> _repeated_videoIds_codec
+        = pb::FieldCodec.ForMessage(10, global::KillrVideo.Protobuf.Uuid.Parser);
+    private readonly pbc::RepeatedField<global::KillrVideo.Protobuf.Uuid> videoIds_ = new pbc::RepeatedField<global::KillrVideo.Protobuf.Uuid>();
+    public pbc::RepeatedField<global::KillrVideo.Protobuf.Uuid> VideoIds {
       get { return videoIds_; }
     }
 
@@ -473,8 +473,8 @@ namespace KillrVideo.Statistics {
 
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
-    private global::KillrVideo.Common.Uuid videoId_;
-    public global::KillrVideo.Common.Uuid VideoId {
+    private global::KillrVideo.Protobuf.Uuid videoId_;
+    public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
         videoId_ = value;
@@ -546,7 +546,7 @@ namespace KillrVideo.Statistics {
       }
       if (other.videoId_ != null) {
         if (videoId_ == null) {
-          videoId_ = new global::KillrVideo.Common.Uuid();
+          videoId_ = new global::KillrVideo.Protobuf.Uuid();
         }
         VideoId.MergeFrom(other.VideoId);
       }
@@ -564,7 +564,7 @@ namespace KillrVideo.Statistics {
             break;
           case 10: {
             if (videoId_ == null) {
-              videoId_ = new global::KillrVideo.Common.Uuid();
+              videoId_ = new global::KillrVideo.Protobuf.Uuid();
             }
             input.ReadMessage(videoId_);
             break;
