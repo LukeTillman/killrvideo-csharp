@@ -2,23 +2,25 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Search.Dtos;
+using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
+using KillrVideo.Protobuf;
 using KillrVideo.Utils;
 
-namespace KillrVideo.Search.SearchImpl
+namespace KillrVideo.Search
 {
     /// <summary>
     /// Searches for videos by tag in Cassandra.
     /// </summary>
-    public class SearchVideosByTag : ISearchVideos
+    public class SearchVideosByTag : SearchService.ISearchService
     {
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
 
         public SearchVideosByTag(ISession session, TaskCache<string, PreparedStatement> statementCache)
         {
-            if (session == null) throw new ArgumentNullException("session");
-            if (statementCache == null) throw new ArgumentNullException("statementCache");
+            if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             _session = session;
             _statementCache = statementCache;
         }
@@ -26,55 +28,58 @@ namespace KillrVideo.Search.SearchImpl
         /// <summary>
         /// Gets a page of videos for a search query (looks for videos with that tag).
         /// </summary>
-        public async Task<VideosForSearchQuery> SearchVideos(SearchVideosQuery searchVideosQuery)
+        public async Task<SearchVideosResponse> SearchVideos(SearchVideosRequest request, ServerCallContext context)
         {
             // Use the driver's built-in paging feature to get only a page of rows
             PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM videos_by_tag WHERE tag = ?");
-            IStatement boundStatement = preparedStatement.Bind(searchVideosQuery.Query)
+            IStatement boundStatement = preparedStatement.Bind(request.Query)
                                                          .SetAutoPage(false)
-                                                         .SetPageSize(searchVideosQuery.PageSize);
+                                                         .SetPageSize(request.PageSize);
 
             // The initial query won't have a paging state, but subsequent calls should if there are more pages
-            if (string.IsNullOrEmpty(searchVideosQuery.PagingState) == false)
-                boundStatement.SetPagingState(Convert.FromBase64String(searchVideosQuery.PagingState));
+            if (string.IsNullOrEmpty(request.PagingState) == false)
+                boundStatement.SetPagingState(Convert.FromBase64String(request.PagingState));
 
             RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
-            return new VideosForSearchQuery
+            var response = new SearchVideosResponse
             {
-                Query = searchVideosQuery.Query,
-                Videos = rows.Select(MapRowToVideoPreview).ToList(),
+                Query = request.Query,
                 PagingState = rows.PagingState != null && rows.PagingState.Length > 0 ? Convert.ToBase64String(rows.PagingState) : null
             };
+
+            response.Videos.Add(rows.Select(MapRowToVideoPreview));
+            return response;
         }
 
         /// <summary>
         /// Gets a list of query suggestions for providing typeahead support.
         /// </summary>
-        public async Task<SuggestedQueries> GetQuerySuggestions(GetQuerySuggestions getSuggestions)
+        public async Task<GetQuerySuggestionsResponse> GetQuerySuggestions(GetQuerySuggestionsRequest request, ServerCallContext context)
         {
-            string firstLetter = getSuggestions.Query.Substring(0, 1);
+            string firstLetter = request.Query.Substring(0, 1);
             PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT tag FROM tags_by_letter WHERE first_letter = ? AND tag >= ? LIMIT ?");
-            BoundStatement boundStatement = preparedStatement.Bind(firstLetter, getSuggestions.Query, getSuggestions.PageSize);
+            BoundStatement boundStatement = preparedStatement.Bind(firstLetter, request.Query, request.PageSize);
             RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
-            return new SuggestedQueries
+            var response = new GetQuerySuggestionsResponse
             {
-                Query = getSuggestions.Query,
-                Suggestions = rows.Select(row => row.GetValue<string>("tag")).ToList()
+                Query = request.Query
             };
+            response.Suggestions.Add(rows.Select(row => row.GetValue<string>("tag")));
+            return response;
         }
 
         /// <summary>
         /// Maps a row to a VideoPreview object.
         /// </summary>
-        private static VideoPreview MapRowToVideoPreview(Row row)
+        private static SearchResultsVideoPreview MapRowToVideoPreview(Row row)
         {
-            return new VideoPreview
+            return new SearchResultsVideoPreview
             {
-                VideoId = row.GetValue<Guid>("videoid"),
-                AddedDate = row.GetValue<DateTimeOffset>("added_date"),
+                VideoId = row.GetValue<Guid>("videoid").ToUuid(),
+                AddedDate = row.GetValue<DateTimeOffset>("added_date").ToTimestamp(),
                 Name = row.GetValue<string>("name"),
                 PreviewImageLocation = row.GetValue<string>("preview_image_location"),
-                UserId = row.GetValue<Guid>("userid")
+                UserId = row.GetValue<Guid>("userid").ToUuid()
             };
         }
     }
