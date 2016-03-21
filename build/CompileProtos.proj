@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="CompileProtos" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SourceFolder>$(MSBuildProjectDirectory)\..\src</SourceFolder>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.Comments\KillrVideo.Comments.csproj" />
+    <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.Ratings\KillrVideo.Ratings.csproj" />
+    <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.SampleData\KillrVideo.SampleData.csproj" />
+    <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.Search\KillrVideo.Search.csproj" />
+    <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.Statistics\KillrVideo.Statistics.csproj" />
+    <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.SuggestedVideos\KillrVideo.SuggestedVideos.csproj" />
+    <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.Uploads\KillrVideo.Uploads.csproj" />
+    <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.UserManagement\KillrVideo.UserManagement.csproj" />
+    <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.VideoCatalog\KillrVideo.VideoCatalog.csproj" />
+  </ItemGroup>
+
+  <Target Name="CompileProtos">
+    <Message Text="Compiling .proto files" Importance="high" />
+    <MSBuild Projects="@(ProjectsWithProtos)" Targets="CompileProtos" StopOnFirstFailure="true" />
+  </Target>
+</Project>

@@ -48,6 +48,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.SampleData.Worke
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.SampleData", "KillrVideo.SampleData\KillrVideo.SampleData.csproj", "{F7088371-8ED3-4827-B15A-05F598C27399}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{B35E0A26-3D33-4058-8205-032B1E8D74DA}"
+	ProjectSection(SolutionItems) = preProject
+		..\build\CompileProtos.bat = ..\build\CompileProtos.bat
+		..\build\CompileProtos.proj = ..\build\CompileProtos.proj
+		..\build\Protobuf.targets = ..\build\Protobuf.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

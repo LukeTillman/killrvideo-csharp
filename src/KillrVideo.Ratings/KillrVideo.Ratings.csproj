@@ -94,6 +94,12 @@
     <Compile Include="RatingsService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\lib\killrvideo-service-protos\src\ratings\ratings_events.proto">
+      <Link>protos\ratings_events.proto</Link>
+    </None>
+    <None Include="..\..\lib\killrvideo-service-protos\src\ratings\ratings_service.proto">
+      <Link>protos\ratings_service.proto</Link>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +118,7 @@
     <Error Condition="!Exists('..\packages\grpc.native.csharp.0.13.0\build\portable-net45+netcore45+wpa81+wp8\grpc.native.csharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\grpc.native.csharp.0.13.0\build\portable-net45+netcore45+wpa81+wp8\grpc.native.csharp.targets'))" />
   </Target>
   <Import Project="..\packages\grpc.native.csharp.0.13.0\build\portable-net45+netcore45+wpa81+wp8\grpc.native.csharp.targets" Condition="Exists('..\packages\grpc.native.csharp.0.13.0\build\portable-net45+netcore45+wpa81+wp8\grpc.native.csharp.targets')" />
+  <Import Project="..\..\build\Protobuf.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
