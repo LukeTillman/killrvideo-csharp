@@ -2,8 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Comments.Dtos;
-using KillrVideo.Comments.Messages.Events;
+using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
+using KillrVideo.Comments.Events;
+using KillrVideo.Protobuf;
 using KillrVideo.Utils;
 using Nimbus;
 
@@ -12,17 +14,17 @@ namespace KillrVideo.Comments
     /// <summary>
     /// Comments service that uses Cassandra to store comments and publishes events on a message bus.
     /// </summary>
-    public class CommentsService : ICommentsService
+    public class CommentsServiceImpl : CommentsService.ICommentsService
     {
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
         private readonly IBus _bus;
 
-        public CommentsService(ISession session, TaskCache<string, PreparedStatement> statementCache, IBus bus)
+        public CommentsServiceImpl(ISession session, TaskCache<string, PreparedStatement> statementCache, IBus bus)
         {
-            if (session == null) throw new ArgumentNullException("session");
-            if (statementCache == null) throw new ArgumentNullException("statementCache");
-            if (bus == null) throw new ArgumentNullException("bus");
+            if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
+            if (bus == null) throw new ArgumentNullException(nameof(bus));
             _session = session;
             _statementCache = statementCache;
             _bus = bus;
@@ -31,7 +33,7 @@ namespace KillrVideo.Comments
         /// <summary>
         /// Records a user comment on a video.
         /// </summary>
-        public async Task CommentOnVideo(CommentOnVideo comment)
+        public async Task<CommentOnVideoResponse> CommentOnVideo(CommentOnVideoRequest request, ServerCallContext context)
         {
             // Use a client side timestamp for the writes that we can include when we publish the event
             var timestamp = DateTimeOffset.UtcNow;
@@ -44,11 +46,11 @@ namespace KillrVideo.Comments
             var batch = new BatchStatement();
 
             // INSERT INTO comments_by_video
-            batch.Add(preparedStatements[0].Bind(comment.VideoId, comment.CommentId, comment.UserId, comment.Comment,
+            batch.Add(preparedStatements[0].Bind(request.VideoId.ToGuid(), request.CommentId.ToGuid(), request.UserId.ToGuid(), request.Comment,
                                                  timestamp.ToMicrosecondsSinceEpoch()));
 
             // INSERT INTO comments_by_user
-            batch.Add(preparedStatements[1].Bind(comment.UserId, comment.CommentId, comment.VideoId, comment.Comment,
+            batch.Add(preparedStatements[1].Bind(request.UserId.ToGuid(), request.CommentId.ToGuid(), request.VideoId.ToGuid(), request.Comment,
                                                  timestamp.ToMicrosecondsSinceEpoch()));
 
             await _session.ExecuteAsync(batch).ConfigureAwait(false);
@@ -56,69 +58,64 @@ namespace KillrVideo.Comments
             // Tell the world about the comment
             await _bus.Publish(new UserCommentedOnVideo
             {
-                UserId = comment.UserId,
-                VideoId = comment.VideoId,
-                CommentId = comment.CommentId,
-                Timestamp = timestamp
+                UserId = request.UserId,
+                VideoId = request.VideoId,
+                CommentId = request.CommentId,
+                CommentTimestamp = timestamp.ToTimestamp()
             }).ConfigureAwait(false);
+
+            return new CommentOnVideoResponse();
         }
 
         /// <summary>
         /// Gets a page of the latest comments for a user.
         /// </summary>
-        public async Task<UserComments> GetUserComments(GetUserComments getComments)
+        public async Task<GetUserCommentsResponse> GetUserComments(GetUserCommentsRequest request, ServerCallContext context)
         {
-            PreparedStatement prepared;
-            BoundStatement bound;
+            PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync(
+                "SELECT commentid, videoid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_user WHERE userid = ?");
 
-            if (getComments.FirstCommentIdOnPage.HasValue)
-            {
-                prepared = await _statementCache.NoContext.GetOrAddAsync(
-                    "SELECT commentid, videoid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_user WHERE userid = ? AND commentid <= ? LIMIT ?");
-                bound = prepared.Bind(getComments.UserId, getComments.FirstCommentIdOnPage.Value, getComments.PageSize);
-            }
-            else
-            {
-                prepared = await _statementCache.NoContext.GetOrAddAsync(
-                    "SELECT commentid, videoid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_user WHERE userid = ? LIMIT ?");
-                bound = prepared.Bind(getComments.UserId, getComments.PageSize);
-            }
+            IStatement bound = prepared.Bind(request.UserId.ToGuid())
+                                       .SetAutoPage(false)
+                                       .SetPageSize(request.PageSize);
 
+            if (string.IsNullOrEmpty(request.PagingState) == false)
+                bound.SetPagingState(Convert.FromBase64String(request.PagingState));
+            
             RowSet rows = await _session.ExecuteAsync(bound).ConfigureAwait(false);
-            return new UserComments
+            var response = new GetUserCommentsResponse
             {
-                UserId = getComments.UserId,
-                Comments = rows.Select(MapRowToUserComment).ToList()
+                UserId = request.UserId,
+                PagingState = rows.PagingState != null ? Convert.ToBase64String(rows.PagingState) : ""
             };
+
+            response.Comments.Add(rows.Select(MapRowToUserComment));
+            return response;
         }
 
         /// <summary>
         /// Gets a page of the latest comments for a video.
         /// </summary>
-        public async Task<VideoComments> GetVideoComments(GetVideoComments getComments)
+        public async Task<GetVideoCommentsResponse> GetVideoComments(GetVideoCommentsRequest request, ServerCallContext context)
         {
-            PreparedStatement prepared;
-            BoundStatement bound;
+            PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync(
+                    "SELECT commentid, userid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_video WHERE videoid = ?");
 
-            if (getComments.FirstCommentIdOnPage.HasValue)
-            {
-                prepared = await _statementCache.NoContext.GetOrAddAsync(
-                    "SELECT commentid, userid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_video WHERE videoid = ? AND commentid <= ? LIMIT ?");
-                bound = prepared.Bind(getComments.VideoId, getComments.FirstCommentIdOnPage.Value, getComments.PageSize);
-            }
-            else
-            {
-                prepared = await _statementCache.NoContext.GetOrAddAsync(
-                    "SELECT commentid, userid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_video WHERE videoid = ? LIMIT ?");
-                bound = prepared.Bind(getComments.VideoId, getComments.PageSize);
-            }
+            IStatement bound = prepared.Bind(request.VideoId.ToGuid())
+                                       .SetAutoPage(false)
+                                       .SetPageSize(request.PageSize);
+
+            if (string.IsNullOrEmpty(request.PagingState) == false)
+                bound.SetPagingState(Convert.FromBase64String(request.PagingState));
 
             RowSet rows = await _session.ExecuteAsync(bound).ConfigureAwait(false);
-            return new VideoComments
+            var response = new GetVideoCommentsResponse
             {
-                VideoId = getComments.VideoId,
-                Comments = rows.Select(MapRowToVideoComment).ToList()
+                VideoId = request.VideoId,
+                PagingState = rows.PagingState != null ? Convert.ToBase64String(rows.PagingState) : ""
             };
+            response.Comments.Add(rows.Select(MapRowToVideoComment));
+            return response;
         }
 
         private static UserComment MapRowToUserComment(Row row)
@@ -127,10 +124,10 @@ namespace KillrVideo.Comments
 
             return new UserComment
             {
-                CommentId = row.GetValue<Guid>("commentid"),
-                VideoId = row.GetValue<Guid>("videoid"),
+                CommentId = row.GetValue<Guid>("commentid").ToTimeUuid(),
+                VideoId = row.GetValue<Guid>("videoid").ToUuid(),
                 Comment = row.GetValue<string>("comment"),
-                CommentTimestamp = row.GetValue<DateTimeOffset>("comment_timestamp")
+                CommentTimestamp = row.GetValue<DateTimeOffset>("comment_timestamp").ToTimestamp()
             };
         }
 
@@ -140,10 +137,10 @@ namespace KillrVideo.Comments
 
             return new VideoComment
             {
-                CommentId = row.GetValue<Guid>("commentid"),
-                UserId = row.GetValue<Guid>("userid"),
+                CommentId = row.GetValue<Guid>("commentid").ToTimeUuid(),
+                UserId = row.GetValue<Guid>("userid").ToUuid(),
                 Comment = row.GetValue<string>("comment"),
-                CommentTimestamp = row.GetValue<DateTimeOffset>("comment_timestamp")
+                CommentTimestamp = row.GetValue<DateTimeOffset>("comment_timestamp").ToTimestamp()
             };
         }
     }
