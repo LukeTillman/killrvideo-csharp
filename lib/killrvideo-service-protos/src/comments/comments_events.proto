@@ -1,0 +1,13 @@
+syntax = "proto3";
+package killrvideo.comments.events;
+
+import "google/protobuf/timestamp.proto";
+import "common/common_types.proto";
+
+// Message published when a user commented on a video
+message UserCommentedOnVideo {
+  Uuid user_id = 1;
+  Uuid video_id = 2;
+  TimeUuid comment_id = 3;
+  Timestamp comment_timestamp = 4;
+}

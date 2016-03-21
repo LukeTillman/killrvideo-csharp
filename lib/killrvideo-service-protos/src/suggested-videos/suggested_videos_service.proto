@@ -1,0 +1,50 @@
+syntax = "proto3";
+package killrvideo.suggested_videos.service;
+
+import "common/common_types.proto";
+
+// Service responsible for generating video suggestions
+service SuggestedVideoService {
+  // Gets videos related to another video
+  rpc GetRelatedVideos(GetRelatedVideosRequest) returns (GetRelatedVideosResponse);
+  
+  // Gets personalized video suggestions for a user
+  rpc GetSuggestedForUser(GetSuggestedForUserRequest) returns (GetSuggestedForUserResponse);
+}
+
+// Request to get videos related to another video
+message GetRelatedVideosRequest {
+  Uuid video_id = 1;
+  int32 page_size = 2;
+  string paging_state = 16;
+}
+
+// Response when getting messages related to another video
+message GetRelatedVideosResponse {
+  Uuid video_id = 1;
+  repeated SuggestedVideoPreview videos = 2;
+  string paging_state = 3;
+}
+
+// Request to get personalized video suggestions for a user
+message GetSuggestedForUserRequest {
+  Uuid user_id = 1;
+  int32 page_size = 2;
+  string paging_state = 16;
+}
+
+// Response when getting personalized suggestions for a user
+message GetSuggestedForUserResponse {
+  Uuid user_id = 1;
+  repeated SuggestedVideoPreview videos = 2;
+  string paging_state = 3;
+}
+
+// Video preview data for a video returned as a video suggestion
+message SuggestedVideoPreview {
+  Uuid video_id = 1;
+  Timestamp added_date = 2;
+  string name = 3;
+  string preview_image_location = 4;
+  Uuid user_id = 5;
+}
