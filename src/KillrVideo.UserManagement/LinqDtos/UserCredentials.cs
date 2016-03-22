@@ -1,7 +1,7 @@
 ﻿using System;
 using Cassandra.Mapping.Attributes;
 
-namespace KillrVideo.UserManagement.Dtos
+namespace KillrVideo.UserManagement.LinqDtos
 {
     /// <summary>
     /// Represents user credentials.  The Table/Column/PartitionKey attributes are here only for LINQ support (see LinqUserReadModel).

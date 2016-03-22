@@ -86,10 +86,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dtos\CreateUser.cs" />
-    <Compile Include="Dtos\UserCredentials.cs" />
-    <Compile Include="Dtos\UserProfile.cs" />
-    <Compile Include="IUserManagementService.cs" />
+    <Compile Include="LinqDtos\UserCredentials.cs" />
+    <Compile Include="LinqDtos\UserProfile.cs" />
     <Compile Include="LinqUserManagementService.cs" />
     <Compile Include="PasswordHash.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -97,7 +95,6 @@
     <Compile Include="protos\UserManagementService.generated.cs" />
     <Compile Include="protos\UserManagementServiceGrpc.cs" />
     <Compile Include="UserManagementService.cs" />
-    <Compile Include="UserManagementServiceWindsorInstaller.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\lib\killrvideo-service-protos\src\user-management\user_management_events.proto">
@@ -109,6 +106,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KillrVideo.Protobuf\KillrVideo.Protobuf.csproj">
+      <Project>{4a41c0c8-6a27-4728-b596-b64227a26fb6}</Project>
+      <Name>KillrVideo.Protobuf</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
       <Project>{9516b3f3-89b7-4343-9f88-ffee6d74fffc}</Project>
       <Name>KillrVideo.Utils</Name>
