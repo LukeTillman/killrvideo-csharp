@@ -10,6 +10,7 @@ using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Protobuf;
 using KillrVideo.Search.Dtos;
+using RestSharp.Deserializers;
 using Method = RestSharp.Method;
 
 namespace KillrVideo.Search
@@ -85,7 +86,7 @@ namespace KillrVideo.Search
             restRequest.AddParameter("spellcheck.build", "true");
             restRequest.AddParameter("spellcheck.q", request.Query);
             IRestResponse<SearchSuggestionResult> restResponse = await _restClient.ExecuteTaskAsync<SearchSuggestionResult>(restRequest).ConfigureAwait(false);
-
+            
             // Start with an empty response (i.e. no suggestions)
             var response = new GetQuerySuggestionsResponse { Query = request.Query };
 
@@ -105,8 +106,25 @@ namespace KillrVideo.Search
 
             // Success
 
-            // Json embeds another json object within an array.
-            // Ensures we receive data
+            /* 
+              The spellcheck.suggestions object that comes back in the JSON looks something like this (for example, searching for 'cat'):
+
+                "suggestions": [
+                  "cat",
+                  {
+                    "numFound": 1,
+                    "startOffset": 0,
+                    "endOffset": 3,
+                    "suggestion": [
+                      "cat summer video teaser"
+                    ]
+                  }
+                ]
+              
+              Yes, that's an array of mixed objects (seriously, WTF kind of an API is that Solr?!). Since the array is mixed, we deserialized
+              it as a List<string> where the second element will be the JSON string with the actual data we care about. We need to now run
+              deserialization again on that to get at the actual data.
+            */
             if (restResponse.Data.Spellcheck.Suggestions.Count >= 2)
             {
                 // Deserialize the embedded object
@@ -121,7 +139,7 @@ namespace KillrVideo.Search
 
             return response;
         }
-
+        
         private static SearchResultsVideoPreview MapRowToVideoPreview(Row row)
         {
             return new SearchResultsVideoPreview
