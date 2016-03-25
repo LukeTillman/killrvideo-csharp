@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using KillrVideo.MessageBus.Publish;
 using KillrVideo.MessageBus.Subscribe;
+using Serilog;
 
 namespace KillrVideo.MessageBus
 {
@@ -11,6 +12,8 @@ namespace KillrVideo.MessageBus
     /// </summary>
     public class Bus
     {
+        private static readonly ILogger Logger = Log.ForContext<Bus>();
+
         private readonly CancellationTokenSource _cancelBusStart;
 
         private readonly SubscriptionServer _subscriptionServer;
@@ -20,6 +23,7 @@ namespace KillrVideo.MessageBus
 
         internal Bus(BusBuilder busConfig)
         {
+            
             if (busConfig == null) throw new ArgumentNullException(nameof(busConfig));
 
             _cancelBusStart = new CancellationTokenSource();
@@ -75,16 +79,11 @@ namespace KillrVideo.MessageBus
             catch (AggregateException e)
             {
                 foreach (var ex in e.IgnoreTaskCanceled())
-                {
-                    Console.WriteLine("Error while stopping server");
-                    Console.WriteLine(ex.ToString());
-                }
+                    Logger.Error(ex, "Error while stopping server");
             }
             catch (Exception e)
             {
-                // TODO: Proper logging
-                Console.WriteLine("Error while stopping server");
-                Console.WriteLine(e.ToString());
+                Logger.Error(e, "Error while stopping server");
             }
 
             // Wait for the subsciption server to stop

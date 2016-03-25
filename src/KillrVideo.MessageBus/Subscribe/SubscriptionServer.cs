@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 using Google.Protobuf;
 using Google.Protobuf.Reflection;
 using KillrVideo.MessageBus.Transport;
+using Serilog;
 
 namespace KillrVideo.MessageBus.Subscribe
 {
     internal class SubscriptionServer
     {
+        private static readonly ILogger Logger = Log.ForContext<SubscriptionServer>();
+
         private readonly string _serviceName;
         private readonly IMessageTransport _transport;
         private readonly IDictionary<MessageDescriptor, List<IHandlerAdapter>> _handlers;
@@ -64,14 +67,12 @@ namespace KillrVideo.MessageBus.Subscribe
             {
                 foreach (var ex in e.IgnoreTaskCanceled())
                 {
-                    Console.WriteLine("Error while stopping subscription server");
-                    Console.WriteLine(ex.ToString());
+                    Logger.Error(ex, "Error while stopping subscription server");
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error while stopping subscription server");
-                Console.WriteLine(e.ToString());
+                Logger.Error(e, "Error while stopping subscription server");
             }
         }
 
@@ -109,8 +110,7 @@ namespace KillrVideo.MessageBus.Subscribe
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Error while processing subscriptions");
-                    Console.WriteLine(e.ToString());
+                    Logger.Error(e, "Unexpected error while processing subscriptions");
                 }
             }
         }
@@ -138,10 +138,9 @@ namespace KillrVideo.MessageBus.Subscribe
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Error while receiving from transport");
-                    Console.WriteLine(e.ToString());
+                    Logger.Error(e, "Error while receiving from transport for subscription {subscription}", subscription.Id);
 
-                    // Just start over with next message
+                    // Just start over with next message (TODO: Retry?)
                     continue;
                 }
 
@@ -157,8 +156,7 @@ namespace KillrVideo.MessageBus.Subscribe
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Error parsing message from transport");
-                    Console.WriteLine(e.ToString());
+                    Logger.Error(e, "Error while parsing message from transport for subscription {subscription}", subscription.Id);
 
                     // Just start over with next message
                     continue;
@@ -175,10 +173,9 @@ namespace KillrVideo.MessageBus.Subscribe
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Error dispatching to message handlers");
-                    Console.WriteLine(e.ToString());
+                    Logger.Error(e, "Error dispatching to message handlers for subscription {subscription}", subscription.Id);
 
-                    // Just start over with next message
+                    // Just start over with next message (TODO: Handler retries?)
                     continue;
                 }
 
