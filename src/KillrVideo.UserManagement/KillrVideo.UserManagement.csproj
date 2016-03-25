@@ -86,6 +86,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KillrVideo.MessageBus\KillrVideo.MessageBus.csproj">
+      <Project>{9a8c1794-cec4-4670-af3e-e3cd83881e8e}</Project>
+      <Name>KillrVideo.MessageBus</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Protobuf\KillrVideo.Protobuf.csproj">
       <Project>{4a41c0c8-6a27-4728-b596-b64227a26fb6}</Project>
       <Name>KillrVideo.Protobuf</Name>

@@ -5,9 +5,9 @@ using Cassandra;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Comments.Events;
+using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
 using KillrVideo.Utils;
-using Nimbus;
 
 namespace KillrVideo.Comments
 {

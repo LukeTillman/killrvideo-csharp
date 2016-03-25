@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Cassandra;
 using Cassandra.Data.Linq;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
 using KillrVideo.UserManagement.Events;
 using KillrVideo.UserManagement.LinqDtos;
 using KillrVideo.Utils;
-using Nimbus;
 
 namespace KillrVideo.UserManagement
 {
@@ -26,7 +25,7 @@ namespace KillrVideo.UserManagement
         private readonly IBus _bus;
 
         private readonly Table<LinqDtos.UserProfile> _userProfileTable;
-        private readonly Table<LinqDtos.UserCredentials> _userCredentialsTable; 
+        private readonly Table<UserCredentials> _userCredentialsTable; 
 
         public LinqUserManagementService(ISession session, TaskCache<string, PreparedStatement> statementCache, IBus bus)
         {
@@ -39,7 +38,7 @@ namespace KillrVideo.UserManagement
             _bus = bus;
 
             _userProfileTable = new Table<LinqDtos.UserProfile>(session);
-            _userCredentialsTable = new Table<LinqDtos.UserCredentials>(session);
+            _userCredentialsTable = new Table<UserCredentials>(session);
         }
 
         /// <summary>
@@ -93,7 +92,7 @@ namespace KillrVideo.UserManagement
         public async Task<VerifyCredentialsResponse> VerifyCredentials(VerifyCredentialsRequest request, ServerCallContext context)
         {
             // Lookup the user by email address
-            IEnumerable<LinqDtos.UserCredentials> results = await _userCredentialsTable.Where(uc => uc.EmailAddress == request.Email)
+            IEnumerable<UserCredentials> results = await _userCredentialsTable.Where(uc => uc.EmailAddress == request.Email)
                                                                                        .ExecuteAsync().ConfigureAwait(false);
             
             var response = new VerifyCredentialsResponse();

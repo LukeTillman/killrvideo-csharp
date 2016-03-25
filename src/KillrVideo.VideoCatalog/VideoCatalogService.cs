@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using Cassandra;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
 using KillrVideo.Utils;
 using KillrVideo.VideoCatalog.Events;
-using Nimbus;
 
 namespace KillrVideo.VideoCatalog
 {

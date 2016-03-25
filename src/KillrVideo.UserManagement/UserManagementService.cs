@@ -1,14 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
 using KillrVideo.UserManagement.Events;
 using KillrVideo.Utils;
-using Nimbus;
 
 namespace KillrVideo.UserManagement
 {
