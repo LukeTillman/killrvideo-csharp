@@ -77,19 +77,28 @@
     <Compile Include="Dtos\SearchSpellcheck.cs" />
     <Compile Include="Dtos\SearchSpellcheckSuggestions.cs" />
     <Compile Include="Dtos\SearchSuggestionResult.cs" />
+    <Compile Include="Handlers\UpdateSearchOnVideoAdded.cs" />
     <Compile Include="protos\SearchService.generated.cs" />
     <Compile Include="protos\SearchServiceGrpc.cs" />
     <Compile Include="DataStaxEnterpriseSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="protos\VideoCatalogEvents.generated.cs" />
     <Compile Include="SearchVideosByTag.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\lib\killrvideo-service-protos\src\search\search_service.proto">
       <Link>protos\search_service.proto</Link>
     </None>
+    <None Include="..\..\lib\killrvideo-service-protos\src\video-catalog\video_catalog_events.proto">
+      <Link>protos\video_catalog_events.proto</Link>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KillrVideo.MessageBus\KillrVideo.MessageBus.csproj">
+      <Project>{9a8c1794-cec4-4670-af3e-e3cd83881e8e}</Project>
+      <Name>KillrVideo.MessageBus</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Protobuf\KillrVideo.Protobuf.csproj">
       <Project>{4a41c0c8-6a27-4728-b596-b64227a26fb6}</Project>
       <Name>KillrVideo.Protobuf</Name>
