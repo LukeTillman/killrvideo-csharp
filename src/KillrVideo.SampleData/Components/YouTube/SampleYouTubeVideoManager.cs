@@ -23,13 +23,14 @@ namespace KillrVideo.SampleData.Components.YouTube
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
         
-        public SampleYouTubeVideoManager(YouTubeService youTubeService, ISession session, TaskCache<string, PreparedStatement> statementCache)
+        public SampleYouTubeVideoManager(YouTubeService youTubeService, ISession session)
         {
             if (youTubeService == null) throw new ArgumentNullException(nameof(youTubeService));
             if (session == null) throw new ArgumentNullException(nameof(session));
             _youTubeService = youTubeService;
             _session = session;
-            _statementCache = statementCache;
+
+            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
         }
 
         /// <summary>
@@ -102,7 +103,7 @@ namespace KillrVideo.SampleData.Components.YouTube
                 await _statementCache.NoContext.GetOrAddAsync("SELECT published_at FROM sample_data_youtube_videos WHERE sourceid = ? LIMIT 1");
             RowSet rowSet = await _session.ExecuteAsync(prepared.Bind(channelSource.UniqueId)).ConfigureAwait(false);
             Row row = rowSet.SingleOrDefault();
-            DateTimeOffset newestVideoWeHave = row == null ? Epoch : row.GetValue<DateTimeOffset>("published_at");
+            DateTimeOffset newestVideoWeHave = row?.GetValue<DateTimeOffset>("published_at") ?? Epoch;
 
             // Statement for inserting the video into the sample table
             PreparedStatement preparedInsert = await _statementCache.NoContext.GetOrAddAsync(

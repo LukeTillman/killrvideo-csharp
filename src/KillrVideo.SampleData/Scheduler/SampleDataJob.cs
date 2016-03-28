@@ -37,13 +37,12 @@ namespace KillrVideo.SampleData.Scheduler
         /// </summary>
         public DateTimeOffset NextRunTime { get; private set; }
         
-        protected SampleDataJob(ISession session, TaskCache<string, PreparedStatement> statementCache)
+        protected SampleDataJob(ISession session)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
-            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             _session = session;
-            _statementCache = statementCache;
 
+            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
             _jobName = GetType().FullName;
             _logger = Log.ForContext(GetType());
             NextRunTime = DateTimeOffset.MaxValue;

@@ -16,17 +16,17 @@ namespace KillrVideo.SampleData.Handlers
     public class AddSampleUsersHandler : IHandleMessage<AddSampleUsersRequest>
     {
         private readonly ISession _session;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
         private readonly UserManagementService.IUserManagementServiceClient _userManagement;
+        private readonly TaskCache<string, PreparedStatement> _statementCache;
 
-        public AddSampleUsersHandler(ISession session, TaskCache<string, PreparedStatement> statementCache, UserManagementService.IUserManagementServiceClient userManagement)
+        public AddSampleUsersHandler(ISession session, UserManagementService.IUserManagementServiceClient userManagement)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
-            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             if (userManagement == null) throw new ArgumentNullException(nameof(userManagement));
             _session = session;
-            _statementCache = statementCache;
             _userManagement = userManagement;
+
+            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
         }
 
         public async Task Handle(AddSampleUsersRequest busCommand)

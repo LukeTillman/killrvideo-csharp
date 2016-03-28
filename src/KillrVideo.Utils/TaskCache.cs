@@ -7,27 +7,31 @@ using System.Threading.Tasks;
 namespace KillrVideo.Utils
 {
     /// <summary>
-    /// A cache for async operation results.  Override the CreateTaskForKey method for generating items from a key.  The cache will ensure that 
-    /// only one Task is ever created for a given key (i.e. that the CreateTaskForKey method will only ever be invoked once for a given key) 
+    /// A cache for async operation results.  Provide a factoryFunc for generating items from a key.  The cache will ensure that 
+    /// only one Task is ever created for a given key (i.e. that the factoryFunc will only ever be invoked once for a given key) 
     /// UNLESS the Task for a key is faulted, in which case a new one will be generated.
     /// </summary>
     /// <typeparam name="TKey">The key type for items in the cache</typeparam>
     /// <typeparam name="TItem">The item type of items in the cache</typeparam>
-    public abstract class TaskCache<TKey, TItem> : INoCapturedContextTaskCache<TKey, TItem>
+    public class TaskCache<TKey, TItem> : INoCapturedContextTaskCache<TKey, TItem>
     {
+        private readonly Func<TKey, Task<TItem>> _factoryFunc;
         private readonly ConcurrentDictionary<TKey, Lazy<Task<TItem>>> _cachedItems;
 
         /// <summary>
         /// Gets the TaskCache with an API that won't capture the Task context.  Useful to avoid having to put ConfigureAwait(false) all
         /// over your code.
         /// </summary>
-        public INoCapturedContextTaskCache<TKey, TItem> NoContext
-        {
-            get { return this; }
-        }
+        public INoCapturedContextTaskCache<TKey, TItem> NoContext => this;
 
-        protected TaskCache()
+        /// <summary>
+        /// Create a new TaskCache using the provided factoryFunc to generate items from keys.
+        /// </summary>
+        public TaskCache(Func<TKey, Task<TItem>> factoryFunc)
         {
+            if (factoryFunc == null) throw new ArgumentNullException(nameof(factoryFunc));
+            _factoryFunc = factoryFunc;
+
             _cachedItems = new ConcurrentDictionary<TKey, Lazy<Task<TItem>>>();
         }
 
@@ -51,7 +55,7 @@ namespace KillrVideo.Utils
         public Task<TItem[]> GetOrAddAllAsync(params TKey[] keys)
         {
             if (keys == null || keys.Length == 0)
-                throw new ArgumentException("You must specify at least one key to get.", "keys");
+                throw new ArgumentException("You must specify at least one key to get.", nameof(keys));
             
             return Task.WhenAll(keys.Select(GetOrAddAsync));
         }
@@ -60,15 +64,10 @@ namespace KillrVideo.Utils
         {
             return GetOrAddAllAsync(keys).ConfigureAwait(false);
         }
-
-        /// <summary>
-        /// Should create the Task&lt;TItem&gt; for the given key.
-        /// </summary>
-        protected abstract Task<TItem> CreateTaskForKey(TKey key);
-
+        
         private Lazy<Task<TItem>> CreateTask(TKey key)
         {
-            return new Lazy<Task<TItem>>(() => CreateTaskForKey(key));
+            return new Lazy<Task<TItem>>(() => _factoryFunc(key));
         }
 
         private Lazy<Task<TItem>> UpdateTaskIfFaulted(TKey key, Lazy<Task<TItem>> currentValue)

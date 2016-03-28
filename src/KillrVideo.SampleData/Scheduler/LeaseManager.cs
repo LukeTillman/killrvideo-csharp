@@ -25,16 +25,15 @@ namespace KillrVideo.SampleData.Scheduler
 
         private DateTimeOffset _leaseOwnerUntil;
         
-        public LeaseManager(ISession session, TaskCache<string, PreparedStatement> statementCache, LeaseManagerConfig config)
+        public LeaseManager(ISession session, LeaseManagerConfig config)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
-            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             if (config == null) throw new ArgumentNullException(nameof(config));
             
             _session = session;
-            _statementCache = statementCache;
             _leaseName = config.LeaseName;
             _uniqueId = config.UniqueId;
+            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
 
             // Start by assuming we are not the lease owner
             _leaseOwnerUntil = DateTimeOffset.MinValue;

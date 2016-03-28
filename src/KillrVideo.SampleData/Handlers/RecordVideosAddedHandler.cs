@@ -17,12 +17,12 @@ namespace KillrVideo.SampleData.Handlers
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
 
-        public RecordVideosAddedHandler(ISession session, TaskCache<string, PreparedStatement> statementCache)
+        public RecordVideosAddedHandler(ISession session)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
-            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             _session = session;
-            _statementCache = statementCache;
+
+            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
         }
 
         private async Task HandleImpl(Uuid videoId)

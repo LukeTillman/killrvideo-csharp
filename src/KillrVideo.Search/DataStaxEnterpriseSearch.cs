@@ -21,18 +21,17 @@ namespace KillrVideo.Search
     public class DataStaxEnterpriseSearch : SearchService.ISearchService
     {
         private readonly ISession _session;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
         private readonly IRestClient _restClient;
+        private readonly TaskCache<string, PreparedStatement> _statementCache;
 
-        public DataStaxEnterpriseSearch(ISession session, TaskCache<string, PreparedStatement> statementCache, IRestClient restClient)
+        public DataStaxEnterpriseSearch(ISession session, IRestClient restClient)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
-            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             if (restClient == null) throw new ArgumentNullException(nameof(restClient));
-
             _session = session;
-            _statementCache = statementCache;
             _restClient = restClient;
+
+            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
         }
 
         /// <summary>

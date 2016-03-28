@@ -23,13 +23,12 @@ namespace KillrVideo.SampleData.Scheduler.Jobs
         /// </summary>
         protected override int MinutesBetweenRuns => 480;
 
-        public AddSampleYouTubeVideosJob(ISession session, TaskCache<string, PreparedStatement> statementCache, IBus bus,
-                                         IManageSampleYouTubeVideos youTubeManager, IGetSampleData sampleDataRetriever)
-            : base(session, statementCache)
+        public AddSampleYouTubeVideosJob(ISession session, IBus bus, IManageSampleYouTubeVideos youTubeManager, IGetSampleData sampleDataRetriever)
+            : base(session)
         {
             if (bus == null) throw new ArgumentNullException(nameof(bus));
-            if (youTubeManager == null) throw new ArgumentNullException("youTubeManager");
-            if (sampleDataRetriever == null) throw new ArgumentNullException("sampleDataRetriever");
+            if (youTubeManager == null) throw new ArgumentNullException(nameof(youTubeManager));
+            if (sampleDataRetriever == null) throw new ArgumentNullException(nameof(sampleDataRetriever));
 
             _bus = bus;
             _youTubeManager = youTubeManager;

@@ -24,18 +24,17 @@ namespace KillrVideo.VideoCatalog
         private static readonly Regex ParseLatestPagingState = new Regex("([0-9]{8}){8}([0-9]{1})(.*)", RegexOptions.Compiled | RegexOptions.Singleline);
         
         private readonly ISession _session;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
         private readonly IBus _bus;
+        private readonly TaskCache<string, PreparedStatement> _statementCache;
 
-        public VideoCatalogServiceImpl(ISession session, TaskCache<string, PreparedStatement> statementCache, IBus bus)
+        public VideoCatalogServiceImpl(ISession session, IBus bus)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
-            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             if (bus == null) throw new ArgumentNullException(nameof(bus));
-
             _session = session;
-            _statementCache = statementCache;
             _bus = bus;
+
+            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
         }
 
         /// <summary>

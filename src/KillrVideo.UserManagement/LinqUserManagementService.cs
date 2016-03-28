@@ -21,22 +21,20 @@ namespace KillrVideo.UserManagement
     public class LinqUserManagementService : UserManagementService.IUserManagementService
     {
         private readonly ISession _session;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
         private readonly IBus _bus;
+        private readonly TaskCache<string, PreparedStatement> _statementCache;
 
         private readonly Table<LinqDtos.UserProfile> _userProfileTable;
         private readonly Table<UserCredentials> _userCredentialsTable; 
 
-        public LinqUserManagementService(ISession session, TaskCache<string, PreparedStatement> statementCache, IBus bus)
+        public LinqUserManagementService(ISession session, IBus bus)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
-            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             if (bus == null) throw new ArgumentNullException(nameof(bus));
-
             _session = session;
-            _statementCache = statementCache;
             _bus = bus;
 
+            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
             _userProfileTable = new Table<LinqDtos.UserProfile>(session);
             _userCredentialsTable = new Table<UserCredentials>(session);
         }

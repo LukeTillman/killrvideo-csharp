@@ -18,8 +18,8 @@ namespace KillrVideo.SampleData.Scheduler.Jobs
         /// </summary>
         protected override int MinutesBetweenRuns => 120;
 
-        public AddSampleUsersJob(ISession session, TaskCache<string, PreparedStatement> statementCache, IBus bus) 
-            : base(session, statementCache)
+        public AddSampleUsersJob(ISession session, IBus bus) 
+            : base(session)
         {
             if (bus == null) throw new ArgumentNullException(nameof(bus));
             _bus = bus;
