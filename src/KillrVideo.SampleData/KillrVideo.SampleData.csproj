@@ -58,10 +58,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\GetSampleData.cs" />
+    <Compile Include="Components\IGetSampleData.cs" />
+    <Compile Include="Components\YouTube\IManageSampleYouTubeVideos.cs" />
+    <Compile Include="Components\YouTube\SampleYouTubeVideoManager.cs" />
+    <Compile Include="Components\YouTube\YouTubeVideo.cs" />
+    <Compile Include="Components\YouTube\YouTubeVideoSource.cs" />
+    <Compile Include="Handlers\AddSampleCommentsHandler.cs" />
+    <Compile Include="Handlers\AddSampleRatingsHandler.cs" />
+    <Compile Include="Handlers\AddSampleUsersHandler.cs" />
+    <Compile Include="Handlers\AddSampleVideoViewsHandler.cs" />
+    <Compile Include="Handlers\AddSampleYouTubeVideosHandler.cs" />
+    <Compile Include="Handlers\RecordVideosAddedHandler.cs" />
+    <Compile Include="Handlers\RefreshYouTubeSourcesHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="protos\SampleDataService.generated.cs" />
     <Compile Include="protos\SampleDataServiceGrpc.cs" />
     <Compile Include="SampleDataService.cs" />
+    <Compile Include="Scheduler\Jobs\AddSampleCommentsJob.cs" />
+    <Compile Include="Scheduler\Jobs\AddSampleRatingsJob.cs" />
+    <Compile Include="Scheduler\Jobs\AddSampleUsersJob.cs" />
+    <Compile Include="Scheduler\Jobs\AddSampleVideoViewsJob.cs" />
+    <Compile Include="Scheduler\Jobs\AddSampleYouTubeVideosJob.cs" />
+    <Compile Include="Scheduler\Jobs\RefreshYouTubeVideoSourcesJob.cs" />
+    <Compile Include="Scheduler\LeaseManager.cs" />
+    <Compile Include="Scheduler\LeaseManagerConfig.cs" />
+    <Compile Include="Scheduler\SampleDataJob.cs" />
+    <Compile Include="Scheduler\SampleDataJobScheduler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\lib\killrvideo-service-protos\src\sample-data\sample_data_service.proto">
@@ -70,11 +93,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KillrVideo.MessageBus\KillrVideo.MessageBus.csproj">
+      <Project>{9a8c1794-cec4-4670-af3e-e3cd83881e8e}</Project>
+      <Name>KillrVideo.MessageBus</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
       <Project>{9516B3F3-89B7-4343-9F88-FFEE6D74FFFC}</Project>
       <Name>KillrVideo.Utils</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

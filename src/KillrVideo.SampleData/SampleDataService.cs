@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Grpc.Core;
-using Nimbus;
+using KillrVideo.MessageBus;
 
 namespace KillrVideo.SampleData
 {
@@ -21,49 +21,61 @@ namespace KillrVideo.SampleData
         /// <summary>
         /// Adds sample comments to the site.
         /// </summary>
-        public Task<AddSampleCommentsResponse> AddSampleComments(AddSampleCommentsRequest request, ServerCallContext context)
+        public async Task<AddSampleCommentsResponse> AddSampleComments(AddSampleCommentsRequest request, ServerCallContext context)
         {
-            return _bus.Send(request);
+            // Publish the request so a handler can pick it up and run it in the background
+            await _bus.Publish(request).ConfigureAwait(false);
+            return new AddSampleCommentsResponse();
         }
 
         /// <summary>
         /// Adds sample video ratings to the site.
         /// </summary>
-        public Task<AddSampleRatingsResponse> AddSampleRatings(AddSampleRatingsRequest request, ServerCallContext context)
+        public async Task<AddSampleRatingsResponse> AddSampleRatings(AddSampleRatingsRequest request, ServerCallContext context)
         {
-            return _bus.Send(request);
+            // Publish the request so a handler can pick it up and run it in the background
+            await _bus.Publish(request).ConfigureAwait(false);
+            return new AddSampleRatingsResponse();
         }
 
         /// <summary>
         /// Adds sample users to the site.
         /// </summary>
-        public Task<AddSampleUsersResponse> AddSampleUsers(AddSampleUsersRequest request, ServerCallContext context)
+        public async Task<AddSampleUsersResponse> AddSampleUsers(AddSampleUsersRequest request, ServerCallContext context)
         {
-            return _bus.Send(request);
+            // Publish the request so a handler can pick it up and run it in the background
+            await _bus.Publish(request).ConfigureAwait(false);
+            return new AddSampleUsersResponse();
         }
 
         /// <summary>
         /// Adds sample video views to the site.
         /// </summary>
-        public Task<AddSampleVideoViewsResponse> AddSampleVideoViews(AddSampleVideoViewsRequest request, ServerCallContext context)
+        public async Task<AddSampleVideoViewsResponse> AddSampleVideoViews(AddSampleVideoViewsRequest request, ServerCallContext context)
         {
-            return _bus.Send(request);
+            // Publish the request so a handler can pick it up and run it in the background
+            await _bus.Publish(request).ConfigureAwait(false);
+            return new AddSampleVideoViewsResponse();
         }
 
         /// <summary>
         /// Adds sample YouTube videos to the site.
         /// </summary>
-        public Task<AddSampleYouTubeVideosResponse> AddSampleYouTubeVideos(AddSampleYouTubeVideosRequest request, ServerCallContext context)
+        public async Task<AddSampleYouTubeVideosResponse> AddSampleYouTubeVideos(AddSampleYouTubeVideosRequest request, ServerCallContext context)
         {
-            return _bus.Send(request);
+            // Publish the request so a handler can pick it up and run it in the background
+            await _bus.Publish(request).ConfigureAwait(false);
+            return new AddSampleYouTubeVideosResponse();
         }
 
         /// <summary>
         /// Triggers a refresh of the YouTube sample video sources.
         /// </summary>
-        public Task<RefreshYouTubeSourcesResponse> RefreshYouTubeSources(RefreshYouTubeSourcesRequest request, ServerCallContext context)
+        public async Task<RefreshYouTubeSourcesResponse> RefreshYouTubeSources(RefreshYouTubeSourcesRequest request, ServerCallContext context)
         {
-            return _bus.Send(refresh);
+            // Publish the request so a handler can pick it up and run it in the background
+            await _bus.Publish(request).ConfigureAwait(false);
+            return new RefreshYouTubeSourcesResponse();
         }
     }
 }
