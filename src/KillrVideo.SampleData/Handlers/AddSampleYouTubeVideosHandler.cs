@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using KillrVideo.SampleData.Dtos;
-using KillrVideo.SampleData.Worker.Components;
-using KillrVideo.SampleData.Worker.Components.YouTube;
-using KillrVideo.VideoCatalog;
-using KillrVideo.VideoCatalog.Dtos;
+using KillrVideo.MessageBus;
+using KillrVideo.SampleData.Components;
+using KillrVideo.SampleData.Components.YouTube;
 using Serilog;
-using Nimbus.Handlers;
 
-namespace KillrVideo.SampleData.Worker.Handlers
+namespace KillrVideo.SampleData.Handlers
 {
     /// <summary>
     /// Adds sample YouTube videos to the site.
     /// </summary>
-    public class AddSampleYouTubeVideosHandler : IHandleCommand<AddSampleYouTubeVideos>
+    public class AddSampleYouTubeVideosHandler : IHandleMessage<AddSampleYouTubeVideosRequest>
     {
         private static readonly ILogger Logger = Log.ForContext<AddSampleYouTubeVideosHandler>();
 
@@ -34,7 +31,7 @@ namespace KillrVideo.SampleData.Worker.Handlers
             _videoCatalog = videoCatalog;
         }
 
-        public async Task Handle(AddSampleYouTubeVideos busCommand)
+        public async Task Handle(AddSampleYouTubeVideosRequest busCommand)
         {
             // Get some sample users to be the authors for the videos we're going to add
             List<Guid> userIds = await _sampleDataRetriever.GetRandomSampleUserIds(busCommand.NumberOfVideos).ConfigureAwait(false);

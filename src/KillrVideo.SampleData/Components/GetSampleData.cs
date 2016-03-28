@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Cassandra;
 using KillrVideo.Utils;
 
-namespace KillrVideo.SampleData.Worker.Components
+namespace KillrVideo.SampleData.Components
 {
     /// <summary>
     /// Gets sample data from Cassandra.
@@ -17,8 +17,8 @@ namespace KillrVideo.SampleData.Worker.Components
 
         public GetSampleData(ISession session, TaskCache<string, PreparedStatement> statementCache)
         {
-            if (session == null) throw new ArgumentNullException("session");
-            if (statementCache == null) throw new ArgumentNullException("statementCache");
+            if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             _session = session;
             _statementCache = statementCache;
         }

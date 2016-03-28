@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace KillrVideo.SampleData.Worker.Components.YouTube
+namespace KillrVideo.SampleData.Components.YouTube
 {
     /// <summary>
     /// Component responsible for managing sample YouTube videos that can be added to the site.

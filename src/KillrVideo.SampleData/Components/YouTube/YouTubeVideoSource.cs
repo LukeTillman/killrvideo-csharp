@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using KillrVideo.Utils;
 
-namespace KillrVideo.SampleData.Worker.Components.YouTube
+namespace KillrVideo.SampleData.Components.YouTube
 {
     /// <summary>
     /// A predefined set of sources for sample YouTube videos.  Use the All field for access to all available sources or one

@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Cassandra;
-using KillrVideo.Comments;
-using KillrVideo.Comments.Dtos;
-using KillrVideo.SampleData.Dtos;
-using KillrVideo.SampleData.Worker.Components;
-using Serilog;
-using Nimbus.Handlers;
+using KillrVideo.MessageBus;
+using KillrVideo.SampleData.Components;
 using NLipsum.Core;
+using Serilog;
 
-namespace KillrVideo.SampleData.Worker.Handlers
+namespace KillrVideo.SampleData.Handlers
 {
     /// <summary>
     /// Adds sample comments to videos on the site.
     /// </summary>
-    public class AddSampleCommentsHandler : IHandleCommand<AddSampleComments>
+    public class AddSampleCommentsHandler : IHandleMessage<AddSampleCommentsRequest>
     {
         private static readonly ILogger Logger = Log.ForContext<AddSampleCommentsHandler>();
 
@@ -39,13 +35,13 @@ namespace KillrVideo.SampleData.Worker.Handlers
 
         public AddSampleCommentsHandler(IGetSampleData sampleDataRetriever, ICommentsService commentService)
         {
-            if (sampleDataRetriever == null) throw new ArgumentNullException("sampleDataRetriever");
-            if (commentService == null) throw new ArgumentNullException("commentService");
+            if (sampleDataRetriever == null) throw new ArgumentNullException(nameof(sampleDataRetriever));
+            if (commentService == null) throw new ArgumentNullException(nameof(commentService));
             _sampleDataRetriever = sampleDataRetriever;
             _commentService = commentService;
         }
 
-        public async Task Handle(AddSampleComments busCommand)
+        public async Task Handle(AddSampleCommentsRequest busCommand)
         {
             // Get some sample users to use as comment authors
             List<Guid> userIds = await _sampleDataRetriever.GetRandomSampleUserIds(busCommand.NumberOfComments).ConfigureAwait(false);

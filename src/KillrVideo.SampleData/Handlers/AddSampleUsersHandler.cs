@@ -3,37 +3,31 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
 using Faker;
-using Faker.Extensions;
-using KillrVideo.SampleData.Dtos;
-using KillrVideo.UserManagement;
-using KillrVideo.UserManagement.Dtos;
+using KillrVideo.MessageBus;
 using KillrVideo.Utils;
-using Nimbus.Handlers;
 
-namespace KillrVideo.SampleData.Worker.Handlers
+namespace KillrVideo.SampleData.Handlers
 {
     /// <summary>
     /// Adds sample users to the site.
     /// </summary>
-    public class AddSampleUsersHandler : IHandleCommand<AddSampleUsers>
+    public class AddSampleUsersHandler : IHandleMessage<AddSampleUsersRequest>
     {
-        private const string PasswordPattern = "?#??#???#??#?";
-
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
         private readonly IUserManagementService _userManagement;
 
         public AddSampleUsersHandler(ISession session, TaskCache<string, PreparedStatement> statementCache, IUserManagementService userManagement)
         {
-            if (session == null) throw new ArgumentNullException("session");
-            if (statementCache == null) throw new ArgumentNullException("statementCache");
-            if (userManagement == null) throw new ArgumentNullException("userManagement");
+            if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
+            if (userManagement == null) throw new ArgumentNullException(nameof(userManagement));
             _session = session;
             _statementCache = statementCache;
             _userManagement = userManagement;
         }
 
-        public async Task Handle(AddSampleUsers busCommand)
+        public async Task Handle(AddSampleUsersRequest busCommand)
         {
             // Create some fake user data
             var users = Enumerable.Range(0, busCommand.NumberOfUsers).Select(idx =>
@@ -41,11 +35,11 @@ namespace KillrVideo.SampleData.Worker.Handlers
                 var user = new CreateUser
                 {
                     UserId = Guid.NewGuid(),
-                    FirstName = Name.GetFirstName(),
-                    LastName = Name.GetLastName(),
-                    Password = PasswordPattern.Bothify()
+                    FirstName = Name.First(),
+                    LastName = Name.Last(),
+                    Password = Internet.Password(7, 20)
                 };
-                user.EmailAddress = string.Format("{0}+sampleuser@killrvideo.com", Internet.GetUserName(user.FirstName, user.LastName));
+                user.EmailAddress = $"{Internet.UserName($"{user.FirstName} {user.LastName}")}+sampleuser@killrvideo.com";
                 return user;
             }).ToArray();
 

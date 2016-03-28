@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.SampleData.Dtos;
-using KillrVideo.SampleData.Worker.Components;
-using KillrVideo.SampleData.Worker.Components.YouTube;
+using KillrVideo.SampleData.Components;
+using KillrVideo.SampleData.Components.YouTube;
 using KillrVideo.Utils;
 
-namespace KillrVideo.SampleData.Worker.Scheduler.Jobs
+namespace KillrVideo.SampleData.Scheduler.Jobs
 {
     /// <summary>
     /// Scheduled sample data job that adds sample YouTube videos to the site.

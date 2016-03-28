@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace KillrVideo.SampleData.Worker.Components.YouTube
+namespace KillrVideo.SampleData.Components.YouTube
 {
     /// <summary>
     /// Represents a video returned from YouTube.

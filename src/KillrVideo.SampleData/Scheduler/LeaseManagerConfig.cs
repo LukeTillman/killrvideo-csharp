@@ -1,4 +1,4 @@
-﻿namespace KillrVideo.SampleData.Worker.Scheduler
+﻿namespace KillrVideo.SampleData.Scheduler
 {
     /// <summary>
     /// Some configuration needed by the LeaseManager component.

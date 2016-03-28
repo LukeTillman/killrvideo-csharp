@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Serilog;
 
-namespace KillrVideo.SampleData.Worker.Scheduler
+namespace KillrVideo.SampleData.Scheduler
 {
     /// <summary>
     /// A scheduler that will run sample data jobs on a schedule.
@@ -21,8 +21,8 @@ namespace KillrVideo.SampleData.Worker.Scheduler
 
         public SampleDataJobScheduler(LeaseManager leaseManager, IEnumerable<SampleDataJob> jobs)
         {
-            if (leaseManager == null) throw new ArgumentNullException("leaseManager");
-            if (jobs == null) throw new ArgumentNullException("jobs");
+            if (leaseManager == null) throw new ArgumentNullException(nameof(leaseManager));
+            if (jobs == null) throw new ArgumentNullException(nameof(jobs));
             _leaseManager = leaseManager;
             _jobs = jobs.ToList();
         }

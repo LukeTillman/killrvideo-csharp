@@ -1,19 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using KillrVideo.Ratings;
-using KillrVideo.Ratings.Dtos;
-using KillrVideo.SampleData.Dtos;
-using KillrVideo.SampleData.Worker.Components;
+using KillrVideo.MessageBus;
+using KillrVideo.SampleData.Components;
 using Serilog;
-using Nimbus.Handlers;
 
-namespace KillrVideo.SampleData.Worker.Handlers
+namespace KillrVideo.SampleData.Handlers
 {
     /// <summary>
     /// Adds sample video ratings to the site.
     /// </summary>
-    public class AddSampleRatingsHandler : IHandleCommand<AddSampleRatings>
+    public class AddSampleRatingsHandler : IHandleMessage<AddSampleRatingsRequest>
     {
         private static readonly ILogger Logger = Log.ForContext<AddSampleRatingsHandler>();
 
@@ -22,13 +19,14 @@ namespace KillrVideo.SampleData.Worker.Handlers
 
         public AddSampleRatingsHandler(IGetSampleData sampleDataRetriever, IRatingsService ratingsService)
         {
-            if (sampleDataRetriever == null) throw new ArgumentNullException("sampleDataRetriever");
-            if (ratingsService == null) throw new ArgumentNullException("ratingsService");
+            if (sampleDataRetriever == null) throw new ArgumentNullException(nameof(sampleDataRetriever));
+            if (ratingsService == null) throw new ArgumentNullException(nameof(ratingsService));
+
             _sampleDataRetriever = sampleDataRetriever;
             _ratingsService = ratingsService;
         }
 
-        public async Task Handle(AddSampleRatings busCommand)
+        public async Task Handle(AddSampleRatingsRequest busCommand)
         {
             // Get some user ids and video ids to rate with those users
             List<Guid> userIds = await _sampleDataRetriever.GetRandomSampleUserIds(busCommand.NumberOfRatings).ConfigureAwait(false);

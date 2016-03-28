@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.SampleData.Dtos;
 using KillrVideo.Utils;
 
-namespace KillrVideo.SampleData.Worker.Scheduler.Jobs
+namespace KillrVideo.SampleData.Scheduler.Jobs
 {
     /// <summary>
     /// Sample data job that adds sample comments to videos.

@@ -7,7 +7,7 @@ using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
 using KillrVideo.Utils;
 
-namespace KillrVideo.SampleData.Worker.Components.YouTube
+namespace KillrVideo.SampleData.Components.YouTube
 {
     /// <summary>
     /// Component responsible for retrieving random videos from YouTube.
@@ -25,8 +25,8 @@ namespace KillrVideo.SampleData.Worker.Components.YouTube
         
         public SampleYouTubeVideoManager(YouTubeService youTubeService, ISession session, TaskCache<string, PreparedStatement> statementCache)
         {
-            if (youTubeService == null) throw new ArgumentNullException("youTubeService");
-            if (session == null) throw new ArgumentNullException("session");
+            if (youTubeService == null) throw new ArgumentNullException(nameof(youTubeService));
+            if (session == null) throw new ArgumentNullException(nameof(session));
             _youTubeService = youTubeService;
             _session = session;
             _statementCache = statementCache;

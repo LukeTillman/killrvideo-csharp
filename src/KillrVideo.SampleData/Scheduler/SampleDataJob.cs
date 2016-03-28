@@ -5,7 +5,7 @@ using Cassandra;
 using KillrVideo.Utils;
 using Serilog;
 
-namespace KillrVideo.SampleData.Worker.Scheduler
+namespace KillrVideo.SampleData.Scheduler
 {
     /// <summary>
     /// Represents a sample data job that needs to run on a schedule.
@@ -39,8 +39,8 @@ namespace KillrVideo.SampleData.Worker.Scheduler
         
         protected SampleDataJob(ISession session, TaskCache<string, PreparedStatement> statementCache)
         {
-            if (session == null) throw new ArgumentNullException("session");
-            if (statementCache == null) throw new ArgumentNullException("statementCache");
+            if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             _session = session;
             _statementCache = statementCache;
 
@@ -62,7 +62,7 @@ namespace KillrVideo.SampleData.Worker.Scheduler
             Row row = rows.SingleOrDefault();
 
             // Calculate the next scheduled run time based on the last run time
-            var lastRunTime = row == null ? (DateTimeOffset?) null : row.GetValue<DateTimeOffset>("scheduled_run_time");
+            var lastRunTime = row?.GetValue<DateTimeOffset>("scheduled_run_time");
             SetNextRunTime(lastRunTime);
         }
 

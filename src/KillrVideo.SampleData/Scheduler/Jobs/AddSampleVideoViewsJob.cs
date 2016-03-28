@@ -1,10 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.SampleData.Dtos;
 using KillrVideo.Utils;
 
-namespace KillrVideo.SampleData.Worker.Scheduler.Jobs
+namespace KillrVideo.SampleData.Scheduler.Jobs
 {
     /// <summary>
     /// Scheduled job that runs to add video views to the site.

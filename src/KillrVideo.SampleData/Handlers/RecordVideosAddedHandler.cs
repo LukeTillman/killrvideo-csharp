@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cassandra;
+using KillrVideo.MessageBus;
 using KillrVideo.Utils;
-using KillrVideo.VideoCatalog.Messages.Events;
-using Nimbus.Handlers;
 
-namespace KillrVideo.SampleData.Worker.Handlers
+namespace KillrVideo.SampleData.Handlers
 {
     /// <summary>
     /// Records the video id of any videos added to the site so that they can potentially be used when adding
     /// video-related sample data like comments, ratings, etc.
     /// </summary>
-    public class RecordVideosAddedHandler : IHandleCompetingEvent<UploadedVideoAdded>, IHandleCompetingEvent<YouTubeVideoAdded>
+    public class RecordVideosAddedHandler : IHandleMessage<UploadedVideoAdded>, IHandleMessage<YouTubeVideoAdded>
     {
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;

@@ -6,7 +6,7 @@ using Cassandra;
 using KillrVideo.Utils;
 using Serilog;
 
-namespace KillrVideo.SampleData.Worker.Scheduler
+namespace KillrVideo.SampleData.Scheduler
 {
     /// <summary>
     /// Component responsible for obtaining/renewing a lease.  Uses Cassandra's LWT to ensure only one worker across the cluster
@@ -27,9 +27,9 @@ namespace KillrVideo.SampleData.Worker.Scheduler
         
         public LeaseManager(ISession session, TaskCache<string, PreparedStatement> statementCache, LeaseManagerConfig config)
         {
-            if (session == null) throw new ArgumentNullException("session");
-            if (statementCache == null) throw new ArgumentNullException("statementCache");
-            if (config == null) throw new ArgumentNullException("config");
+            if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
+            if (config == null) throw new ArgumentNullException(nameof(config));
             
             _session = session;
             _statementCache = statementCache;

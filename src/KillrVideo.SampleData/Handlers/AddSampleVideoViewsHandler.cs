@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using KillrVideo.SampleData.Dtos;
-using KillrVideo.SampleData.Worker.Components;
-using KillrVideo.Statistics;
-using KillrVideo.Statistics.Dtos;
+using KillrVideo.MessageBus;
+using KillrVideo.SampleData.Components;
 using Serilog;
-using Nimbus.Handlers;
 
-namespace KillrVideo.SampleData.Worker.Handlers
+namespace KillrVideo.SampleData.Handlers
 {
     /// <summary>
     /// Adds sample video views to the site.
     /// </summary>
-    public class AddSampleVideoViewsHandler : IHandleCommand<AddSampleVideoViews>
+    public class AddSampleVideoViewsHandler : IHandleMessage<AddSampleVideoViewsRequest>
     {
         private static readonly ILogger Logger = Log.ForContext<AddSampleVideoViewsHandler>();
 
@@ -22,13 +19,13 @@ namespace KillrVideo.SampleData.Worker.Handlers
 
         public AddSampleVideoViewsHandler(IGetSampleData sampleDataRetriever, IStatisticsService statsService)
         {
-            if (sampleDataRetriever == null) throw new ArgumentNullException("sampleDataRetriever");
-            if (statsService == null) throw new ArgumentNullException("statsService");
+            if (sampleDataRetriever == null) throw new ArgumentNullException(nameof(sampleDataRetriever));
+            if (statsService == null) throw new ArgumentNullException(nameof(statsService));
             _sampleDataRetriever = sampleDataRetriever;
             _statsService = statsService;
         }
 
-        public async Task Handle(AddSampleVideoViews busCommand)
+        public async Task Handle(AddSampleVideoViewsRequest busCommand)
         {
             // Get some videos for adding views to
             List<Guid> videoIds = await _sampleDataRetriever.GetRandomVideoIds(busCommand.NumberOfViews).ConfigureAwait(false);
