@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Uploads.Messages.Events;
+using Google.Protobuf.WellKnownTypes;
+using KillrVideo.MessageBus;
+using KillrVideo.Protobuf;
+using KillrVideo.Uploads.Events;
 using KillrVideo.Utils;
-using KillrVideo.VideoCatalog.Messages.Events;
-using Nimbus;
-using Nimbus.Handlers;
+using KillrVideo.VideoCatalog.Events;
 
-namespace KillrVideo.VideoCatalog.Worker.Handlers
+namespace KillrVideo.VideoCatalog.Handlers
 {
     /// <summary>
     /// Updates an uploaded videos information in the catalog once the video has been published and is ready for viewing.
     /// </summary>
-    public class UpdateUploadedVideoWhenPublished : IHandleCompetingEvent<UploadedVideoPublished>
+    public class UpdateUploadedVideoWhenPublished : IHandleMessage<UploadedVideoPublished>
     {
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
@@ -22,9 +23,9 @@ namespace KillrVideo.VideoCatalog.Worker.Handlers
 
         public UpdateUploadedVideoWhenPublished(ISession session, TaskCache<string, PreparedStatement> statementCache, IBus bus)
         {
-            if (session == null) throw new ArgumentNullException("session");
-            if (statementCache == null) throw new ArgumentNullException("statementCache");
-            if (bus == null) throw new ArgumentNullException("bus");
+            if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
+            if (bus == null) throw new ArgumentNullException(nameof(bus));
             _session = session;
             _statementCache = statementCache;
             _bus = bus;
@@ -38,12 +39,11 @@ namespace KillrVideo.VideoCatalog.Worker.Handlers
             RowSet rows = await _session.ExecuteAsync(bound).ConfigureAwait(false);
             Row videoRow = rows.SingleOrDefault();
             if (videoRow == null)
-                throw new InvalidOperationException(string.Format("Could not find video with id {0}", publishedVideo.VideoId));
+                throw new InvalidOperationException($"Could not find video with id {publishedVideo.VideoId}");
 
             var locationType = videoRow.GetValue<int>("location_type");
-            if (locationType != VideoCatalogConstants.UploadedVideoType)
-                throw new InvalidOperationException(string.Format("Video {0} is not an uploaded video of type {1} but is type {2}", publishedVideo.VideoId,
-                                                                  VideoCatalogConstants.UploadedVideoType, locationType));
+            if (locationType != (int) VideoLocationType.UPLOAD)
+                throw new InvalidOperationException($"Video {publishedVideo.VideoId} is not an uploaded video of type {VideoLocationType.UPLOAD} but is type {locationType}");
 
             // Get some data from the Row
             var userId = videoRow.GetValue<Guid>("userid");
@@ -51,6 +51,11 @@ namespace KillrVideo.VideoCatalog.Worker.Handlers
             var description = videoRow.GetValue<string>("description");
             var tags = videoRow.GetValue<IEnumerable<string>>("tags");
             var addDate = videoRow.GetValue<DateTimeOffset>("added_date");
+
+            // Get some data from the event
+            string videoUrl = publishedVideo.VideoUrl;
+            string thumbnailUrl = publishedVideo.ThumbnailUrl;
+            Guid videoId = publishedVideo.VideoId.ToGuid();
             
             // Update the video locations (and write to denormalized tables) via batch
             PreparedStatement[] writePrepared = await _statementCache.NoContext.GetOrAddAllAsync(
@@ -61,30 +66,30 @@ namespace KillrVideo.VideoCatalog.Worker.Handlers
 
             // Calculate date-related data for the video
             string yyyymmdd = addDate.ToString("yyyyMMdd");
-            DateTimeOffset timestamp = publishedVideo.Timestamp;
+            DateTimeOffset timestamp = publishedVideo.Timestamp.ToDateTimeOffset();
 
             var batch = new BatchStatement();
-            batch.Add(writePrepared[0].Bind(timestamp.ToMicrosecondsSinceEpoch(), publishedVideo.VideoUrl, publishedVideo.ThumbnailUrl,
-                                            publishedVideo.VideoId));
-            batch.Add(writePrepared[1].Bind(timestamp.ToMicrosecondsSinceEpoch(), publishedVideo.ThumbnailUrl, userId, addDate, publishedVideo.VideoId));
-            batch.Add(writePrepared[2].Bind(yyyymmdd, addDate, publishedVideo.VideoId, userId, name, publishedVideo.ThumbnailUrl,
-                                            timestamp.ToMicrosecondsSinceEpoch(), VideoCatalogConstants.LatestVideosTtlSeconds));
+            batch.Add(writePrepared[0].Bind(timestamp.ToMicrosecondsSinceEpoch(), videoUrl, thumbnailUrl, videoId));
+            batch.Add(writePrepared[1].Bind(timestamp.ToMicrosecondsSinceEpoch(), thumbnailUrl, userId, addDate, videoId));
+            batch.Add(writePrepared[2].Bind(yyyymmdd, addDate, videoId, userId, name, thumbnailUrl, timestamp.ToMicrosecondsSinceEpoch(), 
+                                            VideoCatalogServiceImpl.LatestVideosTtlSeconds));
 
             await _session.ExecuteAsync(batch).ConfigureAwait(false);
 
             // Tell the world about the uploaded video that was added
-            await _bus.Publish(new UploadedVideoAdded
+            var addedEvent = new UploadedVideoAdded
             {
                 VideoId = publishedVideo.VideoId,
-                UserId = userId,
+                UserId = userId.ToUuid(),
                 Name = name,
                 Description = description,
-                Tags = tags.ToHashSet(),
                 Location = publishedVideo.VideoUrl,
                 PreviewImageLocation = publishedVideo.ThumbnailUrl,
-                AddedDate = addDate,
-                Timestamp = timestamp
-            }).ConfigureAwait(false);
+                AddedDate = addDate.ToTimestamp(),
+                Timestamp = timestamp.ToTimestamp()
+            };
+            addedEvent.Tags.Add(tags);
+            await _bus.Publish(addedEvent).ConfigureAwait(false);
         }
     }
 }

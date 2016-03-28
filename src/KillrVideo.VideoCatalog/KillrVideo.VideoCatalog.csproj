@@ -66,13 +66,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Handlers\UpdateUploadedVideoWhenPublished.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="protos\UploadsEvents.generated.cs" />
     <Compile Include="protos\VideoCatalogEvents.generated.cs" />
     <Compile Include="protos\VideoCatalogService.generated.cs" />
     <Compile Include="protos\VideoCatalogServiceGrpc.cs" />
     <Compile Include="VideoCatalogService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\lib\killrvideo-service-protos\src\uploads\uploads_events.proto">
+      <Link>protos\uploads_events.proto</Link>
+    </None>
     <None Include="..\..\lib\killrvideo-service-protos\src\video-catalog\video_catalog_events.proto">
       <Link>protos\video_catalog_events.proto</Link>
     </None>

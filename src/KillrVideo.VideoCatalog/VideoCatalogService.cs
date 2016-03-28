@@ -18,7 +18,8 @@ namespace KillrVideo.VideoCatalog
     /// </summary>
     public class VideoCatalogServiceImpl : VideoCatalogService.IVideoCatalogService
     {
-        private static readonly int LatestVideosTtlSeconds = Convert.ToInt32(TimeSpan.FromDays(MaxDaysInPastForLatestVideos).TotalSeconds);
+        public static readonly int LatestVideosTtlSeconds = Convert.ToInt32(TimeSpan.FromDays(MaxDaysInPastForLatestVideos).TotalSeconds);
+
         private const int MaxDaysInPastForLatestVideos = 7;
         private static readonly Regex ParseLatestPagingState = new Regex("([0-9]{8}){8}([0-9]{1})(.*)", RegexOptions.Compiled | RegexOptions.Singleline);
         
