@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using KillrVideo.MessageBus;
+using KillrVideo.Protobuf;
 using KillrVideo.SampleData.Components;
+using KillrVideo.Statistics;
 using Serilog;
 
 namespace KillrVideo.SampleData.Handlers
@@ -15,9 +17,9 @@ namespace KillrVideo.SampleData.Handlers
         private static readonly ILogger Logger = Log.ForContext<AddSampleVideoViewsHandler>();
 
         private readonly IGetSampleData _sampleDataRetriever;
-        private readonly IStatisticsService _statsService;
+        private readonly StatisticsService.IStatisticsServiceClient _statsService;
 
-        public AddSampleVideoViewsHandler(IGetSampleData sampleDataRetriever, IStatisticsService statsService)
+        public AddSampleVideoViewsHandler(IGetSampleData sampleDataRetriever, StatisticsService.IStatisticsServiceClient statsService)
         {
             if (sampleDataRetriever == null) throw new ArgumentNullException(nameof(sampleDataRetriever));
             if (statsService == null) throw new ArgumentNullException(nameof(statsService));
@@ -39,10 +41,10 @@ namespace KillrVideo.SampleData.Handlers
             var viewTasks = new List<Task>();
             for (int i = 0; i < busCommand.NumberOfViews; i++)
             {
-                viewTasks.Add(_statsService.RecordPlaybackStarted(new RecordPlaybackStarted
+                viewTasks.Add(_statsService.RecordPlaybackStartedAsync(new RecordPlaybackStartedRequest
                 {
-                    VideoId = videoIds[i]
-                }));
+                    VideoId = videoIds[i].ToUuid()
+                }).ResponseAsync);
             }
 
             await Task.WhenAll(viewTasks).ConfigureAwait(false);

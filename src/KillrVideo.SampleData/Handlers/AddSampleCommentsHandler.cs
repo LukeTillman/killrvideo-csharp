@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using KillrVideo.Comments;
 using KillrVideo.MessageBus;
+using KillrVideo.Protobuf;
 using KillrVideo.SampleData.Components;
 using NLipsum.Core;
 using Serilog;
@@ -31,9 +33,9 @@ namespace KillrVideo.SampleData.Handlers
         };
 
         private readonly IGetSampleData _sampleDataRetriever;
-        private readonly ICommentsService _commentService;
+        private readonly CommentsService.ICommentsServiceClient _commentService;
 
-        public AddSampleCommentsHandler(IGetSampleData sampleDataRetriever, ICommentsService commentService)
+        public AddSampleCommentsHandler(IGetSampleData sampleDataRetriever, CommentsService.ICommentsServiceClient commentService)
         {
             if (sampleDataRetriever == null) throw new ArgumentNullException(nameof(sampleDataRetriever));
             if (commentService == null) throw new ArgumentNullException(nameof(commentService));
@@ -68,13 +70,13 @@ namespace KillrVideo.SampleData.Handlers
             var commentTasks = new List<Task>();
             for (int i = 0; i < busCommand.NumberOfComments; i++)
             {
-                commentTasks.Add(_commentService.CommentOnVideo(new CommentOnVideo
+                commentTasks.Add(_commentService.CommentOnVideoAsync(new CommentOnVideoRequest
                 {
-                    CommentId = TimeUuid.NewId(),
-                    VideoId = videoIds[i],
-                    UserId = userIds[i],
+                    CommentId = Cassandra.TimeUuid.NewId().ToGuid().ToTimeUuid(),
+                    VideoId = videoIds[i].ToUuid(),
+                    UserId = userIds[i].ToUuid(),
                     Comment = comments[i]
-                }));
+                }).ResponseAsync);
             }
 
             await Task.WhenAll(commentTasks).ConfigureAwait(false);

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using KillrVideo.MessageBus;
+using KillrVideo.Protobuf;
 using KillrVideo.SampleData.Components;
 using KillrVideo.SampleData.Components.YouTube;
+using KillrVideo.VideoCatalog;
 using Serilog;
 
 namespace KillrVideo.SampleData.Handlers
@@ -17,14 +19,14 @@ namespace KillrVideo.SampleData.Handlers
 
         private readonly IGetSampleData _sampleDataRetriever;
         private readonly IManageSampleYouTubeVideos _youTubeManager;
-        private readonly IVideoCatalogService _videoCatalog;
+        private readonly VideoCatalogService.IVideoCatalogServiceClient _videoCatalog;
 
         public AddSampleYouTubeVideosHandler(IGetSampleData sampleDataRetriever, IManageSampleYouTubeVideos youTubeManager, 
-                                             IVideoCatalogService videoCatalog)
+                                             VideoCatalogService.IVideoCatalogServiceClient videoCatalog)
         {
-            if (sampleDataRetriever == null) throw new ArgumentNullException("sampleDataRetriever");
-            if (youTubeManager == null) throw new ArgumentNullException("youTubeManager");
-            if (videoCatalog == null) throw new ArgumentNullException("videoCatalog");
+            if (sampleDataRetriever == null) throw new ArgumentNullException(nameof(sampleDataRetriever));
+            if (youTubeManager == null) throw new ArgumentNullException(nameof(youTubeManager));
+            if (videoCatalog == null) throw new ArgumentNullException(nameof(videoCatalog));
 
             _sampleDataRetriever = sampleDataRetriever;
             _youTubeManager = youTubeManager;
@@ -49,17 +51,19 @@ namespace KillrVideo.SampleData.Handlers
             {
                 YouTubeVideo sampleVideo = sampleVideos[idx];
                 Guid userId = userIds[idx];
-                
-                // Submit the video
-                await _videoCatalog.SubmitYouTubeVideo(new SubmitYouTubeVideo
+
+                var request = new SubmitYouTubeVideoRequest
                 {
-                    VideoId = Guid.NewGuid(),
-                    UserId = userId,
+                    VideoId = Guid.NewGuid().ToUuid(),
+                    UserId = userId.ToUuid(),
                     YouTubeVideoId = sampleVideo.YouTubeVideoId,
                     Name = sampleVideo.Name,
-                    Description = sampleVideo.Description,
-                    Tags = sampleVideo.SuggestedTags
-                }).ConfigureAwait(false);
+                    Description = sampleVideo.Description
+                };
+                request.Tags.Add(sampleVideo.SuggestedTags);
+                
+                // Submit the video
+                await _videoCatalog.SubmitYouTubeVideoAsync(request).ResponseAsync.ConfigureAwait(false);
 
                 // Mark them as used so we make a best effort not to reuse sample videos and post duplicates
                 await _youTubeManager.MarkVideoAsUsed(sampleVideo).ConfigureAwait(false);

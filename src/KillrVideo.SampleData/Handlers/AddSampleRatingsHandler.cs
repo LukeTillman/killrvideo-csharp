@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using KillrVideo.MessageBus;
+using KillrVideo.Protobuf;
+using KillrVideo.Ratings;
 using KillrVideo.SampleData.Components;
 using Serilog;
 
@@ -15,9 +17,9 @@ namespace KillrVideo.SampleData.Handlers
         private static readonly ILogger Logger = Log.ForContext<AddSampleRatingsHandler>();
 
         private readonly IGetSampleData _sampleDataRetriever;
-        private readonly IRatingsService _ratingsService;
+        private readonly RatingsService.IRatingsServiceClient _ratingsService;
 
-        public AddSampleRatingsHandler(IGetSampleData sampleDataRetriever, IRatingsService ratingsService)
+        public AddSampleRatingsHandler(IGetSampleData sampleDataRetriever, RatingsService.IRatingsServiceClient ratingsService)
         {
             if (sampleDataRetriever == null) throw new ArgumentNullException(nameof(sampleDataRetriever));
             if (ratingsService == null) throw new ArgumentNullException(nameof(ratingsService));
@@ -48,12 +50,12 @@ namespace KillrVideo.SampleData.Handlers
             var random = new Random();
             for (int i = 0; i < busCommand.NumberOfRatings; i++)
             {
-                ratingTasks.Add(_ratingsService.RateVideo(new RateVideo
+                ratingTasks.Add(_ratingsService.RateVideoAsync(new RateVideoRequest
                 {
-                    UserId = userIds[i], 
-                    VideoId = videoIds[i], 
+                    UserId = userIds[i].ToUuid(), 
+                    VideoId = videoIds[i].ToUuid(), 
                     Rating = random.Next(1, 6)
-                }));
+                }).ResponseAsync);
             }
 
             await Task.WhenAll(ratingTasks).ConfigureAwait(false);
