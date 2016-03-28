@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cassandra;
+using KillrVideo.MessageBus;
 using KillrVideo.Utils;
 
 namespace KillrVideo.SampleData.Scheduler.Jobs
@@ -10,26 +11,23 @@ namespace KillrVideo.SampleData.Scheduler.Jobs
     /// </summary>
     public class AddSampleRatingsJob : SampleDataJob
     {
-        private readonly ISampleDataService _sampleDataService;
+        private readonly IBus _bus;
 
         /// <summary>
         /// Runs every 2 minutes.
         /// </summary>
-        protected override int MinutesBetweenRuns
-        {
-            get { return 2; }
-        }
+        protected override int MinutesBetweenRuns => 2;
 
-        public AddSampleRatingsJob(ISession session, TaskCache<string, PreparedStatement> statementCache, ISampleDataService sampleDataService) 
+        public AddSampleRatingsJob(ISession session, TaskCache<string, PreparedStatement> statementCache, IBus bus) 
             : base(session, statementCache)
         {
-            if (sampleDataService == null) throw new ArgumentNullException("sampleDataService");
-            _sampleDataService = sampleDataService;
+            if (bus == null) throw new ArgumentNullException(nameof(bus));
+            _bus = bus;
         }
 
         protected override Task RunImpl()
         {
-            return _sampleDataService.AddSampleRatings(new AddSampleRatings { NumberOfRatings = 5 });
+            return _bus.Publish(new AddSampleRatingsRequest { NumberOfRatings = 5 });
         }
     }
 }
