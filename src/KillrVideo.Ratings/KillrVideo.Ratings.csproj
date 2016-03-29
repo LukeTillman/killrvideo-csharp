@@ -78,6 +78,8 @@
     <Compile Include="protos\RatingsService.generated.cs" />
     <Compile Include="protos\RatingsServiceGrpc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RatingsRpcServer.cs" />
+    <Compile Include="RatingsRpcServerConfig.cs" />
     <Compile Include="RatingsService.cs" />
   </ItemGroup>
   <ItemGroup>

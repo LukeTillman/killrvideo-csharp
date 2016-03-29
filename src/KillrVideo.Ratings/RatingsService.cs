@@ -13,7 +13,7 @@ namespace KillrVideo.Ratings
     /// <summary>
     /// An implementation of the video ratings service that stores ratings in Cassandra and publishes events on a message bus.
     /// </summary>
-    public class RatingsServiceImpl : RatingsService.IRatingsService
+    internal class RatingsServiceImpl : RatingsService.IRatingsService
     {
         private readonly ISession _session;
         private readonly IBus _bus;

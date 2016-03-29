@@ -4,24 +4,24 @@ using Grpc.Core;
 using KillrVideo.MessageBus;
 using Serilog;
 
-namespace KillrVideo.Comments
+namespace KillrVideo.Ratings
 {
     /// <summary>
-    /// The RPC endpoint server for the Comments Service which can be started/stopped.
+    /// The RPC server for the Ratings service which can be started/stopped.
     /// </summary>
-    public class CommentsRpcServer
+    public class RatingsRpcServer
     {
-        private static readonly ILogger Logger = Log.ForContext<CommentsRpcServer>();
+        private static readonly ILogger Logger = Log.ForContext<RatingsRpcServer>();
 
         private readonly Server _server;
         private IBusServer _bus;
 
-        public CommentsRpcServer()
+        public RatingsRpcServer()
         {
             _server = new Server();
         }
 
-        public void Start(CommentsRpcServerConfig config)
+        public void Start(RatingsRpcServerConfig config)
         {
             // Validate config
             if (config == null) throw new ArgumentNullException(nameof(config));
@@ -31,12 +31,12 @@ namespace KillrVideo.Comments
             Logger.Information("Starting server");
 
             // Create the message bus
-            _bus = BusBuilder.Configure().WithServiceName("KillrVideo.Comments").WithTransport(config.BusTransport).Build();
+            _bus = BusBuilder.Configure().WithServiceName("KillrVideo.Ratings").WithTransport(config.BusTransport).Build();
             IBus publisher = _bus.StartServer();
 
             // Create, bind, and start the service endpoint
-            var commentsService = new CommentsServiceImpl(config.Cassandra, publisher);
-            _server.Services.Add(CommentsService.BindService(commentsService));
+            var ratingsService = new RatingsServiceImpl(config.Cassandra, publisher);
+            _server.Services.Add(RatingsService.BindService(ratingsService));
             _server.Ports.Add(config.Host, config.Port, ServerCredentials.Insecure);
             _server.Start();
 

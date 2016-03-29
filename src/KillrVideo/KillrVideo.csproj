@@ -42,6 +42,14 @@
       <HintPath>..\packages\lz4net.1.0.5.93\lib\net40-client\LZ4.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Serilog, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.1.5.14\lib\net45\Serilog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Serilog.FullNetFx, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.1.5.14\lib\net45\Serilog.FullNetFx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -72,6 +80,10 @@
     <ProjectReference Include="..\KillrVideo.MessageBus\KillrVideo.MessageBus.csproj">
       <Project>{9a8c1794-cec4-4670-af3e-e3cd83881e8e}</Project>
       <Name>KillrVideo.MessageBus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Ratings\KillrVideo.Ratings.csproj">
+      <Project>{c054a489-a037-49e5-8461-546cd61817eb}</Project>
+      <Name>KillrVideo.Ratings</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

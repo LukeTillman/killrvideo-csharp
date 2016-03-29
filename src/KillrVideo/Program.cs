@@ -4,6 +4,9 @@ using System.Net;
 using Cassandra;
 using KillrVideo.Comments;
 using KillrVideo.MessageBus.Transport;
+using KillrVideo.Ratings;
+using Serilog;
+using Serilog.Events;
 
 namespace KillrVideo
 {
@@ -14,6 +17,11 @@ namespace KillrVideo
     {
         static void Main(string[] args)
         {
+            // Configure logging
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.ColoredConsole(LogEventLevel.Information, "{Timestamp:HH:mm:ss} [{SourceContext:l}] {Message}{NewLine}{Exception}")
+                .CreateLogger();
+
             // Get the host and starting port to bind RPC services to
             string host = ConfigurationManager.AppSettings.Get("ServicesHost");
             if (string.IsNullOrWhiteSpace(host))
@@ -34,7 +42,17 @@ namespace KillrVideo
             {
                 BusTransport = InMemoryTransport.Instance,
                 Cassandra = cassandra,
-                Host = "localhost",
+                Host = host,
+                Port = port++
+            });
+
+            // Start ratings service
+            var ratingsRpc = new RatingsRpcServer();
+            ratingsRpc.Start(new RatingsRpcServerConfig
+            {
+                BusTransport = InMemoryTransport.Instance,
+                Cassandra = cassandra,
+                Host = host,
                 Port = port++
             });
         }
