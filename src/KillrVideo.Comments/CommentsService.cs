@@ -14,7 +14,7 @@ namespace KillrVideo.Comments
     /// <summary>
     /// Comments service that uses Cassandra to store comments and publishes events on a message bus.
     /// </summary>
-    public class CommentsServiceImpl : CommentsService.ICommentsService
+    internal class CommentsServiceImpl : CommentsService.ICommentsService
     {
         private readonly ISession _session;
         private readonly IBus _bus;

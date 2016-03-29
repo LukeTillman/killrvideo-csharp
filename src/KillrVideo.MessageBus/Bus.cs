@@ -10,7 +10,7 @@ namespace KillrVideo.MessageBus
     /// <summary>
     /// A bus that can be started/stopped. Use the IBus result from starting to publish messages.
     /// </summary>
-    public class Bus
+    internal class Bus : IBusServer
     {
         private static readonly ILogger Logger = Log.ForContext<Bus>();
 
@@ -23,7 +23,6 @@ namespace KillrVideo.MessageBus
 
         internal Bus(BusBuilder busConfig)
         {
-            
             if (busConfig == null) throw new ArgumentNullException(nameof(busConfig));
 
             _cancelBusStart = new CancellationTokenSource();
@@ -57,7 +56,7 @@ namespace KillrVideo.MessageBus
         /// <summary>
         /// Stops any subscriptions that were added.
         /// </summary>
-        public async Task StopServer()
+        public async Task StopServerAsync()
         {
             // Make sure bus is only stopped once
             int state = Interlocked.Increment(ref _started);

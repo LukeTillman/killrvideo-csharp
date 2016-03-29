@@ -60,9 +60,9 @@ namespace KillrVideo.MessageBus
         }
 
         /// <summary>
-        /// Builds a bus instance.
+        /// Builds a bus server instance.
         /// </summary>
-        public Bus Build()
+        public IBusServer Build()
         {
             Validate();
             return new Bus(this);
