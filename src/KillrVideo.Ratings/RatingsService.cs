@@ -7,7 +7,6 @@ using Grpc.Core;
 using KillrVideo.Cassandra;
 using KillrVideo.MessageBus;
 using KillrVideo.Ratings.Events;
-using KillrVideo.Utils;
 
 namespace KillrVideo.Ratings
 {
@@ -18,16 +17,16 @@ namespace KillrVideo.Ratings
     {
         private readonly ISession _session;
         private readonly IBus _bus;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly PreparedStatementCache _statementCache;
 
-        public RatingsServiceImpl(ISession session, IBus bus)
+        public RatingsServiceImpl(ISession session, PreparedStatementCache statementCache, IBus bus)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             if (bus == null) throw new ArgumentNullException(nameof(bus));
             _session = session;
+            _statementCache = statementCache;
             _bus = bus;
-
-            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
         }
 
         /// <summary>
@@ -35,7 +34,7 @@ namespace KillrVideo.Ratings
         /// </summary>
         public async Task<RateVideoResponse> RateVideo(RateVideoRequest request, ServerCallContext context)
         {
-            PreparedStatement[] preparedStatements = await _statementCache.NoContext.GetOrAddAllAsync(
+            PreparedStatement[] preparedStatements = await _statementCache.GetOrAddAllAsync(
                 "UPDATE video_ratings SET rating_counter = rating_counter + 1, rating_total = rating_total + ? WHERE videoid = ?",
                 "INSERT INTO video_ratings_by_user (videoid, userid, rating) VALUES (?, ?, ?) USING TIMESTAMP ?");
 
@@ -69,7 +68,7 @@ namespace KillrVideo.Ratings
         /// </summary>
         public async Task<GetRatingResponse> GetRating(GetRatingRequest request, ServerCallContext context)
         {
-            PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM video_ratings WHERE videoid = ?");
+            PreparedStatement preparedStatement = await _statementCache.GetOrAddAsync("SELECT * FROM video_ratings WHERE videoid = ?");
             BoundStatement boundStatement = preparedStatement.Bind(request.VideoId.ToGuid());
             RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
             Row row = rows.SingleOrDefault();
@@ -87,7 +86,7 @@ namespace KillrVideo.Ratings
         /// </summary>
         public async Task<GetUserRatingResponse> GetUserRating(GetUserRatingRequest request, ServerCallContext context)
         {
-            PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT rating FROM video_ratings_by_user WHERE videoid = ? AND userid = ?");
+            PreparedStatement preparedStatement = await _statementCache.GetOrAddAsync("SELECT rating FROM video_ratings_by_user WHERE videoid = ? AND userid = ?");
             BoundStatement boundStatement = preparedStatement.Bind(request.VideoId.ToGuid(), request.UserId.ToGuid());
             RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
 

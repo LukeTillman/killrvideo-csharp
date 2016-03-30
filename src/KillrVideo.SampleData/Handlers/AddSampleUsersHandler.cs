@@ -3,10 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
 using Faker;
+using KillrVideo.Cassandra;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
 using KillrVideo.UserManagement;
-using KillrVideo.Utils;
 
 namespace KillrVideo.SampleData.Handlers
 {
@@ -17,16 +17,16 @@ namespace KillrVideo.SampleData.Handlers
     {
         private readonly ISession _session;
         private readonly UserManagementService.IUserManagementServiceClient _userManagement;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly PreparedStatementCache _statementCache;
 
-        public AddSampleUsersHandler(ISession session, UserManagementService.IUserManagementServiceClient userManagement)
+        public AddSampleUsersHandler(ISession session, PreparedStatementCache statementCache, UserManagementService.IUserManagementServiceClient userManagement)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             if (userManagement == null) throw new ArgumentNullException(nameof(userManagement));
             _session = session;
+            _statementCache = statementCache;
             _userManagement = userManagement;
-
-            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
         }
 
         public async Task Handle(AddSampleUsersRequest busCommand)
@@ -46,7 +46,7 @@ namespace KillrVideo.SampleData.Handlers
             }).ToArray();
 
             // Get statement for recording sample users
-            PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync("INSERT INTO sample_data_users (userid) VALUES (?)");
+            PreparedStatement prepared = await _statementCache.GetOrAddAsync("INSERT INTO sample_data_users (userid) VALUES (?)");
 
             // Add the user and record their Id in C* (not a big deal if we fail halfway through since this is sample data)
             foreach (CreateUserRequest user in users)

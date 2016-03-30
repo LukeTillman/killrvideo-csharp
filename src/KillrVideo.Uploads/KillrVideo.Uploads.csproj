@@ -95,10 +95,6 @@
       <Project>{4a41c0c8-6a27-4728-b596-b64227a26fb6}</Project>
       <Name>KillrVideo.Protobuf</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
-      <Project>{9516b3f3-89b7-4343-9f88-ffee6d74fffc}</Project>
-      <Name>KillrVideo.Utils</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

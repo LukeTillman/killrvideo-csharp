@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Cassandra;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using KillrVideo.Cassandra;
 using KillrVideo.Protobuf;
-using KillrVideo.Utils;
 
 namespace KillrVideo.SuggestedVideos
 {
@@ -18,14 +18,14 @@ namespace KillrVideo.SuggestedVideos
         private const int RelatedVideosToReturn = 4;
 
         private readonly ISession _session;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly PreparedStatementCache _statementCache;
 
-        public SuggestVideosByTag(ISession session)
+        public SuggestVideosByTag(ISession session, PreparedStatementCache statementCache)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             _session = session;
-
-            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
+            _statementCache = statementCache;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace KillrVideo.SuggestedVideos
         public async Task<GetRelatedVideosResponse> GetRelatedVideos(GetRelatedVideosRequest request, ServerCallContext context)
         {
             // Lookup the tags for the video
-            PreparedStatement tagsForVideoPrepared = await _statementCache.NoContext.GetOrAddAsync("SELECT tags FROM videos WHERE videoid = ?");
+            PreparedStatement tagsForVideoPrepared = await _statementCache.GetOrAddAsync("SELECT tags FROM videos WHERE videoid = ?");
             BoundStatement tagsForVideoBound = tagsForVideoPrepared.Bind(request.VideoId.ToGuid());
             RowSet tagRows = await _session.ExecuteAsync(tagsForVideoBound).ConfigureAwait(false);
 
@@ -53,7 +53,7 @@ namespace KillrVideo.SuggestedVideos
                 return response;
 
             var relatedVideos = new Dictionary<Uuid, SuggestedVideoPreview>();
-            PreparedStatement videosForTagPrepared = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM videos_by_tag WHERE tag = ? LIMIT ?");
+            PreparedStatement videosForTagPrepared = await _statementCache.GetOrAddAsync("SELECT * FROM videos_by_tag WHERE tag = ? LIMIT ?");
 
             var inFlightQueries = new List<Task<RowSet>>();
             for (var i = 0; i < tags.Count; i++)

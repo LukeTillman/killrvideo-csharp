@@ -9,7 +9,6 @@ using Grpc.Core;
 using KillrVideo.Cassandra;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
-using KillrVideo.Utils;
 using KillrVideo.VideoCatalog.Events;
 
 namespace KillrVideo.VideoCatalog
@@ -26,16 +25,16 @@ namespace KillrVideo.VideoCatalog
         
         private readonly ISession _session;
         private readonly IBus _bus;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly PreparedStatementCache _statementCache;
 
-        public VideoCatalogServiceImpl(ISession session, IBus bus)
+        public VideoCatalogServiceImpl(ISession session, PreparedStatementCache statementCache, IBus bus)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             if (bus == null) throw new ArgumentNullException(nameof(bus));
             _session = session;
+            _statementCache = statementCache;
             _bus = bus;
-
-            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
         }
 
         /// <summary>
@@ -46,7 +45,7 @@ namespace KillrVideo.VideoCatalog
             var timestamp = DateTimeOffset.UtcNow;
 
             // Store the information we have now in Cassandra
-            PreparedStatement[] prepared = await _statementCache.NoContext.GetOrAddAllAsync(
+            PreparedStatement[] prepared = await _statementCache.GetOrAddAllAsync(
                 "INSERT INTO videos (videoid, userid, name, description, tags, location_type, added_date) VALUES (?, ?, ?, ?, ?, ?, ?) USING TIMESTAMP ?",
                 "INSERT INTO user_videos (userid, added_date, videoid, name) VALUES (?, ?, ?, ?) USING TIMESTAMP ?"
             );
@@ -79,7 +78,7 @@ namespace KillrVideo.VideoCatalog
         public async Task<SubmitYouTubeVideoResponse> SubmitYouTubeVideo(SubmitYouTubeVideoRequest request, ServerCallContext context)
         {
             // Use a batch to insert the YouTube video into multiple tables
-            PreparedStatement[] prepared = await _statementCache.NoContext.GetOrAddAllAsync(
+            PreparedStatement[] prepared = await _statementCache.GetOrAddAllAsync(
                 "INSERT INTO videos (videoid, userid, name, description, location, preview_image_location, tags, added_date, location_type) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) USING TIMESTAMP ?",
                 "INSERT INTO user_videos (userid, added_date, videoid, name, preview_image_location) VALUES (?, ?, ?, ?, ?) USING TIMESTAMP ?",
@@ -127,7 +126,7 @@ namespace KillrVideo.VideoCatalog
         /// </summary>
         public async Task<GetVideoResponse> GetVideo(GetVideoRequest request, ServerCallContext context)
         {
-            PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM videos WHERE videoid = ?");
+            PreparedStatement preparedStatement = await _statementCache.GetOrAddAsync("SELECT * FROM videos WHERE videoid = ?");
             RowSet rows = await _session.ExecuteAsync(preparedStatement.Bind(request.VideoId.ToGuid())).ConfigureAwait(false);
             Row row = rows.SingleOrDefault();
             if (row == null)
@@ -168,7 +167,7 @@ namespace KillrVideo.VideoCatalog
 
             // As an example, let's do the multi-get using multiple statements at the driver level.  For an example of doing this at
             // the CQL level with an IN() clause, see UserManagement's GetUserProfiles
-            PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync(
+            PreparedStatement prepared = await _statementCache.GetOrAddAsync(
                 "SELECT videoid, userid, added_date, name, preview_image_location FROM videos WHERE videoid = ?");
 
             // Bind multiple times to the prepared statement with each video id and execute all the gets in parallel, then await
@@ -206,7 +205,7 @@ namespace KillrVideo.VideoCatalog
             var results = new List<VideoPreview>();
             string nextPageState = string.Empty;
 
-            PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM latest_videos WHERE yyyymmdd = ?");
+            PreparedStatement preparedStatement = await _statementCache.GetOrAddAsync("SELECT * FROM latest_videos WHERE yyyymmdd = ?");
 
             // TODO: Run queries in parallel?
             while (bucketIndex < buckets.Length)
@@ -259,7 +258,7 @@ namespace KillrVideo.VideoCatalog
         public async Task<GetUserVideoPreviewsResponse> GetUserVideoPreviews(GetUserVideoPreviewsRequest request, ServerCallContext context)
         {
             // Figure out if we're getting first page or subsequent page
-            PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM user_videos WHERE userid = ?");
+            PreparedStatement preparedStatement = await _statementCache.GetOrAddAsync("SELECT * FROM user_videos WHERE userid = ?");
             IStatement boundStatement = preparedStatement.Bind(request.UserId.ToGuid())
                                                          .SetAutoPage(false)
                                                          .SetPageSize(request.PageSize);

@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cassandra;
+using KillrVideo.Cassandra;
 using KillrVideo.MessageBus;
 using KillrVideo.SampleData.Components;
 using KillrVideo.SampleData.Components.YouTube;
-using KillrVideo.Utils;
 
 namespace KillrVideo.SampleData.Scheduler.Jobs
 {
@@ -23,8 +23,9 @@ namespace KillrVideo.SampleData.Scheduler.Jobs
         /// </summary>
         protected override int MinutesBetweenRuns => 480;
 
-        public AddSampleYouTubeVideosJob(ISession session, IBus bus, IManageSampleYouTubeVideos youTubeManager, IGetSampleData sampleDataRetriever)
-            : base(session)
+        public AddSampleYouTubeVideosJob(ISession session, PreparedStatementCache statementCache, IBus bus, 
+                                         IManageSampleYouTubeVideos youTubeManager, IGetSampleData sampleDataRetriever)
+            : base(session, statementCache)
         {
             if (bus == null) throw new ArgumentNullException(nameof(bus));
             if (youTubeManager == null) throw new ArgumentNullException(nameof(youTubeManager));

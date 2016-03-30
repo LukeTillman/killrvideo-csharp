@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Cassandra;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using KillrVideo.Cassandra;
 using KillrVideo.Protobuf;
-using KillrVideo.Utils;
 
 namespace KillrVideo.Search
 {
@@ -15,9 +15,9 @@ namespace KillrVideo.Search
     public class SearchVideosByTag : SearchService.ISearchService
     {
         private readonly ISession _session;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly PreparedStatementCache _statementCache;
 
-        public SearchVideosByTag(ISession session, TaskCache<string, PreparedStatement> statementCache)
+        public SearchVideosByTag(ISession session, PreparedStatementCache statementCache)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
@@ -31,7 +31,7 @@ namespace KillrVideo.Search
         public async Task<SearchVideosResponse> SearchVideos(SearchVideosRequest request, ServerCallContext context)
         {
             // Use the driver's built-in paging feature to get only a page of rows
-            PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM videos_by_tag WHERE tag = ?");
+            PreparedStatement preparedStatement = await _statementCache.GetOrAddAsync("SELECT * FROM videos_by_tag WHERE tag = ?");
             IStatement boundStatement = preparedStatement.Bind(request.Query)
                                                          .SetAutoPage(false)
                                                          .SetPageSize(request.PageSize);
@@ -57,7 +57,7 @@ namespace KillrVideo.Search
         public async Task<GetQuerySuggestionsResponse> GetQuerySuggestions(GetQuerySuggestionsRequest request, ServerCallContext context)
         {
             string firstLetter = request.Query.Substring(0, 1);
-            PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT tag FROM tags_by_letter WHERE first_letter = ? AND tag >= ? LIMIT ?");
+            PreparedStatement preparedStatement = await _statementCache.GetOrAddAsync("SELECT tag FROM tags_by_letter WHERE first_letter = ? AND tag >= ? LIMIT ?");
             BoundStatement boundStatement = preparedStatement.Bind(firstLetter, request.Query, request.PageSize);
             RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
             var response = new GetQuerySuggestionsResponse

@@ -2,6 +2,7 @@
 using Cassandra;
 using DryIocAttributes;
 using Grpc.Core;
+using KillrVideo.Cassandra;
 using KillrVideo.MessageBus;
 
 namespace KillrVideo.Ratings
@@ -13,9 +14,9 @@ namespace KillrVideo.Ratings
     public class RatingsServiceFactory
     {
         [Export]
-        public static ServerServiceDefinition Create(ISession cassandra, IBus bus)
+        public static ServerServiceDefinition Create(ISession cassandra, PreparedStatementCache statementCache, IBus bus)
         {
-            var ratingsService = new RatingsServiceImpl(cassandra, bus);
+            var ratingsService = new RatingsServiceImpl(cassandra, statementCache, bus);
             return RatingsService.BindService(ratingsService);
         }
     }

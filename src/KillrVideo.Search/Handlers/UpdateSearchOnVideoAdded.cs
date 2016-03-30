@@ -6,7 +6,6 @@ using Google.Protobuf.WellKnownTypes;
 using KillrVideo.Cassandra;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
-using KillrVideo.Utils;
 using KillrVideo.VideoCatalog.Events;
 
 namespace KillrVideo.Search.Handlers
@@ -17,14 +16,14 @@ namespace KillrVideo.Search.Handlers
     public class UpdateSearchOnVideoAdded : IHandleMessage<UploadedVideoAdded>, IHandleMessage<YouTubeVideoAdded>
     {
         private readonly ISession _session;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly PreparedStatementCache _statementCache;
 
-        public UpdateSearchOnVideoAdded(ISession session)
+        public UpdateSearchOnVideoAdded(ISession session, PreparedStatementCache statementCache)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             _session = session;
-
-            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
+            _statementCache = statementCache;
         }
 
         private async Task HandleImpl(Uuid videoId, Timestamp addedDate, Uuid userId, string name, string previewImageLocation,
@@ -42,7 +41,6 @@ namespace KillrVideo.Search.Handlers
             // We need to add multiple statements for each tag
             foreach (string tag in tags)
             {
-                
                 // INSERT INTO videos_by_tag
                 batch.Add(prepared[0].Bind(tag, videoId.ToGuid(), addedDate.ToDateTimeOffset(), userId.ToGuid(), name, previewImageLocation, ts,
                                            ts.ToMicrosecondsSinceEpoch()));

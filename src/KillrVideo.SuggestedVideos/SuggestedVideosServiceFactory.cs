@@ -2,6 +2,7 @@
 using Cassandra;
 using DryIocAttributes;
 using Grpc.Core;
+using KillrVideo.Cassandra;
 
 namespace KillrVideo.SuggestedVideos
 {
@@ -12,10 +13,10 @@ namespace KillrVideo.SuggestedVideos
     public static class SuggestedVideosServiceFactory
     {
         [Export]
-        public static ServerServiceDefinition Create(ISession cassandra)
+        public static ServerServiceDefinition Create(ISession cassandra, PreparedStatementCache statementCache)
         {
             // TODO: Which implementation based on config or detect C* cluster version?
-            var suggestionsService = new SuggestVideosByTag(cassandra);
+            var suggestionsService = new SuggestVideosByTag(cassandra, statementCache);
             return SuggestedVideoService.BindService(suggestionsService);
         }
     }

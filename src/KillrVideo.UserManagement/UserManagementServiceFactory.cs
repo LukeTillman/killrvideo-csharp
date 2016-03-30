@@ -2,6 +2,7 @@
 using Cassandra;
 using DryIocAttributes;
 using Grpc.Core;
+using KillrVideo.Cassandra;
 using KillrVideo.MessageBus;
 
 namespace KillrVideo.UserManagement
@@ -13,9 +14,9 @@ namespace KillrVideo.UserManagement
     public static class UserManagementServiceFactory
     {
         [Export]
-        public static ServerServiceDefinition Create(ISession cassandra, IBus bus)
+        public static ServerServiceDefinition Create(ISession cassandra, PreparedStatementCache statementCache, IBus bus)
         {
-            var userManagement = new UserManagementServiceImpl(cassandra, bus);
+            var userManagement = new UserManagementServiceImpl(cassandra, statementCache, bus);
             return UserManagementService.BindService(userManagement);
         }
     }

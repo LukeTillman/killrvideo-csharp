@@ -90,13 +90,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KillrVideo.Cassandra\KillrVideo.Cassandra.csproj">
+      <Project>{ffe7da21-41a2-436b-9e4d-c036dbf33d62}</Project>
+      <Name>KillrVideo.Cassandra</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Protobuf\KillrVideo.Protobuf.csproj">
       <Project>{4a41c0c8-6a27-4728-b596-b64227a26fb6}</Project>
       <Name>KillrVideo.Protobuf</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
-      <Project>{9516B3F3-89B7-4343-9F88-FFEE6D74FFFC}</Project>
-      <Name>KillrVideo.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

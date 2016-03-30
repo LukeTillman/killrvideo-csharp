@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Utils;
+using KillrVideo.Cassandra;
 using Serilog;
 
 namespace KillrVideo.SampleData.Scheduler
@@ -16,7 +16,7 @@ namespace KillrVideo.SampleData.Scheduler
         private static readonly TimeSpan TimeUntilRetry = TimeSpan.FromSeconds(5);
         
         private readonly ISession _session;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly PreparedStatementCache _statementCache;
         private readonly ILogger _logger;
         private readonly string _jobName;
 
@@ -37,12 +37,13 @@ namespace KillrVideo.SampleData.Scheduler
         /// </summary>
         public DateTimeOffset NextRunTime { get; private set; }
         
-        protected SampleDataJob(ISession session)
+        protected SampleDataJob(ISession session, PreparedStatementCache statementCache)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             _session = session;
+            _statementCache = statementCache;
 
-            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
             _jobName = GetType().FullName;
             _logger = Log.ForContext(GetType());
             NextRunTime = DateTimeOffset.MaxValue;
@@ -55,7 +56,7 @@ namespace KillrVideo.SampleData.Scheduler
         {
             // Lookup the last run time in Cassandra
             PreparedStatement prepared =
-                await _statementCache.NoContext.GetOrAddAsync("SELECT scheduled_run_time FROM sample_data_job_log WHERE job_name = ? LIMIT 1");
+                await _statementCache.GetOrAddAsync("SELECT scheduled_run_time FROM sample_data_job_log WHERE job_name = ? LIMIT 1");
             BoundStatement bound = prepared.Bind(_jobName);
             RowSet rows = await _session.ExecuteAsync(bound).ConfigureAwait(false);
             Row row = rows.SingleOrDefault();
@@ -81,7 +82,7 @@ namespace KillrVideo.SampleData.Scheduler
             {
                 // Run the job, then log the run in Cassandra
                 await RunImpl().ConfigureAwait(false);
-                PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync(
+                PreparedStatement prepared = await _statementCache.GetOrAddAsync(
                     "INSERT INTO sample_data_job_log (job_name, scheduled_run_time, actual_run_time) VALUES (?, ?, ?)");
                 BoundStatement bound = prepared.Bind(_jobName, _nextScheduledRunTime, DateTimeOffset.UtcNow);
                 await _session.ExecuteAsync(bound).ConfigureAwait(false);

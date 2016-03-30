@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
 using Grpc.Core;
-using KillrVideo.Utils;
+using KillrVideo.Cassandra;
 
 namespace KillrVideo.Statistics
 {
@@ -13,14 +13,14 @@ namespace KillrVideo.Statistics
     public class StatisticsServiceImpl : StatisticsService.IStatisticsService
     {
         private readonly ISession _session;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly PreparedStatementCache _statementCache;
         
-        public StatisticsServiceImpl(ISession session)
+        public StatisticsServiceImpl(ISession session, PreparedStatementCache statementCache)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             _session = session;
-
-            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
+            _statementCache = statementCache;
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace KillrVideo.Statistics
         /// </summary>
         public async Task<RecordPlaybackStartedResponse> RecordPlaybackStarted(RecordPlaybackStartedRequest request, ServerCallContext context)
         {
-            PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync("UPDATE video_playback_stats SET views = views + 1 WHERE videoid = ?");
+            PreparedStatement prepared = await _statementCache.GetOrAddAsync("UPDATE video_playback_stats SET views = views + 1 WHERE videoid = ?");
             BoundStatement bound = prepared.Bind(request.VideoId.ToGuid());
             await _session.ExecuteAsync(bound).ConfigureAwait(false);
             return new RecordPlaybackStartedResponse();
@@ -42,7 +42,7 @@ namespace KillrVideo.Statistics
             // Enforce some sanity on this until we can change the data model to avoid the multi-get
             if (request.VideoIds.Count > 20) throw new ArgumentOutOfRangeException(nameof(request.VideoIds), "Cannot do multi-get on more than 20 video id keys.");
 
-            PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync("SELECT videoid, views FROM video_playback_stats WHERE videoid = ?"); ;
+            PreparedStatement prepared = await _statementCache.GetOrAddAsync("SELECT videoid, views FROM video_playback_stats WHERE videoid = ?"); ;
 
             // Run queries in parallel (another example of multi-get at the driver level)
             var idsAndTasks = request.VideoIds.Select(id => new

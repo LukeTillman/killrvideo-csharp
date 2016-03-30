@@ -8,7 +8,6 @@ using KillrVideo.Cassandra;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
 using KillrVideo.UserManagement.Events;
-using KillrVideo.Utils;
 
 namespace KillrVideo.UserManagement
 {
@@ -19,16 +18,16 @@ namespace KillrVideo.UserManagement
     {
         private readonly ISession _session;
         private readonly IBus _bus;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly PreparedStatementCache _statementCache;
 
-        public UserManagementServiceImpl(ISession session, IBus bus)
+        public UserManagementServiceImpl(ISession session, PreparedStatementCache statementCache, IBus bus)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             if (bus == null) throw new ArgumentNullException(nameof(bus));
             _session = session;
+            _statementCache = statementCache;
             _bus = bus;
-
-            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
         }
 
         /// <summary>
@@ -41,7 +40,7 @@ namespace KillrVideo.UserManagement
 
             DateTimeOffset timestamp = DateTimeOffset.UtcNow;
 
-            PreparedStatement preparedCredentials = await _statementCache.NoContext.GetOrAddAsync(
+            PreparedStatement preparedCredentials = await _statementCache.GetOrAddAsync(
                 "INSERT INTO user_credentials (email, password, userid) VALUES (?, ?, ?) IF NOT EXISTS USING TIMESTAMP ?");
 
             // Insert the credentials info (this will return false if a user with that email address already exists)
@@ -54,7 +53,7 @@ namespace KillrVideo.UserManagement
             if (applied == false)
                 throw new Exception("A user with that email address already exists"); // TODO: Figure out how to do errors properly in grpc
 
-            PreparedStatement preparedUser = await _statementCache.NoContext.GetOrAddAsync(
+            PreparedStatement preparedUser = await _statementCache.GetOrAddAsync(
                 "INSERT INTO users (userid, firstname, lastname, email, created_date) VALUES (?, ?, ?, ?, ?) USING TIMESTAMP ?");
 
             // Insert the "profile" information using a parameterized CQL statement
@@ -82,7 +81,7 @@ namespace KillrVideo.UserManagement
         public async Task<VerifyCredentialsResponse> VerifyCredentials(VerifyCredentialsRequest request, ServerCallContext context)
         {
             PreparedStatement preparedStatement =
-                await _statementCache.NoContext.GetOrAddAsync("SELECT email, password, userid FROM user_credentials WHERE email = ?");
+                await _statementCache.GetOrAddAsync("SELECT email, password, userid FROM user_credentials WHERE email = ?");
 
             // Use the get credentials prepared statement to find credentials for the user
             RowSet result = await _session.ExecuteAsync(preparedStatement.Bind(request.Email)).ConfigureAwait(false);

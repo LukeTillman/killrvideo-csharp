@@ -11,7 +11,6 @@ using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
 using KillrVideo.UserManagement.Events;
 using KillrVideo.UserManagement.LinqDtos;
-using KillrVideo.Utils;
 
 namespace KillrVideo.UserManagement
 {
@@ -23,19 +22,20 @@ namespace KillrVideo.UserManagement
     {
         private readonly ISession _session;
         private readonly IBus _bus;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly PreparedStatementCache _statementCache;
 
         private readonly Table<LinqDtos.UserProfile> _userProfileTable;
         private readonly Table<UserCredentials> _userCredentialsTable; 
 
-        public LinqUserManagementService(ISession session, IBus bus)
+        public LinqUserManagementService(ISession session, PreparedStatementCache statementCache, IBus bus)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             if (bus == null) throw new ArgumentNullException(nameof(bus));
             _session = session;
+            _statementCache = statementCache;
             _bus = bus;
 
-            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
             _userProfileTable = new Table<LinqDtos.UserProfile>(session);
             _userCredentialsTable = new Table<UserCredentials>(session);
         }
@@ -51,7 +51,7 @@ namespace KillrVideo.UserManagement
             // TODO:  Use LINQ to create users
             DateTimeOffset timestamp = DateTimeOffset.UtcNow;
 
-            PreparedStatement preparedCredentials = await _statementCache.NoContext.GetOrAddAsync(
+            PreparedStatement preparedCredentials = await _statementCache.GetOrAddAsync(
                 "INSERT INTO user_credentials (email, password, userid) VALUES (?, ?, ?) IF NOT EXISTS");
 
             // Insert the credentials info (this will return false if a user with that email address already exists)
@@ -63,7 +63,7 @@ namespace KillrVideo.UserManagement
             if (applied == false)
                 throw new Exception("A user with that email address already exists");       // TODO: Right way to do error responses with grpc?
 
-            PreparedStatement preparedUser = await _statementCache.NoContext.GetOrAddAsync(
+            PreparedStatement preparedUser = await _statementCache.GetOrAddAsync(
                 "INSERT INTO users (userid, firstname, lastname, email, created_date) VALUES (?, ?, ?, ?, ?) USING TIMESTAMP ?");
 
             // Insert the "profile" information using a parameterized CQL statement

@@ -2,6 +2,7 @@
 using Cassandra;
 using DryIocAttributes;
 using Grpc.Core;
+using KillrVideo.Cassandra;
 
 namespace KillrVideo.Statistics
 {
@@ -12,9 +13,9 @@ namespace KillrVideo.Statistics
     public static class StatisticsServiceFactory
     {
         [Export]
-        public static ServerServiceDefinition Create(ISession cassandra)
+        public static ServerServiceDefinition Create(ISession cassandra, PreparedStatementCache statementCache)
         {
-            var statsService = new StatisticsServiceImpl(cassandra);
+            var statsService = new StatisticsServiceImpl(cassandra, statementCache);
             return StatisticsService.BindService(statsService);
         }
     }

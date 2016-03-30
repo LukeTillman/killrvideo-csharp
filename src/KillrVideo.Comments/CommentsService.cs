@@ -8,7 +8,6 @@ using KillrVideo.Cassandra;
 using KillrVideo.Comments.Events;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
-using KillrVideo.Utils;
 
 namespace KillrVideo.Comments
 {
@@ -19,16 +18,16 @@ namespace KillrVideo.Comments
     {
         private readonly ISession _session;
         private readonly IBus _bus;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly PreparedStatementCache _statementCache;
 
-        public CommentsServiceImpl(ISession session, IBus bus)
+        public CommentsServiceImpl(ISession session, PreparedStatementCache statementCache, IBus bus)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             if (bus == null) throw new ArgumentNullException(nameof(bus));
             _session = session;
+            _statementCache = statementCache;
             _bus = bus;
-
-            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
         }
 
         /// <summary>
@@ -39,7 +38,7 @@ namespace KillrVideo.Comments
             // Use a client side timestamp for the writes that we can include when we publish the event
             var timestamp = DateTimeOffset.UtcNow;
 
-            PreparedStatement[] preparedStatements = await _statementCache.NoContext.GetOrAddAllAsync(
+            PreparedStatement[] preparedStatements = await _statementCache.GetOrAddAllAsync(
                 "INSERT INTO comments_by_video (videoid, commentid, userid, comment) VALUES (?, ?, ?, ?) USING TIMESTAMP ?",
                 "INSERT INTO comments_by_user (userid, commentid, videoid, comment) VALUES (?, ?, ?, ?) USING TIMESTAMP ?");
 
@@ -73,7 +72,7 @@ namespace KillrVideo.Comments
         /// </summary>
         public async Task<GetUserCommentsResponse> GetUserComments(GetUserCommentsRequest request, ServerCallContext context)
         {
-            PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync(
+            PreparedStatement prepared = await _statementCache.GetOrAddAsync(
                 "SELECT commentid, videoid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_user WHERE userid = ?");
 
             IStatement bound = prepared.Bind(request.UserId.ToGuid())
@@ -99,7 +98,7 @@ namespace KillrVideo.Comments
         /// </summary>
         public async Task<GetVideoCommentsResponse> GetVideoComments(GetVideoCommentsRequest request, ServerCallContext context)
         {
-            PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync(
+            PreparedStatement prepared = await _statementCache.GetOrAddAsync(
                     "SELECT commentid, userid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_video WHERE videoid = ?");
 
             IStatement bound = prepared.Bind(request.VideoId.ToGuid())

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Cassandra;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using KillrVideo.Cassandra;
 using KillrVideo.Protobuf;
 using KillrVideo.SuggestedVideos.MLT;
-using KillrVideo.Utils;
 using RestSharp;
 
 namespace KillrVideo.SuggestedVideos
@@ -19,16 +19,16 @@ namespace KillrVideo.SuggestedVideos
     {
         private readonly ISession _session;
         private readonly IRestClient _restClient;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly PreparedStatementCache _statementCache;
 
-        public DataStaxEnterpriseSuggestedVideos(ISession session, IRestClient restClient)
+        public DataStaxEnterpriseSuggestedVideos(ISession session, PreparedStatementCache statementCache, IRestClient restClient)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             if (restClient == null) throw new ArgumentNullException(nameof(restClient));
             _session = session;
+            _statementCache = statementCache;
             _restClient = restClient;
-
-            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace KillrVideo.SuggestedVideos
         {
             // Return the output of a Spark job that runs periodically in the background to populate the video_recommendations table
             // (see the /data/spark folder in the repo for more information)
-            PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync(
+            PreparedStatement prepared = await _statementCache.GetOrAddAsync(
                 "SELECT videoid, authorid, name, added_date, preview_image_location FROM video_recommendations WHERE userid=?");
 
             IStatement bound = prepared.Bind(request.UserId.ToGuid())

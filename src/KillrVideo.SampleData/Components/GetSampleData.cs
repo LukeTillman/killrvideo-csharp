@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Utils;
+using KillrVideo.Cassandra;
 
 namespace KillrVideo.SampleData.Components
 {
@@ -13,14 +13,14 @@ namespace KillrVideo.SampleData.Components
     public class GetSampleData : IGetSampleData
     {
         private readonly ISession _session;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly PreparedStatementCache _statementCache;
 
-        public GetSampleData(ISession session)
+        public GetSampleData(ISession session, PreparedStatementCache statementCache)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             _session = session;
-
-            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
+            _statementCache = statementCache;
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace KillrVideo.SampleData.Components
         public async Task<List<Guid>> GetRandomSampleUserIds(int count)
         {
             // Use the token() function to get the first count ids above an below a random user Id
-            PreparedStatement[] prepared = await _statementCache.NoContext.GetOrAddAllAsync(
+            PreparedStatement[] prepared = await _statementCache.GetOrAddAllAsync(
                 "SELECT userid FROM sample_data_users WHERE token(userid) >= token(?) LIMIT ?",
                 "SELECT userid FROM sample_data_users WHERE token(userid) < token(?) LIMIT ?");
 
@@ -64,7 +64,7 @@ namespace KillrVideo.SampleData.Components
         public async Task<List<Guid>> GetRandomVideoIds(int count)
         {
             // Use the token() function to get the first count ids above an below a random video Id
-            PreparedStatement[] prepared = await _statementCache.NoContext.GetOrAddAllAsync(
+            PreparedStatement[] prepared = await _statementCache.GetOrAddAllAsync(
                 "SELECT videoid FROM sample_data_videos WHERE token(videoid) >= token(?) LIMIT ?",
                 "SELECT videoid FROM sample_data_videos WHERE token(videoid) < token(?) LIMIT ?");
 

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Cassandra;
 using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
-using KillrVideo.Utils;
+using KillrVideo.Cassandra;
 
 namespace KillrVideo.SampleData.Components.YouTube
 {
@@ -21,16 +21,16 @@ namespace KillrVideo.SampleData.Components.YouTube
 
         private readonly YouTubeService _youTubeService;
         private readonly ISession _session;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly PreparedStatementCache _statementCache;
         
-        public SampleYouTubeVideoManager(YouTubeService youTubeService, ISession session)
+        public SampleYouTubeVideoManager(YouTubeService youTubeService, ISession session, PreparedStatementCache statementCache)
         {
             if (youTubeService == null) throw new ArgumentNullException(nameof(youTubeService));
             if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             _youTubeService = youTubeService;
             _session = session;
-
-            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
+            _statementCache = statementCache;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace KillrVideo.SampleData.Components.YouTube
         {
             // Statement for getting unused videos from a source
             PreparedStatement prepared =
-                await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM sample_data_youtube_videos WHERE sourceid = ?");
+                await _statementCache.GetOrAddAsync("SELECT * FROM sample_data_youtube_videos WHERE sourceid = ?");
             
             // Iterate the list of sources in random order
             var random = new Random();
@@ -87,7 +87,7 @@ namespace KillrVideo.SampleData.Components.YouTube
         public async Task MarkVideoAsUsed(YouTubeVideo video)
         {
             // Mark all videos as used using queries in parallel
-            PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync(
+            PreparedStatement prepared = await _statementCache.GetOrAddAsync(
                 "UPDATE sample_data_youtube_videos SET used = true WHERE sourceid = ? AND published_at = ? AND youtube_video_id = ?");
 
             await _session.ExecuteAsync(prepared.Bind(video.Source.UniqueId, video.PublishedAt, video.YouTubeVideoId)).ConfigureAwait(false);
@@ -100,13 +100,13 @@ namespace KillrVideo.SampleData.Components.YouTube
         {
             // Since channel lists are sorted by date, try to be smart and see what the date is of the latest video we have for the channel
             PreparedStatement prepared =
-                await _statementCache.NoContext.GetOrAddAsync("SELECT published_at FROM sample_data_youtube_videos WHERE sourceid = ? LIMIT 1");
+                await _statementCache.GetOrAddAsync("SELECT published_at FROM sample_data_youtube_videos WHERE sourceid = ? LIMIT 1");
             RowSet rowSet = await _session.ExecuteAsync(prepared.Bind(channelSource.UniqueId)).ConfigureAwait(false);
             Row row = rowSet.SingleOrDefault();
             DateTimeOffset newestVideoWeHave = row?.GetValue<DateTimeOffset>("published_at") ?? Epoch;
 
             // Statement for inserting the video into the sample table
-            PreparedStatement preparedInsert = await _statementCache.NoContext.GetOrAddAsync(
+            PreparedStatement preparedInsert = await _statementCache.GetOrAddAsync(
                 "INSERT INTO sample_data_youtube_videos (sourceid, published_at, youtube_video_id, name, description) VALUES (?, ?, ?, ?, ?)");
 
             bool getMoreVideos = true;
@@ -161,7 +161,7 @@ namespace KillrVideo.SampleData.Components.YouTube
         internal async Task RefreshKeywords(YouTubeVideoSource.VideosWithKeyword keywordSource)
         {
             // Statement for inserting the video into the sample table
-            PreparedStatement preparedInsert = await _statementCache.NoContext.GetOrAddAsync(
+            PreparedStatement preparedInsert = await _statementCache.GetOrAddAsync(
                 "INSERT INTO sample_data_youtube_videos (sourceid, published_at, youtube_video_id, name, description) VALUES (?, ?, ?, ?, ?)");
 
             bool getMoreVideos = true;
@@ -215,7 +215,7 @@ namespace KillrVideo.SampleData.Components.YouTube
         internal async Task RefreshPlaylist(YouTubeVideoSource.VideosFromPlaylist playlistSource)
         {
             // Statement for inserting the video into the sample table
-            PreparedStatement preparedInsert = await _statementCache.NoContext.GetOrAddAsync(
+            PreparedStatement preparedInsert = await _statementCache.GetOrAddAsync(
                 "INSERT INTO sample_data_youtube_videos (sourceid, published_at, youtube_video_id, name, description) VALUES (?, ?, ?, ?, ?)");
 
             bool getMoreVideos = true;

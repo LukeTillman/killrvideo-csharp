@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cassandra;
+using KillrVideo.Cassandra;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
-using KillrVideo.Utils;
 using KillrVideo.VideoCatalog.Events;
 
 namespace KillrVideo.SampleData.Handlers
@@ -15,20 +15,20 @@ namespace KillrVideo.SampleData.Handlers
     public class RecordVideosAddedHandler : IHandleMessage<UploadedVideoAdded>, IHandleMessage<YouTubeVideoAdded>
     {
         private readonly ISession _session;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly PreparedStatementCache _statementCache;
 
-        public RecordVideosAddedHandler(ISession session)
+        public RecordVideosAddedHandler(ISession session, PreparedStatementCache statementCache)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             _session = session;
-
-            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
+            _statementCache = statementCache;
         }
 
         private async Task HandleImpl(Uuid videoId)
         {
             // Record the id in our sample data tracking table
-            PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync("INSERT INTO sample_data_videos (videoid) VALUES (?)");
+            PreparedStatement prepared = await _statementCache.GetOrAddAsync("INSERT INTO sample_data_videos (videoid) VALUES (?)");
             await _session.ExecuteAsync(prepared.Bind(videoId.ToGuid())).ConfigureAwait(false);
         }
 

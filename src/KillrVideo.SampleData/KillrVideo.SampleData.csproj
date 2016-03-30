@@ -203,10 +203,6 @@
       <Project>{4a41c0c8-6a27-4728-b596-b64227a26fb6}</Project>
       <Name>KillrVideo.Protobuf</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.Utils\KillrVideo.Utils.csproj">
-      <Project>{9516B3F3-89B7-4343-9F88-FFEE6D74FFFC}</Project>
-      <Name>KillrVideo.Utils</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

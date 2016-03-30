@@ -8,7 +8,6 @@ using KillrVideo.Cassandra;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
 using KillrVideo.Uploads.Events;
-using KillrVideo.Utils;
 using KillrVideo.VideoCatalog.Events;
 
 namespace KillrVideo.VideoCatalog.Handlers
@@ -20,22 +19,22 @@ namespace KillrVideo.VideoCatalog.Handlers
     {
         private readonly ISession _session;
         private readonly IBus _bus;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly PreparedStatementCache _statementCache;
 
-        public UpdateUploadedVideoWhenPublished(ISession session, IBus bus)
+        public UpdateUploadedVideoWhenPublished(ISession session, PreparedStatementCache statementCache, IBus bus)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             if (bus == null) throw new ArgumentNullException(nameof(bus));
             _session = session;
+            _statementCache = statementCache;
             _bus = bus;
-
-            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
         }
 
         public async Task Handle(UploadedVideoPublished publishedVideo)
         {
             // Find the video
-            PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM videos WHERE videoid = ?");
+            PreparedStatement prepared = await _statementCache.GetOrAddAsync("SELECT * FROM videos WHERE videoid = ?");
             BoundStatement bound = prepared.Bind(publishedVideo.VideoId);
             RowSet rows = await _session.ExecuteAsync(bound).ConfigureAwait(false);
             Row videoRow = rows.SingleOrDefault();
@@ -59,7 +58,7 @@ namespace KillrVideo.VideoCatalog.Handlers
             Guid videoId = publishedVideo.VideoId.ToGuid();
             
             // Update the video locations (and write to denormalized tables) via batch
-            PreparedStatement[] writePrepared = await _statementCache.NoContext.GetOrAddAllAsync(
+            PreparedStatement[] writePrepared = await _statementCache.GetOrAddAllAsync(
                 "UPDATE videos USING TIMESTAMP ? SET location = ?, preview_image_location = ? WHERE videoid = ?",
                 "UPDATE user_videos USING TIMESTAMP ? SET preview_image_location = ? WHERE userid = ? AND added_date = ? AND videoid = ?",
                 "INSERT INTO latest_videos (yyyymmdd, added_date, videoid, userid, name, preview_image_location) VALUES (?, ?, ?, ?, ?, ?) USING TIMESTAMP ? AND TTL ?"

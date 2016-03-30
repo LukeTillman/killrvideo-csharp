@@ -2,15 +2,14 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Utils;
 using RestSharp;
 using Newtonsoft.Json;
 using System.Net;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using KillrVideo.Cassandra;
 using KillrVideo.Protobuf;
 using KillrVideo.Search.Dtos;
-using RestSharp.Deserializers;
 using Method = RestSharp.Method;
 
 namespace KillrVideo.Search
@@ -22,16 +21,16 @@ namespace KillrVideo.Search
     {
         private readonly ISession _session;
         private readonly IRestClient _restClient;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
+        private readonly PreparedStatementCache _statementCache;
 
-        public DataStaxEnterpriseSearch(ISession session, IRestClient restClient)
+        public DataStaxEnterpriseSearch(ISession session, PreparedStatementCache statementCache, IRestClient restClient)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             if (restClient == null) throw new ArgumentNullException(nameof(restClient));
             _session = session;
+            _statementCache = statementCache;
             _restClient = restClient;
-
-            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
         }
 
         /// <summary>
@@ -45,7 +44,7 @@ namespace KillrVideo.Search
             // More info on ExtendedDisMax: http://wiki.apache.org/solr/ExtendedDisMax
             string solrQuery = "{ \"q\": \"{!edismax qf=\\\"name^2 tags^1 description\\\"}" + request.Query + "\" }";
             
-            PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync(
+            PreparedStatement prepared = await _statementCache.GetOrAddAsync(
                 "SELECT videoid, userid, name, preview_image_location, added_date FROM videos WHERE solr_query=?");
 
             // The driver's built-in paging feature just works with DSE Search Solr paging which is pretty cool
