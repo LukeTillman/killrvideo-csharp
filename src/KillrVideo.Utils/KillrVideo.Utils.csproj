@@ -44,7 +44,6 @@
     <Compile Include="INoCapturedContextTaskCache.cs" />
     <Compile Include="MicrosecondsSinceEpoch.cs" />
     <Compile Include="TaskCache.cs" />
-    <Compile Include="HelperExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WorkerComposition\ILogicalWorkerRole.cs" />
   </ItemGroup>

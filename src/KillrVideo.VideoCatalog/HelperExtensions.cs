@@ -1,23 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
 
-namespace KillrVideo.Utils
+namespace KillrVideo.VideoCatalog
 {
     /// <summary>
-    /// Some utility extension methods.
+    /// Helper extension methods.
     /// </summary>
     public static class HelperExtensions
     {
-        /// <summary>
-        /// Converts an IEnumerable&lt;T&gt; to a HashSet&lt;T&gt;.  If the IEnumerable is null, returns an empty HashSet.
-        /// </summary>
-        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> enumerable)
-        {
-            if (enumerable == null) return new HashSet<T>();
-            return new HashSet<T>(enumerable);
-        }
-
         /// <summary>
         /// Truncates a DateTimeOffset to the specified resolution.  Use the TimeSpan.TicksPerXXX constants for
         /// the resolution parameter.  Returns a new DateTimeOffset.
@@ -26,7 +15,5 @@ namespace KillrVideo.Utils
         {
             return new DateTimeOffset(dateTimeOffset.Ticks - (dateTimeOffset.Ticks % resolution), dateTimeOffset.Offset);
         }
-
-        
     }
 }
