@@ -84,7 +84,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HelperExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -98,6 +97,10 @@
     <None Include="user.template.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KillrVideo.Cassandra\KillrVideo.Cassandra.csproj">
+      <Project>{FFE7DA21-41A2-436B-9E4D-C036DBF33D62}</Project>
+      <Name>KillrVideo.Cassandra</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Comments\KillrVideo.Comments.csproj">
       <Project>{37bb374e-2e30-4f9d-8f1d-6982116a07b0}</Project>
       <Name>KillrVideo.Comments</Name>

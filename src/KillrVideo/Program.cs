@@ -1,12 +1,20 @@
 ﻿using System;
 using System.Configuration;
 using System.Net;
+using System.Reflection;
 using Cassandra;
 using DryIoc;
 using DryIoc.MefAttributedModel;
 using Grpc.Core;
+using KillrVideo.Cassandra;
+using KillrVideo.Comments;
 using KillrVideo.MessageBus;
 using KillrVideo.MessageBus.Transport;
+using KillrVideo.Ratings;
+using KillrVideo.Statistics;
+using KillrVideo.SuggestedVideos;
+using KillrVideo.Uploads;
+using KillrVideo.UserManagement;
 using Serilog;
 using Serilog.Events;
 
@@ -17,6 +25,16 @@ namespace KillrVideo
     /// </summary>
     class Program
     {
+        private static readonly Assembly[] ServiceAssemblies = new[]
+        {
+            typeof (CommentsServiceFactory).Assembly,
+            typeof (RatingsServiceFactory).Assembly,
+            typeof (StatisticsServiceFactory).Assembly,
+            typeof (SuggestedVideosServiceFactory).Assembly,
+            typeof (UploadsServiceFactory).Assembly,
+            typeof (UserManagementServiceFactory).Assembly
+        };
+
         static void Main(string[] args)
         {
             // Configure logging
@@ -41,7 +59,7 @@ namespace KillrVideo
             // Let the container pick up any components using the MEF-like attributes in referenced assemblies (this will pick up any 
             // exported Grpc server definitions, message bus handlers, and background tasks in the referenced services)
             container = container.WithMefAttributedModel();
-            container.RegisterExports(typeof(Program).Assembly.GetReferencedApplicationAssemblies());
+            container.RegisterExports(ServiceAssemblies);
 
             // Create a Grpc server with any services from the container
             var server = new Server();
@@ -59,6 +77,7 @@ namespace KillrVideo
 
             // Register Cassandra session factory as singleton
             container.Register(Made.Of(() => CreateCassandraSession()), Reuse.Singleton);
+            container.Register<PreparedStatementCache>(Reuse.Singleton);
 
             // Register Bus and components
             container.Register(Made.Of(() => CreateBusServer()), Reuse.Singleton);
