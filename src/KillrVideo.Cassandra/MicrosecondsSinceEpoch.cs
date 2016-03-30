@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace KillrVideo.Utils
+namespace KillrVideo.Cassandra
 {
     /// <summary>
-    /// Helper class for converting between DateTimeOffset and microseconds since Epoch.
+    /// Helper class for converting between DateTimeOffset and microseconds since Epoch which is used for Cassandra write timestamps.
     /// </summary>
     public static class MicrosecondsSinceEpoch
     {

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Cassandra;
 using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
+using KillrVideo.Cassandra;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
 using KillrVideo.Utils;

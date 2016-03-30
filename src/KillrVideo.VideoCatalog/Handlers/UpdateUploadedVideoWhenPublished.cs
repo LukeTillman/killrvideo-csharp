@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
 using Google.Protobuf.WellKnownTypes;
+using KillrVideo.Cassandra;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
 using KillrVideo.Uploads.Events;

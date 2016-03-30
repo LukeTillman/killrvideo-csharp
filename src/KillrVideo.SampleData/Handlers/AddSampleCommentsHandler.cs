@@ -72,7 +72,7 @@ namespace KillrVideo.SampleData.Handlers
             {
                 commentTasks.Add(_commentService.CommentOnVideoAsync(new CommentOnVideoRequest
                 {
-                    CommentId = Cassandra.TimeUuid.NewId().ToGuid().ToTimeUuid(),
+                    CommentId = global::Cassandra.TimeUuid.NewId().ToGuid().ToTimeUuid(),
                     VideoId = videoIds[i].ToUuid(),
                     UserId = userIds[i].ToUuid(),
                     Comment = comments[i]

@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.MessageBus", "Ki
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo", "KillrVideo\KillrVideo.csproj", "{F0683BB1-9E47-4CC0-8780-E87AEF6ADC48}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.Cassandra", "KillrVideo.Cassandra\KillrVideo.Cassandra.csproj", "{FFE7DA21-41A2-436B-9E4D-C036DBF33D62}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,10 @@ Global
 		{F0683BB1-9E47-4CC0-8780-E87AEF6ADC48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0683BB1-9E47-4CC0-8780-E87AEF6ADC48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F0683BB1-9E47-4CC0-8780-E87AEF6ADC48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFE7DA21-41A2-436B-9E4D-C036DBF33D62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFE7DA21-41A2-436B-9E4D-C036DBF33D62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFE7DA21-41A2-436B-9E4D-C036DBF33D62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFE7DA21-41A2-436B-9E4D-C036DBF33D62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -122,6 +128,7 @@ Global
 		{F7088371-8ED3-4827-B15A-05F598C27399} = {B70BBD28-B0F5-4642-B08A-3BA9C0D103AD}
 		{4A41C0C8-6A27-4728-B596-B64227A26FB6} = {E733F240-AAC1-42B4-9EFE-0AB822C31BD9}
 		{9A8C1794-CEC4-4670-AF3E-E3CD83881E8E} = {E733F240-AAC1-42B4-9EFE-0AB822C31BD9}
+		{FFE7DA21-41A2-436B-9E4D-C036DBF33D62} = {E733F240-AAC1-42B4-9EFE-0AB822C31BD9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\TransientFaultHandling.Core.5.1.1209.1\lib\NET4

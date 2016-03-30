@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Cassandra;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using KillrVideo.Cassandra;
 using KillrVideo.Comments.Events;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
