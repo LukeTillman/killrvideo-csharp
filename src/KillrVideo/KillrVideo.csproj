@@ -109,6 +109,22 @@
       <Project>{c054a489-a037-49e5-8461-546cd61817eb}</Project>
       <Name>KillrVideo.Ratings</Name>
     </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Statistics\KillrVideo.Statistics.csproj">
+      <Project>{d7e26bcf-316d-431e-b448-dbc54cb17b4f}</Project>
+      <Name>KillrVideo.Statistics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.SuggestedVideos\KillrVideo.SuggestedVideos.csproj">
+      <Project>{846e5d96-7f24-4caa-8dde-90f36dae7e06}</Project>
+      <Name>KillrVideo.SuggestedVideos</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Uploads\KillrVideo.Uploads.csproj">
+      <Project>{249ac1eb-7035-4e88-a311-c683e049a0ea}</Project>
+      <Name>KillrVideo.Uploads</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.UserManagement\KillrVideo.UserManagement.csproj">
+      <Project>{5fcf1c36-ed2a-4bf0-b231-b12506210f6d}</Project>
+      <Name>KillrVideo.UserManagement</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\grpc.native.csharp.0.13.0\build\portable-net45+netcore45+wpa81+wp8\grpc.native.csharp.targets" Condition="Exists('..\packages\grpc.native.csharp.0.13.0\build\portable-net45+netcore45+wpa81+wp8\grpc.native.csharp.targets')" />

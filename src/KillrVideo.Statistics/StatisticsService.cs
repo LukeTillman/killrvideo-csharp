@@ -15,12 +15,12 @@ namespace KillrVideo.Statistics
         private readonly ISession _session;
         private readonly TaskCache<string, PreparedStatement> _statementCache;
         
-        public StatisticsServiceImpl(ISession session, TaskCache<string, PreparedStatement> statementCache)
+        public StatisticsServiceImpl(ISession session)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
-            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             _session = session;
-            _statementCache = statementCache;
+
+            _statementCache = new TaskCache<string, PreparedStatement>(_session.PrepareAsync);
         }
 
         /// <summary>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using Cassandra;
@@ -11,6 +10,10 @@ using KillrVideo.Comments;
 using KillrVideo.MessageBus;
 using KillrVideo.MessageBus.Transport;
 using KillrVideo.Ratings;
+using KillrVideo.Statistics;
+using KillrVideo.SuggestedVideos;
+using KillrVideo.Uploads;
+using KillrVideo.UserManagement;
 using Serilog;
 using Serilog.Events;
 
@@ -24,7 +27,11 @@ namespace KillrVideo
         private static readonly Assembly[] ServiceAssemblies = new[]
         {
             typeof(CommentsServiceFactory).Assembly,
-            typeof(RatingsServiceFactory).Assembly
+            typeof(RatingsServiceFactory).Assembly,
+            typeof(StatisticsServiceFactory).Assembly,
+            typeof(SuggestedVideosServiceFactory).Assembly,
+            typeof(UploadsServiceFactory).Assembly,
+            typeof(UserManagementServiceFactory).Assembly
         };
 
         static void Main(string[] args)
