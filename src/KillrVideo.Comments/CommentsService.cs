@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
+using DryIocAttributes;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
@@ -14,7 +16,8 @@ namespace KillrVideo.Comments
     /// <summary>
     /// Comments service that uses Cassandra to store comments and publishes events on a message bus.
     /// </summary>
-    internal class CommentsServiceImpl : CommentsService.ICommentsService
+    [Export, AsFactory]
+    public class CommentsServiceImpl : CommentsService.ICommentsService
     {
         private readonly ISession _session;
         private readonly IBus _bus;
@@ -28,6 +31,15 @@ namespace KillrVideo.Comments
             _session = session;
             _statementCache = statementCache;
             _bus = bus;
+        }
+
+        /// <summary>
+        /// Convert this instance to a ServerServiceDefinition that can be run on a Grpc server.
+        /// </summary>
+        [Export]
+        public ServerServiceDefinition ToServerServiceDefinition()
+        {
+            return CommentsService.BindService(this);
         }
 
         /// <summary>

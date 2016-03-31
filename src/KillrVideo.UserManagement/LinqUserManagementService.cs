@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
@@ -18,6 +19,7 @@ namespace KillrVideo.UserManagement
     /// An implementation of the user management service that uses the LINQ portion of the Cassandra driver to store user accounts in Cassandra
     /// and publishes events to a message bus.
     /// </summary>
+    [Export]
     public class LinqUserManagementService : UserManagementService.IUserManagementService
     {
         private readonly ISession _session;

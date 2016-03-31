@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
+using DryIocAttributes;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
@@ -13,7 +15,8 @@ namespace KillrVideo.Ratings
     /// <summary>
     /// An implementation of the video ratings service that stores ratings in Cassandra and publishes events on a message bus.
     /// </summary>
-    internal class RatingsServiceImpl : RatingsService.IRatingsService
+    [Export, AsFactory]
+    public class RatingsServiceImpl : RatingsService.IRatingsService
     {
         private readonly ISession _session;
         private readonly IBus _bus;
@@ -27,6 +30,15 @@ namespace KillrVideo.Ratings
             _session = session;
             _statementCache = statementCache;
             _bus = bus;
+        }
+
+        /// <summary>
+        /// Convert this instance to a ServerServiceDefinition that can be run on a Grpc server.
+        /// </summary>
+        [Export]
+        public ServerServiceDefinition ToServerServiceDefinition()
+        {
+            return RatingsService.BindService(this);
         }
 
         /// <summary>

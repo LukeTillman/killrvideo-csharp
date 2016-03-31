@@ -71,7 +71,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommentsServiceFactory.cs" />
     <Compile Include="CommentsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="protos\CommentsEvents.generated.cs" />

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
+using DryIocAttributes;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
@@ -13,6 +15,7 @@ namespace KillrVideo.SuggestedVideos
     /// <summary>
     /// Searches the videos_by_tag table to offer suggestions for related videos. Does not support paging currently.
     /// </summary>
+    [Export]
     public class SuggestVideosByTag : SuggestedVideoService.ISuggestedVideoService
     {
         private const int RelatedVideosToReturn = 4;
@@ -122,7 +125,7 @@ namespace KillrVideo.SuggestedVideos
             var response = new GetSuggestedForUserResponse { UserId = request.UserId };
             return Task.FromResult(response);
         }
-
+        
         /// <summary>
         /// Maps a row to a VideoPreview object.
         /// </summary>

@@ -15,6 +15,7 @@ using KillrVideo.Statistics;
 using KillrVideo.SuggestedVideos;
 using KillrVideo.Uploads;
 using KillrVideo.UserManagement;
+using RestSharp;
 using Serilog;
 using Serilog.Events;
 
@@ -27,11 +28,11 @@ namespace KillrVideo
     {
         private static readonly Assembly[] ServiceAssemblies = new[]
         {
-            typeof (CommentsServiceFactory).Assembly,
-            typeof (RatingsServiceFactory).Assembly,
-            typeof (StatisticsServiceFactory).Assembly,
-            typeof (SuggestedVideosServiceFactory).Assembly,
-            typeof (UploadsServiceFactory).Assembly,
+            typeof (CommentsService).Assembly,
+            typeof (RatingsService).Assembly,
+            typeof (StatisticsService).Assembly,
+            typeof (SuggestedVideoService).Assembly,
+            typeof (UploadsService).Assembly,
             typeof (UserManagementServiceFactory).Assembly
         };
 
@@ -78,10 +79,14 @@ namespace KillrVideo
             // Register Cassandra session factory as singleton
             container.Register(Made.Of(() => CreateCassandraSession()), Reuse.Singleton);
             container.Register<PreparedStatementCache>(Reuse.Singleton);
+            container.Register(Made.Of(() => GetDataStaxEnterpriseState()), Reuse.Singleton);
 
             // Register Bus and components
             container.Register(Made.Of(() => CreateBusServer()), Reuse.Singleton);
             container.Register(Made.Of(r => ServiceInfo.Of<IBusServer>(), busServer => busServer.StartServer()), Reuse.Singleton);
+
+            // Register REST client
+            container.Register<IRestClient, RestClient>(Made.Of(() => new RestClient()));
 
             return container;
         }
@@ -112,6 +117,13 @@ namespace KillrVideo
             }
 
             return builder.Build().Connect("killrvideo");
+        }
+
+        private static DataStaxEnterpriseEnvironmentState GetDataStaxEnterpriseState()
+        {
+            // TODO: Check configs for enabling DSE search/spark
+            var state = DataStaxEnterpriseEnvironmentState.None;
+            return state;
         }
 
         private static IBusServer CreateBusServer()

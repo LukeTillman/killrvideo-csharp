@@ -76,7 +76,6 @@
     <Compile Include="protos\RatingsServiceGrpc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatingsService.cs" />
-    <Compile Include="RatingsServiceFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\lib\killrvideo-service-protos\src\ratings\ratings_events.proto">

@@ -79,7 +79,6 @@
     <Compile Include="protos\UploadsService.generated.cs" />
     <Compile Include="protos\UploadsServiceGrpc.cs" />
     <Compile Include="UploadsService.cs" />
-    <Compile Include="UploadsServiceFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\lib\killrvideo-service-protos\src\uploads\uploads_events.proto">

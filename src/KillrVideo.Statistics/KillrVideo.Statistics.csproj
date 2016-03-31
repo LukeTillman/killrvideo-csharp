@@ -73,7 +73,6 @@
     <Compile Include="protos\StatisticsService.generated.cs" />
     <Compile Include="protos\StatisticsServiceGrpc.cs" />
     <Compile Include="StatisticsService.cs" />
-    <Compile Include="StatisticsServiceFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\lib\killrvideo-service-protos\src\statistics\statistics_service.proto">

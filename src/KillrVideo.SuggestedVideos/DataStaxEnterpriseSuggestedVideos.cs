@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Cassandra;
+using DryIocAttributes;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
@@ -15,6 +17,7 @@ namespace KillrVideo.SuggestedVideos
     /// <summary>
     /// Makes video suggestions based on data in Cassandra.
     /// </summary>
+    [Export]
     public class DataStaxEnterpriseSuggestedVideos : SuggestedVideoService.ISuggestedVideoService
     {
         private readonly ISession _session;
@@ -124,7 +127,7 @@ namespace KillrVideo.SuggestedVideos
             response.Videos.Add(rows.Select(MapRowToVideoPreview));
             return response;
         }
-
+        
         private static SuggestedVideoPreview MapRowToVideoPreview(Row row)
         {
             return new SuggestedVideoPreview
