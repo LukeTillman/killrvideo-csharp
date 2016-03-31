@@ -11,10 +11,12 @@ using KillrVideo.Comments;
 using KillrVideo.MessageBus;
 using KillrVideo.MessageBus.Transport;
 using KillrVideo.Ratings;
+using KillrVideo.Search;
 using KillrVideo.Statistics;
 using KillrVideo.SuggestedVideos;
 using KillrVideo.Uploads;
 using KillrVideo.UserManagement;
+using KillrVideo.VideoCatalog;
 using RestSharp;
 using Serilog;
 using Serilog.Events;
@@ -33,7 +35,9 @@ namespace KillrVideo
             typeof (StatisticsService).Assembly,
             typeof (SuggestedVideoService).Assembly,
             typeof (UploadsService).Assembly,
-            typeof (UserManagementServiceFactory).Assembly
+            typeof (UserManagementService).Assembly,
+            typeof (VideoCatalogService).Assembly,
+            typeof (SearchService).Assembly
         };
 
         static void Main(string[] args)

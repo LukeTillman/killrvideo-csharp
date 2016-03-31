@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
@@ -17,6 +18,7 @@ namespace KillrVideo.Search
     /// <summary>
     /// Searches videos using DataStax Enterprise search (Solr integration).
     /// </summary>
+    [Export]
     public class DataStaxEnterpriseSearch : SearchService.ISearchService
     {
         private readonly ISession _session;

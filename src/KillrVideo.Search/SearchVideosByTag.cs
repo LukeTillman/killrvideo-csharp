@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
@@ -12,6 +13,7 @@ namespace KillrVideo.Search
     /// <summary>
     /// Searches for videos by tag in Cassandra.
     /// </summary>
+    [Export]
     public class SearchVideosByTag : SearchService.ISearchService
     {
         private readonly ISession _session;
