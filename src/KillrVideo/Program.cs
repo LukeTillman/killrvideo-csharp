@@ -62,7 +62,7 @@ namespace KillrVideo
             var config = ConfigurationManager.AppSettings.AllKeys.ToDictionary(key => key, key => ConfigurationManager.AppSettings.Get(key));
 
             // Create IoC container
-            IContainer container = CreateContainer();
+            IContainer container = CreateContainer(config);
 
             // Let the container pick up any components using the MEF-like attributes in referenced assemblies (this will pick up any 
             // exported Grpc server definitions, message bus handlers, and background tasks in the referenced services)
@@ -95,12 +95,13 @@ namespace KillrVideo
             server.Start();
         }
 
-        private static Container CreateContainer()
+        private static Container CreateContainer(IDictionary<string, string> config)
         {
             var container = new Container();
 
-            // Register Cassandra session factory as singleton
-            container.Register(Made.Of(() => CreateCassandraSession()), Reuse.Singleton);
+            // Register Cassandra session instance as Singleton (which is a best practice)
+            ISession session = CreateCassandraSession(config);
+            container.RegisterInstance(session);
             container.Register<PreparedStatementCache>(Reuse.Singleton);
 
             // Register Bus and components
@@ -113,9 +114,9 @@ namespace KillrVideo
             return container;
         }
 
-        private static ISession CreateCassandraSession()
+        private static ISession CreateCassandraSession(IDictionary<string, string> config)
         {
-            string[] hosts = ConfigurationManager.AppSettings.Get("CassandraHosts").Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] hosts = GetRequiredConfig(config, "CassandraHosts").Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             if (hosts.Length == 0)
                 throw new InvalidOperationException("You must specify the CassandraHosts configuration option");
 
