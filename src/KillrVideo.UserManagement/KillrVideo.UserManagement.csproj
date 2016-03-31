@@ -80,7 +80,6 @@
     <Compile Include="protos\UserManagementService.generated.cs" />
     <Compile Include="protos\UserManagementServiceGrpc.cs" />
     <Compile Include="UserManagementService.cs" />
-    <Compile Include="UserManagementServiceFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\lib\killrvideo-service-protos\src\user-management\user_management_events.proto">

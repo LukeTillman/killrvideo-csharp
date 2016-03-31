@@ -16,8 +16,8 @@ namespace KillrVideo.Comments
     /// <summary>
     /// Comments service that uses Cassandra to store comments and publishes events on a message bus.
     /// </summary>
-    [Export, AsFactory]
-    public class CommentsServiceImpl : CommentsService.ICommentsService
+    [Export(typeof(IGrpcServerService))]
+    public class CommentsServiceImpl : CommentsService.ICommentsService, IGrpcServerService
     {
         private readonly ISession _session;
         private readonly IBus _bus;
@@ -36,7 +36,6 @@ namespace KillrVideo.Comments
         /// <summary>
         /// Convert this instance to a ServerServiceDefinition that can be run on a Grpc server.
         /// </summary>
-        [Export]
         public ServerServiceDefinition ToServerServiceDefinition()
         {
             return CommentsService.BindService(this);

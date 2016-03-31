@@ -19,8 +19,8 @@ namespace KillrVideo.UserManagement
     /// An implementation of the user management service that uses the LINQ portion of the Cassandra driver to store user accounts in Cassandra
     /// and publishes events to a message bus.
     /// </summary>
-    [Export]
-    public class LinqUserManagementService : UserManagementService.IUserManagementService
+    [Export(typeof(IGrpcServerService))]
+    public class LinqUserManagementService : UserManagementService.IUserManagementService, IGrpcServerService
     {
         private readonly ISession _session;
         private readonly IBus _bus;
@@ -40,6 +40,14 @@ namespace KillrVideo.UserManagement
 
             _userProfileTable = new Table<LinqDtos.UserProfile>(session);
             _userCredentialsTable = new Table<UserCredentials>(session);
+        }
+
+        /// <summary>
+        /// Convert this instance to a ServerServiceDefinition that can be run on a Grpc server.
+        /// </summary>
+        public ServerServiceDefinition ToServerServiceDefinition()
+        {
+            return UserManagementService.BindService(this);
         }
 
         /// <summary>

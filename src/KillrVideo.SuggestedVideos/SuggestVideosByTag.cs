@@ -4,7 +4,6 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using DryIocAttributes;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
@@ -15,8 +14,8 @@ namespace KillrVideo.SuggestedVideos
     /// <summary>
     /// Searches the videos_by_tag table to offer suggestions for related videos. Does not support paging currently.
     /// </summary>
-    [Export]
-    public class SuggestVideosByTag : SuggestedVideoService.ISuggestedVideoService
+    [Export(typeof(IGrpcServerService))]
+    public class SuggestVideosByTag : SuggestedVideoService.ISuggestedVideoService, IGrpcServerService
     {
         private const int RelatedVideosToReturn = 4;
 
@@ -29,6 +28,14 @@ namespace KillrVideo.SuggestedVideos
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             _session = session;
             _statementCache = statementCache;
+        }
+
+        /// <summary>
+        /// Convert this instance to a ServerServiceDefinition that can be run on a Grpc server.
+        /// </summary>
+        public ServerServiceDefinition ToServerServiceDefinition()
+        {
+            return SuggestedVideoService.BindService(this);
         }
 
         /// <summary>

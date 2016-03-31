@@ -18,8 +18,8 @@ namespace KillrVideo.Search
     /// <summary>
     /// Searches videos using DataStax Enterprise search (Solr integration).
     /// </summary>
-    [Export]
-    public class DataStaxEnterpriseSearch : SearchService.ISearchService
+    [Export(typeof(IGrpcServerService))]
+    public class DataStaxEnterpriseSearch : SearchService.ISearchService, IGrpcServerService
     {
         private readonly ISession _session;
         private readonly IRestClient _restClient;
@@ -33,6 +33,14 @@ namespace KillrVideo.Search
             _session = session;
             _statementCache = statementCache;
             _restClient = restClient;
+        }
+
+        /// <summary>
+        /// Convert this instance to a ServerServiceDefinition that can be run on a Grpc server.
+        /// </summary>
+        public ServerServiceDefinition ToServerServiceDefinition()
+        {
+            return SearchService.BindService(this);
         }
 
         /// <summary>

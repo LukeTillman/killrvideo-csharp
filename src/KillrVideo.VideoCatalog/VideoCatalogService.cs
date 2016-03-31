@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Cassandra;
-using DryIocAttributes;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
@@ -18,8 +17,8 @@ namespace KillrVideo.VideoCatalog
     /// <summary>
     /// An implementation of the video catalog service that stores catalog data in Cassandra and publishes events on a message bus.
     /// </summary>
-    [Export, AsFactory]
-    public class VideoCatalogServiceImpl : VideoCatalogService.IVideoCatalogService
+    [Export(typeof(IGrpcServerService))]
+    public class VideoCatalogServiceImpl : VideoCatalogService.IVideoCatalogService, IGrpcServerService
     {
         public static readonly int LatestVideosTtlSeconds = Convert.ToInt32(TimeSpan.FromDays(MaxDaysInPastForLatestVideos).TotalSeconds);
 
@@ -43,7 +42,6 @@ namespace KillrVideo.VideoCatalog
         /// <summary>
         /// Convert this instance to a ServerServiceDefinition that can be run on a Grpc server.
         /// </summary>
-        [Export]
         public ServerServiceDefinition ToServerServiceDefinition()
         {
             return VideoCatalogService.BindService(this);

@@ -1,8 +1,8 @@
 using System;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
-using DryIocAttributes;
 using Grpc.Core;
+using KillrVideo.Protobuf;
 
 namespace KillrVideo.Uploads
 {
@@ -10,13 +10,12 @@ namespace KillrVideo.Uploads
     /// The default implementation of the Uploads service currently doesn't support uploaded videos. (We need some way to support
     /// processing and extracting thumbnails locally in order to support this.)
     /// </summary>
-    [Export, AsFactory]
-    public class UploadsServiceImpl : UploadsService.IUploadsService
+    [Export(typeof(IGrpcServerService))]
+    public class UploadsServiceImpl : UploadsService.IUploadsService, IGrpcServerService
     {
         /// <summary>
         /// Convert this instance to a ServerServiceDefinition that can be run on a Grpc server.
         /// </summary>
-        [Export]
         public ServerServiceDefinition ToServerServiceDefinition()
         {
             return UploadsService.BindService(this);

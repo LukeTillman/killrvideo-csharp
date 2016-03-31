@@ -3,17 +3,17 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using DryIocAttributes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
+using KillrVideo.Protobuf;
 
 namespace KillrVideo.Statistics
 {
     /// <summary>
     /// An implementation of the video statistics service that stores video stats in Cassandra.
     /// </summary>
-    [Export, AsFactory]
-    public class StatisticsServiceImpl : StatisticsService.IStatisticsService
+    [Export(typeof(IGrpcServerService))]
+    public class StatisticsServiceImpl : StatisticsService.IStatisticsService, IGrpcServerService
     {
         private readonly ISession _session;
         private readonly PreparedStatementCache _statementCache;
@@ -29,7 +29,6 @@ namespace KillrVideo.Statistics
         /// <summary>
         /// Convert this instance to a ServerServiceDefinition that can be run on a Grpc server.
         /// </summary>
-        [Export]
         public ServerServiceDefinition ToServerServiceDefinition()
         {
             return StatisticsService.BindService(this);

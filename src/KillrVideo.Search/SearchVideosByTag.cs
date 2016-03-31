@@ -13,8 +13,8 @@ namespace KillrVideo.Search
     /// <summary>
     /// Searches for videos by tag in Cassandra.
     /// </summary>
-    [Export]
-    public class SearchVideosByTag : SearchService.ISearchService
+    [Export(typeof(IGrpcServerService))]
+    public class SearchVideosByTag : SearchService.ISearchService, IGrpcServerService
     {
         private readonly ISession _session;
         private readonly PreparedStatementCache _statementCache;
@@ -25,6 +25,14 @@ namespace KillrVideo.Search
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             _session = session;
             _statementCache = statementCache;
+        }
+
+        /// <summary>
+        /// Convert this instance to a ServerServiceDefinition that can be run on a Grpc server.
+        /// </summary>
+        public ServerServiceDefinition ToServerServiceDefinition()
+        {
+            return SearchService.BindService(this);
         }
 
         /// <summary>

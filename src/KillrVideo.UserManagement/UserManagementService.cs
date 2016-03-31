@@ -15,8 +15,8 @@ namespace KillrVideo.UserManagement
     /// <summary>
     /// An implementation of the user management service that stores accounts in Cassandra and publishes events on a message bus.
     /// </summary>
-    [Export]
-    public class UserManagementServiceImpl : UserManagementService.IUserManagementService
+    [Export(typeof(IGrpcServerService))]
+    public class UserManagementServiceImpl : UserManagementService.IUserManagementService, IGrpcServerService
     {
         private readonly ISession _session;
         private readonly IBus _bus;
@@ -30,6 +30,14 @@ namespace KillrVideo.UserManagement
             _session = session;
             _statementCache = statementCache;
             _bus = bus;
+        }
+
+        /// <summary>
+        /// Convert this instance to a ServerServiceDefinition that can be run on a Grpc server.
+        /// </summary>
+        public ServerServiceDefinition ToServerServiceDefinition()
+        {
+            return UserManagementService.BindService(this);
         }
 
         /// <summary>

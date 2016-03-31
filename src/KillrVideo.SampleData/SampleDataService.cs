@@ -1,17 +1,17 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
-using DryIocAttributes;
 using Grpc.Core;
 using KillrVideo.MessageBus;
+using KillrVideo.Protobuf;
 
 namespace KillrVideo.SampleData
 {
     /// <summary>
     /// Implementation of sample data service that simply sends commands on the bus to a backend worker.
     /// </summary>
-    [Export, AsFactory]
-    public class SampleDataServiceImpl : SampleDataService.ISampleDataService
+    [Export(typeof(IGrpcServerService))]
+    public class SampleDataServiceImpl : SampleDataService.ISampleDataService, IGrpcServerService
     {
         private readonly IBus _bus;
 
@@ -24,7 +24,6 @@ namespace KillrVideo.SampleData
         /// <summary>
         /// Convert this instance to a ServerServiceDefinition that can be run on a Grpc server.
         /// </summary>
-        [Export]
         public ServerServiceDefinition ToServerServiceDefinition()
         {
             return SampleDataService.BindService(this);

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Cassandra;
-using DryIocAttributes;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
@@ -17,8 +16,8 @@ namespace KillrVideo.SuggestedVideos
     /// <summary>
     /// Makes video suggestions based on data in Cassandra.
     /// </summary>
-    [Export]
-    public class DataStaxEnterpriseSuggestedVideos : SuggestedVideoService.ISuggestedVideoService
+    [Export(typeof(IGrpcServerService))]
+    public class DataStaxEnterpriseSuggestedVideos : SuggestedVideoService.ISuggestedVideoService, IGrpcServerService
     {
         private readonly ISession _session;
         private readonly IRestClient _restClient;
@@ -32,6 +31,14 @@ namespace KillrVideo.SuggestedVideos
             _session = session;
             _statementCache = statementCache;
             _restClient = restClient;
+        }
+
+        /// <summary>
+        /// Convert this instance to a ServerServiceDefinition that can be run on a Grpc server.
+        /// </summary>
+        public ServerServiceDefinition ToServerServiceDefinition()
+        {
+            return SuggestedVideoService.BindService(this);
         }
 
         /// <summary>
