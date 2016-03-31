@@ -49,7 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataStaxEnterpriseEnvironmentState.cs" />
     <Compile Include="MicrosecondsSinceEpoch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PreparedStatementCache.cs" />

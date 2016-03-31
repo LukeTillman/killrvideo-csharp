@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace KillrVideo.UserManagement
     /// An implementation of the user management service that stores accounts in Cassandra and publishes events on a message bus.
     /// </summary>
     [Export(typeof(IGrpcServerService))]
-    public class UserManagementServiceImpl : UserManagementService.IUserManagementService, IGrpcServerService
+    public class UserManagementServiceImpl : UserManagementService.IUserManagementService, IConditionalGrpcServerService
     {
         private readonly ISession _session;
         private readonly IBus _bus;
@@ -38,6 +39,15 @@ namespace KillrVideo.UserManagement
         public ServerServiceDefinition ToServerServiceDefinition()
         {
             return UserManagementService.BindService(this);
+        }
+
+        /// <summary>
+        /// Returns true if this service should run given the configuration of the host.
+        /// </summary>
+        public bool ShouldRun(IDictionary<string, string> hostConfig)
+        {
+            // Use this implementation when LINQ is not enabled or not present in the host config
+            return UserManagementConfig.UseLinq(hostConfig) == false;
         }
 
         /// <summary>

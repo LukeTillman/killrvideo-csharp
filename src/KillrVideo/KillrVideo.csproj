@@ -113,6 +113,10 @@
       <Project>{9a8c1794-cec4-4670-af3e-e3cd83881e8e}</Project>
       <Name>KillrVideo.MessageBus</Name>
     </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Protobuf\KillrVideo.Protobuf.csproj">
+      <Project>{4a41c0c8-6a27-4728-b596-b64227a26fb6}</Project>
+      <Name>KillrVideo.Protobuf</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Ratings\KillrVideo.Ratings.csproj">
       <Project>{c054a489-a037-49e5-8461-546cd61817eb}</Project>
       <Name>KillrVideo.Ratings</Name>

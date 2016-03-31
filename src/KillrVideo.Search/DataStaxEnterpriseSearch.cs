@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace KillrVideo.Search
     /// Searches videos using DataStax Enterprise search (Solr integration).
     /// </summary>
     [Export(typeof(IGrpcServerService))]
-    public class DataStaxEnterpriseSearch : SearchService.ISearchService, IGrpcServerService
+    public class DataStaxEnterpriseSearch : SearchService.ISearchService, IConditionalGrpcServerService
     {
         private readonly ISession _session;
         private readonly IRestClient _restClient;
@@ -41,6 +42,15 @@ namespace KillrVideo.Search
         public ServerServiceDefinition ToServerServiceDefinition()
         {
             return SearchService.BindService(this);
+        }
+
+        /// <summary>
+        /// Returns true if this service should run given the configuration of the host.
+        /// </summary>
+        public bool ShouldRun(IDictionary<string, string> hostConfig)
+        {
+            // Use this implementation when DSE Search is enabled in the host config
+            return SearchConfig.UseDseSearch(hostConfig);
         }
 
         /// <summary>

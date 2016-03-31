@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IConditionalGrpcServerService.cs" />
     <Compile Include="IGrpcServerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="protos\CommonTypes.generated.cs" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Net;
@@ -17,7 +18,7 @@ namespace KillrVideo.SuggestedVideos
     /// Makes video suggestions based on data in Cassandra.
     /// </summary>
     [Export(typeof(IGrpcServerService))]
-    public class DataStaxEnterpriseSuggestedVideos : SuggestedVideoService.ISuggestedVideoService, IGrpcServerService
+    public class DataStaxEnterpriseSuggestedVideos : SuggestedVideoService.ISuggestedVideoService, IConditionalGrpcServerService
     {
         private readonly ISession _session;
         private readonly IRestClient _restClient;
@@ -39,6 +40,15 @@ namespace KillrVideo.SuggestedVideos
         public ServerServiceDefinition ToServerServiceDefinition()
         {
             return SuggestedVideoService.BindService(this);
+        }
+
+        /// <summary>
+        /// Returns true if this service should run given the configuration of the host.
+        /// </summary>
+        public bool ShouldRun(IDictionary<string, string> hostConfig)
+        {
+            // Use this implementation when DSE Search and Spark are enabled in the host config
+            return SuggestionsConfig.UseDse(hostConfig);
         }
 
         /// <summary>

@@ -15,7 +15,7 @@ namespace KillrVideo.SuggestedVideos
     /// Searches the videos_by_tag table to offer suggestions for related videos. Does not support paging currently.
     /// </summary>
     [Export(typeof(IGrpcServerService))]
-    public class SuggestVideosByTag : SuggestedVideoService.ISuggestedVideoService, IGrpcServerService
+    public class SuggestVideosByTag : SuggestedVideoService.ISuggestedVideoService, IConditionalGrpcServerService
     {
         private const int RelatedVideosToReturn = 4;
 
@@ -36,6 +36,15 @@ namespace KillrVideo.SuggestedVideos
         public ServerServiceDefinition ToServerServiceDefinition()
         {
             return SuggestedVideoService.BindService(this);
+        }
+
+        /// <summary>
+        /// Returns true if this service should run given the configuration of the host.
+        /// </summary>
+        public bool ShouldRun(IDictionary<string, string> hostConfig)
+        {
+            // Use this implementation when DSE Search and Spark are not enabled or not present in the host config
+            return SuggestionsConfig.UseDse(hostConfig) == false;
         }
 
         /// <summary>

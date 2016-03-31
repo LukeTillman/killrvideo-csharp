@@ -5,7 +5,9 @@
 extern alias SampleData;
 
 using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using Cassandra;
@@ -16,6 +18,7 @@ using KillrVideo.Cassandra;
 using KillrVideo.Comments;
 using KillrVideo.MessageBus;
 using KillrVideo.MessageBus.Transport;
+using KillrVideo.Protobuf;
 using KillrVideo.Ratings;
 using KillrVideo.Search;
 using KillrVideo.Statistics;
@@ -55,16 +58,8 @@ namespace KillrVideo
                 .WriteTo.ColoredConsole(LogEventLevel.Information, "{Timestamp:HH:mm:ss} [{SourceContext:l}] {Message}{NewLine}{Exception}")
                 .CreateLogger();
 
-            // Get the host and starting port to bind RPC services to
-            string host = ConfigurationManager.AppSettings.Get("ServicesHost");
-            if (string.IsNullOrWhiteSpace(host))
-                throw new InvalidOperationException("You must specify the ServicesHost configuration option");
-
-            string portConfig = ConfigurationManager.AppSettings.Get("ServicesPort");
-            if (string.IsNullOrWhiteSpace(portConfig))
-                throw new InvalidOperationException("You must specify the ServicesPort configuration option");
-
-            int port = int.Parse(portConfig);
+            // Convert all configurations from our .config file to a Dictionary
+            var config = ConfigurationManager.AppSettings.AllKeys.ToDictionary(key => key, key => ConfigurationManager.AppSettings.Get(key));
 
             // Create IoC container
             IContainer container = CreateContainer();
@@ -74,12 +69,28 @@ namespace KillrVideo
             container = container.WithMefAttributedModel();
             container.RegisterExports(ServiceAssemblies);
 
-            // Create a Grpc server with any services from the container
-            var server = new Server();
-            server.Ports.Add(host, port, ServerCredentials.Insecure);
+            // Get the host and starting port to bind RPC services to
+            string host = GetRequiredConfig(config, "ServicesHost");
+            string portConfig = GetRequiredConfig(config, "ServicesPort");
+            int port = int.Parse(portConfig);
 
-            foreach (var serverServiceDef in container.ResolveMany<ServerServiceDefinition>())
-                server.Services.Add(serverServiceDef);
+            // Create the server and add the services found in the container
+            var server = new Server
+            {
+                Ports = { new ServerPort(host, port, ServerCredentials.Insecure) }
+            };
+
+            // Try to find any Grpc services in the container
+            foreach (var grpcService in container.ResolveMany<IGrpcServerService>())
+            {
+                // Skip any conditional services that shouldn't run in the current environment
+                var conditionalService = grpcService as IConditionalGrpcServerService;
+                if (conditionalService?.ShouldRun(config) == false)
+                    continue;
+
+                // Add to server
+                server.Services.Add(grpcService.ToServerServiceDefinition());
+            }
 
             server.Start();
         }
@@ -91,7 +102,6 @@ namespace KillrVideo
             // Register Cassandra session factory as singleton
             container.Register(Made.Of(() => CreateCassandraSession()), Reuse.Singleton);
             container.Register<PreparedStatementCache>(Reuse.Singleton);
-            container.Register(Made.Of(() => GetDataStaxEnterpriseState()), Reuse.Singleton);
 
             // Register Bus and components
             container.Register(Made.Of(() => CreateBusServer()), Reuse.Singleton);
@@ -130,17 +140,19 @@ namespace KillrVideo
 
             return builder.Build().Connect("killrvideo");
         }
-
-        private static DataStaxEnterpriseEnvironmentState GetDataStaxEnterpriseState()
-        {
-            // TODO: Check configs for enabling DSE search/spark
-            var state = DataStaxEnterpriseEnvironmentState.None;
-            return state;
-        }
-
+        
         private static IBusServer CreateBusServer()
         {
             return BusBuilder.Configure().WithServiceName("KillrVideo").WithTransport(InMemoryTransport.Instance).Build();
+        }
+
+        private static string GetRequiredConfig(IDictionary<string, string> config, string configKey)
+        {
+            string val;
+            if (config.TryGetValue(configKey, out val) == false || string.IsNullOrWhiteSpace(val))
+                throw new InvalidOperationException($"You must specify a value for {configKey} in your .config file");
+
+            return val;
         }
     }
 }

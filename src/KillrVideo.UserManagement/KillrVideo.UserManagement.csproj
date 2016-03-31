@@ -79,6 +79,7 @@
     <Compile Include="protos\UserManagementEvents.generated.cs" />
     <Compile Include="protos\UserManagementService.generated.cs" />
     <Compile Include="protos\UserManagementServiceGrpc.cs" />
+    <Compile Include="UserManagementConfig.cs" />
     <Compile Include="UserManagementService.cs" />
   </ItemGroup>
   <ItemGroup>

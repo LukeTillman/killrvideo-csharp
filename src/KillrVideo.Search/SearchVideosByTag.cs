@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace KillrVideo.Search
     /// Searches for videos by tag in Cassandra.
     /// </summary>
     [Export(typeof(IGrpcServerService))]
-    public class SearchVideosByTag : SearchService.ISearchService, IGrpcServerService
+    public class SearchVideosByTag : SearchService.ISearchService, IConditionalGrpcServerService
     {
         private readonly ISession _session;
         private readonly PreparedStatementCache _statementCache;
@@ -33,6 +34,15 @@ namespace KillrVideo.Search
         public ServerServiceDefinition ToServerServiceDefinition()
         {
             return SearchService.BindService(this);
+        }
+
+        /// <summary>
+        /// Returns true if this service should run given the configuration of the host.
+        /// </summary>
+        public bool ShouldRun(IDictionary<string, string> hostConfig)
+        {
+            // Use this implementation when DSE Search is not enabled or not present in the host config
+            return SearchConfig.UseDseSearch(hostConfig) == false;
         }
 
         /// <summary>
