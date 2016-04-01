@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using DryIocAttributes;
 using KillrVideo.MessageBus;
 using KillrVideo.SampleData.Components.YouTube;
 
@@ -9,6 +10,7 @@ namespace KillrVideo.SampleData.Handlers
     /// <summary>
     /// Handler that refreshes sample YouTube video sources.
     /// </summary>
+    [ExportMany, Reuse(ReuseType.Transient)]
     public class RefreshYouTubeSourcesHandler : IHandleMessage<RefreshYouTubeSourcesRequest>
     {
         private readonly SampleYouTubeVideoManager _youTubeManager;

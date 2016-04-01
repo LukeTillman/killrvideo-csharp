@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DryIocAttributes;
 using KillrVideo.Comments;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
@@ -13,6 +14,7 @@ namespace KillrVideo.SampleData.Handlers
     /// <summary>
     /// Adds sample comments to videos on the site.
     /// </summary>
+    [ExportMany, Reuse(ReuseType.Transient)]
     public class AddSampleCommentsHandler : IHandleMessage<AddSampleCommentsRequest>
     {
         private static readonly ILogger Logger = Log.ForContext<AddSampleCommentsHandler>();

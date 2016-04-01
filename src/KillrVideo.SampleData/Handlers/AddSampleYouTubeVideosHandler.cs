@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DryIocAttributes;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
 using KillrVideo.SampleData.Components;
@@ -13,6 +14,7 @@ namespace KillrVideo.SampleData.Handlers
     /// <summary>
     /// Adds sample YouTube videos to the site.
     /// </summary>
+    [ExportMany, Reuse(ReuseType.Transient)]
     public class AddSampleYouTubeVideosHandler : IHandleMessage<AddSampleYouTubeVideosRequest>
     {
         private static readonly ILogger Logger = Log.ForContext<AddSampleYouTubeVideosHandler>();

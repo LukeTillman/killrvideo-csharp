@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cassandra;
+using DryIocAttributes;
 using KillrVideo.Cassandra;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
@@ -12,6 +13,7 @@ namespace KillrVideo.SampleData.Handlers
     /// Records the video id of any videos added to the site so that they can potentially be used when adding
     /// video-related sample data like comments, ratings, etc.
     /// </summary>
+    [ExportMany, Reuse(ReuseType.Transient)]
     public class RecordVideosAddedHandler : IHandleMessage<UploadedVideoAdded>, IHandleMessage<YouTubeVideoAdded>
     {
         private readonly ISession _session;

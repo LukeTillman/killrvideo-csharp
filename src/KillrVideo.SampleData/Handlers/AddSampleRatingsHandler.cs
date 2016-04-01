@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DryIocAttributes;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
 using KillrVideo.Ratings;
@@ -12,6 +13,7 @@ namespace KillrVideo.SampleData.Handlers
     /// <summary>
     /// Adds sample video ratings to the site.
     /// </summary>
+    [ExportMany, Reuse(ReuseType.Transient)]
     public class AddSampleRatingsHandler : IHandleMessage<AddSampleRatingsRequest>
     {
         private static readonly ILogger Logger = Log.ForContext<AddSampleRatingsHandler>();

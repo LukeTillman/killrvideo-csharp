@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
+using DryIocAttributes;
 using Google.Protobuf.WellKnownTypes;
 using KillrVideo.Cassandra;
 using KillrVideo.MessageBus;
@@ -15,6 +16,7 @@ namespace KillrVideo.VideoCatalog.Handlers
     /// <summary>
     /// Updates an uploaded videos information in the catalog once the video has been published and is ready for viewing.
     /// </summary>
+    [ExportMany, Reuse(ReuseType.Transient)]
     public class UpdateUploadedVideoWhenPublished : IHandleMessage<UploadedVideoPublished>
     {
         private readonly ISession _session;

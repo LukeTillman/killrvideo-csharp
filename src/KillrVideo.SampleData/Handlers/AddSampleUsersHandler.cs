@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
+using DryIocAttributes;
 using Faker;
 using KillrVideo.Cassandra;
 using KillrVideo.MessageBus;
@@ -13,6 +14,7 @@ namespace KillrVideo.SampleData.Handlers
     /// <summary>
     /// Adds sample users to the site.
     /// </summary>
+    [ExportMany, Reuse(ReuseType.Transient)]
     public class AddSampleUsersHandler : IHandleMessage<AddSampleUsersRequest>
     {
         private readonly ISession _session;
