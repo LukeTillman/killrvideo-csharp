@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cassandra;
+using DryIocAttributes;
 using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
 using KillrVideo.Cassandra;
@@ -13,6 +14,7 @@ namespace KillrVideo.Search.Handlers
     /// <summary>
     /// Updates the search by tags data when new videos are added to the video catalog.
     /// </summary>
+    [ExportMany, Reuse(ReuseType.Transient)]
     public class UpdateSearchOnVideoAdded : IHandleMessage<UploadedVideoAdded>, IHandleMessage<YouTubeVideoAdded>
     {
         private readonly ISession _session;

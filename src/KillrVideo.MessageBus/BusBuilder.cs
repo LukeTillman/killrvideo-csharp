@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Google.Protobuf;
-using Google.Protobuf.Reflection;
 using KillrVideo.MessageBus.Subscribe;
 using KillrVideo.MessageBus.Transport;
 
@@ -13,12 +10,11 @@ namespace KillrVideo.MessageBus
     public class BusBuilder
     {
         internal IMessageTransport Transport { get; private set; }
-        internal Dictionary<MessageDescriptor, List<IHandlerAdapter>> Handlers { get; }
         internal string SerivceName { get; private set; }
+        internal IHandlerFactory HandlerFactory { get; private set; }
 
         private BusBuilder()
         {
-            Handlers = new Dictionary<MessageDescriptor, List<IHandlerAdapter>>();
         }
 
         /// <summary>
@@ -42,23 +38,15 @@ namespace KillrVideo.MessageBus
         }
 
         /// <summary>
-        /// Subscribe and handle a particular Protobuf message type with the bus.
+        /// Configure the handler factory to use.
         /// </summary>
-        public BusBuilder Subscribe<T>(MessageDescriptor messageType, IHandleMessage<T> handler)
-            where T : IMessage<T>
+        public BusBuilder WithHandlerFactory(IHandlerFactory handlerFactory)
         {
-            if (messageType == null) throw new ArgumentNullException(nameof(messageType));
-            if (handler == null) throw new ArgumentNullException(nameof(handler));
-
-            List<IHandlerAdapter> handlers;
-            if (Handlers.TryGetValue(messageType, out handlers) == false)
-                handlers = new List<IHandlerAdapter>();
-
-            handlers.Add(new HandlerAdapter<T>(handler));
-            Handlers[messageType] = handlers;
+            if (handlerFactory == null) throw new ArgumentNullException(nameof(handlerFactory));
+            HandlerFactory = handlerFactory;
             return this;
         }
-
+        
         /// <summary>
         /// Builds a bus server instance.
         /// </summary>
@@ -72,6 +60,7 @@ namespace KillrVideo.MessageBus
         {
             if (SerivceName == null) throw new InvalidOperationException("Must specify a service name for the bus.");
             if (Transport == null) throw new InvalidOperationException("Must specify a transport for the bus.");
+            if (HandlerFactory == null) throw new InvalidOperationException("Must specify a handler factory for the bus");
         }
 
         /// <summary>

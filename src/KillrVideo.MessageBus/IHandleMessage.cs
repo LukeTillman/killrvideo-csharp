@@ -4,10 +4,9 @@ using Google.Protobuf;
 namespace KillrVideo.MessageBus
 {
     /// <summary>
-    /// Interface for any bus message handlers.
+    /// Interface for message handlers.
     /// </summary>
-    public interface IHandleMessage<in T>
-        where T : IMessage<T>
+    public interface IHandleMessage<in T> where T : IMessage, new()
     {
         Task Handle(T message);
     }

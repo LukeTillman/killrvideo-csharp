@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Google.Protobuf;
-using Google.Protobuf.Reflection;
 using KillrVideo.MessageBus.Transport;
 using Serilog;
 
@@ -16,33 +14,36 @@ namespace KillrVideo.MessageBus.Subscribe
 
         private readonly string _serviceName;
         private readonly IMessageTransport _transport;
-        private readonly IDictionary<MessageDescriptor, List<IHandlerAdapter>> _handlers;
+        private readonly IHandlerFactory _handlerFactory;
 
         private readonly CancellationTokenSource _cancelRunningServer;
         private Task _runningServer;
 
-        public SubscriptionServer(string serviceName, IMessageTransport transport, IDictionary<MessageDescriptor, List<IHandlerAdapter>> handlers)
+        public SubscriptionServer(string serviceName, IMessageTransport transport, IHandlerFactory handlerFactory)
         {
             if (serviceName == null) throw new ArgumentNullException(nameof(serviceName));
             if (transport == null) throw new ArgumentNullException(nameof(transport));
-            if (handlers == null) throw new ArgumentNullException(nameof(handlers));
-
+            if (handlerFactory == null) throw new ArgumentNullException(nameof(handlerFactory));
             _serviceName = serviceName;
             _transport = transport;
-            _handlers = handlers;
+            _handlerFactory = handlerFactory;
 
             _cancelRunningServer = new CancellationTokenSource();
             _runningServer = Task.CompletedTask;
         }
 
-        public async Task StartServer(CancellationToken token = default(CancellationToken))
+        public async Task StartServer(List<HandlerRegistration> handlers, CancellationToken token = default(CancellationToken))
         {
             // Nothing to do if no handlers
-            if (_handlers.Count == 0)
+            if (handlers.Count == 0)
                 return;
 
+            // Get the unique message FullNames amongst the handlers and use those as the topic name to subscribe to
+            Dictionary<string, List<HandlerRegistration>> handlersByTopic = handlers.GroupBy(h => h.MessageDescriptor.FullName)
+                                                                                    .ToDictionary(g => g.Key, g => g.ToList());
+
             // Subscribe to all topics
-            Subscription[] subscriptions = await Task.WhenAll(_handlers.Select(kvp => Subscribe(kvp.Key, kvp.Value, token)))
+            Subscription[] subscriptions = await Task.WhenAll(handlersByTopic.Select(kvp => Subscribe(kvp.Key, kvp.Value, token)))
                                                      .ConfigureAwait(false);
 
             // Kick off a background task to pull messages off the transport for each subscription and dispatch the messages
@@ -76,11 +77,10 @@ namespace KillrVideo.MessageBus.Subscribe
             }
         }
 
-        private async Task<Subscription> Subscribe(MessageDescriptor messageType, List<IHandlerAdapter> handlers, CancellationToken token)
+        private async Task<Subscription> Subscribe(string topic, List<HandlerRegistration> handlers, CancellationToken token)
         {
-            string topic = messageType.FullName;
             string id = await _transport.Subscribe(_serviceName, topic, token).ConfigureAwait(false);
-            return new Subscription(id, messageType, handlers);
+            return new Subscription(id, handlers);
         }
 
         private async Task RunServer(Subscription[] subscriptions, CancellationToken token)
@@ -144,41 +144,20 @@ namespace KillrVideo.MessageBus.Subscribe
                     continue;
                 }
 
-                // Parse the Protobuf bytes
-                IMessage message;
+                // Dispatch to handlers
                 try
                 {
-                    message = subscription.MessageType.Parser.ParseFrom(msgBytes);
-                }
-                catch (OperationCanceledException)
-                {
-                    throw;
+                    var dispatchTasks = subscription.Handlers.Select(h => h.Dispatch(_handlerFactory, msgBytes));
+                    await Task.WhenAll(dispatchTasks).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {
-                    Logger.Error(e, "Error while parsing message from transport for subscription {subscription}", subscription.Id);
+                    Logger.Error(e, "Error while dispatching message to handlers for subscription {subscription}", subscription.Id);
 
-                    // Just start over with next message
+                    // Just go to next message (TODO: Handler retries?)
                     continue;
                 }
-
-                // Dispatch the message to handlers
-                try
-                {
-                    await subscription.DispatchMessage(message).ConfigureAwait(false);
-                }
-                catch (OperationCanceledException)
-                {
-                    throw;
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e, "Error dispatching to message handlers for subscription {subscription}", subscription.Id);
-
-                    // Just start over with next message (TODO: Handler retries?)
-                    continue;
-                }
-
+                
                 processed = true;
             }
 

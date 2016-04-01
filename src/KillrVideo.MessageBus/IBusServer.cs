@@ -1,21 +1,25 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace KillrVideo.MessageBus
 {
     /// <summary>
     /// A bus server that can be started/stopped.
     /// </summary>
-    public interface IBusServer
+    public interface IBusServer : IBus
     {
         /// <summary>
-        /// Starts the server processing any subscriptions and returns a bus that can
-        /// publish events.
+        /// Subscribes the specified handler Types.
         /// </summary>
-        IBus StartServer();
+        void Subscribe(params Type[] handlerTypes);
 
         /// <summary>
-        /// Stops any subscriptions and returns a Task that will complete once the server
-        /// is shutdown.
+        /// Starts the server processing any subscriptions.
+        /// </summary>
+        void StartServer();
+
+        /// <summary>
+        /// Stops any subscriptions and returns a Task that will complete once the server is shutdown.
         /// </summary>
         Task StopServerAsync();
     }

@@ -3,7 +3,6 @@
 // Comments service to post sample comments, which would conflict with the same types defined in the KillrVideo.Comments service project/DLL
 // which is also referenced by this project
 extern alias SampleData;
-
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -92,21 +91,34 @@ namespace KillrVideo
                 server.Services.Add(grpcService.ToServerServiceDefinition());
             }
 
+            // Try to find any bus message handlers registered with the container
+            Type[] handlerTypes = container.GetServiceRegistrations()
+                                           .Where(sr => sr.ServiceType.IsMessageHandlerInterface())
+                                           .Select(sr => sr.ServiceType)
+                                           .ToArray();
+            var busServer = container.Resolve<IBusServer>();
+            busServer.Subscribe(handlerTypes);
+
+            // Start bus
+            busServer.StartServer();
+
+            // Start Grpc server
             server.Start();
         }
 
         private static Container CreateContainer(IDictionary<string, string> config)
         {
             var container = new Container();
-
+            
             // Register Cassandra session instance as Singleton (which is a best practice)
             ISession session = CreateCassandraSession(config);
             container.RegisterInstance(session);
             container.Register<PreparedStatementCache>(Reuse.Singleton);
 
             // Register Bus and components
-            container.Register(Made.Of(() => CreateBusServer()), Reuse.Singleton);
-            container.Register(Made.Of(r => ServiceInfo.Of<IBusServer>(), busServer => busServer.StartServer()), Reuse.Singleton);
+            IBusServer bus = CreateBusServer(new ContainerHandlerFactory(container));
+            container.RegisterInstance(bus);
+            container.RegisterMapping<IBus, IBusServer>();
 
             // Register REST client
             container.Register<IRestClient, RestClient>(Made.Of(() => new RestClient()));
@@ -142,9 +154,13 @@ namespace KillrVideo
             return builder.Build().Connect("killrvideo");
         }
         
-        private static IBusServer CreateBusServer()
+        private static IBusServer CreateBusServer(ContainerHandlerFactory handlerFactory)
         {
-            return BusBuilder.Configure().WithServiceName("KillrVideo").WithTransport(InMemoryTransport.Instance).Build();
+            return BusBuilder.Configure()
+                .WithServiceName("KillrVideo")
+                .WithTransport(InMemoryTransport.Instance)
+                .WithHandlerFactory(handlerFactory)
+                .Build();
         }
 
         private static string GetRequiredConfig(IDictionary<string, string> config, string configKey)
