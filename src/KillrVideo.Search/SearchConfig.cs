@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using KillrVideo.Host.Config;
 
 namespace KillrVideo.Search
 {
@@ -15,13 +15,10 @@ namespace KillrVideo.Search
         /// <summary>
         /// Returns true if using DSE Search is enabled.
         /// </summary>
-        internal static bool UseDseSearch(IDictionary<string, string> config)
+        internal static bool UseDseSearch(IHostConfiguration config)
         {
-            string useDse;
-            if (config.TryGetValue(UseDseKey, out useDse) == false)
-                return false;
-
-            return bool.Parse(useDse);
+            string useDse = config.GetConfigurationValue(UseDseKey);
+            return !string.IsNullOrWhiteSpace(useDse) && bool.Parse(useDse);
         }
     }
 }

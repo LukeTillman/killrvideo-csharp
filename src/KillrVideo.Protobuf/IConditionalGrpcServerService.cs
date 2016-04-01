@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using KillrVideo.Host.Config;
 
 namespace KillrVideo.Protobuf
 {
@@ -10,6 +10,6 @@ namespace KillrVideo.Protobuf
         /// <summary>
         /// Returns true if this service should run given the configuration of the host.
         /// </summary>
-        bool ShouldRun(IDictionary<string, string> hostConfiguration);
+        bool ShouldRun(IHostConfiguration hostConfiguration);
     }
 }

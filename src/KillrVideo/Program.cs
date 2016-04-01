@@ -15,6 +15,7 @@ using DryIoc.MefAttributedModel;
 using Grpc.Core;
 using KillrVideo.Cassandra;
 using KillrVideo.Comments;
+using KillrVideo.Host.Config;
 using KillrVideo.MessageBus;
 using KillrVideo.MessageBus.Transport;
 using KillrVideo.Protobuf;
@@ -37,7 +38,7 @@ namespace KillrVideo
     /// </summary>
     class Program
     {
-        private static readonly Assembly[] ServiceAssemblies = new[]
+        private static readonly Assembly[] ProjectAssemblies = new[]
         {
             typeof (CommentsService).Assembly,
             typeof (RatingsService).Assembly,
@@ -47,7 +48,9 @@ namespace KillrVideo
             typeof (UserManagementService).Assembly,
             typeof (VideoCatalogService).Assembly,
             typeof (SearchService).Assembly,
-            typeof (SampleDataService).Assembly
+            typeof (SampleDataService).Assembly,
+            typeof (AppSettingsConfiguration).Assembly,
+            typeof (GrpcServerTask).Assembly
         };
 
         static void Main(string[] args)
@@ -58,7 +61,7 @@ namespace KillrVideo
                 .CreateLogger();
 
             // Convert all configurations from our .config file to a Dictionary
-            var config = ConfigurationManager.AppSettings.AllKeys.ToDictionary(key => key, key => ConfigurationManager.AppSettings.Get(key));
+            var config = new AppSettingsConfiguration();
 
             // Create IoC container
             IContainer container = CreateContainer(config);
@@ -66,30 +69,7 @@ namespace KillrVideo
             // Let the container pick up any components using the MEF-like attributes in referenced assemblies (this will pick up any 
             // exported Grpc server definitions, message bus handlers, and background tasks in the referenced services)
             container = container.WithMefAttributedModel();
-            container.RegisterExports(ServiceAssemblies);
-
-            // Get the host and starting port to bind RPC services to
-            string host = GetRequiredConfig(config, "ServicesHost");
-            string portConfig = GetRequiredConfig(config, "ServicesPort");
-            int port = int.Parse(portConfig);
-
-            // Create the server and add the services found in the container
-            var server = new Server
-            {
-                Ports = { new ServerPort(host, port, ServerCredentials.Insecure) }
-            };
-
-            // Try to find any Grpc services in the container
-            foreach (var grpcService in container.ResolveMany<IGrpcServerService>())
-            {
-                // Skip any conditional services that shouldn't run in the current environment
-                var conditionalService = grpcService as IConditionalGrpcServerService;
-                if (conditionalService?.ShouldRun(config) == false)
-                    continue;
-
-                // Add to server
-                server.Services.Add(grpcService.ToServerServiceDefinition());
-            }
+            container.RegisterExports(ProjectAssemblies);
 
             // Try to find any bus message handlers registered with the container
             Type[] handlerTypes = container.GetServiceRegistrations()
@@ -102,13 +82,14 @@ namespace KillrVideo
             // Start bus
             busServer.StartServer();
 
-            // Start Grpc server
-            server.Start();
+            // Start host
+            var host = container.Resolve<Host.Host>();
+            host.Start("KillrVideo", config);
         }
 
-        private static Container CreateContainer(IDictionary<string, string> config)
+        private static Container CreateContainer(IHostConfiguration config)
         {
-            var container = new Container();
+            var container = new Container(rules => rules.WithResolveIEnumerableAsLazyEnumerable());
             
             // Register Cassandra session instance as Singleton (which is a best practice)
             ISession session = CreateCassandraSession(config);
@@ -126,9 +107,9 @@ namespace KillrVideo
             return container;
         }
 
-        private static ISession CreateCassandraSession(IDictionary<string, string> config)
+        private static ISession CreateCassandraSession(IHostConfiguration config)
         {
-            string[] hosts = GetRequiredConfig(config, "CassandraHosts").Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] hosts = config.GetRequiredConfigurationValue("CassandraHosts").Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             if (hosts.Length == 0)
                 throw new InvalidOperationException("You must specify the CassandraHosts configuration option");
 

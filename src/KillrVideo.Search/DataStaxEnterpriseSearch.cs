@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Cassandra;
-using RestSharp;
-using Newtonsoft.Json;
-using System.Net;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
+using KillrVideo.Host.Config;
 using KillrVideo.Protobuf;
 using KillrVideo.Search.Dtos;
+using Newtonsoft.Json;
+using RestSharp;
 using Method = RestSharp.Method;
 
 namespace KillrVideo.Search
@@ -47,7 +47,7 @@ namespace KillrVideo.Search
         /// <summary>
         /// Returns true if this service should run given the configuration of the host.
         /// </summary>
-        public bool ShouldRun(IDictionary<string, string> hostConfig)
+        public bool ShouldRun(IHostConfiguration hostConfig)
         {
             // Use this implementation when DSE Search is enabled in the host config
             return SearchConfig.UseDseSearch(hostConfig);

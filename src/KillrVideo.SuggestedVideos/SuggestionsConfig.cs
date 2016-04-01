@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using KillrVideo.Host.Config;
 
 namespace KillrVideo.SuggestedVideos
 {
@@ -15,13 +15,10 @@ namespace KillrVideo.SuggestedVideos
         /// <summary>
         /// Returns true if DSE Search and Spark are enabled.
         /// </summary>
-        internal static bool UseDse(IDictionary<string, string> config)
+        internal static bool UseDse(IHostConfiguration config)
         {
-            string useDse;
-            if (config.TryGetValue(UseDseKey, out useDse) == false)
-                return false;
-
-            return bool.Parse(useDse);
+            string useDse = config.GetConfigurationValue(UseDseKey);
+            return !string.IsNullOrWhiteSpace(useDse) && bool.Parse(useDse);
         }
     }
 }

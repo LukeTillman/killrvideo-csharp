@@ -15,7 +15,7 @@ namespace KillrVideo.Host
     [Export]
     public class Host
     {
-        private static readonly ILogger Logger = Logger.ForContext<Host>();
+        private static readonly ILogger Logger = Log.ForContext<Host>();
 
         private readonly IEnumerable<IHostTask> _tasks;
         private string _name;

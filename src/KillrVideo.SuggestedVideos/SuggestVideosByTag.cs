@@ -7,6 +7,7 @@ using Cassandra;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
+using KillrVideo.Host.Config;
 using KillrVideo.Protobuf;
 
 namespace KillrVideo.SuggestedVideos
@@ -41,7 +42,7 @@ namespace KillrVideo.SuggestedVideos
         /// <summary>
         /// Returns true if this service should run given the configuration of the host.
         /// </summary>
-        public bool ShouldRun(IDictionary<string, string> hostConfig)
+        public bool ShouldRun(IHostConfiguration hostConfig)
         {
             // Use this implementation when DSE Search and Spark are not enabled or not present in the host config
             return SuggestionsConfig.UseDse(hostConfig) == false;

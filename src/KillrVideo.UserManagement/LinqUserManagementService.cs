@@ -8,6 +8,7 @@ using Cassandra.Data.Linq;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
+using KillrVideo.Host.Config;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
 using KillrVideo.UserManagement.Events;
@@ -53,7 +54,7 @@ namespace KillrVideo.UserManagement
         /// <summary>
         /// Returns true if this service should run given the configuration of the host.
         /// </summary>
-        public bool ShouldRun(IDictionary<string, string> hostConfig)
+        public bool ShouldRun(IHostConfiguration hostConfig)
         {
             // Use this implementation when LINQ has been enabled in the host
             return UserManagementConfig.UseLinq(hostConfig);

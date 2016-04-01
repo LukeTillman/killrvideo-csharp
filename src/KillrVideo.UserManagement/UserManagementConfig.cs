@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using KillrVideo.Host.Config;
 
 namespace KillrVideo.UserManagement
 {
@@ -15,13 +15,10 @@ namespace KillrVideo.UserManagement
         /// <summary>
         /// Returns true if the LINQ implementation should be used.
         /// </summary>
-        internal static bool UseLinq(IDictionary<string, string> config)
+        internal static bool UseLinq(IHostConfiguration config)
         {
-            string useLinq;
-            if (config.TryGetValue(UseLinqKey, out useLinq) == false)
-                return false;
-
-            return bool.Parse(useLinq);
+            string useLinq = config.GetConfigurationValue(UseLinqKey);
+            return !string.IsNullOrWhiteSpace(useLinq) && bool.Parse(useLinq);
         }
     }
 }
