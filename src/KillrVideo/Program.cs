@@ -50,7 +50,8 @@ namespace KillrVideo
             typeof (SearchService).Assembly,
             typeof (SampleDataService).Assembly,
             typeof (AppSettingsConfiguration).Assembly,
-            typeof (GrpcServerTask).Assembly
+            typeof (GrpcServerTask).Assembly,
+            typeof (CassandraSessionFactory).Assembly
         };
 
         static void Main(string[] args)
@@ -90,12 +91,8 @@ namespace KillrVideo
         private static Container CreateContainer(IHostConfiguration config)
         {
             var container = new Container(rules => rules.WithResolveIEnumerableAsLazyEnumerable());
+            container.RegisterInstance(config);
             
-            // Register Cassandra session instance as Singleton (which is a best practice)
-            ISession session = CreateCassandraSession(config);
-            container.RegisterInstance(session);
-            container.Register<PreparedStatementCache>(Reuse.Singleton);
-
             // Register Bus and components
             IBusServer bus = CreateBusServer(new ContainerHandlerFactory(container));
             container.RegisterInstance(bus);
@@ -106,34 +103,7 @@ namespace KillrVideo
 
             return container;
         }
-
-        private static ISession CreateCassandraSession(IHostConfiguration config)
-        {
-            string[] hosts = config.GetRequiredConfigurationValue("CassandraHosts").Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            if (hosts.Length == 0)
-                throw new InvalidOperationException("You must specify the CassandraHosts configuration option");
-
-            Builder builder = Cluster.Builder();
-
-            // Allow for multiple hosts
-            foreach (string host in hosts)
-            {
-                string[] hostAndPort = host.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                switch (hostAndPort.Length)
-                {
-                    case 1:
-                        builder.AddContactPoint(hostAndPort[0]);
-                        break;
-                    case 2:
-                        builder.AddContactPoint(new IPEndPoint(IPAddress.Parse(hostAndPort[0]), int.Parse(hostAndPort[1])));
-                        break;
-                    default:
-                        throw new InvalidOperationException($"Unable to parse host {host} from CassandraHosts configuration option");
-                }
-            }
-
-            return builder.Build().Connect("killrvideo");
-        }
+        
         
         private static IBusServer CreateBusServer(ContainerHandlerFactory handlerFactory)
         {

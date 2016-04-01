@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace KillrVideo.Cassandra
     /// <summary>
     /// A cache for PreparedStatements based on the CQL string.
     /// </summary>
+    [Export]
     public class PreparedStatementCache
     {
         private readonly ISession _session;

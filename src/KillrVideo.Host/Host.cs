@@ -30,7 +30,7 @@ namespace KillrVideo.Host
         {
             _name = name;
 
-            Logger.Information("Starting KillrVideo Host {HostName}", name);
+            Logger.Information("Starting Host {HostName}", name);
 
             foreach (IHostTask task in _tasks)
             {
