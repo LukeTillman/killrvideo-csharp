@@ -64,7 +64,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Clients\ChannelFactory.cs" />
+    <Compile Include="Clients\IChannelFactory.cs" />
+    <Compile Include="Clients\ServiceNotFoundException.cs" />
     <Compile Include="GrpcServerTask.cs" />
+    <Compile Include="ServiceDiscovery\LocalServiceDiscovery.cs" />
     <Compile Include="Services\IConditionalGrpcServerService.cs" />
     <Compile Include="Services\IGrpcServerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

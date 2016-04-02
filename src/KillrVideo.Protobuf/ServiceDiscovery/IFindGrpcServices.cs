@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
+using Google.Protobuf.Reflection;
 
 namespace KillrVideo.Protobuf.ServiceDiscovery
 {
@@ -11,6 +12,6 @@ namespace KillrVideo.Protobuf.ServiceDiscovery
         /// <summary>
         /// Finds a service in the catalog. Returns null if the service cannot be located.
         /// </summary>
-        Task<IPEndPoint> Find(string serviceName);
+        IPEndPoint Find(ServiceDescriptor service);
     }
 }
