@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DryIocAttributes;
 using Google.Protobuf;
+using KillrVideo.Host;
 using KillrVideo.Host.Config;
 using KillrVideo.Host.Tasks;
 using KillrVideo.MessageBus.Publish;
@@ -24,6 +25,7 @@ namespace KillrVideo.MessageBus
         private readonly SubscriptionServer _subscriptionServer;
         private readonly Publisher _publisher;
 
+        private Task _startedServer;
         private int _started;
 
         /// <summary>
@@ -42,6 +44,7 @@ namespace KillrVideo.MessageBus
             // Create components for the bus from config provided
             _subscriptionServer = new SubscriptionServer(hostConfig.ApplicationName, messageTransport, handlerFactory);
             _publisher = new Publisher(messageTransport);
+            _startedServer = Task.CompletedTask;
         }
 
         /// <summary>
@@ -55,29 +58,52 @@ namespace KillrVideo.MessageBus
                 throw new InvalidOperationException("Bus can only be started once");
 
             // Start the subscription server and tell the publisher to start once subscriptions have been started
-            StartSubscriptionServer();
+            _startedServer = StartImpl(_cancelBusStart.Token);
         }
 
-        private void StartSubscriptionServer()
+        private async Task StartImpl(CancellationToken token)
         {
-            Logger.Information("Starting message bus subscription handlers");
-            _subscriptionServer.StartServer(_cancelBusStart.Token).ContinueWith(HandleSubscriptionServerTask);
-        }
-
-        private void HandleSubscriptionServerTask(Task t)
-        {
-            // If the task wasn't canceled or didn't error out, start the publisher
-            if (!t.IsCanceled && !t.IsFaulted)
+            bool started = false;
+            while (true)
             {
-                Logger.Information("Started subscription handlers, starting publisher");
-                _publisher.Start();
-            }
+                token.ThrowIfCancellationRequested();
 
-            // If there was an error, log it and try starting again
-            if (t.IsFaulted)
-            {
-                Logger.Error(t.Exception, "Error while starting the message bus");
-                StartSubscriptionServer();
+                // Start the subscription server
+                try
+                {
+                    Logger.Information("Starting message bus subscription handlers");
+                    await _subscriptionServer.StartServer(token).ConfigureAwait(false);
+                    Logger.Information("Started subscription handlers, starting publisher");
+                    _publisher.Start();
+                    Logger.Information("Started publisher");
+                    started = true;
+                }
+                catch (OperationCanceledException)
+                {
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e, "Unexpected exception while starting message bus");
+                }
+
+                // If started, good to go
+                if (started)
+                    break;
+
+                // Wait and retry
+                try
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(5), token).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException)
+                {
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e, "Unexpected exception while waiting to retry starting server");
+                }
             }
         }
 
@@ -104,6 +130,10 @@ namespace KillrVideo.MessageBus
             {
                 // Cancel in case the Start Task is still running
                 _cancelBusStart.Cancel();
+                await _startedServer.ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
             }
             catch (AggregateException e)
             {

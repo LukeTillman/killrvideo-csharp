@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using KillrVideo.Host;
+using KillrVideo.Host.Tasks;
 using Serilog;
 
 namespace KillrVideo.SampleData.Scheduler
@@ -10,7 +13,8 @@ namespace KillrVideo.SampleData.Scheduler
     /// <summary>
     /// A scheduler that will run sample data jobs on a schedule.
     /// </summary>
-    public class SampleDataJobScheduler
+    [Export(typeof(IHostTask))]
+    public class SampleDataJobScheduler : IHostTask
     {
         private static readonly ILogger Logger = Log.ForContext<SampleDataJobScheduler>();
         private static readonly TimeSpan RetryOnExceptionWaitTime = TimeSpan.FromSeconds(5);
@@ -19,18 +23,55 @@ namespace KillrVideo.SampleData.Scheduler
         private readonly LeaseManager _leaseManager;
         private readonly List<SampleDataJob> _jobs;
 
+        private readonly CancellationTokenSource _cancellation;
+        private Task _runningServer;
+
+        public string Name => "Sample Data Scheduler Server";
+
         public SampleDataJobScheduler(LeaseManager leaseManager, IEnumerable<SampleDataJob> jobs)
         {
             if (leaseManager == null) throw new ArgumentNullException(nameof(leaseManager));
             if (jobs == null) throw new ArgumentNullException(nameof(jobs));
             _leaseManager = leaseManager;
             _jobs = jobs.ToList();
+
+            _cancellation = new CancellationTokenSource();
+            _runningServer = Task.CompletedTask;
         }
-        
+
+        public void Start()
+        {
+            Logger.Information("Starting sample data job scheduler with {JobsCount} jobs", _jobs.Count);
+            _runningServer = Run(_cancellation.Token);
+            Logger.Information("Started sample data job scheduler");
+        }
+
+        public async Task StopAsync()
+        {
+            Logger.Information("Stopping sample data job scheduler");
+
+            try
+            {
+                _cancellation.Cancel();
+            }
+            catch (AggregateException e)
+            {
+                foreach (var ex in e.IgnoreTaskCanceled())
+                    Logger.Error(ex, "Unexpected exception while cancelling sample data scheduler");
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "Unexpected exception while cancelling sample data scheduler");
+            }
+
+            await _runningServer.ConfigureAwait(false);
+            Logger.Information("Stopped sample data job scheduler");
+        }
+
         /// <summary>
         /// Starts the scheduler processing sample data jobs.
         /// </summary>
-        public async Task Run(CancellationToken cancellationToken)
+        private async Task Run(CancellationToken cancellationToken)
         {
             while (cancellationToken.IsCancellationRequested == false)
             {
@@ -69,7 +110,7 @@ namespace KillrVideo.SampleData.Scheduler
                     if (waitOnException)
                         await Task.Delay(RetryOnExceptionWaitTime, cancellationToken).ConfigureAwait(false);
                 }
-                catch (TaskCanceledException)
+                catch (OperationCanceledException)
                 {
                     break;
                 }

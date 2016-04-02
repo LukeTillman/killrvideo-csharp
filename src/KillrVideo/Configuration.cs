@@ -12,7 +12,7 @@ namespace KillrVideo
     public static class Configuration
     {
         [Export]
-        public static readonly IHostConfiguration Config = new AppSettingsConfiguration("KillrVideo");
+        public static readonly IHostConfiguration Config = new AppSettingsConfiguration("KillrVideo", "1");
 
         [Export]
         public static IMessageTransport Transport = InMemoryTransport.Instance;

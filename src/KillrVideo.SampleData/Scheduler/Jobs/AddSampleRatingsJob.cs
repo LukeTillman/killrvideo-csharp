@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 using Cassandra;
 using KillrVideo.Cassandra;
@@ -9,6 +10,7 @@ namespace KillrVideo.SampleData.Scheduler.Jobs
     /// <summary>
     /// Scheduled job that runs to add sample ratings to videos.
     /// </summary>
+    [Export(typeof(SampleDataJob))]
     public class AddSampleRatingsJob : SampleDataJob
     {
         private readonly IBus _bus;

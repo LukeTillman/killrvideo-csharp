@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 using Cassandra;
 using KillrVideo.Cassandra;
@@ -12,6 +13,7 @@ namespace KillrVideo.SampleData.Scheduler.Jobs
     /// <summary>
     /// Scheduled sample data job that adds sample YouTube videos to the site.
     /// </summary>
+    [Export(typeof(SampleDataJob))]
     public class AddSampleYouTubeVideosJob : SampleDataJob
     {
         private readonly IBus _bus;

@@ -18,9 +18,15 @@ namespace KillrVideo.Host.Config
         /// </summary>
         public string ApplicationName { get; }
 
-        public AppSettingsConfiguration(string applicationName)
+        /// <summary>
+        /// A unique identifier for this particular running instance of the application.
+        /// </summary>
+        public string ApplicationInstanceId { get; }
+
+        public AppSettingsConfiguration(string applicationName, string applicationInstanceId)
         {
             ApplicationName = applicationName;
+            ApplicationInstanceId = applicationInstanceId;
             _config = ConfigurationManager.AppSettings.AllKeys.ToDictionary(key => key, key => ConfigurationManager.AppSettings.Get(key));
         }
 

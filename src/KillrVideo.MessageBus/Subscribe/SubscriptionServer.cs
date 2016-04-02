@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using KillrVideo.Host;
 using KillrVideo.MessageBus.Transport;
 using Serilog;
 

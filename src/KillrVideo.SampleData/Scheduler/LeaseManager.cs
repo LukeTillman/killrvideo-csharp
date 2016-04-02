@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Cassandra;
 using KillrVideo.Cassandra;
+using KillrVideo.Host.Config;
 using Serilog;
 
 namespace KillrVideo.SampleData.Scheduler
@@ -12,6 +14,7 @@ namespace KillrVideo.SampleData.Scheduler
     /// Component responsible for obtaining/renewing a lease.  Uses Cassandra's LWT to ensure only one worker across the cluster
     /// is the lease owner at any given time.
     /// </summary>
+    [Export]
     public class LeaseManager
     {
         private static readonly ILogger Logger = Log.ForContext<LeaseManager>();
@@ -25,7 +28,7 @@ namespace KillrVideo.SampleData.Scheduler
 
         private DateTimeOffset _leaseOwnerUntil;
         
-        public LeaseManager(ISession session, PreparedStatementCache statementCache, LeaseManagerConfig config)
+        public LeaseManager(ISession session, PreparedStatementCache statementCache, IHostConfiguration config)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
@@ -33,8 +36,8 @@ namespace KillrVideo.SampleData.Scheduler
             
             _session = session;
             _statementCache = statementCache;
-            _leaseName = config.LeaseName;
-            _uniqueId = config.UniqueId;
+            _leaseName = config.ApplicationName;
+            _uniqueId = config.ApplicationInstanceId;
 
             // Start by assuming we are not the lease owner
             _leaseOwnerUntil = DateTimeOffset.MinValue;
@@ -84,7 +87,7 @@ namespace KillrVideo.SampleData.Scheduler
                 // Try to acquire the lease using LWT in Cassandra
                 PreparedStatement prepared =
                     await _statementCache.GetOrAddAsync("INSERT INTO sample_data_leases (name, owner) VALUES (?, ?) IF NOT EXISTS");
-                BoundStatement bound = prepared.Bind(_leaseName, _uniqueId);
+                IStatement bound = prepared.Bind(_leaseName, _uniqueId).SetSerialConsistencyLevel(ConsistencyLevel.LocalSerial);
                 RowSet rows = await _session.ExecuteAsync(bound).ConfigureAwait(false);
                 Row row = rows.Single();
 
@@ -142,8 +145,8 @@ namespace KillrVideo.SampleData.Scheduler
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error(string.Format("Unexpected exception while renewing lease. Trying again in {0} seconds.",
-                                               RetryOnExceptionWaitTime.TotalSeconds), ex);
+                    Logger.Error(ex, "Unexpected exception while renewing lease. Trying again in {RetrySeconds} seconds.",
+                                 RetryOnExceptionWaitTime.TotalSeconds);
                 }
 
                 // Wait before trying again (cancellation exceptions are OK here)
@@ -168,7 +171,7 @@ namespace KillrVideo.SampleData.Scheduler
                 // Try to renew the lease using LWT in Cassandra
                 PreparedStatement prepared =
                     await _statementCache.GetOrAddAsync("UPDATE sample_data_leases SET owner = ? WHERE name = ? IF owner = ?");
-                BoundStatement bound = prepared.Bind(_uniqueId, _leaseName, _uniqueId);
+                IStatement bound = prepared.Bind(_uniqueId, _leaseName, _uniqueId).SetSerialConsistencyLevel(ConsistencyLevel.LocalSerial);
                 RowSet rows = await _session.ExecuteAsync(bound).ConfigureAwait(false);
                 Row row = rows.Single();
 

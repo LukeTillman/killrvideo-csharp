@@ -162,7 +162,6 @@
     <Compile Include="Scheduler\Jobs\AddSampleYouTubeVideosJob.cs" />
     <Compile Include="Scheduler\Jobs\RefreshYouTubeVideoSourcesJob.cs" />
     <Compile Include="Scheduler\LeaseManager.cs" />
-    <Compile Include="Scheduler\LeaseManagerConfig.cs" />
     <Compile Include="Scheduler\SampleDataJob.cs" />
     <Compile Include="Scheduler\SampleDataJobScheduler.cs" />
   </ItemGroup>
@@ -194,6 +193,10 @@
     <ProjectReference Include="..\KillrVideo.Cassandra\KillrVideo.Cassandra.csproj">
       <Project>{ffe7da21-41a2-436b-9e4d-c036dbf33d62}</Project>
       <Name>KillrVideo.Cassandra</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.Host\KillrVideo.Host.csproj">
+      <Project>{98070be4-e3eb-4703-81d3-277a6c08721c}</Project>
+      <Name>KillrVideo.Host</Name>
     </ProjectReference>
     <ProjectReference Include="..\KillrVideo.MessageBus\KillrVideo.MessageBus.csproj">
       <Project>{9a8c1794-cec4-4670-af3e-e3cd83881e8e}</Project>

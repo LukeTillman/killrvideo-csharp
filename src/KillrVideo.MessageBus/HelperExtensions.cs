@@ -35,12 +35,6 @@ namespace KillrVideo.MessageBus
             }
         }
 
-        /// <summary>
-        /// Gets all inner exceptions on the AggregateException that aren't TaskCanceledExceptions.
-        /// </summary>
-        internal static IEnumerable<Exception> IgnoreTaskCanceled(this AggregateException ae)
-        {
-            return ae.InnerExceptions.Where(e => e.GetType() != typeof(TaskCanceledException));
-        }
+        
     }
 }
