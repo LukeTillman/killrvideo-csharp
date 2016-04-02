@@ -4,20 +4,13 @@
 // which is also referenced by this project
 extern alias SampleData;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Net;
 using System.Reflection;
-using Cassandra;
 using DryIoc;
 using DryIoc.MefAttributedModel;
-using Grpc.Core;
 using KillrVideo.Cassandra;
 using KillrVideo.Comments;
 using KillrVideo.Host.Config;
 using KillrVideo.MessageBus;
-using KillrVideo.MessageBus.Transport;
 using KillrVideo.Protobuf;
 using KillrVideo.Ratings;
 using KillrVideo.Search;
@@ -29,7 +22,6 @@ using KillrVideo.VideoCatalog;
 using RestSharp;
 using SampleData::KillrVideo.SampleData;
 using Serilog;
-using Serilog.Events;
 
 namespace KillrVideo
 {
@@ -77,6 +69,7 @@ namespace KillrVideo
 
             Console.ReadKey();
             host.Stop();
+            container.Dispose();
 
             Console.ReadKey();
         }

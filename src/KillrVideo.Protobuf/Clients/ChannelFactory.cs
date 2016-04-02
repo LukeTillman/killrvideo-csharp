@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.ComponentModel.Composition;
-using System.Net;
 using Google.Protobuf.Reflection;
 using Grpc.Core;
 using KillrVideo.Protobuf.ServiceDiscovery;
+using Serilog;
 
 namespace KillrVideo.Protobuf.Clients
 {
@@ -13,8 +13,10 @@ namespace KillrVideo.Protobuf.Clients
     /// by IPEndPoint for reuse.
     /// </summary>
     [Export(typeof(IChannelFactory))]
-    public class ChannelFactory : IChannelFactory
+    public class ChannelFactory : IChannelFactory, IDisposable
     {
+        private static readonly ILogger Logger = Log.ForContext<ChannelFactory>();
+
         private readonly ConcurrentDictionary<ServiceLocation, Lazy<Channel>> _cache;
         private readonly IFindGrpcServices _serviceDiscovery;
 
@@ -39,6 +41,22 @@ namespace KillrVideo.Protobuf.Clients
         private static Lazy<Channel> CreateChannel(ServiceLocation location)
         {
             return new Lazy<Channel>(() => new Channel(location.Host, location.Port, ChannelCredentials.Insecure));
+        }
+
+        public void Dispose()
+        {
+            // Make sure all channels are shutdown when factory is disposed of
+            foreach (Lazy<Channel> channel in _cache.Values)
+            {
+                try
+                {
+                    channel.Value.ShutdownAsync();
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e, "Exception while calling ShutdownAsync on Channel");
+                }
+            }
         }
     }
 }
