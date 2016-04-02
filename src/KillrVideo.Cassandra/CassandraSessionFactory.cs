@@ -46,6 +46,10 @@ namespace KillrVideo.Cassandra
                 }
             }
 
+            var queryOptions = new QueryOptions();
+            queryOptions.SetConsistencyLevel(ConsistencyLevel.LocalQuorum);
+            builder.WithQueryOptions(queryOptions);
+
             Logger.Information("Creating Cassandra session connection to killrvideo schema");
             return builder.Build().Connect("killrvideo");
         }

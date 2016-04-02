@@ -108,7 +108,7 @@ namespace KillrVideo.SampleData.Scheduler
             // Get the next time the lease will expire
             PreparedStatement prepared =
                 await _statementCache.GetOrAddAsync("SELECT writetime(owner) FROM sample_data_leases WHERE name = ?");
-            IStatement bound = prepared.Bind(_leaseName).SetSerialConsistencyLevel(ConsistencyLevel.LocalSerial);
+            IStatement bound = prepared.Bind(_leaseName).SetConsistencyLevel(ConsistencyLevel.LocalSerial);
             RowSet rows = await _session.ExecuteAsync(bound).ConfigureAwait(false);
             Row row = rows.SingleOrDefault();
 
