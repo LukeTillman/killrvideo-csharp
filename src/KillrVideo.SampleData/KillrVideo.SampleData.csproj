@@ -164,6 +164,8 @@
     <Compile Include="Scheduler\LeaseManager.cs" />
     <Compile Include="Scheduler\SampleDataJob.cs" />
     <Compile Include="Scheduler\SampleDataJobScheduler.cs" />
+    <Compile Include="ServiceClientFactory.cs" />
+    <Compile Include="YouTubeClientFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\lib\killrvideo-service-protos\src\comments\comments_service.proto">

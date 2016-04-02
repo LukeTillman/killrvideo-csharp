@@ -15,7 +15,7 @@ namespace KillrVideo.Protobuf.Clients
     [Export(typeof(IChannelFactory))]
     public class ChannelFactory : IChannelFactory
     {
-        private readonly ConcurrentDictionary<IPEndPoint, Lazy<Channel>> _cache;
+        private readonly ConcurrentDictionary<ServiceLocation, Lazy<Channel>> _cache;
         private readonly IFindGrpcServices _serviceDiscovery;
 
         public ChannelFactory(IFindGrpcServices serviceDiscovery)
@@ -23,22 +23,22 @@ namespace KillrVideo.Protobuf.Clients
             if (serviceDiscovery == null) throw new ArgumentNullException(nameof(serviceDiscovery));
             _serviceDiscovery = serviceDiscovery;
 
-            _cache = new ConcurrentDictionary<IPEndPoint, Lazy<Channel>>();
+            _cache = new ConcurrentDictionary<ServiceLocation, Lazy<Channel>>();
         }
 
         public Channel GetChannel(ServiceDescriptor service)
         {
             // Find the service
-            IPEndPoint ip = _serviceDiscovery.Find(service);
-            if (ip == null)
+            ServiceLocation location = _serviceDiscovery.Find(service);
+            if (location == null)
                 throw new ServiceNotFoundException(service);
 
-            return _cache.GetOrAdd(ip, CreateChannel).Value;
+            return _cache.GetOrAdd(location, CreateChannel).Value;
         }
 
-        private static Lazy<Channel> CreateChannel(IPEndPoint ip)
+        private static Lazy<Channel> CreateChannel(ServiceLocation location)
         {
-            return new Lazy<Channel>(() => new Channel(ip.Address.ToString(), ip.Port, ChannelCredentials.Insecure));
+            return new Lazy<Channel>(() => new Channel(location.Host, location.Port, ChannelCredentials.Insecure));
         }
     }
 }

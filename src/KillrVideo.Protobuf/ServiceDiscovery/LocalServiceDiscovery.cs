@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using Google.Protobuf.Reflection;
 using KillrVideo.Host.Config;
@@ -12,27 +13,28 @@ namespace KillrVideo.Protobuf.ServiceDiscovery
     public class LocalServiceDiscovery : IFindGrpcServices
     {
         private readonly IHostConfiguration _hostConfig;
-        private readonly Lazy<IPEndPoint> _localServicesIp; 
+        private readonly Lazy<ServiceLocation> _localServicesIp; 
 
         public LocalServiceDiscovery(IHostConfiguration hostConfig)
         {
             if (hostConfig == null) throw new ArgumentNullException(nameof(hostConfig));
             _hostConfig = hostConfig;
-            _localServicesIp = new Lazy<IPEndPoint>(GetLocalServicesIp);
+            _localServicesIp = new Lazy<ServiceLocation>(GetLocalGrpcServer);
         }
 
-        public IPEndPoint Find(ServiceDescriptor service)
+        public ServiceLocation Find(ServiceDescriptor service)
         {
             return _localServicesIp.Value;
         }
 
-        private IPEndPoint GetLocalServicesIp()
+        private ServiceLocation GetLocalGrpcServer()
         {
             // Get the host/port configuration for the Grpc Server
             string host = _hostConfig.GetRequiredConfigurationValue(GrpcServerTask.HostConfigKey);
             string portVal = _hostConfig.GetRequiredConfigurationValue(GrpcServerTask.HostPortKey);
             int port = int.Parse(portVal);
-            return new IPEndPoint(IPAddress.Parse(host), port);
+
+            return new ServiceLocation(host, port);
         }
     }
 }
