@@ -48,7 +48,7 @@ namespace KillrVideo.Ratings
         {
             PreparedStatement[] preparedStatements = await _statementCache.GetOrAddAllAsync(
                 "UPDATE video_ratings SET rating_counter = rating_counter + 1, rating_total = rating_total + ? WHERE videoid = ?",
-                "INSERT INTO video_ratings_by_user (videoid, userid, rating) VALUES (?, ?, ?) USING TIMESTAMP ?");
+                "INSERT INTO video_ratings_by_user (videoid, userid, rating) VALUES (?, ?, ?)");
 
             DateTimeOffset timestamp = DateTimeOffset.UtcNow;
 
@@ -58,7 +58,7 @@ namespace KillrVideo.Ratings
                 // UPDATE video_ratings... (Driver will throw if we don't cast the rating to a long I guess because counters are data type long)
                 preparedStatements[0].Bind((long) request.Rating, request.VideoId.ToGuid()),
                 // INSERT INTO video_ratings_by_user
-                preparedStatements[1].Bind(request.VideoId.ToGuid(), request.UserId.ToGuid(), request.Rating, timestamp.ToMicrosecondsSinceEpoch())
+                preparedStatements[1].Bind(request.VideoId.ToGuid(), request.UserId.ToGuid(), request.Rating).SetTimestamp(timestamp)
             };
 
             await Task.WhenAll(bound.Select(b => _session.ExecuteAsync(b))).ConfigureAwait(false);

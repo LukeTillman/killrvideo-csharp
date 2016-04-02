@@ -32,8 +32,8 @@ namespace KillrVideo.Search.Handlers
                                       RepeatedField<string> tags, Timestamp timestamp)
         {
             PreparedStatement[] prepared = await _statementCache.GetOrAddAllAsync(
-                "INSERT INTO videos_by_tag (tag, videoid, added_date, userid, name, preview_image_location, tagged_date) VALUES (?, ?, ?, ?, ?, ?, ?) USING TIMESTAMP ?",
-                "INSERT INTO tags_by_letter (first_letter, tag) VALUES (?, ?) USING TIMESTAMP ?");
+                "INSERT INTO videos_by_tag (tag, videoid, added_date, userid, name, preview_image_location, tagged_date) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO tags_by_letter (first_letter, tag) VALUES (?, ?)");
 
             DateTimeOffset ts = timestamp.ToDateTimeOffset();
 
@@ -44,13 +44,13 @@ namespace KillrVideo.Search.Handlers
             foreach (string tag in tags)
             {
                 // INSERT INTO videos_by_tag
-                batch.Add(prepared[0].Bind(tag, videoId.ToGuid(), addedDate.ToDateTimeOffset(), userId.ToGuid(), name, previewImageLocation, ts,
-                                           ts.ToMicrosecondsSinceEpoch()));
+                batch.Add(prepared[0].Bind(tag, videoId.ToGuid(), addedDate.ToDateTimeOffset(), userId.ToGuid(), name, previewImageLocation, ts));
 
                 // INSERT INTO tags_by_letter
                 string firstLetter = tag.Substring(0, 1);
-                batch.Add(prepared[1].Bind(firstLetter, tag, ts.ToMicrosecondsSinceEpoch()));
+                batch.Add(prepared[1].Bind(firstLetter, tag));
             }
+            batch.SetTimestamp(ts);
 
             await _session.ExecuteAsync(batch).ConfigureAwait(false);
         }

@@ -62,11 +62,10 @@ namespace KillrVideo.UserManagement
             DateTimeOffset timestamp = DateTimeOffset.UtcNow;
 
             PreparedStatement preparedCredentials = await _statementCache.GetOrAddAsync(
-                "INSERT INTO user_credentials (email, password, userid) VALUES (?, ?, ?) IF NOT EXISTS USING TIMESTAMP ?");
+                "INSERT INTO user_credentials (email, password, userid) VALUES (?, ?, ?) IF NOT EXISTS");
 
             // Insert the credentials info (this will return false if a user with that email address already exists)
-            IStatement insertCredentialsStatement = preparedCredentials.Bind(request.Email, hashedPassword, request.UserId.ToGuid(),
-                                                                             timestamp.ToMicrosecondsSinceEpoch());
+            IStatement insertCredentialsStatement = preparedCredentials.Bind(request.Email, hashedPassword, request.UserId.ToGuid());
             RowSet credentialsResult = await _session.ExecuteAsync(insertCredentialsStatement).ConfigureAwait(false);
 
             // The first column in the row returned will be a boolean indicating whether the change was applied (TODO: Compensating action for user creation failure?)
@@ -75,11 +74,11 @@ namespace KillrVideo.UserManagement
                 throw new Exception("A user with that email address already exists"); // TODO: Figure out how to do errors properly in grpc
 
             PreparedStatement preparedUser = await _statementCache.GetOrAddAsync(
-                "INSERT INTO users (userid, firstname, lastname, email, created_date) VALUES (?, ?, ?, ?, ?) USING TIMESTAMP ?");
+                "INSERT INTO users (userid, firstname, lastname, email, created_date) VALUES (?, ?, ?, ?, ?)");
 
             // Insert the "profile" information using a parameterized CQL statement
-            IStatement insertUserStatement =
-                preparedUser.Bind(request.UserId.ToGuid(), request.FirstName, request.LastName, request.Email, timestamp, timestamp.ToMicrosecondsSinceEpoch());
+            IStatement insertUserStatement = preparedUser.Bind(request.UserId.ToGuid(), request.FirstName, request.LastName, request.Email, timestamp)
+                                                         .SetTimestamp(timestamp);
 
             await _session.ExecuteAsync(insertUserStatement).ConfigureAwait(false);
 

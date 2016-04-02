@@ -85,11 +85,11 @@ namespace KillrVideo.UserManagement
                 throw new Exception("A user with that email address already exists");       // TODO: Right way to do error responses with grpc?
 
             PreparedStatement preparedUser = await _statementCache.GetOrAddAsync(
-                "INSERT INTO users (userid, firstname, lastname, email, created_date) VALUES (?, ?, ?, ?, ?) USING TIMESTAMP ?");
+                "INSERT INTO users (userid, firstname, lastname, email, created_date) VALUES (?, ?, ?, ?, ?)");
 
             // Insert the "profile" information using a parameterized CQL statement
-            IStatement insertUserStatement =
-                preparedUser.Bind(request.UserId.ToGuid(), request.FirstName, request.LastName, request.Email, timestamp, timestamp.ToMicrosecondsSinceEpoch());
+            IStatement insertUserStatement = preparedUser.Bind(request.UserId.ToGuid(), request.FirstName, request.LastName, request.Email, timestamp)
+                                                         .SetTimestamp(timestamp);
 
             await _session.ExecuteAsync(insertUserStatement).ConfigureAwait(false);
 

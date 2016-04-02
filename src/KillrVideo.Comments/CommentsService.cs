@@ -51,20 +51,19 @@ namespace KillrVideo.Comments
             var timestamp = DateTimeOffset.UtcNow;
 
             PreparedStatement[] preparedStatements = await _statementCache.GetOrAddAllAsync(
-                "INSERT INTO comments_by_video (videoid, commentid, userid, comment) VALUES (?, ?, ?, ?) USING TIMESTAMP ?",
-                "INSERT INTO comments_by_user (userid, commentid, videoid, comment) VALUES (?, ?, ?, ?) USING TIMESTAMP ?");
+                "INSERT INTO comments_by_video (videoid, commentid, userid, comment) VALUES (?, ?, ?, ?)",
+                "INSERT INTO comments_by_user (userid, commentid, videoid, comment) VALUES (?, ?, ?, ?)");
 
             // Use a batch to insert into all tables
             var batch = new BatchStatement();
 
             // INSERT INTO comments_by_video
-            batch.Add(preparedStatements[0].Bind(request.VideoId.ToGuid(), request.CommentId.ToGuid(), request.UserId.ToGuid(), request.Comment,
-                                                 timestamp.ToMicrosecondsSinceEpoch()));
+            batch.Add(preparedStatements[0].Bind(request.VideoId.ToGuid(), request.CommentId.ToGuid(), request.UserId.ToGuid(), request.Comment));
 
             // INSERT INTO comments_by_user
-            batch.Add(preparedStatements[1].Bind(request.UserId.ToGuid(), request.CommentId.ToGuid(), request.VideoId.ToGuid(), request.Comment,
-                                                 timestamp.ToMicrosecondsSinceEpoch()));
+            batch.Add(preparedStatements[1].Bind(request.UserId.ToGuid(), request.CommentId.ToGuid(), request.VideoId.ToGuid(), request.Comment));
 
+            batch.SetTimestamp(timestamp);
             await _session.ExecuteAsync(batch).ConfigureAwait(false);
 
             // Tell the world about the comment

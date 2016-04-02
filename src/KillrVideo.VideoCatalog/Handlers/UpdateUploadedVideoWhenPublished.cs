@@ -61,9 +61,9 @@ namespace KillrVideo.VideoCatalog.Handlers
             
             // Update the video locations (and write to denormalized tables) via batch
             PreparedStatement[] writePrepared = await _statementCache.GetOrAddAllAsync(
-                "UPDATE videos USING TIMESTAMP ? SET location = ?, preview_image_location = ? WHERE videoid = ?",
-                "UPDATE user_videos USING TIMESTAMP ? SET preview_image_location = ? WHERE userid = ? AND added_date = ? AND videoid = ?",
-                "INSERT INTO latest_videos (yyyymmdd, added_date, videoid, userid, name, preview_image_location) VALUES (?, ?, ?, ?, ?, ?) USING TIMESTAMP ? AND TTL ?"
+                "UPDATE videos SET location = ?, preview_image_location = ? WHERE videoid = ?",
+                "UPDATE user_videos SET preview_image_location = ? WHERE userid = ? AND added_date = ? AND videoid = ?",
+                "INSERT INTO latest_videos (yyyymmdd, added_date, videoid, userid, name, preview_image_location) VALUES (?, ?, ?, ?, ?, ?) USING TTL ?"
             );
 
             // Calculate date-related data for the video
@@ -71,10 +71,10 @@ namespace KillrVideo.VideoCatalog.Handlers
             DateTimeOffset timestamp = publishedVideo.Timestamp.ToDateTimeOffset();
 
             var batch = new BatchStatement();
-            batch.Add(writePrepared[0].Bind(timestamp.ToMicrosecondsSinceEpoch(), videoUrl, thumbnailUrl, videoId));
-            batch.Add(writePrepared[1].Bind(timestamp.ToMicrosecondsSinceEpoch(), thumbnailUrl, userId, addDate, videoId));
-            batch.Add(writePrepared[2].Bind(yyyymmdd, addDate, videoId, userId, name, thumbnailUrl, timestamp.ToMicrosecondsSinceEpoch(), 
-                                            VideoCatalogServiceImpl.LatestVideosTtlSeconds));
+            batch.Add(writePrepared[0].Bind(videoUrl, thumbnailUrl, videoId))
+                 .Add(writePrepared[1].Bind(thumbnailUrl, userId, addDate, videoId))
+                 .Add(writePrepared[2].Bind(yyyymmdd, addDate, videoId, userId, name, thumbnailUrl, VideoCatalogServiceImpl.LatestVideosTtlSeconds))
+                 .SetTimestamp(timestamp);
 
             await _session.ExecuteAsync(batch).ConfigureAwait(false);
 
