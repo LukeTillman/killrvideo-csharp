@@ -64,7 +64,7 @@ namespace KillrVideo.VideoCatalog
             var batch = new BatchStatement();
 
             batch.Add(prepared[0].Bind(request.VideoId.ToGuid(), request.UserId.ToGuid(), request.Name, request.Description,
-                                       request.Tags.ToArray(), VideoLocationType.UPLOAD, timestamp))
+                                       request.Tags.ToArray(), (int) VideoLocationType.UPLOAD, timestamp))
                  .Add(prepared[1].Bind(request.UserId.ToGuid(), timestamp, request.VideoId.ToGuid(), request.Name))
                  .SetTimestamp(timestamp);
 
@@ -103,7 +103,7 @@ namespace KillrVideo.VideoCatalog
 
             var batch = new BatchStatement();
             batch.Add(prepared[0].Bind(request.VideoId.ToGuid(), request.UserId.ToGuid(), request.Name, request.Description, location,
-                                       previewImageLocation, request.Tags.ToArray(), addDate, VideoLocationType.YOUTUBE))
+                                       previewImageLocation, request.Tags.ToArray(), addDate, (int) VideoLocationType.YOUTUBE))
                  .Add(prepared[1].Bind(request.UserId.ToGuid(), addDate, request.VideoId.ToGuid(), request.Name, previewImageLocation))
                  .Add(prepared[2].Bind(yyyymmdd, addDate, request.VideoId.ToGuid(), request.UserId.ToGuid(), request.Name, previewImageLocation, LatestVideosTtlSeconds))
                  .SetTimestamp(addDate);

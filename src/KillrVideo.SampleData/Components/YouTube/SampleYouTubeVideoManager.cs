@@ -14,6 +14,7 @@ namespace KillrVideo.SampleData.Components.YouTube
     /// Component responsible for retrieving random videos from YouTube.
     /// </summary>
     [Export(typeof(IManageSampleYouTubeVideos))]
+    [Export(typeof(SampleYouTubeVideoManager))]
     public class SampleYouTubeVideoManager : IManageSampleYouTubeVideos
     {
         private static readonly DateTimeOffset Epoch = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);

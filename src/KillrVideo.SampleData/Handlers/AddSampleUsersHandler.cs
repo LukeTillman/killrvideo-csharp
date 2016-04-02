@@ -54,7 +54,7 @@ namespace KillrVideo.SampleData.Handlers
             foreach (CreateUserRequest user in users)
             {
                 await _userManagement.CreateUserAsync(user).ResponseAsync.ConfigureAwait(false);
-                BoundStatement bound = prepared.Bind(user.UserId);
+                BoundStatement bound = prepared.Bind(user.UserId.ToGuid());
                 await _session.ExecuteAsync(bound).ConfigureAwait(false);
             }
         }
