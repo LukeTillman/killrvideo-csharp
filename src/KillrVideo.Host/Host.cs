@@ -18,37 +18,50 @@ namespace KillrVideo.Host
         private static readonly ILogger Logger = Log.ForContext<Host>();
 
         private readonly IEnumerable<IHostTask> _tasks;
-        private string _name;
+        private readonly IHostConfiguration _hostConfig;
 
-        public Host(IEnumerable<IHostTask> tasks)
+        public Host(IEnumerable<IHostTask> tasks, IHostConfiguration hostConfig)
         {
             if (tasks == null) throw new ArgumentNullException(nameof(tasks));
+            if (hostConfig == null) throw new ArgumentNullException(nameof(hostConfig));
             _tasks = tasks;
+            _hostConfig = hostConfig;
         }
 
-        public void Start(string name, IHostConfiguration hostConfig)
+        public void Start()
         {
-            _name = name;
-
-            Logger.Information("Starting Host {HostName}", name);
+            Logger.Information("Starting Host {ApplicationName}", _hostConfig.ApplicationName);
 
             foreach (IHostTask task in _tasks)
             {
-                Logger.Information("Starting Task {TaskName} on {HostName}", task.Name, name);
-                task.Start(hostConfig);
+                Logger.Information("Starting Task {TaskName} on {ApplicationName}", task.Name, _hostConfig.ApplicationName);
+                task.Start();
             }
+
+            Logger.Information("Started Host {ApplicationName}", _hostConfig.ApplicationName);
         }
 
         public void Stop()
         {
+            Logger.Information("Stopping Host {ApplicationName}", _hostConfig.ApplicationName);
+
             try
             {
-                Task.WaitAll(_tasks.Select(t => t.StopAsync()).ToArray());
+                var stopping = new List<Task>();
+                foreach (var task in _tasks)
+                {
+                    Logger.Information("Stopping Task {TaskName} on {ApplicationName}", task.Name, _hostConfig.ApplicationName);
+                    stopping.Add(task.StopAsync());
+                }
+
+                Task.WaitAll(stopping.ToArray());
             }
             catch (Exception e)
             {
-                Logger.Error(e, "Error while stopping host {HostName}", _name);
+                Logger.Error(e, "Error while stopping Host {ApplicationName}", _hostConfig.ApplicationName);
             }
+
+            Logger.Information("Stopped Host {ApplicationName}", _hostConfig.ApplicationName);
         }
     }
 }

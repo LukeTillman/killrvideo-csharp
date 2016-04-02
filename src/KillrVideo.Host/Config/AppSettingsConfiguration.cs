@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 
 namespace KillrVideo.Host.Config
@@ -12,8 +13,14 @@ namespace KillrVideo.Host.Config
     {
         private readonly IDictionary<string, string> _config;
 
-        public AppSettingsConfiguration()
+        /// <summary>
+        /// The name of the application.
+        /// </summary>
+        public string ApplicationName { get; }
+
+        public AppSettingsConfiguration(string applicationName)
         {
+            ApplicationName = applicationName;
             _config = ConfigurationManager.AppSettings.AllKeys.ToDictionary(key => key, key => ConfigurationManager.AppSettings.Get(key));
         }
 

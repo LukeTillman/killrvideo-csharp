@@ -21,23 +21,26 @@ namespace KillrVideo.Protobuf
         private static readonly ILogger Logger = Log.ForContext<GrpcServerTask>();
 
         private readonly IEnumerable<IGrpcServerService> _services;
+        private readonly IHostConfiguration _hostConfiguration;
         private readonly Server _server;
 
         public string Name => "Grpc Server";
 
-        public GrpcServerTask(IEnumerable<IGrpcServerService> services)
+        public GrpcServerTask(IEnumerable<IGrpcServerService> services, IHostConfiguration hostConfiguration)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
+            if (hostConfiguration == null) throw new ArgumentNullException(nameof(hostConfiguration));
             _services = services;
+            _hostConfiguration = hostConfiguration;
 
             _server = new Server();
         }
 
-        public void Start(IHostConfiguration hostConfiguration)
+        public void Start()
         {
             // Get the host/port configuration for the Grpc Server
-            string host = hostConfiguration.GetRequiredConfigurationValue(HostConfigKey);
-            string portVal = hostConfiguration.GetRequiredConfigurationValue(HostPortKey);
+            string host = _hostConfiguration.GetRequiredConfigurationValue(HostConfigKey);
+            string portVal = _hostConfiguration.GetRequiredConfigurationValue(HostPortKey);
             int port = int.Parse(portVal);
 
             _server.Ports.Add(host, port, ServerCredentials.Insecure);
@@ -50,7 +53,7 @@ namespace KillrVideo.Protobuf
                 Logger.Debug("Found GrpcServerService {ServiceTypeName}", serviceTypeName);
 
                 var conditionalService = service as IConditionalGrpcServerService;
-                bool shouldRun = conditionalService?.ShouldRun(hostConfiguration) ?? true;
+                bool shouldRun = conditionalService?.ShouldRun(_hostConfiguration) ?? true;
                 if (shouldRun)
                 {
                     Logger.Debug("Adding GrpcServerService {ServiceTypeName}", serviceTypeName);

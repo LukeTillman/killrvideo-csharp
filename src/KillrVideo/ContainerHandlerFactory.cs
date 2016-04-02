@@ -1,5 +1,8 @@
 ﻿using System;
+using System.ComponentModel.Composition;
+using System.Linq;
 using DryIoc;
+using KillrVideo.MessageBus;
 using KillrVideo.MessageBus.Subscribe;
 
 namespace KillrVideo
@@ -7,6 +10,7 @@ namespace KillrVideo
     /// <summary>
     /// An IHandlerFactory implementation for the message bus that creates handlers from the DryIoc container.
     /// </summary>
+    [Export(typeof(IHandlerFactory))]
     public class ContainerHandlerFactory : IHandlerFactory
     {
         private readonly IContainer _container;
@@ -15,6 +19,14 @@ namespace KillrVideo
         {
             if (container == null) throw new ArgumentNullException(nameof(container));
             _container = container;
+        }
+
+        public Type[] GetAllHandlerTypes()
+        {
+            return _container.GetServiceRegistrations()
+                             .Where(sr => sr.ServiceType.IsMessageHandlerInterface())
+                             .Select(sr => sr.ServiceType)
+                             .ToArray();
         }
 
         public THandler Resolve<THandler>()

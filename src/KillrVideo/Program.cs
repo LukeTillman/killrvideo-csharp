@@ -51,7 +51,9 @@ namespace KillrVideo
             typeof (SampleDataService).Assembly,
             typeof (AppSettingsConfiguration).Assembly,
             typeof (GrpcServerTask).Assembly,
-            typeof (CassandraSessionFactory).Assembly
+            typeof (CassandraSessionFactory).Assembly,
+            typeof (Bus).Assembly,
+            typeof (Program).Assembly
         };
 
         static void Main(string[] args)
@@ -61,66 +63,32 @@ namespace KillrVideo
                 .WriteTo.ColoredConsole(LogEventLevel.Information, "{Timestamp:HH:mm:ss} [{SourceContext:l}] {Message}{NewLine}{Exception}")
                 .CreateLogger();
 
-            // Convert all configurations from our .config file to a Dictionary
-            var config = new AppSettingsConfiguration();
-
             // Create IoC container
-            IContainer container = CreateContainer(config);
+            IContainer container = CreateContainer();
 
             // Let the container pick up any components using the MEF-like attributes in referenced assemblies (this will pick up any 
             // exported Grpc server definitions, message bus handlers, and background tasks in the referenced services)
             container = container.WithMefAttributedModel();
             container.RegisterExports(ProjectAssemblies);
 
-            // Try to find any bus message handlers registered with the container
-            Type[] handlerTypes = container.GetServiceRegistrations()
-                                           .Where(sr => sr.ServiceType.IsMessageHandlerInterface())
-                                           .Select(sr => sr.ServiceType)
-                                           .ToArray();
-            var busServer = container.Resolve<IBusServer>();
-            busServer.Subscribe(handlerTypes);
-
-            // Start bus
-            busServer.StartServer();
-
             // Start host
             var host = container.Resolve<Host.Host>();
-            host.Start("KillrVideo", config);
+            host.Start();
+
+            Console.ReadKey();
+            host.Stop();
+
+            Console.ReadKey();
         }
 
-        private static Container CreateContainer(IHostConfiguration config)
+        private static Container CreateContainer()
         {
             var container = new Container(rules => rules.WithResolveIEnumerableAsLazyEnumerable());
-            container.RegisterInstance(config);
             
-            // Register Bus and components
-            IBusServer bus = CreateBusServer(new ContainerHandlerFactory(container));
-            container.RegisterInstance(bus);
-            container.RegisterMapping<IBus, IBusServer>();
-
             // Register REST client
             container.Register<IRestClient, RestClient>(Made.Of(() => new RestClient()));
 
             return container;
-        }
-        
-        
-        private static IBusServer CreateBusServer(ContainerHandlerFactory handlerFactory)
-        {
-            return BusBuilder.Configure()
-                .WithServiceName("KillrVideo")
-                .WithTransport(InMemoryTransport.Instance)
-                .WithHandlerFactory(handlerFactory)
-                .Build();
-        }
-
-        private static string GetRequiredConfig(IDictionary<string, string> config, string configKey)
-        {
-            string val;
-            if (config.TryGetValue(configKey, out val) == false || string.IsNullOrWhiteSpace(val))
-                throw new InvalidOperationException($"You must specify a value for {configKey} in your .config file");
-
-            return val;
         }
     }
 }

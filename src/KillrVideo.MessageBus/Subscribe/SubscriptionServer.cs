@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using KillrVideo.MessageBus.Transport;
@@ -10,6 +11,7 @@ namespace KillrVideo.MessageBus.Subscribe
 {
     internal class SubscriptionServer
     {
+        private static readonly MethodInfo HandlerRegistrationFactoryMethod = typeof(HandlerRegistration).GetMethod("Create", BindingFlags.Static | BindingFlags.Public);
         private static readonly ILogger Logger = Log.ForContext<SubscriptionServer>();
 
         private readonly string _serviceName;
@@ -32,8 +34,32 @@ namespace KillrVideo.MessageBus.Subscribe
             _runningServer = Task.CompletedTask;
         }
 
-        public async Task StartServer(List<HandlerRegistration> handlers, CancellationToken token = default(CancellationToken))
+        public async Task StartServer(CancellationToken token = default(CancellationToken))
         {
+            // Get any available handlers
+            var handlers = new List<HandlerRegistration>();
+            Type[] handlerTypes = _handlerFactory.GetAllHandlerTypes();
+            foreach (Type handlerType in handlerTypes)
+            {
+                // Try to get the IHandleMessage<T> interface from the handlerType
+                var handlerInterfaces = handlerType.IsMessageHandlerInterface()
+                                            ? new Type[] { handlerType }    // The handlerType itself is already IHandleMessage<T>
+                                            : handlerType.GetMessageHandlerInterfaces().ToArray();    // The handlerType should implement IHandleMessage<T> at least once
+
+                if (handlerInterfaces.Length == 0)
+                    throw new InvalidOperationException($"The handler Type {handlerType.Name} is not a message handler");
+
+                // Get the message Type T from IHandleMessage<T> and create a handler registration by invoking the static factory method
+                // on HandlerRegistration with the appropriate type arguments
+                foreach (Type handlerInterface in handlerInterfaces)
+                {
+                    Type messageType = handlerInterface.GenericTypeArguments.Single();
+                    var handler =
+                        (HandlerRegistration) HandlerRegistrationFactoryMethod.MakeGenericMethod(handlerType, messageType).Invoke(this, null);
+                    handlers.Add(handler);
+                }
+            }
+
             // Nothing to do if no handlers
             if (handlers.Count == 0)
                 return;

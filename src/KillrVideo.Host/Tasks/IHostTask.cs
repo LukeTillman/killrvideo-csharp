@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using KillrVideo.Host.Config;
 
 namespace KillrVideo.Host.Tasks
 {
@@ -16,7 +15,7 @@ namespace KillrVideo.Host.Tasks
         /// <summary>
         /// Starts the background task.
         /// </summary>
-        void Start(IHostConfiguration hostConfiguration);
+        void Start();
 
         /// <summary>
         /// Stops the background task.

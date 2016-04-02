@@ -1,12 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using DryIocAttributes;
 using Google.Protobuf;
+using KillrVideo.Host.Config;
+using KillrVideo.Host.Tasks;
 using KillrVideo.MessageBus.Publish;
 using KillrVideo.MessageBus.Subscribe;
+using KillrVideo.MessageBus.Transport;
 using Serilog;
 
 namespace KillrVideo.MessageBus
@@ -14,65 +15,39 @@ namespace KillrVideo.MessageBus
     /// <summary>
     /// A bus that can be started/stopped. Use the IBus result from starting to publish messages.
     /// </summary>
-    internal class Bus : IBusServer
+    [ExportMany]
+    public class Bus : IHostTask, IBus
     {
-        private static readonly MethodInfo HandlerRegistrationFactoryMethod = typeof (HandlerRegistration).GetMethod("Create", BindingFlags.Static | BindingFlags.Public);
         private static readonly ILogger Logger = Log.ForContext<Bus>();
 
         private readonly CancellationTokenSource _cancelBusStart;
-        private readonly List<HandlerRegistration> _handlers;
-
         private readonly SubscriptionServer _subscriptionServer;
         private readonly Publisher _publisher;
 
         private int _started;
 
-        internal Bus(BusBuilder busConfig)
+        /// <summary>
+        /// The name of the task.
+        /// </summary>
+        public string Name => "Message Bus Server";
+
+        public Bus(IHostConfiguration hostConfig, IMessageTransport messageTransport, IHandlerFactory handlerFactory)
         {
-            if (busConfig == null) throw new ArgumentNullException(nameof(busConfig));
+            if (hostConfig == null) throw new ArgumentNullException(nameof(hostConfig));
+            if (messageTransport == null) throw new ArgumentNullException(nameof(messageTransport));
+            if (handlerFactory == null) throw new ArgumentNullException(nameof(handlerFactory));
 
             _cancelBusStart = new CancellationTokenSource();
-            _handlers = new List<HandlerRegistration>();
 
             // Create components for the bus from config provided
-            _subscriptionServer = new SubscriptionServer(busConfig.SerivceName, busConfig.Transport, busConfig.HandlerFactory);
-            _publisher = new Publisher(busConfig.Transport);
+            _subscriptionServer = new SubscriptionServer(hostConfig.ApplicationName, messageTransport, handlerFactory);
+            _publisher = new Publisher(messageTransport);
         }
 
         /// <summary>
-        /// Subscribes the specified handler Types.
+        /// Starts processing any subscriptions that are available.
         /// </summary>
-        public void Subscribe(params Type[] handlerTypes)
-        {
-            if (_started != 0)
-                throw new InvalidOperationException("Handlers can only be added before the bus is started");
-
-            foreach (Type handlerType in handlerTypes)
-            {
-                // Try to get the IHandleMessage<T> interface from the handlerType
-                var handlerInterfaces = handlerType.IsMessageHandlerInterface()
-                                            ? new Type[] { handlerType }    // The handlerType itself is already IHandleMessage<T>
-                                            : handlerType.GetMessageHandlerInterfaces().ToArray();    // The handlerType should implement IHandleMessage<T> at least once
-
-                if (handlerInterfaces.Length == 0)
-                    throw new InvalidOperationException($"The handler Type {handlerType.Name} is not a message handler");
-                
-                // Get the message Type T from IHandleMessage<T> and create a handler registration by invoking the static factory method
-                // on HandlerRegistration with the appropriate type arguments
-                foreach (Type handlerInterface in handlerInterfaces)
-                {
-                    Type messageType = handlerInterface.GenericTypeArguments.Single();
-                    var handler =
-                        (HandlerRegistration) HandlerRegistrationFactoryMethod.MakeGenericMethod(handlerType, messageType).Invoke(this, null);
-                    _handlers.Add(handler);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Starts listening to any subscriptions that were added and returns an IBus instance that can publish messages.
-        /// </summary>
-        public void StartServer()
+        public void Start()
         {
             // Make sure bus is only started once
             int state = Interlocked.Increment(ref _started);
@@ -80,19 +55,36 @@ namespace KillrVideo.MessageBus
                 throw new InvalidOperationException("Bus can only be started once");
 
             // Start the subscription server and tell the publisher to start once subscriptions have been started
-            _subscriptionServer.StartServer(_handlers, _cancelBusStart.Token)
-                               .ContinueWith(t =>
-                               {
-                                   if (!t.IsCanceled && !t.IsFaulted)
-                                       _publisher.Start();
-                               }, _cancelBusStart.Token);
+            StartSubscriptionServer();
+        }
 
+        private void StartSubscriptionServer()
+        {
+            Logger.Information("Starting message bus subscription handlers");
+            _subscriptionServer.StartServer(_cancelBusStart.Token).ContinueWith(HandleSubscriptionServerTask);
+        }
+
+        private void HandleSubscriptionServerTask(Task t)
+        {
+            // If the task wasn't canceled or didn't error out, start the publisher
+            if (!t.IsCanceled && !t.IsFaulted)
+            {
+                Logger.Information("Started subscription handlers, starting publisher");
+                _publisher.Start();
+            }
+
+            // If there was an error, log it and try starting again
+            if (t.IsFaulted)
+            {
+                Logger.Error(t.Exception, "Error while starting the message bus");
+                StartSubscriptionServer();
+            }
         }
 
         /// <summary>
         /// Stops any subscriptions that were added.
         /// </summary>
-        public async Task StopServerAsync()
+        public async Task StopAsync()
         {
             // Make sure bus is only stopped once
             int state = Interlocked.Increment(ref _started);
@@ -101,6 +93,8 @@ namespace KillrVideo.MessageBus
 
             if (state > 2)
                 throw new InvalidOperationException("Bus cannot be stopped multiple times");
+
+            Logger.Information("Stopping message bus publisher and subscription handlers");
 
             // Tell the publisher to stop publishing new events
             _publisher.Stop();
@@ -123,6 +117,8 @@ namespace KillrVideo.MessageBus
 
             // Wait for the subsciption server to stop
             await _subscriptionServer.StopServer().ConfigureAwait(false);
+
+            Logger.Information("Stopped message bus publisher and subscription handlers");
         }
         
         public Task Publish(IMessage message, CancellationToken token = new CancellationToken())
