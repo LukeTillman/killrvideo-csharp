@@ -1,6 +1,6 @@
 ﻿using KillrVideo.Host.Config;
 
-namespace KillrVideo.Protobuf
+namespace KillrVideo.Protobuf.Services
 {
     /// <summary>
     /// Interface for Grpc services that may or may not run based on the host's configuration.

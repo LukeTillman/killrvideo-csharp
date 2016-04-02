@@ -65,10 +65,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GrpcServerTask.cs" />
-    <Compile Include="IConditionalGrpcServerService.cs" />
-    <Compile Include="IGrpcServerService.cs" />
+    <Compile Include="Services\IConditionalGrpcServerService.cs" />
+    <Compile Include="Services\IGrpcServerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="protos\CommonTypes.generated.cs" />
+    <Compile Include="ServiceDiscovery\IFindGrpcServices.cs" />
     <Compile Include="TimeUuid.cs" />
     <Compile Include="Uuid.cs" />
     <Compile Include="UuidExtensions.cs" />

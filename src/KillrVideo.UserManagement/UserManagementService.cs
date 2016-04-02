@@ -9,6 +9,7 @@ using KillrVideo.Cassandra;
 using KillrVideo.Host.Config;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
+using KillrVideo.Protobuf.Services;
 using KillrVideo.UserManagement.Events;
 
 namespace KillrVideo.UserManagement

@@ -3,6 +3,7 @@ using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 using Grpc.Core;
 using KillrVideo.Protobuf;
+using KillrVideo.Protobuf.Services;
 
 namespace KillrVideo.Uploads
 {

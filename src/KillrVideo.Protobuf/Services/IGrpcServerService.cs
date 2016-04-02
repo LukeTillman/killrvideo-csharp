@@ -1,6 +1,6 @@
 ﻿using Grpc.Core;
 
-namespace KillrVideo.Protobuf
+namespace KillrVideo.Protobuf.Services
 {
     /// <summary>
     /// Interface for components that are Grpc service implementations that can be converted to a ServerServiceDefintion and

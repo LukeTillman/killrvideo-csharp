@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
+using KillrVideo.Protobuf.Services;
 
 namespace KillrVideo.SampleData
 {

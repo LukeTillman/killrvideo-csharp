@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using KillrVideo.Host.Config;
 using KillrVideo.Host.Tasks;
+using KillrVideo.Protobuf.Services;
 using Serilog;
 
 namespace KillrVideo.Protobuf

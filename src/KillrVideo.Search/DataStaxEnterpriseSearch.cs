@@ -9,6 +9,7 @@ using Grpc.Core;
 using KillrVideo.Cassandra;
 using KillrVideo.Host.Config;
 using KillrVideo.Protobuf;
+using KillrVideo.Protobuf.Services;
 using KillrVideo.Search.Dtos;
 using Newtonsoft.Json;
 using RestSharp;

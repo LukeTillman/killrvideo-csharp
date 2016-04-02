@@ -10,6 +10,7 @@ using Grpc.Core;
 using KillrVideo.Cassandra;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
+using KillrVideo.Protobuf.Services;
 using KillrVideo.VideoCatalog.Events;
 
 namespace KillrVideo.VideoCatalog

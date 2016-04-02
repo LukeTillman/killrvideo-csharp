@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
@@ -10,6 +11,7 @@ namespace KillrVideo.SampleData.Components
     /// <summary>
     /// Gets sample data from Cassandra.
     /// </summary>
+    [Export(typeof(IGetSampleData))]
     public class GetSampleData : IGetSampleData
     {
         private readonly ISession _session;

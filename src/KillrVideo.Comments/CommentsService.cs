@@ -10,6 +10,7 @@ using KillrVideo.Cassandra;
 using KillrVideo.Comments.Events;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
+using KillrVideo.Protobuf.Services;
 
 namespace KillrVideo.Comments
 {
