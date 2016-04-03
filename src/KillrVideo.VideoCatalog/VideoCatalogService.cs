@@ -138,7 +138,10 @@ namespace KillrVideo.VideoCatalog
             RowSet rows = await _session.ExecuteAsync(preparedStatement.Bind(request.VideoId.ToGuid())).ConfigureAwait(false);
             Row row = rows.SingleOrDefault();
             if (row == null)
-                return null; // TODO: Throw exception? How to do error responses with grpc?
+            {
+                var status = new Status(StatusCode.NotFound, $"Video with id {request.VideoId.Value} was not found");
+                throw new RpcException(status);
+            }
 
             var response = new GetVideoResponse
             {
@@ -171,7 +174,11 @@ namespace KillrVideo.VideoCatalog
             // Since we're doing a multi-get here, limit the number of previews to 20 to try and enforce some
             // performance sanity.  If we ever needed to do more than that, we might think about a different
             // data model that doesn't involve a multi-get.
-            if (request.VideoIds.Count > 20) throw new ArgumentOutOfRangeException(nameof(request.VideoIds), "Cannot fetch more than 20 videos at once.");
+            if (request.VideoIds.Count > 20)
+            {
+                var status = new Status(StatusCode.InvalidArgument, "Cannot fetch more than 20 videos at once");
+                throw new RpcException(status);
+            }
 
             // As an example, let's do the multi-get using multiple statements at the driver level.  For an example of doing this at
             // the CQL level with an IN() clause, see UserManagement's GetUserProfiles

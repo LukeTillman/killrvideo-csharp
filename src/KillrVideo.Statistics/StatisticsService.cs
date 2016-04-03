@@ -52,7 +52,11 @@ namespace KillrVideo.Statistics
         public async Task<GetNumberOfPlaysResponse> GetNumberOfPlays(GetNumberOfPlaysRequest request, ServerCallContext context)
         {
             // Enforce some sanity on this until we can change the data model to avoid the multi-get
-            if (request.VideoIds.Count > 20) throw new ArgumentOutOfRangeException(nameof(request.VideoIds), "Cannot do multi-get on more than 20 video id keys.");
+            if (request.VideoIds.Count > 20)
+            {
+                var status = new Status(StatusCode.InvalidArgument, "Cannot do a get more than 20 videos at once");
+                throw new RpcException(status);
+            }
 
             PreparedStatement prepared = await _statementCache.GetOrAddAsync("SELECT videoid, views FROM video_playback_stats WHERE videoid = ?"); ;
 

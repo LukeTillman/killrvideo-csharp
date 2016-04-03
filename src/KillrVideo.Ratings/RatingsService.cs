@@ -7,7 +7,6 @@ using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
 using KillrVideo.MessageBus;
-using KillrVideo.Protobuf;
 using KillrVideo.Protobuf.Services;
 using KillrVideo.Ratings.Events;
 

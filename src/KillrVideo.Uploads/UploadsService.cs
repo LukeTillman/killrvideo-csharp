@@ -27,7 +27,8 @@ namespace KillrVideo.Uploads
         /// </summary>
         public Task<GetUploadDestinationResponse> GetUploadDestination(GetUploadDestinationRequest request, ServerCallContext context)
         {
-            throw new NotSupportedException();
+            var status = new Status(StatusCode.Unimplemented, "Uploading videos is currently not supported");
+            throw new RpcException(status);
         }
 
         /// <summary>
@@ -35,7 +36,8 @@ namespace KillrVideo.Uploads
         /// </summary>
         public Task<MarkUploadCompleteResponse> MarkUploadComplete(MarkUploadCompleteRequest request, ServerCallContext context)
         {
-            throw new NotSupportedException();
+            var status = new Status(StatusCode.Unimplemented, "Uploading videos is currently not supported");
+            throw new RpcException(status);
         }
 
         /// <summary>
@@ -43,7 +45,8 @@ namespace KillrVideo.Uploads
         /// </summary>
         public Task<GetStatusOfVideoResponse> GetStatusOfVideo(GetStatusOfVideoRequest request, ServerCallContext context)
         {
-            throw new NotSupportedException();
+            var status = new Status(StatusCode.Unimplemented, "Uploading videos is currently not supported");
+            throw new RpcException(status);
         }
     }
 }
