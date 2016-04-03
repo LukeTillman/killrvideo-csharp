@@ -71,7 +71,10 @@ namespace KillrVideo.UserManagement
             // The first column in the row returned will be a boolean indicating whether the change was applied (TODO: Compensating action for user creation failure?)
             var applied = credentialsResult.Single().GetValue<bool>("[applied]");
             if (applied == false)
-                throw new Exception("A user with that email address already exists"); // TODO: Figure out how to do errors properly in grpc
+            {
+                var status = new Status(StatusCode.AlreadyExists, "A user with that email address already exists");
+                throw new RpcException(status);
+            }
 
             PreparedStatement preparedUser = await _statementCache.GetOrAddAsync(
                 "INSERT INTO users (userid, firstname, lastname, email, created_date) VALUES (?, ?, ?, ?, ?)");
@@ -133,7 +136,11 @@ namespace KillrVideo.UserManagement
             // Since we're essentially doing a multi-get here, limit the number userIds (i.e. partition keys) to 20 in an attempt
             // to enforce some performance sanity.  Anything larger and we might want to consider a different data model that doesn't 
             // involve doing a multi-get
-            if (request.UserIds.Count > 20) throw new ArgumentOutOfRangeException(nameof(request.UserIds), "Cannot do multi-get on more than 20 user id keys.");
+            if (request.UserIds.Count > 20)
+            {
+                var status = new Status(StatusCode.InvalidArgument, "Cannot get more than 20 user profiles at once");
+                throw new RpcException(status);
+            }
 
             // As an example, we'll do the multi-get at the CQL level using an IN() clause (i.e. let Cassandra handle it).  For an example of
             // doing it at the driver level, see the VideoCatalog's GetVideoPreviews method

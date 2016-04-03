@@ -82,7 +82,10 @@ namespace KillrVideo.UserManagement
             // The first column in the row returned will be a boolean indicating whether the change was applied (TODO: Compensating action for user creation failure?)
             var applied = credentialsResult.Single().GetValue<bool>("[applied]");
             if (applied == false)
-                throw new Exception("A user with that email address already exists");       // TODO: Right way to do error responses with grpc?
+            {
+                var status = new Status(StatusCode.AlreadyExists, "A user with that email address already exists");
+                throw new RpcException(status);
+            }
 
             PreparedStatement preparedUser = await _statementCache.GetOrAddAsync(
                 "INSERT INTO users (userid, firstname, lastname, email, created_date) VALUES (?, ?, ?, ?, ?)");
@@ -143,7 +146,11 @@ namespace KillrVideo.UserManagement
             // Since we're essentially doing a multi-get here, limit the number userIds (i.e. partition keys) to 20 in an attempt
             // to enforce some performance sanity.  Anything larger and we might want to consider a different data model that doesn't 
             // involve doing a multi-get
-            if (request.UserIds.Count > 20) throw new ArgumentOutOfRangeException(nameof(request.UserIds), "Cannot do multi-get on more than 20 user id keys.");
+            if (request.UserIds.Count > 20)
+            {
+                var status = new Status(StatusCode.InvalidArgument, "Cannot get more than 20 user profiles at once");
+                throw new RpcException(status);
+            }
 
             // Do some LINQ queries in parallel
             IEnumerable<Task<IEnumerable<LinqDtos.UserProfile>>> getProfilesTasks = request.UserIds.Select(uuid => _userProfileTable.Where(up => up.UserId == uuid.ToGuid()).ExecuteAsync());
