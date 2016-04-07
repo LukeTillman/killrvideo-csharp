@@ -346,9 +346,6 @@
     <Content Include=".bowerrc" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="package.json" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Content\bootstrap-cosmo\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-cosmo\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\bootstrap-cosmo\fonts\glyphicons-halflings-regular.woff" />
