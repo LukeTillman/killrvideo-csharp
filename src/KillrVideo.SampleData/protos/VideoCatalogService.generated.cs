@@ -51,37 +51,41 @@ namespace KillrVideo.VideoCatalog {
             "ZGVvLmNvbW1vbi5VdWlkEi4KCmFkZGVkX2RhdGUYAiABKAsyGi5nb29nbGUu",
             "cHJvdG9idWYuVGltZXN0YW1wEgwKBG5hbWUYAyABKAkSHgoWcHJldmlld19p",
             "bWFnZV9sb2NhdGlvbhgEIAEoCRIoCgd1c2VyX2lkGAUgASgLMhcua2lsbHJ2",
-            "aWRlby5jb21tb24uVXVpZCJICh1HZXRMYXRlc3RWaWRlb1ByZXZpZXdzUmVx",
-            "dWVzdBIRCglwYWdlX3NpemUYASABKAUSFAoMcGFnaW5nX3N0YXRlGBAgASgJ",
-            "InYKHkdldExhdGVzdFZpZGVvUHJldmlld3NSZXNwb25zZRI+Cg52aWRlb19w",
-            "cmV2aWV3cxgBIAMoCzImLmtpbGxydmlkZW8udmlkZW9fY2F0YWxvZy5WaWRl",
-            "b1ByZXZpZXcSFAoMcGFnaW5nX3N0YXRlGAIgASgJInAKG0dldFVzZXJWaWRl",
-            "b1ByZXZpZXdzUmVxdWVzdBIoCgd1c2VyX2lkGAEgASgLMhcua2lsbHJ2aWRl",
-            "by5jb21tb24uVXVpZBIRCglwYWdlX3NpemUYAiABKAUSFAoMcGFnaW5nX3N0",
-            "YXRlGBAgASgJIp4BChxHZXRVc2VyVmlkZW9QcmV2aWV3c1Jlc3BvbnNlEigK",
-            "B3VzZXJfaWQYASABKAsyFy5raWxscnZpZGVvLmNvbW1vbi5VdWlkEj4KDnZp",
-            "ZGVvX3ByZXZpZXdzGAIgAygLMiYua2lsbHJ2aWRlby52aWRlb19jYXRhbG9n",
-            "LlZpZGVvUHJldmlldxIUCgxwYWdpbmdfc3RhdGUYAyABKAkqLAoRVmlkZW9M",
-            "b2NhdGlvblR5cGUSCwoHWU9VVFVCRRAAEgoKBlVQTE9BRBABMo8GChNWaWRl",
-            "b0NhdGFsb2dTZXJ2aWNlEoIBChNTdWJtaXRVcGxvYWRlZFZpZGVvEjQua2ls",
-            "bHJ2aWRlby52aWRlb19jYXRhbG9nLlN1Ym1pdFVwbG9hZGVkVmlkZW9SZXF1",
-            "ZXN0GjUua2lsbHJ2aWRlby52aWRlb19jYXRhbG9nLlN1Ym1pdFVwbG9hZGVk",
-            "VmlkZW9SZXNwb25zZRJ/ChJTdWJtaXRZb3VUdWJlVmlkZW8SMy5raWxscnZp",
-            "ZGVvLnZpZGVvX2NhdGFsb2cuU3VibWl0WW91VHViZVZpZGVvUmVxdWVzdBo0",
-            "LmtpbGxydmlkZW8udmlkZW9fY2F0YWxvZy5TdWJtaXRZb3VUdWJlVmlkZW9S",
-            "ZXNwb25zZRJhCghHZXRWaWRlbxIpLmtpbGxydmlkZW8udmlkZW9fY2F0YWxv",
-            "Zy5HZXRWaWRlb1JlcXVlc3QaKi5raWxscnZpZGVvLnZpZGVvX2NhdGFsb2cu",
-            "R2V0VmlkZW9SZXNwb25zZRJ5ChBHZXRWaWRlb1ByZXZpZXdzEjEua2lsbHJ2",
-            "aWRlby52aWRlb19jYXRhbG9nLkdldFZpZGVvUHJldmlld3NSZXF1ZXN0GjIu",
-            "a2lsbHJ2aWRlby52aWRlb19jYXRhbG9nLkdldFZpZGVvUHJldmlld3NSZXNw",
-            "b25zZRKLAQoWR2V0TGF0ZXN0VmlkZW9QcmV2aWV3cxI3LmtpbGxydmlkZW8u",
-            "dmlkZW9fY2F0YWxvZy5HZXRMYXRlc3RWaWRlb1ByZXZpZXdzUmVxdWVzdBo4",
-            "LmtpbGxydmlkZW8udmlkZW9fY2F0YWxvZy5HZXRMYXRlc3RWaWRlb1ByZXZp",
-            "ZXdzUmVzcG9uc2UShQEKFEdldFVzZXJWaWRlb1ByZXZpZXdzEjUua2lsbHJ2",
-            "aWRlby52aWRlb19jYXRhbG9nLkdldFVzZXJWaWRlb1ByZXZpZXdzUmVxdWVz",
-            "dBo2LmtpbGxydmlkZW8udmlkZW9fY2F0YWxvZy5HZXRVc2VyVmlkZW9QcmV2",
-            "aWV3c1Jlc3BvbnNlQhqqAhdLaWxsclZpZGVvLlZpZGVvQ2F0YWxvZ2IGcHJv",
-            "dG8z"));
+            "aWRlby5jb21tb24uVXVpZCK1AQodR2V0TGF0ZXN0VmlkZW9QcmV2aWV3c1Jl",
+            "cXVlc3QSEQoJcGFnZV9zaXplGAEgASgFEjcKE3N0YXJ0aW5nX2FkZGVkX2Rh",
+            "dGUYAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEjIKEXN0YXJ0",
+            "aW5nX3ZpZGVvX2lkGAMgASgLMhcua2lsbHJ2aWRlby5jb21tb24uVXVpZBIU",
+            "CgxwYWdpbmdfc3RhdGUYECABKAkidgoeR2V0TGF0ZXN0VmlkZW9QcmV2aWV3",
+            "c1Jlc3BvbnNlEj4KDnZpZGVvX3ByZXZpZXdzGAEgAygLMiYua2lsbHJ2aWRl",
+            "by52aWRlb19jYXRhbG9nLlZpZGVvUHJldmlldxIUCgxwYWdpbmdfc3RhdGUY",
+            "AiABKAki3QEKG0dldFVzZXJWaWRlb1ByZXZpZXdzUmVxdWVzdBIoCgd1c2Vy",
+            "X2lkGAEgASgLMhcua2lsbHJ2aWRlby5jb21tb24uVXVpZBIRCglwYWdlX3Np",
+            "emUYAiABKAUSNwoTc3RhcnRpbmdfYWRkZWRfZGF0ZRgDIAEoCzIaLmdvb2ds",
+            "ZS5wcm90b2J1Zi5UaW1lc3RhbXASMgoRc3RhcnRpbmdfdmlkZW9faWQYBCAB",
+            "KAsyFy5raWxscnZpZGVvLmNvbW1vbi5VdWlkEhQKDHBhZ2luZ19zdGF0ZRgQ",
+            "IAEoCSKeAQocR2V0VXNlclZpZGVvUHJldmlld3NSZXNwb25zZRIoCgd1c2Vy",
+            "X2lkGAEgASgLMhcua2lsbHJ2aWRlby5jb21tb24uVXVpZBI+Cg52aWRlb19w",
+            "cmV2aWV3cxgCIAMoCzImLmtpbGxydmlkZW8udmlkZW9fY2F0YWxvZy5WaWRl",
+            "b1ByZXZpZXcSFAoMcGFnaW5nX3N0YXRlGAMgASgJKiwKEVZpZGVvTG9jYXRp",
+            "b25UeXBlEgsKB1lPVVRVQkUQABIKCgZVUExPQUQQATKPBgoTVmlkZW9DYXRh",
+            "bG9nU2VydmljZRKCAQoTU3VibWl0VXBsb2FkZWRWaWRlbxI0LmtpbGxydmlk",
+            "ZW8udmlkZW9fY2F0YWxvZy5TdWJtaXRVcGxvYWRlZFZpZGVvUmVxdWVzdBo1",
+            "LmtpbGxydmlkZW8udmlkZW9fY2F0YWxvZy5TdWJtaXRVcGxvYWRlZFZpZGVv",
+            "UmVzcG9uc2USfwoSU3VibWl0WW91VHViZVZpZGVvEjMua2lsbHJ2aWRlby52",
+            "aWRlb19jYXRhbG9nLlN1Ym1pdFlvdVR1YmVWaWRlb1JlcXVlc3QaNC5raWxs",
+            "cnZpZGVvLnZpZGVvX2NhdGFsb2cuU3VibWl0WW91VHViZVZpZGVvUmVzcG9u",
+            "c2USYQoIR2V0VmlkZW8SKS5raWxscnZpZGVvLnZpZGVvX2NhdGFsb2cuR2V0",
+            "VmlkZW9SZXF1ZXN0Gioua2lsbHJ2aWRlby52aWRlb19jYXRhbG9nLkdldFZp",
+            "ZGVvUmVzcG9uc2USeQoQR2V0VmlkZW9QcmV2aWV3cxIxLmtpbGxydmlkZW8u",
+            "dmlkZW9fY2F0YWxvZy5HZXRWaWRlb1ByZXZpZXdzUmVxdWVzdBoyLmtpbGxy",
+            "dmlkZW8udmlkZW9fY2F0YWxvZy5HZXRWaWRlb1ByZXZpZXdzUmVzcG9uc2US",
+            "iwEKFkdldExhdGVzdFZpZGVvUHJldmlld3MSNy5raWxscnZpZGVvLnZpZGVv",
+            "X2NhdGFsb2cuR2V0TGF0ZXN0VmlkZW9QcmV2aWV3c1JlcXVlc3QaOC5raWxs",
+            "cnZpZGVvLnZpZGVvX2NhdGFsb2cuR2V0TGF0ZXN0VmlkZW9QcmV2aWV3c1Jl",
+            "c3BvbnNlEoUBChRHZXRVc2VyVmlkZW9QcmV2aWV3cxI1LmtpbGxydmlkZW8u",
+            "dmlkZW9fY2F0YWxvZy5HZXRVc2VyVmlkZW9QcmV2aWV3c1JlcXVlc3QaNi5r",
+            "aWxscnZpZGVvLnZpZGVvX2NhdGFsb2cuR2V0VXNlclZpZGVvUHJldmlld3NS",
+            "ZXNwb25zZUIaqgIXS2lsbHJWaWRlby5WaWRlb0NhdGFsb2diBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::KillrVideo.Protobuf.CommonTypesReflection.Descriptor, },
           new pbr::GeneratedCodeInfo(new[] {typeof(global::KillrVideo.VideoCatalog.VideoLocationType), }, new pbr::GeneratedCodeInfo[] {
@@ -94,9 +98,9 @@ namespace KillrVideo.VideoCatalog {
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest), global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest.Parser, new[]{ "VideoIds" }, null, null, null),
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse), global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse.Parser, new[]{ "VideoPreviews" }, null, null, null),
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.VideoPreview), global::KillrVideo.VideoCatalog.VideoPreview.Parser, new[]{ "VideoId", "AddedDate", "Name", "PreviewImageLocation", "UserId" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest), global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest.Parser, new[]{ "PageSize", "PagingState" }, null, null, null),
+            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest), global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest.Parser, new[]{ "PageSize", "StartingAddedDate", "StartingVideoId", "PagingState" }, null, null, null),
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse), global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse.Parser, new[]{ "VideoPreviews", "PagingState" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest), global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest.Parser, new[]{ "UserId", "PageSize", "PagingState" }, null, null, null),
+            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest), global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest.Parser, new[]{ "UserId", "PageSize", "StartingAddedDate", "StartingVideoId", "PagingState" }, null, null, null),
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse), global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse.Parser, new[]{ "UserId", "VideoPreviews", "PagingState" }, null, null, null)
           }));
     }
@@ -1632,6 +1636,8 @@ namespace KillrVideo.VideoCatalog {
 
     public GetLatestVideoPreviewsRequest(GetLatestVideoPreviewsRequest other) : this() {
       pageSize_ = other.pageSize_;
+      StartingAddedDate = other.startingAddedDate_ != null ? other.StartingAddedDate.Clone() : null;
+      StartingVideoId = other.startingVideoId_ != null ? other.StartingVideoId.Clone() : null;
       pagingState_ = other.pagingState_;
     }
 
@@ -1646,6 +1652,26 @@ namespace KillrVideo.VideoCatalog {
       get { return pageSize_; }
       set {
         pageSize_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "starting_added_date" field.</summary>
+    public const int StartingAddedDateFieldNumber = 2;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp startingAddedDate_;
+    public global::Google.Protobuf.WellKnownTypes.Timestamp StartingAddedDate {
+      get { return startingAddedDate_; }
+      set {
+        startingAddedDate_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "starting_video_id" field.</summary>
+    public const int StartingVideoIdFieldNumber = 3;
+    private global::KillrVideo.Protobuf.Uuid startingVideoId_;
+    public global::KillrVideo.Protobuf.Uuid StartingVideoId {
+      get { return startingVideoId_; }
+      set {
+        startingVideoId_ = value;
       }
     }
 
@@ -1671,6 +1697,8 @@ namespace KillrVideo.VideoCatalog {
         return true;
       }
       if (PageSize != other.PageSize) return false;
+      if (!object.Equals(StartingAddedDate, other.StartingAddedDate)) return false;
+      if (!object.Equals(StartingVideoId, other.StartingVideoId)) return false;
       if (PagingState != other.PagingState) return false;
       return true;
     }
@@ -1678,6 +1706,8 @@ namespace KillrVideo.VideoCatalog {
     public override int GetHashCode() {
       int hash = 1;
       if (PageSize != 0) hash ^= PageSize.GetHashCode();
+      if (startingAddedDate_ != null) hash ^= StartingAddedDate.GetHashCode();
+      if (startingVideoId_ != null) hash ^= StartingVideoId.GetHashCode();
       if (PagingState.Length != 0) hash ^= PagingState.GetHashCode();
       return hash;
     }
@@ -1691,6 +1721,14 @@ namespace KillrVideo.VideoCatalog {
         output.WriteRawTag(8);
         output.WriteInt32(PageSize);
       }
+      if (startingAddedDate_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(StartingAddedDate);
+      }
+      if (startingVideoId_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(StartingVideoId);
+      }
       if (PagingState.Length != 0) {
         output.WriteRawTag(130, 1);
         output.WriteString(PagingState);
@@ -1701,6 +1739,12 @@ namespace KillrVideo.VideoCatalog {
       int size = 0;
       if (PageSize != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(PageSize);
+      }
+      if (startingAddedDate_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(StartingAddedDate);
+      }
+      if (startingVideoId_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(StartingVideoId);
       }
       if (PagingState.Length != 0) {
         size += 2 + pb::CodedOutputStream.ComputeStringSize(PagingState);
@@ -1714,6 +1758,18 @@ namespace KillrVideo.VideoCatalog {
       }
       if (other.PageSize != 0) {
         PageSize = other.PageSize;
+      }
+      if (other.startingAddedDate_ != null) {
+        if (startingAddedDate_ == null) {
+          startingAddedDate_ = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        StartingAddedDate.MergeFrom(other.StartingAddedDate);
+      }
+      if (other.startingVideoId_ != null) {
+        if (startingVideoId_ == null) {
+          startingVideoId_ = new global::KillrVideo.Protobuf.Uuid();
+        }
+        StartingVideoId.MergeFrom(other.StartingVideoId);
       }
       if (other.PagingState.Length != 0) {
         PagingState = other.PagingState;
@@ -1729,6 +1785,20 @@ namespace KillrVideo.VideoCatalog {
             break;
           case 8: {
             PageSize = input.ReadInt32();
+            break;
+          }
+          case 18: {
+            if (startingAddedDate_ == null) {
+              startingAddedDate_ = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(startingAddedDate_);
+            break;
+          }
+          case 26: {
+            if (startingVideoId_ == null) {
+              startingVideoId_ = new global::KillrVideo.Protobuf.Uuid();
+            }
+            input.ReadMessage(startingVideoId_);
             break;
           }
           case 130: {
@@ -1891,6 +1961,8 @@ namespace KillrVideo.VideoCatalog {
     public GetUserVideoPreviewsRequest(GetUserVideoPreviewsRequest other) : this() {
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
       pageSize_ = other.pageSize_;
+      StartingAddedDate = other.startingAddedDate_ != null ? other.StartingAddedDate.Clone() : null;
+      StartingVideoId = other.startingVideoId_ != null ? other.StartingVideoId.Clone() : null;
       pagingState_ = other.pagingState_;
     }
 
@@ -1918,6 +1990,26 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    /// <summary>Field number for the "starting_added_date" field.</summary>
+    public const int StartingAddedDateFieldNumber = 3;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp startingAddedDate_;
+    public global::Google.Protobuf.WellKnownTypes.Timestamp StartingAddedDate {
+      get { return startingAddedDate_; }
+      set {
+        startingAddedDate_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "starting_video_id" field.</summary>
+    public const int StartingVideoIdFieldNumber = 4;
+    private global::KillrVideo.Protobuf.Uuid startingVideoId_;
+    public global::KillrVideo.Protobuf.Uuid StartingVideoId {
+      get { return startingVideoId_; }
+      set {
+        startingVideoId_ = value;
+      }
+    }
+
     /// <summary>Field number for the "paging_state" field.</summary>
     public const int PagingStateFieldNumber = 16;
     private string pagingState_ = "";
@@ -1941,6 +2033,8 @@ namespace KillrVideo.VideoCatalog {
       }
       if (!object.Equals(UserId, other.UserId)) return false;
       if (PageSize != other.PageSize) return false;
+      if (!object.Equals(StartingAddedDate, other.StartingAddedDate)) return false;
+      if (!object.Equals(StartingVideoId, other.StartingVideoId)) return false;
       if (PagingState != other.PagingState) return false;
       return true;
     }
@@ -1949,6 +2043,8 @@ namespace KillrVideo.VideoCatalog {
       int hash = 1;
       if (userId_ != null) hash ^= UserId.GetHashCode();
       if (PageSize != 0) hash ^= PageSize.GetHashCode();
+      if (startingAddedDate_ != null) hash ^= StartingAddedDate.GetHashCode();
+      if (startingVideoId_ != null) hash ^= StartingVideoId.GetHashCode();
       if (PagingState.Length != 0) hash ^= PagingState.GetHashCode();
       return hash;
     }
@@ -1966,6 +2062,14 @@ namespace KillrVideo.VideoCatalog {
         output.WriteRawTag(16);
         output.WriteInt32(PageSize);
       }
+      if (startingAddedDate_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(StartingAddedDate);
+      }
+      if (startingVideoId_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(StartingVideoId);
+      }
       if (PagingState.Length != 0) {
         output.WriteRawTag(130, 1);
         output.WriteString(PagingState);
@@ -1979,6 +2083,12 @@ namespace KillrVideo.VideoCatalog {
       }
       if (PageSize != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(PageSize);
+      }
+      if (startingAddedDate_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(StartingAddedDate);
+      }
+      if (startingVideoId_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(StartingVideoId);
       }
       if (PagingState.Length != 0) {
         size += 2 + pb::CodedOutputStream.ComputeStringSize(PagingState);
@@ -1998,6 +2108,18 @@ namespace KillrVideo.VideoCatalog {
       }
       if (other.PageSize != 0) {
         PageSize = other.PageSize;
+      }
+      if (other.startingAddedDate_ != null) {
+        if (startingAddedDate_ == null) {
+          startingAddedDate_ = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        StartingAddedDate.MergeFrom(other.StartingAddedDate);
+      }
+      if (other.startingVideoId_ != null) {
+        if (startingVideoId_ == null) {
+          startingVideoId_ = new global::KillrVideo.Protobuf.Uuid();
+        }
+        StartingVideoId.MergeFrom(other.StartingVideoId);
       }
       if (other.PagingState.Length != 0) {
         PagingState = other.PagingState;
@@ -2020,6 +2142,20 @@ namespace KillrVideo.VideoCatalog {
           }
           case 16: {
             PageSize = input.ReadInt32();
+            break;
+          }
+          case 26: {
+            if (startingAddedDate_ == null) {
+              startingAddedDate_ = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(startingAddedDate_);
+            break;
+          }
+          case 34: {
+            if (startingVideoId_ == null) {
+              startingVideoId_ = new global::KillrVideo.Protobuf.Uuid();
+            }
+            input.ReadMessage(startingVideoId_);
             break;
           }
           case 130: {

@@ -30,43 +30,46 @@ namespace KillrVideo.Comments {
             "dWlkEigKB3VzZXJfaWQYAiABKAsyFy5raWxscnZpZGVvLmNvbW1vbi5VdWlk",
             "Ei8KCmNvbW1lbnRfaWQYAyABKAsyGy5raWxscnZpZGVvLmNvbW1vbi5UaW1l",
             "VXVpZBIPCgdjb21tZW50GAQgASgJIhgKFkNvbW1lbnRPblZpZGVvUmVzcG9u",
-            "c2UiawoWR2V0VXNlckNvbW1lbnRzUmVxdWVzdBIoCgd1c2VyX2lkGAEgASgL",
+            "c2UipQEKFkdldFVzZXJDb21tZW50c1JlcXVlc3QSKAoHdXNlcl9pZBgBIAEo",
+            "CzIXLmtpbGxydmlkZW8uY29tbW9uLlV1aWQSEQoJcGFnZV9zaXplGAIgASgF",
+            "EjgKE3N0YXJ0aW5nX2NvbW1lbnRfaWQYAyABKAsyGy5raWxscnZpZGVvLmNv",
+            "bW1vbi5UaW1lVXVpZBIUCgxwYWdpbmdfc3RhdGUYECABKAkijQEKF0dldFVz",
+            "ZXJDb21tZW50c1Jlc3BvbnNlEigKB3VzZXJfaWQYASABKAsyFy5raWxscnZp",
+            "ZGVvLmNvbW1vbi5VdWlkEjIKCGNvbW1lbnRzGAIgAygLMiAua2lsbHJ2aWRl",
+            "by5jb21tZW50cy5Vc2VyQ29tbWVudBIUCgxwYWdpbmdfc3RhdGUYAyABKAki",
+            "sQEKC1VzZXJDb21tZW50Ei8KCmNvbW1lbnRfaWQYASABKAsyGy5raWxscnZp",
+            "ZGVvLmNvbW1vbi5UaW1lVXVpZBIpCgh2aWRlb19pZBgCIAEoCzIXLmtpbGxy",
+            "dmlkZW8uY29tbW9uLlV1aWQSDwoHY29tbWVudBgDIAEoCRI1ChFjb21tZW50",
+            "X3RpbWVzdGFtcBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAi",
+            "pwEKF0dldFZpZGVvQ29tbWVudHNSZXF1ZXN0EikKCHZpZGVvX2lkGAEgASgL",
             "Mhcua2lsbHJ2aWRlby5jb21tb24uVXVpZBIRCglwYWdlX3NpemUYAiABKAUS",
-            "FAoMcGFnaW5nX3N0YXRlGBAgASgJIo0BChdHZXRVc2VyQ29tbWVudHNSZXNw",
-            "b25zZRIoCgd1c2VyX2lkGAEgASgLMhcua2lsbHJ2aWRlby5jb21tb24uVXVp",
-            "ZBIyCghjb21tZW50cxgCIAMoCzIgLmtpbGxydmlkZW8uY29tbWVudHMuVXNl",
-            "ckNvbW1lbnQSFAoMcGFnaW5nX3N0YXRlGAMgASgJIrEBCgtVc2VyQ29tbWVu",
-            "dBIvCgpjb21tZW50X2lkGAEgASgLMhsua2lsbHJ2aWRlby5jb21tb24uVGlt",
-            "ZVV1aWQSKQoIdmlkZW9faWQYAiABKAsyFy5raWxscnZpZGVvLmNvbW1vbi5V",
-            "dWlkEg8KB2NvbW1lbnQYAyABKAkSNQoRY29tbWVudF90aW1lc3RhbXAYBCAB",
-            "KAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIm0KF0dldFZpZGVvQ29t",
-            "bWVudHNSZXF1ZXN0EikKCHZpZGVvX2lkGAEgASgLMhcua2lsbHJ2aWRlby5j",
-            "b21tb24uVXVpZBIRCglwYWdlX3NpemUYAiABKAUSFAoMcGFnaW5nX3N0YXRl",
-            "GBAgASgJIpABChhHZXRWaWRlb0NvbW1lbnRzUmVzcG9uc2USKQoIdmlkZW9f",
-            "aWQYASABKAsyFy5raWxscnZpZGVvLmNvbW1vbi5VdWlkEjMKCGNvbW1lbnRz",
-            "GAIgAygLMiEua2lsbHJ2aWRlby5jb21tZW50cy5WaWRlb0NvbW1lbnQSFAoM",
-            "cGFnaW5nX3N0YXRlGAMgASgJIrEBCgxWaWRlb0NvbW1lbnQSLwoKY29tbWVu",
-            "dF9pZBgBIAEoCzIbLmtpbGxydmlkZW8uY29tbW9uLlRpbWVVdWlkEigKB3Vz",
-            "ZXJfaWQYAiABKAsyFy5raWxscnZpZGVvLmNvbW1vbi5VdWlkEg8KB2NvbW1l",
-            "bnQYAyABKAkSNQoRY29tbWVudF90aW1lc3RhbXAYBCABKAsyGi5nb29nbGUu",
-            "cHJvdG9idWYuVGltZXN0YW1wMtsCCg9Db21tZW50c1NlcnZpY2USaQoOQ29t",
-            "bWVudE9uVmlkZW8SKi5raWxscnZpZGVvLmNvbW1lbnRzLkNvbW1lbnRPblZp",
-            "ZGVvUmVxdWVzdBorLmtpbGxydmlkZW8uY29tbWVudHMuQ29tbWVudE9uVmlk",
-            "ZW9SZXNwb25zZRJsCg9HZXRVc2VyQ29tbWVudHMSKy5raWxscnZpZGVvLmNv",
-            "bW1lbnRzLkdldFVzZXJDb21tZW50c1JlcXVlc3QaLC5raWxscnZpZGVvLmNv",
-            "bW1lbnRzLkdldFVzZXJDb21tZW50c1Jlc3BvbnNlEm8KEEdldFZpZGVvQ29t",
-            "bWVudHMSLC5raWxscnZpZGVvLmNvbW1lbnRzLkdldFZpZGVvQ29tbWVudHNS",
-            "ZXF1ZXN0Gi0ua2lsbHJ2aWRlby5jb21tZW50cy5HZXRWaWRlb0NvbW1lbnRz",
-            "UmVzcG9uc2VCFqoCE0tpbGxyVmlkZW8uQ29tbWVudHNiBnByb3RvMw=="));
+            "OAoTc3RhcnRpbmdfY29tbWVudF9pZBgDIAEoCzIbLmtpbGxydmlkZW8uY29t",
+            "bW9uLlRpbWVVdWlkEhQKDHBhZ2luZ19zdGF0ZRgQIAEoCSKQAQoYR2V0Vmlk",
+            "ZW9Db21tZW50c1Jlc3BvbnNlEikKCHZpZGVvX2lkGAEgASgLMhcua2lsbHJ2",
+            "aWRlby5jb21tb24uVXVpZBIzCghjb21tZW50cxgCIAMoCzIhLmtpbGxydmlk",
+            "ZW8uY29tbWVudHMuVmlkZW9Db21tZW50EhQKDHBhZ2luZ19zdGF0ZRgDIAEo",
+            "CSKxAQoMVmlkZW9Db21tZW50Ei8KCmNvbW1lbnRfaWQYASABKAsyGy5raWxs",
+            "cnZpZGVvLmNvbW1vbi5UaW1lVXVpZBIoCgd1c2VyX2lkGAIgASgLMhcua2ls",
+            "bHJ2aWRlby5jb21tb24uVXVpZBIPCgdjb21tZW50GAMgASgJEjUKEWNvbW1l",
+            "bnRfdGltZXN0YW1wGAQgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFt",
+            "cDLbAgoPQ29tbWVudHNTZXJ2aWNlEmkKDkNvbW1lbnRPblZpZGVvEioua2ls",
+            "bHJ2aWRlby5jb21tZW50cy5Db21tZW50T25WaWRlb1JlcXVlc3QaKy5raWxs",
+            "cnZpZGVvLmNvbW1lbnRzLkNvbW1lbnRPblZpZGVvUmVzcG9uc2USbAoPR2V0",
+            "VXNlckNvbW1lbnRzEisua2lsbHJ2aWRlby5jb21tZW50cy5HZXRVc2VyQ29t",
+            "bWVudHNSZXF1ZXN0Giwua2lsbHJ2aWRlby5jb21tZW50cy5HZXRVc2VyQ29t",
+            "bWVudHNSZXNwb25zZRJvChBHZXRWaWRlb0NvbW1lbnRzEiwua2lsbHJ2aWRl",
+            "by5jb21tZW50cy5HZXRWaWRlb0NvbW1lbnRzUmVxdWVzdBotLmtpbGxydmlk",
+            "ZW8uY29tbWVudHMuR2V0VmlkZW9Db21tZW50c1Jlc3BvbnNlQhaqAhNLaWxs",
+            "clZpZGVvLkNvbW1lbnRzYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::KillrVideo.Protobuf.CommonTypesReflection.Descriptor, },
           new pbr::GeneratedCodeInfo(null, new pbr::GeneratedCodeInfo[] {
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Comments.CommentOnVideoRequest), global::KillrVideo.Comments.CommentOnVideoRequest.Parser, new[]{ "VideoId", "UserId", "CommentId", "Comment" }, null, null, null),
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Comments.CommentOnVideoResponse), global::KillrVideo.Comments.CommentOnVideoResponse.Parser, null, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Comments.GetUserCommentsRequest), global::KillrVideo.Comments.GetUserCommentsRequest.Parser, new[]{ "UserId", "PageSize", "PagingState" }, null, null, null),
+            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Comments.GetUserCommentsRequest), global::KillrVideo.Comments.GetUserCommentsRequest.Parser, new[]{ "UserId", "PageSize", "StartingCommentId", "PagingState" }, null, null, null),
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Comments.GetUserCommentsResponse), global::KillrVideo.Comments.GetUserCommentsResponse.Parser, new[]{ "UserId", "Comments", "PagingState" }, null, null, null),
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Comments.UserComment), global::KillrVideo.Comments.UserComment.Parser, new[]{ "CommentId", "VideoId", "Comment", "CommentTimestamp" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Comments.GetVideoCommentsRequest), global::KillrVideo.Comments.GetVideoCommentsRequest.Parser, new[]{ "VideoId", "PageSize", "PagingState" }, null, null, null),
+            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Comments.GetVideoCommentsRequest), global::KillrVideo.Comments.GetVideoCommentsRequest.Parser, new[]{ "VideoId", "PageSize", "StartingCommentId", "PagingState" }, null, null, null),
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Comments.GetVideoCommentsResponse), global::KillrVideo.Comments.GetVideoCommentsResponse.Parser, new[]{ "VideoId", "Comments", "PagingState" }, null, null, null),
             new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Comments.VideoComment), global::KillrVideo.Comments.VideoComment.Parser, new[]{ "CommentId", "UserId", "Comment", "CommentTimestamp" }, null, null, null)
           }));
@@ -384,6 +387,7 @@ namespace KillrVideo.Comments {
     public GetUserCommentsRequest(GetUserCommentsRequest other) : this() {
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
       pageSize_ = other.pageSize_;
+      StartingCommentId = other.startingCommentId_ != null ? other.StartingCommentId.Clone() : null;
       pagingState_ = other.pagingState_;
     }
 
@@ -411,6 +415,16 @@ namespace KillrVideo.Comments {
       }
     }
 
+    /// <summary>Field number for the "starting_comment_id" field.</summary>
+    public const int StartingCommentIdFieldNumber = 3;
+    private global::KillrVideo.Protobuf.TimeUuid startingCommentId_;
+    public global::KillrVideo.Protobuf.TimeUuid StartingCommentId {
+      get { return startingCommentId_; }
+      set {
+        startingCommentId_ = value;
+      }
+    }
+
     /// <summary>Field number for the "paging_state" field.</summary>
     public const int PagingStateFieldNumber = 16;
     private string pagingState_ = "";
@@ -434,6 +448,7 @@ namespace KillrVideo.Comments {
       }
       if (!object.Equals(UserId, other.UserId)) return false;
       if (PageSize != other.PageSize) return false;
+      if (!object.Equals(StartingCommentId, other.StartingCommentId)) return false;
       if (PagingState != other.PagingState) return false;
       return true;
     }
@@ -442,6 +457,7 @@ namespace KillrVideo.Comments {
       int hash = 1;
       if (userId_ != null) hash ^= UserId.GetHashCode();
       if (PageSize != 0) hash ^= PageSize.GetHashCode();
+      if (startingCommentId_ != null) hash ^= StartingCommentId.GetHashCode();
       if (PagingState.Length != 0) hash ^= PagingState.GetHashCode();
       return hash;
     }
@@ -459,6 +475,10 @@ namespace KillrVideo.Comments {
         output.WriteRawTag(16);
         output.WriteInt32(PageSize);
       }
+      if (startingCommentId_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(StartingCommentId);
+      }
       if (PagingState.Length != 0) {
         output.WriteRawTag(130, 1);
         output.WriteString(PagingState);
@@ -472,6 +492,9 @@ namespace KillrVideo.Comments {
       }
       if (PageSize != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(PageSize);
+      }
+      if (startingCommentId_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(StartingCommentId);
       }
       if (PagingState.Length != 0) {
         size += 2 + pb::CodedOutputStream.ComputeStringSize(PagingState);
@@ -491,6 +514,12 @@ namespace KillrVideo.Comments {
       }
       if (other.PageSize != 0) {
         PageSize = other.PageSize;
+      }
+      if (other.startingCommentId_ != null) {
+        if (startingCommentId_ == null) {
+          startingCommentId_ = new global::KillrVideo.Protobuf.TimeUuid();
+        }
+        StartingCommentId.MergeFrom(other.StartingCommentId);
       }
       if (other.PagingState.Length != 0) {
         PagingState = other.PagingState;
@@ -513,6 +542,13 @@ namespace KillrVideo.Comments {
           }
           case 16: {
             PageSize = input.ReadInt32();
+            break;
+          }
+          case 26: {
+            if (startingCommentId_ == null) {
+              startingCommentId_ = new global::KillrVideo.Protobuf.TimeUuid();
+            }
+            input.ReadMessage(startingCommentId_);
             break;
           }
           case 130: {
@@ -913,6 +949,7 @@ namespace KillrVideo.Comments {
     public GetVideoCommentsRequest(GetVideoCommentsRequest other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
       pageSize_ = other.pageSize_;
+      StartingCommentId = other.startingCommentId_ != null ? other.StartingCommentId.Clone() : null;
       pagingState_ = other.pagingState_;
     }
 
@@ -940,6 +977,16 @@ namespace KillrVideo.Comments {
       }
     }
 
+    /// <summary>Field number for the "starting_comment_id" field.</summary>
+    public const int StartingCommentIdFieldNumber = 3;
+    private global::KillrVideo.Protobuf.TimeUuid startingCommentId_;
+    public global::KillrVideo.Protobuf.TimeUuid StartingCommentId {
+      get { return startingCommentId_; }
+      set {
+        startingCommentId_ = value;
+      }
+    }
+
     /// <summary>Field number for the "paging_state" field.</summary>
     public const int PagingStateFieldNumber = 16;
     private string pagingState_ = "";
@@ -963,6 +1010,7 @@ namespace KillrVideo.Comments {
       }
       if (!object.Equals(VideoId, other.VideoId)) return false;
       if (PageSize != other.PageSize) return false;
+      if (!object.Equals(StartingCommentId, other.StartingCommentId)) return false;
       if (PagingState != other.PagingState) return false;
       return true;
     }
@@ -971,6 +1019,7 @@ namespace KillrVideo.Comments {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
       if (PageSize != 0) hash ^= PageSize.GetHashCode();
+      if (startingCommentId_ != null) hash ^= StartingCommentId.GetHashCode();
       if (PagingState.Length != 0) hash ^= PagingState.GetHashCode();
       return hash;
     }
@@ -988,6 +1037,10 @@ namespace KillrVideo.Comments {
         output.WriteRawTag(16);
         output.WriteInt32(PageSize);
       }
+      if (startingCommentId_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(StartingCommentId);
+      }
       if (PagingState.Length != 0) {
         output.WriteRawTag(130, 1);
         output.WriteString(PagingState);
@@ -1001,6 +1054,9 @@ namespace KillrVideo.Comments {
       }
       if (PageSize != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(PageSize);
+      }
+      if (startingCommentId_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(StartingCommentId);
       }
       if (PagingState.Length != 0) {
         size += 2 + pb::CodedOutputStream.ComputeStringSize(PagingState);
@@ -1020,6 +1076,12 @@ namespace KillrVideo.Comments {
       }
       if (other.PageSize != 0) {
         PageSize = other.PageSize;
+      }
+      if (other.startingCommentId_ != null) {
+        if (startingCommentId_ == null) {
+          startingCommentId_ = new global::KillrVideo.Protobuf.TimeUuid();
+        }
+        StartingCommentId.MergeFrom(other.StartingCommentId);
       }
       if (other.PagingState.Length != 0) {
         PagingState = other.PagingState;
@@ -1042,6 +1104,13 @@ namespace KillrVideo.Comments {
           }
           case 16: {
             PageSize = input.ReadInt32();
+            break;
+          }
+          case 26: {
+            if (startingCommentId_ == null) {
+              startingCommentId_ = new global::KillrVideo.Protobuf.TimeUuid();
+            }
+            input.ReadMessage(startingCommentId_);
             break;
           }
           case 130: {
