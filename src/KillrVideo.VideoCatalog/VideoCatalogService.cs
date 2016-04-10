@@ -220,7 +220,17 @@ namespace KillrVideo.VideoCatalog
             var results = new List<VideoPreview>();
             string nextPageState = string.Empty;
 
-            PreparedStatement preparedStatement = await _statementCache.GetOrAddAsync("SELECT * FROM latest_videos WHERE yyyymmdd = ?");
+            DateTimeOffset startingAddedDate = request.StartingAddedDate.ToDateTimeOffset();
+            Guid? startingVideoId = request.StartingVideoId.ToNullableGuid();
+            PreparedStatement preparedStatement;
+            if (startingVideoId == null)
+            {
+                preparedStatement = await _statementCache.GetOrAddAsync("SELECT * FROM latest_videos WHERE yyyymmdd = ?");
+            }
+            else
+            {
+                preparedStatement = await _statementCache.GetOrAddAsync("SELECT * FROM latest_videos WHERE yyyymmdd = ? AND added_date <= ? AND videoid <= ?");
+            }
 
             // TODO: Run queries in parallel?
             while (bucketIndex < buckets.Length)
@@ -229,10 +239,12 @@ namespace KillrVideo.VideoCatalog
                 string bucket = buckets[bucketIndex];
 
                 // Get a page of records but don't automatically load more pages when enumerating the RowSet
-                
-                IStatement boundStatement = preparedStatement.Bind(bucket)
-                                                             .SetAutoPage(false)
-                                                             .SetPageSize(recordsStillNeeded);
+                IStatement boundStatement = startingVideoId == null
+                                                ? preparedStatement.Bind(bucket)
+                                                : preparedStatement.Bind(bucket, startingAddedDate, startingVideoId);
+
+                boundStatement.SetAutoPage(false)
+                              .SetPageSize(recordsStillNeeded);
 
                 // Start from where we left off in this bucket
                 if (string.IsNullOrEmpty(rowPagingState) == false)
@@ -273,16 +285,30 @@ namespace KillrVideo.VideoCatalog
         public async Task<GetUserVideoPreviewsResponse> GetUserVideoPreviews(GetUserVideoPreviewsRequest request, ServerCallContext context)
         {
             // Figure out if we're getting first page or subsequent page
-            PreparedStatement preparedStatement = await _statementCache.GetOrAddAsync("SELECT * FROM user_videos WHERE userid = ?");
-            IStatement boundStatement = preparedStatement.Bind(request.UserId.ToGuid())
-                                                         .SetAutoPage(false)
-                                                         .SetPageSize(request.PageSize);
+            PreparedStatement prepared;
+            IStatement bound;
+            DateTimeOffset startingAddedDate = request.StartingAddedDate.ToDateTimeOffset();
+            Guid? startingVideoId = request.StartingVideoId.ToNullableGuid();
+            Guid userId = request.UserId.ToGuid();
+            if (startingVideoId == null)
+            {
+                prepared = await _statementCache.GetOrAddAsync("SELECT * FROM user_videos WHERE userid = ?");
+                bound = prepared.Bind(userId);
+            }
+            else
+            {
+                prepared = await _statementCache.GetOrAddAsync("SELECT * FROM user_videos WHERE userid = ? AND added_date <= ? AND videoid <= ?");
+                bound = prepared.Bind(userId, startingAddedDate, startingVideoId);
+            }
+
+            bound.SetAutoPage(false)
+                 .SetPageSize(request.PageSize);
 
             // The initial query won't have a paging state, but subsequent calls should if there are more pages
             if (string.IsNullOrEmpty(request.PagingState) == false)
-                boundStatement.SetPagingState(Convert.FromBase64String(request.PagingState));
+                bound.SetPagingState(Convert.FromBase64String(request.PagingState));
 
-            RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
+            RowSet rows = await _session.ExecuteAsync(bound).ConfigureAwait(false);
             var response = new GetUserVideoPreviewsResponse
             {
                 UserId = request.UserId,

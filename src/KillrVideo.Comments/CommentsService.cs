@@ -82,12 +82,25 @@ namespace KillrVideo.Comments
         /// </summary>
         public async Task<GetUserCommentsResponse> GetUserComments(GetUserCommentsRequest request, ServerCallContext context)
         {
-            PreparedStatement prepared = await _statementCache.GetOrAddAsync(
-                "SELECT commentid, videoid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_user WHERE userid = ?");
+            PreparedStatement prepared;
+            IStatement bound;
+            Guid? startingCommentId = request.StartingCommentId.ToNullableGuid();
+            Guid userId = request.UserId.ToGuid();
+            if (startingCommentId == null)
+            {
+                prepared = await _statementCache.GetOrAddAsync(
+                    "SELECT commentid, videoid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_user WHERE userid = ?");
+                bound = prepared.Bind(userId);
+            }
+            else
+            {
+                prepared = await _statementCache.GetOrAddAsync(
+                    "SELECT commentid, videoid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_user WHERE userid = ? AND commentid <= ?");
+                bound = prepared.Bind(userId, startingCommentId);
+            }
 
-            IStatement bound = prepared.Bind(request.UserId.ToGuid())
-                                       .SetAutoPage(false)
-                                       .SetPageSize(request.PageSize);
+            bound.SetAutoPage(false)
+                 .SetPageSize(request.PageSize);
 
             if (string.IsNullOrEmpty(request.PagingState) == false)
                 bound.SetPagingState(Convert.FromBase64String(request.PagingState));
@@ -108,12 +121,25 @@ namespace KillrVideo.Comments
         /// </summary>
         public async Task<GetVideoCommentsResponse> GetVideoComments(GetVideoCommentsRequest request, ServerCallContext context)
         {
-            PreparedStatement prepared = await _statementCache.GetOrAddAsync(
+            PreparedStatement prepared;
+            IStatement bound;
+            Guid? startingCommentId = request.StartingCommentId.ToNullableGuid();
+            Guid videoId = request.VideoId.ToGuid();
+            if (startingCommentId == null)
+            {
+                prepared = await _statementCache.GetOrAddAsync(
                     "SELECT commentid, userid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_video WHERE videoid = ?");
+                bound = prepared.Bind(videoId);
+            }
+            else
+            {
+                prepared = await _statementCache.GetOrAddAsync(
+                    "SELECT commentid, userid, comment, dateOf(commentid) AS comment_timestamp FROM comments_by_video WHERE videoid = ? AND commentid <= ?");
+                bound = prepared.Bind(videoId, startingCommentId);
+            }
 
-            IStatement bound = prepared.Bind(request.VideoId.ToGuid())
-                                       .SetAutoPage(false)
-                                       .SetPageSize(request.PageSize);
+            bound.SetAutoPage(false)
+                 .SetPageSize(request.PageSize);
 
             if (string.IsNullOrEmpty(request.PagingState) == false)
                 bound.SetPagingState(Convert.FromBase64String(request.PagingState));

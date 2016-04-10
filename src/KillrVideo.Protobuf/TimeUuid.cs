@@ -9,7 +9,18 @@ namespace KillrVideo.Protobuf
         /// </summary>
         public Guid ToGuid()
         {
-            return Guid.Parse(this.Value);
+            return Guid.Parse(Value);
+        }
+
+        /// <summary>
+        /// Converts the TimeUuid string value to a nullable Guid.
+        /// </summary>
+        public Guid? ToNullableGuid()
+        {
+            if (string.IsNullOrEmpty(Value))
+                return null;
+
+            return ToGuid();
         }
     }
 }
