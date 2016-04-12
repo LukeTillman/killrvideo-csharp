@@ -220,8 +220,8 @@ namespace KillrVideo.VideoCatalog
             var results = new List<VideoPreview>();
             string nextPageState = string.Empty;
 
-            DateTimeOffset startingAddedDate = request.StartingAddedDate.ToDateTimeOffset();
-            Guid? startingVideoId = request.StartingVideoId.ToNullableGuid();
+            DateTimeOffset? startingAddedDate = request.StartingAddedDate?.ToDateTimeOffset();
+            Guid? startingVideoId = request.StartingVideoId?.ToGuid();
             PreparedStatement preparedStatement;
             if (startingVideoId == null)
             {
@@ -229,7 +229,7 @@ namespace KillrVideo.VideoCatalog
             }
             else
             {
-                preparedStatement = await _statementCache.GetOrAddAsync("SELECT * FROM latest_videos WHERE yyyymmdd = ? AND added_date <= ? AND videoid <= ?");
+                preparedStatement = await _statementCache.GetOrAddAsync("SELECT * FROM latest_videos WHERE yyyymmdd = ? AND (added_date, videoid) <= (?, ?)");
             }
 
             // TODO: Run queries in parallel?
@@ -287,8 +287,8 @@ namespace KillrVideo.VideoCatalog
             // Figure out if we're getting first page or subsequent page
             PreparedStatement prepared;
             IStatement bound;
-            DateTimeOffset startingAddedDate = request.StartingAddedDate.ToDateTimeOffset();
-            Guid? startingVideoId = request.StartingVideoId.ToNullableGuid();
+            DateTimeOffset? startingAddedDate = request.StartingAddedDate?.ToDateTimeOffset();
+            Guid? startingVideoId = request.StartingVideoId?.ToGuid();
             Guid userId = request.UserId.ToGuid();
             if (startingVideoId == null)
             {
@@ -297,7 +297,7 @@ namespace KillrVideo.VideoCatalog
             }
             else
             {
-                prepared = await _statementCache.GetOrAddAsync("SELECT * FROM user_videos WHERE userid = ? AND added_date <= ? AND videoid <= ?");
+                prepared = await _statementCache.GetOrAddAsync("SELECT * FROM user_videos WHERE userid = ? AND (added_date, videoid) <= (?, ?)");
                 bound = prepared.Bind(userId, startingAddedDate, startingVideoId);
             }
 

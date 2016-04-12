@@ -84,7 +84,7 @@ namespace KillrVideo.Comments
         {
             PreparedStatement prepared;
             IStatement bound;
-            Guid? startingCommentId = request.StartingCommentId.ToNullableGuid();
+            Guid? startingCommentId = request.StartingCommentId?.ToGuid();
             Guid userId = request.UserId.ToGuid();
             if (startingCommentId == null)
             {
@@ -123,7 +123,7 @@ namespace KillrVideo.Comments
         {
             PreparedStatement prepared;
             IStatement bound;
-            Guid? startingCommentId = request.StartingCommentId.ToNullableGuid();
+            Guid? startingCommentId = request.StartingCommentId?.ToGuid();
             Guid videoId = request.VideoId.ToGuid();
             if (startingCommentId == null)
             {
