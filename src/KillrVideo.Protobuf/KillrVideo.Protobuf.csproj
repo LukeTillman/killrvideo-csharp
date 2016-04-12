@@ -68,6 +68,7 @@
     <Compile Include="Clients\IChannelFactory.cs" />
     <Compile Include="Clients\ServiceNotFoundException.cs" />
     <Compile Include="GrpcServerTask.cs" />
+    <Compile Include="SerilogLogger.cs" />
     <Compile Include="ServiceDiscovery\LocalServiceDiscovery.cs" />
     <Compile Include="ServiceDiscovery\ServiceLocation.cs" />
     <Compile Include="Services\IConditionalGrpcServerService.cs" />

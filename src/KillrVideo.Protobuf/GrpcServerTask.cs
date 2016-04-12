@@ -34,6 +34,7 @@ namespace KillrVideo.Protobuf
             _services = services;
             _hostConfiguration = hostConfiguration;
 
+            GrpcEnvironment.SetLogger(new SerilogGrpcLogger(Log.Logger));
             _server = new Server();
         }
 
