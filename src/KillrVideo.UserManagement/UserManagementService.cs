@@ -148,7 +148,7 @@ namespace KillrVideo.UserManagement
             // Build a parameterized CQL statement with an IN clause
             var parameterList = string.Join(", ", Enumerable.Repeat("?", request.UserIds.Count));
             var cql = $"SELECT userid, firstname, lastname, email FROM users WHERE userid IN ({parameterList})";
-            var statement = new SimpleStatement(cql, request.UserIds.Cast<object>().ToArray());
+            var statement = new SimpleStatement(cql, request.UserIds.Select(uuid => uuid.ToGuid()).Cast<object>().ToArray());
             
             // Execute and map to UserProfile object
             RowSet resultRows = await _session.ExecuteAsync(statement).ConfigureAwait(false);
