@@ -108,19 +108,16 @@ namespace KillrVideo.UserManagement
 
             // Use the get credentials prepared statement to find credentials for the user
             RowSet result = await _session.ExecuteAsync(preparedStatement.Bind(request.Email)).ConfigureAwait(false);
-            var response = new VerifyCredentialsResponse();
             
             // We should get a single credentials result or no results
             Row row = result.SingleOrDefault();
-            if (row == null)
-                return response;
-
-            // Verify the password hash
-            if (PasswordHash.ValidatePassword(request.Password, row.GetValue<string>("password")) == false)
-                return response;
-
-            response.UserId = row.GetValue<Guid>("userid").ToUuid();
-            return response;
+            if (row == null || PasswordHash.ValidatePassword(request.Password, row.GetValue<string>("password")) == false)
+            {
+                var status = new Status(StatusCode.Unauthenticated, "Email address or password are not correct.");
+                throw new RpcException(status);
+            }
+            
+            return new VerifyCredentialsResponse { UserId = row.GetValue<Guid>("userid").ToUuid() };
         }
         
         /// <summary>

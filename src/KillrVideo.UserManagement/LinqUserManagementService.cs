@@ -118,19 +118,15 @@ namespace KillrVideo.UserManagement
             IEnumerable<UserCredentials> results = await _userCredentialsTable.Where(uc => uc.EmailAddress == request.Email)
                                                                                        .ExecuteAsync().ConfigureAwait(false);
             
-            var response = new VerifyCredentialsResponse();
-
             // Make sure we found a user
             UserCredentials credentials = results.SingleOrDefault();
-            if (credentials == null)
-                return response;
+            if (credentials == null || PasswordHash.ValidatePassword(request.Password, credentials.Password) == false)
+            {
+                var status = new Status(StatusCode.Unauthenticated, "Email address or password are not correct.");
+                throw new RpcException(status);
+            }
 
-            // Verify the password hash
-            if (PasswordHash.ValidatePassword(request.Password, credentials.Password) == false)
-                return response;
-
-            response.UserId = credentials.UserId.ToUuid();
-            return response;
+            return new VerifyCredentialsResponse { UserId = credentials.UserId.ToUuid() };
         }
 
         /// <summary>
