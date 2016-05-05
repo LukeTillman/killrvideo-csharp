@@ -65,7 +65,7 @@ namespace KillrVideo.Search
             var response = new SearchVideosResponse
             {
                 Query = request.Query,
-                PagingState = rows.PagingState != null && rows.PagingState.Length > 0 ? Convert.ToBase64String(rows.PagingState) : null
+                PagingState = rows.PagingState != null && rows.PagingState.Length > 0 ? Convert.ToBase64String(rows.PagingState) : ""
             };
 
             response.Videos.Add(rows.Select(MapRowToVideoPreview));
