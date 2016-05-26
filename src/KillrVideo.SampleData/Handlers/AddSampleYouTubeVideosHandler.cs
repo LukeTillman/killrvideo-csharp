@@ -21,10 +21,10 @@ namespace KillrVideo.SampleData.Handlers
 
         private readonly IGetSampleData _sampleDataRetriever;
         private readonly IManageSampleYouTubeVideos _youTubeManager;
-        private readonly VideoCatalogService.IVideoCatalogServiceClient _videoCatalog;
+        private readonly VideoCatalogService.VideoCatalogServiceClient _videoCatalog;
 
         public AddSampleYouTubeVideosHandler(IGetSampleData sampleDataRetriever, IManageSampleYouTubeVideos youTubeManager, 
-                                             VideoCatalogService.IVideoCatalogServiceClient videoCatalog)
+                                             VideoCatalogService.VideoCatalogServiceClient videoCatalog)
         {
             if (sampleDataRetriever == null) throw new ArgumentNullException(nameof(sampleDataRetriever));
             if (youTubeManager == null) throw new ArgumentNullException(nameof(youTubeManager));

@@ -17,35 +17,35 @@ namespace KillrVideo.SampleData
     public static class ServiceClientFactory
     {
         [Export]
-        public static CommentsService.ICommentsServiceClient CreateCommentsClient(IChannelFactory channelFactory)
+        public static CommentsService.CommentsServiceClient CreateCommentsClient(IChannelFactory channelFactory)
         {
             Channel channel = channelFactory.GetChannel(CommentsService.Descriptor);
             return CommentsService.NewClient(channel);
         }
 
         [Export]
-        public static RatingsService.IRatingsServiceClient CreateRatingsClient(IChannelFactory channelFactory)
+        public static RatingsService.RatingsServiceClient CreateRatingsClient(IChannelFactory channelFactory)
         {
             Channel channel = channelFactory.GetChannel(RatingsService.Descriptor);
             return RatingsService.NewClient(channel);
         }
 
         [Export]
-        public static UserManagementService.IUserManagementServiceClient CreateUsersClient(IChannelFactory channelFactory)
+        public static UserManagementService.UserManagementServiceClient CreateUsersClient(IChannelFactory channelFactory)
         {
             Channel channel = channelFactory.GetChannel(UserManagementService.Descriptor);
             return UserManagementService.NewClient(channel);
         }
 
         [Export]
-        public static StatisticsService.IStatisticsServiceClient CreateStatsClient(IChannelFactory channelFactory)
+        public static StatisticsService.StatisticsServiceClient CreateStatsClient(IChannelFactory channelFactory)
         {
             Channel channel = channelFactory.GetChannel(StatisticsService.Descriptor);
             return StatisticsService.NewClient(channel);
         }
 
         [Export]
-        public static VideoCatalogService.IVideoCatalogServiceClient CreateVideoClient(IChannelFactory channelFactory)
+        public static VideoCatalogService.VideoCatalogServiceClient CreateVideoClient(IChannelFactory channelFactory)
         {
             Channel channel = channelFactory.GetChannel(VideoCatalogService.Descriptor);
             return VideoCatalogService.NewClient(channel);

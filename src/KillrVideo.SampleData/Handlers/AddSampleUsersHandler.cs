@@ -18,10 +18,10 @@ namespace KillrVideo.SampleData.Handlers
     public class AddSampleUsersHandler : IHandleMessage<AddSampleUsersRequest>
     {
         private readonly ISession _session;
-        private readonly UserManagementService.IUserManagementServiceClient _userManagement;
+        private readonly UserManagementService.UserManagementServiceClient _userManagement;
         private readonly PreparedStatementCache _statementCache;
 
-        public AddSampleUsersHandler(ISession session, PreparedStatementCache statementCache, UserManagementService.IUserManagementServiceClient userManagement)
+        public AddSampleUsersHandler(ISession session, PreparedStatementCache statementCache, UserManagementService.UserManagementServiceClient userManagement)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));

@@ -19,9 +19,9 @@ namespace KillrVideo.SampleData.Handlers
         private static readonly ILogger Logger = Log.ForContext<AddSampleRatingsHandler>();
 
         private readonly IGetSampleData _sampleDataRetriever;
-        private readonly RatingsService.IRatingsServiceClient _ratingsService;
+        private readonly RatingsService.RatingsServiceClient _ratingsService;
 
-        public AddSampleRatingsHandler(IGetSampleData sampleDataRetriever, RatingsService.IRatingsServiceClient ratingsService)
+        public AddSampleRatingsHandler(IGetSampleData sampleDataRetriever, RatingsService.RatingsServiceClient ratingsService)
         {
             if (sampleDataRetriever == null) throw new ArgumentNullException(nameof(sampleDataRetriever));
             if (ratingsService == null) throw new ArgumentNullException(nameof(ratingsService));

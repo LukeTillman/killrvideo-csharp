@@ -35,9 +35,9 @@ namespace KillrVideo.SampleData.Handlers
         };
 
         private readonly IGetSampleData _sampleDataRetriever;
-        private readonly CommentsService.ICommentsServiceClient _commentService;
+        private readonly CommentsService.CommentsServiceClient _commentService;
 
-        public AddSampleCommentsHandler(IGetSampleData sampleDataRetriever, CommentsService.ICommentsServiceClient commentService)
+        public AddSampleCommentsHandler(IGetSampleData sampleDataRetriever, CommentsService.CommentsServiceClient commentService)
         {
             if (sampleDataRetriever == null) throw new ArgumentNullException(nameof(sampleDataRetriever));
             if (commentService == null) throw new ArgumentNullException(nameof(commentService));
