@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Linq;
-using System.Net;
 using Google.Protobuf.Reflection;
 using KillrVideo.Host.Config;
 
 namespace KillrVideo.Protobuf.ServiceDiscovery
 {
     /// <summary>
-    /// Service discovery implementation that just points all service clients to the host/port where they
-    /// have been configured to run locally.
+    /// Service discovery implementation that just points all service clients to 'localhost' and the port
+    /// where they have been configured to run locally.
     /// </summary>
     public class LocalServiceDiscovery : IFindGrpcServices
     {
@@ -30,7 +28,7 @@ namespace KillrVideo.Protobuf.ServiceDiscovery
         private ServiceLocation GetLocalGrpcServer()
         {
             // Get the host/port configuration for the Grpc Server
-            string host = _hostConfig.GetRequiredConfigurationValue(GrpcServerTask.HostConfigKey);
+            string host = "localhost";
             string portVal = _hostConfig.GetRequiredConfigurationValue(GrpcServerTask.HostPortKey);
             int port = int.Parse(portVal);
 
