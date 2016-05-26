@@ -19,7 +19,7 @@ namespace KillrVideo.SuggestedVideos
     /// Makes video suggestions based on data in Cassandra.
     /// </summary>
     [Export(typeof(IGrpcServerService))]
-    public class DataStaxEnterpriseSuggestedVideos : SuggestedVideoService.ISuggestedVideoService, IConditionalGrpcServerService
+    public class DataStaxEnterpriseSuggestedVideos : SuggestedVideoService.SuggestedVideoServiceBase, IConditionalGrpcServerService
     {
         private readonly ISession _session;
         private readonly IRestClient _restClient;
@@ -55,7 +55,7 @@ namespace KillrVideo.SuggestedVideos
         /// <summary>
         /// Gets the first 5 videos related to the specified video.
         /// </summary>
-        public async Task<GetRelatedVideosResponse> GetRelatedVideos(GetRelatedVideosRequest request, ServerCallContext context)
+        public override async Task<GetRelatedVideosResponse> GetRelatedVideos(GetRelatedVideosRequest request, ServerCallContext context)
         {
             // Set the base URL of the REST client to use the first node in the Cassandra cluster
             string nodeIp = _session.Cluster.AllHosts().First().Address.Address.ToString();
@@ -120,7 +120,7 @@ namespace KillrVideo.SuggestedVideos
         /// <summary>
         /// Gets the personalized video suggestions for a specific user.
         /// </summary>
-        public async Task<GetSuggestedForUserResponse> GetSuggestedForUser(GetSuggestedForUserRequest request, ServerCallContext context)
+        public override async Task<GetSuggestedForUserResponse> GetSuggestedForUser(GetSuggestedForUserRequest request, ServerCallContext context)
         {
             // Return the output of a Spark job that runs periodically in the background to populate the video_recommendations table
             // (see the /data/spark folder in the repo for more information)

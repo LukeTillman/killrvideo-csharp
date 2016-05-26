@@ -17,7 +17,7 @@ namespace KillrVideo.Comments
     /// Comments service that uses Cassandra to store comments and publishes events on a message bus.
     /// </summary>
     [Export(typeof(IGrpcServerService))]
-    public class CommentsServiceImpl : CommentsService.ICommentsService, IGrpcServerService
+    public class CommentsServiceImpl : CommentsService.CommentsServiceBase, IGrpcServerService
     {
         private readonly ISession _session;
         private readonly IBus _bus;
@@ -44,7 +44,7 @@ namespace KillrVideo.Comments
         /// <summary>
         /// Records a user comment on a video.
         /// </summary>
-        public async Task<CommentOnVideoResponse> CommentOnVideo(CommentOnVideoRequest request, ServerCallContext context)
+        public override async Task<CommentOnVideoResponse> CommentOnVideo(CommentOnVideoRequest request, ServerCallContext context)
         {
             // Use a client side timestamp for the writes that we can include when we publish the event
             var timestamp = DateTimeOffset.UtcNow;
@@ -80,7 +80,7 @@ namespace KillrVideo.Comments
         /// <summary>
         /// Gets a page of the latest comments for a user.
         /// </summary>
-        public async Task<GetUserCommentsResponse> GetUserComments(GetUserCommentsRequest request, ServerCallContext context)
+        public override async Task<GetUserCommentsResponse> GetUserComments(GetUserCommentsRequest request, ServerCallContext context)
         {
             PreparedStatement prepared;
             IStatement bound;
@@ -119,7 +119,7 @@ namespace KillrVideo.Comments
         /// <summary>
         /// Gets a page of the latest comments for a video.
         /// </summary>
-        public async Task<GetVideoCommentsResponse> GetVideoComments(GetVideoCommentsRequest request, ServerCallContext context)
+        public override async Task<GetVideoCommentsResponse> GetVideoComments(GetVideoCommentsRequest request, ServerCallContext context)
         {
             PreparedStatement prepared;
             IStatement bound;

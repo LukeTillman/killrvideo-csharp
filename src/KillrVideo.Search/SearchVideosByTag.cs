@@ -16,7 +16,7 @@ namespace KillrVideo.Search
     /// Searches for videos by tag in Cassandra.
     /// </summary>
     [Export(typeof(IGrpcServerService))]
-    public class SearchVideosByTag : SearchService.ISearchService, IConditionalGrpcServerService
+    public class SearchVideosByTag : SearchService.SearchServiceBase, IConditionalGrpcServerService
     {
         private readonly ISession _session;
         private readonly PreparedStatementCache _statementCache;
@@ -49,7 +49,7 @@ namespace KillrVideo.Search
         /// <summary>
         /// Gets a page of videos for a search query (looks for videos with that tag).
         /// </summary>
-        public async Task<SearchVideosResponse> SearchVideos(SearchVideosRequest request, ServerCallContext context)
+        public override async Task<SearchVideosResponse> SearchVideos(SearchVideosRequest request, ServerCallContext context)
         {
             // Use the driver's built-in paging feature to get only a page of rows
             PreparedStatement preparedStatement = await _statementCache.GetOrAddAsync("SELECT * FROM videos_by_tag WHERE tag = ?");
@@ -75,7 +75,7 @@ namespace KillrVideo.Search
         /// <summary>
         /// Gets a list of query suggestions for providing typeahead support.
         /// </summary>
-        public async Task<GetQuerySuggestionsResponse> GetQuerySuggestions(GetQuerySuggestionsRequest request, ServerCallContext context)
+        public override async Task<GetQuerySuggestionsResponse> GetQuerySuggestions(GetQuerySuggestionsRequest request, ServerCallContext context)
         {
             string firstLetter = request.Query.Substring(0, 1);
             PreparedStatement preparedStatement = await _statementCache.GetOrAddAsync("SELECT tag FROM tags_by_letter WHERE first_letter = ? AND tag >= ? LIMIT ?");

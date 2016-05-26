@@ -21,7 +21,7 @@ namespace KillrVideo.Search
     /// Searches videos using DataStax Enterprise search (Solr integration).
     /// </summary>
     [Export(typeof(IGrpcServerService))]
-    public class DataStaxEnterpriseSearch : SearchService.ISearchService, IConditionalGrpcServerService
+    public class DataStaxEnterpriseSearch : SearchService.SearchServiceBase, IConditionalGrpcServerService
     {
         private readonly ISession _session;
         private readonly IRestClient _restClient;
@@ -57,7 +57,7 @@ namespace KillrVideo.Search
         /// <summary>
         /// Gets a page of videos for a search query.
         /// </summary>
-        public async Task<SearchVideosResponse> SearchVideos(SearchVideosRequest request, ServerCallContext context)
+        public override async Task<SearchVideosResponse> SearchVideos(SearchVideosRequest request, ServerCallContext context)
         {
             // Do a Solr query against DSE search to find videos using Solr's ExtendedDisMax query parser. Query the
             // name, tags, and description fields in the videos table giving a boost to matches in the name and tags
@@ -91,7 +91,7 @@ namespace KillrVideo.Search
         /// <summary>
         /// Gets a list of query suggestions for providing typeahead support.
         /// </summary>
-        public async Task<GetQuerySuggestionsResponse> GetQuerySuggestions(GetQuerySuggestionsRequest request, ServerCallContext context)
+        public override async Task<GetQuerySuggestionsResponse> GetQuerySuggestions(GetQuerySuggestionsRequest request, ServerCallContext context)
         {
 
             // Set the base URL of the REST client to use the first node in the Cassandra cluster

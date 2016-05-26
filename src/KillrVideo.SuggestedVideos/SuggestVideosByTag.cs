@@ -17,7 +17,7 @@ namespace KillrVideo.SuggestedVideos
     /// Searches the videos_by_tag table to offer suggestions for related videos. Does not support paging currently.
     /// </summary>
     [Export(typeof(IGrpcServerService))]
-    public class SuggestVideosByTag : SuggestedVideoService.ISuggestedVideoService, IConditionalGrpcServerService
+    public class SuggestVideosByTag : SuggestedVideoService.SuggestedVideoServiceBase, IConditionalGrpcServerService
     {
         private const int RelatedVideosToReturn = 4;
 
@@ -52,7 +52,7 @@ namespace KillrVideo.SuggestedVideos
         /// <summary>
         /// Gets the first 4 videos related to the specified video. Does not support paging.
         /// </summary>
-        public async Task<GetRelatedVideosResponse> GetRelatedVideos(GetRelatedVideosRequest request, ServerCallContext context)
+        public override async Task<GetRelatedVideosResponse> GetRelatedVideos(GetRelatedVideosRequest request, ServerCallContext context)
         {
             // Lookup the tags for the video
             PreparedStatement tagsForVideoPrepared = await _statementCache.GetOrAddAsync("SELECT tags FROM videos WHERE videoid = ?");
@@ -137,7 +137,7 @@ namespace KillrVideo.SuggestedVideos
         /// <summary>
         /// Gets the personalized video suggestions for a specific user.
         /// </summary>
-        public Task<GetSuggestedForUserResponse> GetSuggestedForUser(GetSuggestedForUserRequest request, ServerCallContext context)
+        public override Task<GetSuggestedForUserResponse> GetSuggestedForUser(GetSuggestedForUserRequest request, ServerCallContext context)
         {
             // TODO: Can we implement suggestions without DSE and Spark? (Yeah, probably not)
             var response = new GetSuggestedForUserResponse { UserId = request.UserId };

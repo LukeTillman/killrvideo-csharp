@@ -1,8 +1,6 @@
-using System;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 using Grpc.Core;
-using KillrVideo.Protobuf;
 using KillrVideo.Protobuf.Services;
 
 namespace KillrVideo.Uploads
@@ -12,7 +10,7 @@ namespace KillrVideo.Uploads
     /// processing and extracting thumbnails locally in order to support this.)
     /// </summary>
     [Export(typeof(IGrpcServerService))]
-    public class UploadsServiceImpl : UploadsService.IUploadsService, IGrpcServerService
+    public class UploadsServiceImpl : UploadsService.UploadsServiceBase, IGrpcServerService
     {
         /// <summary>
         /// Convert this instance to a ServerServiceDefinition that can be run on a Grpc server.
@@ -25,7 +23,7 @@ namespace KillrVideo.Uploads
         /// <summary>
         /// Generates upload destinations for users to upload videos.
         /// </summary>
-        public Task<GetUploadDestinationResponse> GetUploadDestination(GetUploadDestinationRequest request, ServerCallContext context)
+        public override Task<GetUploadDestinationResponse> GetUploadDestination(GetUploadDestinationRequest request, ServerCallContext context)
         {
             var status = new Status(StatusCode.Unimplemented, "Uploading videos is currently not supported");
             throw new RpcException(status);
@@ -34,7 +32,7 @@ namespace KillrVideo.Uploads
         /// <summary>
         /// Marks an upload as complete.
         /// </summary>
-        public Task<MarkUploadCompleteResponse> MarkUploadComplete(MarkUploadCompleteRequest request, ServerCallContext context)
+        public override Task<MarkUploadCompleteResponse> MarkUploadComplete(MarkUploadCompleteRequest request, ServerCallContext context)
         {
             var status = new Status(StatusCode.Unimplemented, "Uploading videos is currently not supported");
             throw new RpcException(status);
@@ -43,7 +41,7 @@ namespace KillrVideo.Uploads
         /// <summary>
         /// Gets the status of an uploaded video's encoding job by the video Id.
         /// </summary>
-        public Task<GetStatusOfVideoResponse> GetStatusOfVideo(GetStatusOfVideoRequest request, ServerCallContext context)
+        public override Task<GetStatusOfVideoResponse> GetStatusOfVideo(GetStatusOfVideoRequest request, ServerCallContext context)
         {
             var status = new Status(StatusCode.Unimplemented, "Uploading videos is currently not supported");
             throw new RpcException(status);

@@ -19,7 +19,7 @@ namespace KillrVideo.VideoCatalog
     /// An implementation of the video catalog service that stores catalog data in Cassandra and publishes events on a message bus.
     /// </summary>
     [Export(typeof(IGrpcServerService))]
-    public class VideoCatalogServiceImpl : VideoCatalogService.IVideoCatalogService, IGrpcServerService
+    public class VideoCatalogServiceImpl : VideoCatalogService.VideoCatalogServiceBase, IGrpcServerService
     {
         public static readonly int LatestVideosTtlSeconds = Convert.ToInt32(TimeSpan.FromDays(MaxDaysInPastForLatestVideos).TotalSeconds);
 
@@ -51,7 +51,7 @@ namespace KillrVideo.VideoCatalog
         /// <summary>
         /// Submits an uploaded video to the catalog.
         /// </summary>
-        public async Task<SubmitUploadedVideoResponse> SubmitUploadedVideo(SubmitUploadedVideoRequest request, ServerCallContext context)
+        public override async Task<SubmitUploadedVideoResponse> SubmitUploadedVideo(SubmitUploadedVideoRequest request, ServerCallContext context)
         {
             var timestamp = DateTimeOffset.UtcNow;
 
@@ -85,7 +85,7 @@ namespace KillrVideo.VideoCatalog
         /// <summary>
         /// Submits a YouTube video to the catalog.
         /// </summary>
-        public async Task<SubmitYouTubeVideoResponse> SubmitYouTubeVideo(SubmitYouTubeVideoRequest request, ServerCallContext context)
+        public override async Task<SubmitYouTubeVideoResponse> SubmitYouTubeVideo(SubmitYouTubeVideoRequest request, ServerCallContext context)
         {
             // Use a batch to insert the YouTube video into multiple tables
             PreparedStatement[] prepared = await _statementCache.GetOrAddAllAsync(
@@ -132,7 +132,7 @@ namespace KillrVideo.VideoCatalog
         /// <summary>
         /// Gets the details of a specific video.
         /// </summary>
-        public async Task<GetVideoResponse> GetVideo(GetVideoRequest request, ServerCallContext context)
+        public override async Task<GetVideoResponse> GetVideo(GetVideoRequest request, ServerCallContext context)
         {
             PreparedStatement preparedStatement = await _statementCache.GetOrAddAsync("SELECT * FROM videos WHERE videoid = ?");
             RowSet rows = await _session.ExecuteAsync(preparedStatement.Bind(request.VideoId.ToGuid())).ConfigureAwait(false);
@@ -164,7 +164,7 @@ namespace KillrVideo.VideoCatalog
         /// <summary>
         /// Gets a limited number of video preview data by video id.
         /// </summary>
-        public async Task<GetVideoPreviewsResponse> GetVideoPreviews(GetVideoPreviewsRequest request, ServerCallContext context)
+        public override async Task<GetVideoPreviewsResponse> GetVideoPreviews(GetVideoPreviewsRequest request, ServerCallContext context)
         {
             var response = new GetVideoPreviewsResponse();
 
@@ -197,7 +197,7 @@ namespace KillrVideo.VideoCatalog
         /// <summary>
         /// Gets the latest videos added to the site.
         /// </summary>
-        public async Task<GetLatestVideoPreviewsResponse> GetLatestVideoPreviews(GetLatestVideoPreviewsRequest request, ServerCallContext context)
+        public override async Task<GetLatestVideoPreviewsResponse> GetLatestVideoPreviews(GetLatestVideoPreviewsRequest request, ServerCallContext context)
         {
             string[] buckets;
             int bucketIndex;
@@ -282,7 +282,7 @@ namespace KillrVideo.VideoCatalog
         /// <summary>
         /// Gets a page of videos for a particular user.
         /// </summary>
-        public async Task<GetUserVideoPreviewsResponse> GetUserVideoPreviews(GetUserVideoPreviewsRequest request, ServerCallContext context)
+        public override async Task<GetUserVideoPreviewsResponse> GetUserVideoPreviews(GetUserVideoPreviewsRequest request, ServerCallContext context)
         {
             // Figure out if we're getting first page or subsequent page
             PreparedStatement prepared;

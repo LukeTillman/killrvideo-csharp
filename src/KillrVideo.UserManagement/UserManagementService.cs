@@ -18,7 +18,7 @@ namespace KillrVideo.UserManagement
     /// An implementation of the user management service that stores accounts in Cassandra and publishes events on a message bus.
     /// </summary>
     [Export(typeof(IGrpcServerService))]
-    public class UserManagementServiceImpl : UserManagementService.IUserManagementService, IConditionalGrpcServerService
+    public class UserManagementServiceImpl : UserManagementService.UserManagementServiceBase, IConditionalGrpcServerService
     {
         private readonly ISession _session;
         private readonly IBus _bus;
@@ -54,7 +54,7 @@ namespace KillrVideo.UserManagement
         /// <summary>
         /// Creates a new user account.
         /// </summary>
-        public async Task<CreateUserResponse> CreateUser(CreateUserRequest request, ServerCallContext context)
+        public override async Task<CreateUserResponse> CreateUser(CreateUserRequest request, ServerCallContext context)
         {
             // Hash the user's password
             string hashedPassword = PasswordHash.CreateHash(request.Password);
@@ -101,7 +101,7 @@ namespace KillrVideo.UserManagement
         /// <summary>
         /// Verifies a user's credentials and returns the user's Id if successful, otherwise null.
         /// </summary>
-        public async Task<VerifyCredentialsResponse> VerifyCredentials(VerifyCredentialsRequest request, ServerCallContext context)
+        public override async Task<VerifyCredentialsResponse> VerifyCredentials(VerifyCredentialsRequest request, ServerCallContext context)
         {
             PreparedStatement preparedStatement =
                 await _statementCache.GetOrAddAsync("SELECT email, password, userid FROM user_credentials WHERE email = ?");
@@ -123,7 +123,7 @@ namespace KillrVideo.UserManagement
         /// <summary>
         /// Gets multiple user profiles by their Ids.  
         /// </summary>
-        public async Task<GetUserProfileResponse> GetUserProfile(GetUserProfileRequest request, ServerCallContext context)
+        public override async Task<GetUserProfileResponse> GetUserProfile(GetUserProfileRequest request, ServerCallContext context)
         {
             var response = new GetUserProfileResponse();
 

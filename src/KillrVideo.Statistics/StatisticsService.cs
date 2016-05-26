@@ -14,7 +14,7 @@ namespace KillrVideo.Statistics
     /// An implementation of the video statistics service that stores video stats in Cassandra.
     /// </summary>
     [Export(typeof(IGrpcServerService))]
-    public class StatisticsServiceImpl : StatisticsService.IStatisticsService, IGrpcServerService
+    public class StatisticsServiceImpl : StatisticsService.StatisticsServiceBase, IGrpcServerService
     {
         private readonly ISession _session;
         private readonly PreparedStatementCache _statementCache;
@@ -38,7 +38,7 @@ namespace KillrVideo.Statistics
         /// <summary>
         /// Records that playback has been started for a video.
         /// </summary>
-        public async Task<RecordPlaybackStartedResponse> RecordPlaybackStarted(RecordPlaybackStartedRequest request, ServerCallContext context)
+        public override async Task<RecordPlaybackStartedResponse> RecordPlaybackStarted(RecordPlaybackStartedRequest request, ServerCallContext context)
         {
             PreparedStatement prepared = await _statementCache.GetOrAddAsync("UPDATE video_playback_stats SET views = views + 1 WHERE videoid = ?");
             BoundStatement bound = prepared.Bind(request.VideoId.ToGuid());
@@ -49,7 +49,7 @@ namespace KillrVideo.Statistics
         /// <summary>
         /// Gets the number of times the specified videos have been played.
         /// </summary>
-        public async Task<GetNumberOfPlaysResponse> GetNumberOfPlays(GetNumberOfPlaysRequest request, ServerCallContext context)
+        public override async Task<GetNumberOfPlaysResponse> GetNumberOfPlays(GetNumberOfPlaysRequest request, ServerCallContext context)
         {
             // Enforce some sanity on this until we can change the data model to avoid the multi-get
             if (request.VideoIds.Count > 20)

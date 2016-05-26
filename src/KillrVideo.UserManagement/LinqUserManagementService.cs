@@ -22,7 +22,7 @@ namespace KillrVideo.UserManagement
     /// and publishes events to a message bus.
     /// </summary>
     [Export(typeof(IGrpcServerService))]
-    public class LinqUserManagementService : UserManagementService.IUserManagementService, IConditionalGrpcServerService
+    public class LinqUserManagementService : UserManagementService.UserManagementServiceBase, IConditionalGrpcServerService
     {
         private readonly ISession _session;
         private readonly IBus _bus;
@@ -64,7 +64,7 @@ namespace KillrVideo.UserManagement
         /// <summary>
         /// Creates a new user account.
         /// </summary>
-        public async Task<CreateUserResponse> CreateUser(CreateUserRequest request, ServerCallContext context)
+        public override async Task<CreateUserResponse> CreateUser(CreateUserRequest request, ServerCallContext context)
         {
             // Hash the user's password
             string hashedPassword = PasswordHash.CreateHash(request.Password);
@@ -112,7 +112,7 @@ namespace KillrVideo.UserManagement
         /// <summary>
         /// Verifies a user's credentials and returns the user's Id if successful, otherwise null.
         /// </summary>
-        public async Task<VerifyCredentialsResponse> VerifyCredentials(VerifyCredentialsRequest request, ServerCallContext context)
+        public override async Task<VerifyCredentialsResponse> VerifyCredentials(VerifyCredentialsRequest request, ServerCallContext context)
         {
             // Lookup the user by email address
             IEnumerable<UserCredentials> results = await _userCredentialsTable.Where(uc => uc.EmailAddress == request.Email)
@@ -132,7 +132,7 @@ namespace KillrVideo.UserManagement
         /// <summary>
         /// Gets multiple user profiles by their Ids.  
         /// </summary>
-        public async Task<GetUserProfileResponse> GetUserProfile(GetUserProfileRequest request, ServerCallContext context)
+        public override async Task<GetUserProfileResponse> GetUserProfile(GetUserProfileRequest request, ServerCallContext context)
         {
             var response = new GetUserProfileResponse();
 

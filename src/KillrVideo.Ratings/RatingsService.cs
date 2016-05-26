@@ -16,7 +16,7 @@ namespace KillrVideo.Ratings
     /// An implementation of the video ratings service that stores ratings in Cassandra and publishes events on a message bus.
     /// </summary>
     [Export(typeof(IGrpcServerService))]
-    public class RatingsServiceImpl : RatingsService.IRatingsService, IGrpcServerService
+    public class RatingsServiceImpl : RatingsService.RatingsServiceBase, IGrpcServerService
     {
         private readonly ISession _session;
         private readonly IBus _bus;
@@ -43,7 +43,7 @@ namespace KillrVideo.Ratings
         /// <summary>
         /// Adds a user's rating of a video.
         /// </summary>
-        public async Task<RateVideoResponse> RateVideo(RateVideoRequest request, ServerCallContext context)
+        public override async Task<RateVideoResponse> RateVideo(RateVideoRequest request, ServerCallContext context)
         {
             PreparedStatement[] preparedStatements = await _statementCache.GetOrAddAllAsync(
                 "UPDATE video_ratings SET rating_counter = rating_counter + 1, rating_total = rating_total + ? WHERE videoid = ?",
@@ -77,7 +77,7 @@ namespace KillrVideo.Ratings
         /// <summary>
         /// Gets the current rating stats for the specified video.
         /// </summary>
-        public async Task<GetRatingResponse> GetRating(GetRatingRequest request, ServerCallContext context)
+        public override async Task<GetRatingResponse> GetRating(GetRatingRequest request, ServerCallContext context)
         {
             PreparedStatement preparedStatement = await _statementCache.GetOrAddAsync("SELECT * FROM video_ratings WHERE videoid = ?");
             BoundStatement boundStatement = preparedStatement.Bind(request.VideoId.ToGuid());
@@ -95,7 +95,7 @@ namespace KillrVideo.Ratings
         /// <summary>
         /// Gets the rating given by a user for a specific video.  Will return 0 for the rating if the user hasn't rated the video.
         /// </summary>
-        public async Task<GetUserRatingResponse> GetUserRating(GetUserRatingRequest request, ServerCallContext context)
+        public override async Task<GetUserRatingResponse> GetUserRating(GetUserRatingRequest request, ServerCallContext context)
         {
             PreparedStatement preparedStatement = await _statementCache.GetOrAddAsync("SELECT rating FROM video_ratings_by_user WHERE videoid = ? AND userid = ?");
             BoundStatement boundStatement = preparedStatement.Bind(request.VideoId.ToGuid(), request.UserId.ToGuid());
