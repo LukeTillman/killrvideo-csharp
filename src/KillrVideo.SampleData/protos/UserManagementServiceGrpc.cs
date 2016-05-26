@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using Grpc.Core;
 
 namespace KillrVideo.UserManagement {
+  /// <summary>
+  ///  The service responsible for managing user information
+  /// </summary>
   public static class UserManagementService
   {
     static readonly string __ServiceName = "killrvideo.user_management.UserManagementService";
@@ -40,107 +43,233 @@ namespace KillrVideo.UserManagement {
         __Marshaller_GetUserProfileRequest,
         __Marshaller_GetUserProfileResponse);
 
-    // service descriptor
+    /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
       get { return global::KillrVideo.UserManagement.UserManagementServiceReflection.Descriptor.Services[0]; }
     }
 
-    // client interface
+    /// <summary>Client for UserManagementService</summary>
+    [System.Obsolete("Client side interfaced will be removed in the next release. Use client class directly.")]
     public interface IUserManagementServiceClient
     {
+      /// <summary>
+      ///  Creates a new user
+      /// </summary>
       global::KillrVideo.UserManagement.CreateUserResponse CreateUser(global::KillrVideo.UserManagement.CreateUserRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Creates a new user
+      /// </summary>
       global::KillrVideo.UserManagement.CreateUserResponse CreateUser(global::KillrVideo.UserManagement.CreateUserRequest request, CallOptions options);
+      /// <summary>
+      ///  Creates a new user
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.UserManagement.CreateUserResponse> CreateUserAsync(global::KillrVideo.UserManagement.CreateUserRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Creates a new user
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.UserManagement.CreateUserResponse> CreateUserAsync(global::KillrVideo.UserManagement.CreateUserRequest request, CallOptions options);
+      /// <summary>
+      ///  Verify a user's username and password
+      /// </summary>
       global::KillrVideo.UserManagement.VerifyCredentialsResponse VerifyCredentials(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Verify a user's username and password
+      /// </summary>
       global::KillrVideo.UserManagement.VerifyCredentialsResponse VerifyCredentials(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, CallOptions options);
+      /// <summary>
+      ///  Verify a user's username and password
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.UserManagement.VerifyCredentialsResponse> VerifyCredentialsAsync(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Verify a user's username and password
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.UserManagement.VerifyCredentialsResponse> VerifyCredentialsAsync(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets a user or group of user's profiles
+      /// </summary>
       global::KillrVideo.UserManagement.GetUserProfileResponse GetUserProfile(global::KillrVideo.UserManagement.GetUserProfileRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets a user or group of user's profiles
+      /// </summary>
       global::KillrVideo.UserManagement.GetUserProfileResponse GetUserProfile(global::KillrVideo.UserManagement.GetUserProfileRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets a user or group of user's profiles
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.UserManagement.GetUserProfileResponse> GetUserProfileAsync(global::KillrVideo.UserManagement.GetUserProfileRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets a user or group of user's profiles
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.UserManagement.GetUserProfileResponse> GetUserProfileAsync(global::KillrVideo.UserManagement.GetUserProfileRequest request, CallOptions options);
     }
 
-    // server-side interface
+    /// <summary>Interface of server-side implementations of UserManagementService</summary>
+    [System.Obsolete("Service implementations should inherit from the generated abstract base class instead.")]
     public interface IUserManagementService
     {
-      Task<global::KillrVideo.UserManagement.CreateUserResponse> CreateUser(global::KillrVideo.UserManagement.CreateUserRequest request, ServerCallContext context);
-      Task<global::KillrVideo.UserManagement.VerifyCredentialsResponse> VerifyCredentials(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, ServerCallContext context);
-      Task<global::KillrVideo.UserManagement.GetUserProfileResponse> GetUserProfile(global::KillrVideo.UserManagement.GetUserProfileRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Creates a new user
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.UserManagement.CreateUserResponse> CreateUser(global::KillrVideo.UserManagement.CreateUserRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Verify a user's username and password
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.UserManagement.VerifyCredentialsResponse> VerifyCredentials(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Gets a user or group of user's profiles
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.UserManagement.GetUserProfileResponse> GetUserProfile(global::KillrVideo.UserManagement.GetUserProfileRequest request, ServerCallContext context);
     }
 
-    // client stub
-    public class UserManagementServiceClient : ClientBase, IUserManagementServiceClient
+    /// <summary>Base class for server-side implementations of UserManagementService</summary>
+    public abstract class UserManagementServiceBase
+    {
+      /// <summary>
+      ///  Creates a new user
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.UserManagement.CreateUserResponse> CreateUser(global::KillrVideo.UserManagement.CreateUserRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Verify a user's username and password
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.UserManagement.VerifyCredentialsResponse> VerifyCredentials(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Gets a user or group of user's profiles
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.UserManagement.GetUserProfileResponse> GetUserProfile(global::KillrVideo.UserManagement.GetUserProfileRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+    }
+
+    /// <summary>Client for UserManagementService</summary>
+    #pragma warning disable 0618
+    public class UserManagementServiceClient : ClientBase<UserManagementServiceClient>, IUserManagementServiceClient
+    #pragma warning restore 0618
     {
       public UserManagementServiceClient(Channel channel) : base(channel)
       {
       }
-      public global::KillrVideo.UserManagement.CreateUserResponse CreateUser(global::KillrVideo.UserManagement.CreateUserRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      public UserManagementServiceClient(CallInvoker callInvoker) : base(callInvoker)
       {
-        var call = CreateCall(__Method_CreateUser, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
       }
-      public global::KillrVideo.UserManagement.CreateUserResponse CreateUser(global::KillrVideo.UserManagement.CreateUserRequest request, CallOptions options)
+      ///<summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      protected UserManagementServiceClient() : base()
       {
-        var call = CreateCall(__Method_CreateUser, options);
-        return Calls.BlockingUnaryCall(call, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.UserManagement.CreateUserResponse> CreateUserAsync(global::KillrVideo.UserManagement.CreateUserRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      ///<summary>Protected constructor to allow creation of configured clients.</summary>
+      protected UserManagementServiceClient(ClientBaseConfiguration configuration) : base(configuration)
       {
-        var call = CreateCall(__Method_CreateUser, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.UserManagement.CreateUserResponse> CreateUserAsync(global::KillrVideo.UserManagement.CreateUserRequest request, CallOptions options)
+
+      /// <summary>
+      ///  Creates a new user
+      /// </summary>
+      public virtual global::KillrVideo.UserManagement.CreateUserResponse CreateUser(global::KillrVideo.UserManagement.CreateUserRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_CreateUser, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return CreateUser(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.UserManagement.VerifyCredentialsResponse VerifyCredentials(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Creates a new user
+      /// </summary>
+      public virtual global::KillrVideo.UserManagement.CreateUserResponse CreateUser(global::KillrVideo.UserManagement.CreateUserRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_VerifyCredentials, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_CreateUser, null, options, request);
       }
-      public global::KillrVideo.UserManagement.VerifyCredentialsResponse VerifyCredentials(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, CallOptions options)
+      /// <summary>
+      ///  Creates a new user
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.UserManagement.CreateUserResponse> CreateUserAsync(global::KillrVideo.UserManagement.CreateUserRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_VerifyCredentials, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return CreateUserAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.UserManagement.VerifyCredentialsResponse> VerifyCredentialsAsync(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Creates a new user
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.UserManagement.CreateUserResponse> CreateUserAsync(global::KillrVideo.UserManagement.CreateUserRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_VerifyCredentials, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_CreateUser, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.UserManagement.VerifyCredentialsResponse> VerifyCredentialsAsync(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, CallOptions options)
+      /// <summary>
+      ///  Verify a user's username and password
+      /// </summary>
+      public virtual global::KillrVideo.UserManagement.VerifyCredentialsResponse VerifyCredentials(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_VerifyCredentials, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return VerifyCredentials(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.UserManagement.GetUserProfileResponse GetUserProfile(global::KillrVideo.UserManagement.GetUserProfileRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Verify a user's username and password
+      /// </summary>
+      public virtual global::KillrVideo.UserManagement.VerifyCredentialsResponse VerifyCredentials(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetUserProfile, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_VerifyCredentials, null, options, request);
       }
-      public global::KillrVideo.UserManagement.GetUserProfileResponse GetUserProfile(global::KillrVideo.UserManagement.GetUserProfileRequest request, CallOptions options)
+      /// <summary>
+      ///  Verify a user's username and password
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.UserManagement.VerifyCredentialsResponse> VerifyCredentialsAsync(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetUserProfile, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return VerifyCredentialsAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.UserManagement.GetUserProfileResponse> GetUserProfileAsync(global::KillrVideo.UserManagement.GetUserProfileRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Verify a user's username and password
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.UserManagement.VerifyCredentialsResponse> VerifyCredentialsAsync(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetUserProfile, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_VerifyCredentials, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.UserManagement.GetUserProfileResponse> GetUserProfileAsync(global::KillrVideo.UserManagement.GetUserProfileRequest request, CallOptions options)
+      /// <summary>
+      ///  Gets a user or group of user's profiles
+      /// </summary>
+      public virtual global::KillrVideo.UserManagement.GetUserProfileResponse GetUserProfile(global::KillrVideo.UserManagement.GetUserProfileRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetUserProfile, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return GetUserProfile(request, new CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///  Gets a user or group of user's profiles
+      /// </summary>
+      public virtual global::KillrVideo.UserManagement.GetUserProfileResponse GetUserProfile(global::KillrVideo.UserManagement.GetUserProfileRequest request, CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetUserProfile, null, options, request);
+      }
+      /// <summary>
+      ///  Gets a user or group of user's profiles
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.UserManagement.GetUserProfileResponse> GetUserProfileAsync(global::KillrVideo.UserManagement.GetUserProfileRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      {
+        return GetUserProfileAsync(request, new CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///  Gets a user or group of user's profiles
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.UserManagement.GetUserProfileResponse> GetUserProfileAsync(global::KillrVideo.UserManagement.GetUserProfileRequest request, CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetUserProfile, null, options, request);
+      }
+      protected override UserManagementServiceClient NewInstance(ClientBaseConfiguration configuration)
+      {
+        return new UserManagementServiceClient(configuration);
       }
     }
 
-    // creates service definition that can be registered with a server
+    /// <summary>Creates a new client for UserManagementService</summary>
+    public static UserManagementServiceClient NewClient(Channel channel)
+    {
+      return new UserManagementServiceClient(channel);
+    }
+
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    #pragma warning disable 0618
     public static ServerServiceDefinition BindService(IUserManagementService serviceImpl)
+    #pragma warning restore 0618
     {
       return ServerServiceDefinition.CreateBuilder(__ServiceName)
           .AddMethod(__Method_CreateUser, serviceImpl.CreateUser)
@@ -148,10 +277,15 @@ namespace KillrVideo.UserManagement {
           .AddMethod(__Method_GetUserProfile, serviceImpl.GetUserProfile).Build();
     }
 
-    // creates a new client
-    public static UserManagementServiceClient NewClient(Channel channel)
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    #pragma warning disable 0618
+    public static ServerServiceDefinition BindService(UserManagementServiceBase serviceImpl)
+    #pragma warning restore 0618
     {
-      return new UserManagementServiceClient(channel);
+      return ServerServiceDefinition.CreateBuilder(__ServiceName)
+          .AddMethod(__Method_CreateUser, serviceImpl.CreateUser)
+          .AddMethod(__Method_VerifyCredentials, serviceImpl.VerifyCredentials)
+          .AddMethod(__Method_GetUserProfile, serviceImpl.GetUserProfile).Build();
     }
 
   }

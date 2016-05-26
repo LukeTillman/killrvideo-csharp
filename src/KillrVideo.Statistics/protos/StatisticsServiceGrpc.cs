@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using Grpc.Core;
 
 namespace KillrVideo.Statistics {
+  /// <summary>
+  ///  Service that tracks playback statistics for videos
+  /// </summary>
   public static class StatisticsService
   {
     static readonly string __ServiceName = "killrvideo.statistics.StatisticsService";
@@ -31,92 +34,191 @@ namespace KillrVideo.Statistics {
         __Marshaller_GetNumberOfPlaysRequest,
         __Marshaller_GetNumberOfPlaysResponse);
 
-    // service descriptor
+    /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
       get { return global::KillrVideo.Statistics.StatisticsServiceReflection.Descriptor.Services[0]; }
     }
 
-    // client interface
+    /// <summary>Client for StatisticsService</summary>
+    [System.Obsolete("Client side interfaced will be removed in the next release. Use client class directly.")]
     public interface IStatisticsServiceClient
     {
+      /// <summary>
+      ///  Record that playback started for a given video
+      /// </summary>
       global::KillrVideo.Statistics.RecordPlaybackStartedResponse RecordPlaybackStarted(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Record that playback started for a given video
+      /// </summary>
       global::KillrVideo.Statistics.RecordPlaybackStartedResponse RecordPlaybackStarted(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, CallOptions options);
+      /// <summary>
+      ///  Record that playback started for a given video
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Statistics.RecordPlaybackStartedResponse> RecordPlaybackStartedAsync(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Record that playback started for a given video
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Statistics.RecordPlaybackStartedResponse> RecordPlaybackStartedAsync(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, CallOptions options);
+      /// <summary>
+      ///  Get the number of plays for a given video or set of videos
+      /// </summary>
       global::KillrVideo.Statistics.GetNumberOfPlaysResponse GetNumberOfPlays(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Get the number of plays for a given video or set of videos
+      /// </summary>
       global::KillrVideo.Statistics.GetNumberOfPlaysResponse GetNumberOfPlays(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, CallOptions options);
+      /// <summary>
+      ///  Get the number of plays for a given video or set of videos
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Statistics.GetNumberOfPlaysResponse> GetNumberOfPlaysAsync(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Get the number of plays for a given video or set of videos
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Statistics.GetNumberOfPlaysResponse> GetNumberOfPlaysAsync(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, CallOptions options);
     }
 
-    // server-side interface
+    /// <summary>Interface of server-side implementations of StatisticsService</summary>
+    [System.Obsolete("Service implementations should inherit from the generated abstract base class instead.")]
     public interface IStatisticsService
     {
-      Task<global::KillrVideo.Statistics.RecordPlaybackStartedResponse> RecordPlaybackStarted(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, ServerCallContext context);
-      Task<global::KillrVideo.Statistics.GetNumberOfPlaysResponse> GetNumberOfPlays(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Record that playback started for a given video
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.Statistics.RecordPlaybackStartedResponse> RecordPlaybackStarted(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Get the number of plays for a given video or set of videos
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.Statistics.GetNumberOfPlaysResponse> GetNumberOfPlays(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, ServerCallContext context);
     }
 
-    // client stub
-    public class StatisticsServiceClient : ClientBase, IStatisticsServiceClient
+    /// <summary>Base class for server-side implementations of StatisticsService</summary>
+    public abstract class StatisticsServiceBase
+    {
+      /// <summary>
+      ///  Record that playback started for a given video
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.Statistics.RecordPlaybackStartedResponse> RecordPlaybackStarted(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Get the number of plays for a given video or set of videos
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.Statistics.GetNumberOfPlaysResponse> GetNumberOfPlays(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+    }
+
+    /// <summary>Client for StatisticsService</summary>
+    #pragma warning disable 0618
+    public class StatisticsServiceClient : ClientBase<StatisticsServiceClient>, IStatisticsServiceClient
+    #pragma warning restore 0618
     {
       public StatisticsServiceClient(Channel channel) : base(channel)
       {
       }
-      public global::KillrVideo.Statistics.RecordPlaybackStartedResponse RecordPlaybackStarted(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      public StatisticsServiceClient(CallInvoker callInvoker) : base(callInvoker)
       {
-        var call = CreateCall(__Method_RecordPlaybackStarted, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
       }
-      public global::KillrVideo.Statistics.RecordPlaybackStartedResponse RecordPlaybackStarted(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, CallOptions options)
+      ///<summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      protected StatisticsServiceClient() : base()
       {
-        var call = CreateCall(__Method_RecordPlaybackStarted, options);
-        return Calls.BlockingUnaryCall(call, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.Statistics.RecordPlaybackStartedResponse> RecordPlaybackStartedAsync(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      ///<summary>Protected constructor to allow creation of configured clients.</summary>
+      protected StatisticsServiceClient(ClientBaseConfiguration configuration) : base(configuration)
       {
-        var call = CreateCall(__Method_RecordPlaybackStarted, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.Statistics.RecordPlaybackStartedResponse> RecordPlaybackStartedAsync(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, CallOptions options)
+
+      /// <summary>
+      ///  Record that playback started for a given video
+      /// </summary>
+      public virtual global::KillrVideo.Statistics.RecordPlaybackStartedResponse RecordPlaybackStarted(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_RecordPlaybackStarted, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return RecordPlaybackStarted(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.Statistics.GetNumberOfPlaysResponse GetNumberOfPlays(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Record that playback started for a given video
+      /// </summary>
+      public virtual global::KillrVideo.Statistics.RecordPlaybackStartedResponse RecordPlaybackStarted(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetNumberOfPlays, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_RecordPlaybackStarted, null, options, request);
       }
-      public global::KillrVideo.Statistics.GetNumberOfPlaysResponse GetNumberOfPlays(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, CallOptions options)
+      /// <summary>
+      ///  Record that playback started for a given video
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Statistics.RecordPlaybackStartedResponse> RecordPlaybackStartedAsync(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetNumberOfPlays, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return RecordPlaybackStartedAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.Statistics.GetNumberOfPlaysResponse> GetNumberOfPlaysAsync(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Record that playback started for a given video
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Statistics.RecordPlaybackStartedResponse> RecordPlaybackStartedAsync(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetNumberOfPlays, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_RecordPlaybackStarted, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.Statistics.GetNumberOfPlaysResponse> GetNumberOfPlaysAsync(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, CallOptions options)
+      /// <summary>
+      ///  Get the number of plays for a given video or set of videos
+      /// </summary>
+      public virtual global::KillrVideo.Statistics.GetNumberOfPlaysResponse GetNumberOfPlays(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetNumberOfPlays, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return GetNumberOfPlays(request, new CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///  Get the number of plays for a given video or set of videos
+      /// </summary>
+      public virtual global::KillrVideo.Statistics.GetNumberOfPlaysResponse GetNumberOfPlays(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetNumberOfPlays, null, options, request);
+      }
+      /// <summary>
+      ///  Get the number of plays for a given video or set of videos
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Statistics.GetNumberOfPlaysResponse> GetNumberOfPlaysAsync(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      {
+        return GetNumberOfPlaysAsync(request, new CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///  Get the number of plays for a given video or set of videos
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Statistics.GetNumberOfPlaysResponse> GetNumberOfPlaysAsync(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetNumberOfPlays, null, options, request);
+      }
+      protected override StatisticsServiceClient NewInstance(ClientBaseConfiguration configuration)
+      {
+        return new StatisticsServiceClient(configuration);
       }
     }
 
-    // creates service definition that can be registered with a server
+    /// <summary>Creates a new client for StatisticsService</summary>
+    public static StatisticsServiceClient NewClient(Channel channel)
+    {
+      return new StatisticsServiceClient(channel);
+    }
+
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    #pragma warning disable 0618
     public static ServerServiceDefinition BindService(IStatisticsService serviceImpl)
+    #pragma warning restore 0618
     {
       return ServerServiceDefinition.CreateBuilder(__ServiceName)
           .AddMethod(__Method_RecordPlaybackStarted, serviceImpl.RecordPlaybackStarted)
           .AddMethod(__Method_GetNumberOfPlays, serviceImpl.GetNumberOfPlays).Build();
     }
 
-    // creates a new client
-    public static StatisticsServiceClient NewClient(Channel channel)
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    #pragma warning disable 0618
+    public static ServerServiceDefinition BindService(StatisticsServiceBase serviceImpl)
+    #pragma warning restore 0618
     {
-      return new StatisticsServiceClient(channel);
+      return ServerServiceDefinition.CreateBuilder(__ServiceName)
+          .AddMethod(__Method_RecordPlaybackStarted, serviceImpl.RecordPlaybackStarted)
+          .AddMethod(__Method_GetNumberOfPlays, serviceImpl.GetNumberOfPlays).Build();
     }
 
   }

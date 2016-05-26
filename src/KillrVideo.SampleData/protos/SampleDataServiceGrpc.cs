@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using Grpc.Core;
 
 namespace KillrVideo.SampleData {
+  /// <summary>
+  ///  Service for managing sample data on the site
+  /// </summary>
   public static class SampleDataService
   {
     static readonly string __ServiceName = "killrvideo.sample_data.SampleDataService";
@@ -67,182 +70,401 @@ namespace KillrVideo.SampleData {
         __Marshaller_RefreshYouTubeSourcesRequest,
         __Marshaller_RefreshYouTubeSourcesResponse);
 
-    // service descriptor
+    /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
       get { return global::KillrVideo.SampleData.SampleDataServiceReflection.Descriptor.Services[0]; }
     }
 
-    // client interface
+    /// <summary>Client for SampleDataService</summary>
+    [System.Obsolete("Client side interfaced will be removed in the next release. Use client class directly.")]
     public interface ISampleDataServiceClient
     {
+      /// <summary>
+      ///  Adds sample comment data
+      /// </summary>
       global::KillrVideo.SampleData.AddSampleCommentsResponse AddSampleComments(global::KillrVideo.SampleData.AddSampleCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Adds sample comment data
+      /// </summary>
       global::KillrVideo.SampleData.AddSampleCommentsResponse AddSampleComments(global::KillrVideo.SampleData.AddSampleCommentsRequest request, CallOptions options);
+      /// <summary>
+      ///  Adds sample comment data
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleCommentsResponse> AddSampleCommentsAsync(global::KillrVideo.SampleData.AddSampleCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Adds sample comment data
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleCommentsResponse> AddSampleCommentsAsync(global::KillrVideo.SampleData.AddSampleCommentsRequest request, CallOptions options);
+      /// <summary>
+      ///  Adds sample ratings data
+      /// </summary>
       global::KillrVideo.SampleData.AddSampleRatingsResponse AddSampleRatings(global::KillrVideo.SampleData.AddSampleRatingsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Adds sample ratings data
+      /// </summary>
       global::KillrVideo.SampleData.AddSampleRatingsResponse AddSampleRatings(global::KillrVideo.SampleData.AddSampleRatingsRequest request, CallOptions options);
+      /// <summary>
+      ///  Adds sample ratings data
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleRatingsResponse> AddSampleRatingsAsync(global::KillrVideo.SampleData.AddSampleRatingsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Adds sample ratings data
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleRatingsResponse> AddSampleRatingsAsync(global::KillrVideo.SampleData.AddSampleRatingsRequest request, CallOptions options);
+      /// <summary>
+      ///  Adds sample users data
+      /// </summary>
       global::KillrVideo.SampleData.AddSampleUsersResponse AddSampleUsers(global::KillrVideo.SampleData.AddSampleUsersRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Adds sample users data
+      /// </summary>
       global::KillrVideo.SampleData.AddSampleUsersResponse AddSampleUsers(global::KillrVideo.SampleData.AddSampleUsersRequest request, CallOptions options);
+      /// <summary>
+      ///  Adds sample users data
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleUsersResponse> AddSampleUsersAsync(global::KillrVideo.SampleData.AddSampleUsersRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Adds sample users data
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleUsersResponse> AddSampleUsersAsync(global::KillrVideo.SampleData.AddSampleUsersRequest request, CallOptions options);
+      /// <summary>
+      ///  Adds sample video views data
+      /// </summary>
       global::KillrVideo.SampleData.AddSampleVideoViewsResponse AddSampleVideoViews(global::KillrVideo.SampleData.AddSampleVideoViewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Adds sample video views data
+      /// </summary>
       global::KillrVideo.SampleData.AddSampleVideoViewsResponse AddSampleVideoViews(global::KillrVideo.SampleData.AddSampleVideoViewsRequest request, CallOptions options);
+      /// <summary>
+      ///  Adds sample video views data
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleVideoViewsResponse> AddSampleVideoViewsAsync(global::KillrVideo.SampleData.AddSampleVideoViewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Adds sample video views data
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleVideoViewsResponse> AddSampleVideoViewsAsync(global::KillrVideo.SampleData.AddSampleVideoViewsRequest request, CallOptions options);
+      /// <summary>
+      ///  Adds sample YouTube video data
+      /// </summary>
       global::KillrVideo.SampleData.AddSampleYouTubeVideosResponse AddSampleYouTubeVideos(global::KillrVideo.SampleData.AddSampleYouTubeVideosRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Adds sample YouTube video data
+      /// </summary>
       global::KillrVideo.SampleData.AddSampleYouTubeVideosResponse AddSampleYouTubeVideos(global::KillrVideo.SampleData.AddSampleYouTubeVideosRequest request, CallOptions options);
+      /// <summary>
+      ///  Adds sample YouTube video data
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleYouTubeVideosResponse> AddSampleYouTubeVideosAsync(global::KillrVideo.SampleData.AddSampleYouTubeVideosRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Adds sample YouTube video data
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleYouTubeVideosResponse> AddSampleYouTubeVideosAsync(global::KillrVideo.SampleData.AddSampleYouTubeVideosRequest request, CallOptions options);
+      /// <summary>
+      ///  Triggers a refresh of the YouTube sample video data sources
+      /// </summary>
       global::KillrVideo.SampleData.RefreshYouTubeSourcesResponse RefreshYouTubeSources(global::KillrVideo.SampleData.RefreshYouTubeSourcesRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Triggers a refresh of the YouTube sample video data sources
+      /// </summary>
       global::KillrVideo.SampleData.RefreshYouTubeSourcesResponse RefreshYouTubeSources(global::KillrVideo.SampleData.RefreshYouTubeSourcesRequest request, CallOptions options);
+      /// <summary>
+      ///  Triggers a refresh of the YouTube sample video data sources
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.SampleData.RefreshYouTubeSourcesResponse> RefreshYouTubeSourcesAsync(global::KillrVideo.SampleData.RefreshYouTubeSourcesRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Triggers a refresh of the YouTube sample video data sources
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.SampleData.RefreshYouTubeSourcesResponse> RefreshYouTubeSourcesAsync(global::KillrVideo.SampleData.RefreshYouTubeSourcesRequest request, CallOptions options);
     }
 
-    // server-side interface
+    /// <summary>Interface of server-side implementations of SampleDataService</summary>
+    [System.Obsolete("Service implementations should inherit from the generated abstract base class instead.")]
     public interface ISampleDataService
     {
-      Task<global::KillrVideo.SampleData.AddSampleCommentsResponse> AddSampleComments(global::KillrVideo.SampleData.AddSampleCommentsRequest request, ServerCallContext context);
-      Task<global::KillrVideo.SampleData.AddSampleRatingsResponse> AddSampleRatings(global::KillrVideo.SampleData.AddSampleRatingsRequest request, ServerCallContext context);
-      Task<global::KillrVideo.SampleData.AddSampleUsersResponse> AddSampleUsers(global::KillrVideo.SampleData.AddSampleUsersRequest request, ServerCallContext context);
-      Task<global::KillrVideo.SampleData.AddSampleVideoViewsResponse> AddSampleVideoViews(global::KillrVideo.SampleData.AddSampleVideoViewsRequest request, ServerCallContext context);
-      Task<global::KillrVideo.SampleData.AddSampleYouTubeVideosResponse> AddSampleYouTubeVideos(global::KillrVideo.SampleData.AddSampleYouTubeVideosRequest request, ServerCallContext context);
-      Task<global::KillrVideo.SampleData.RefreshYouTubeSourcesResponse> RefreshYouTubeSources(global::KillrVideo.SampleData.RefreshYouTubeSourcesRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Adds sample comment data
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.SampleData.AddSampleCommentsResponse> AddSampleComments(global::KillrVideo.SampleData.AddSampleCommentsRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Adds sample ratings data
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.SampleData.AddSampleRatingsResponse> AddSampleRatings(global::KillrVideo.SampleData.AddSampleRatingsRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Adds sample users data
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.SampleData.AddSampleUsersResponse> AddSampleUsers(global::KillrVideo.SampleData.AddSampleUsersRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Adds sample video views data
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.SampleData.AddSampleVideoViewsResponse> AddSampleVideoViews(global::KillrVideo.SampleData.AddSampleVideoViewsRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Adds sample YouTube video data
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.SampleData.AddSampleYouTubeVideosResponse> AddSampleYouTubeVideos(global::KillrVideo.SampleData.AddSampleYouTubeVideosRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Triggers a refresh of the YouTube sample video data sources
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.SampleData.RefreshYouTubeSourcesResponse> RefreshYouTubeSources(global::KillrVideo.SampleData.RefreshYouTubeSourcesRequest request, ServerCallContext context);
     }
 
-    // client stub
-    public class SampleDataServiceClient : ClientBase, ISampleDataServiceClient
+    /// <summary>Base class for server-side implementations of SampleDataService</summary>
+    public abstract class SampleDataServiceBase
+    {
+      /// <summary>
+      ///  Adds sample comment data
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.SampleData.AddSampleCommentsResponse> AddSampleComments(global::KillrVideo.SampleData.AddSampleCommentsRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Adds sample ratings data
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.SampleData.AddSampleRatingsResponse> AddSampleRatings(global::KillrVideo.SampleData.AddSampleRatingsRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Adds sample users data
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.SampleData.AddSampleUsersResponse> AddSampleUsers(global::KillrVideo.SampleData.AddSampleUsersRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Adds sample video views data
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.SampleData.AddSampleVideoViewsResponse> AddSampleVideoViews(global::KillrVideo.SampleData.AddSampleVideoViewsRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Adds sample YouTube video data
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.SampleData.AddSampleYouTubeVideosResponse> AddSampleYouTubeVideos(global::KillrVideo.SampleData.AddSampleYouTubeVideosRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Triggers a refresh of the YouTube sample video data sources
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.SampleData.RefreshYouTubeSourcesResponse> RefreshYouTubeSources(global::KillrVideo.SampleData.RefreshYouTubeSourcesRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+    }
+
+    /// <summary>Client for SampleDataService</summary>
+    #pragma warning disable 0618
+    public class SampleDataServiceClient : ClientBase<SampleDataServiceClient>, ISampleDataServiceClient
+    #pragma warning restore 0618
     {
       public SampleDataServiceClient(Channel channel) : base(channel)
       {
       }
-      public global::KillrVideo.SampleData.AddSampleCommentsResponse AddSampleComments(global::KillrVideo.SampleData.AddSampleCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      public SampleDataServiceClient(CallInvoker callInvoker) : base(callInvoker)
       {
-        var call = CreateCall(__Method_AddSampleComments, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
       }
-      public global::KillrVideo.SampleData.AddSampleCommentsResponse AddSampleComments(global::KillrVideo.SampleData.AddSampleCommentsRequest request, CallOptions options)
+      ///<summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      protected SampleDataServiceClient() : base()
       {
-        var call = CreateCall(__Method_AddSampleComments, options);
-        return Calls.BlockingUnaryCall(call, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleCommentsResponse> AddSampleCommentsAsync(global::KillrVideo.SampleData.AddSampleCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      ///<summary>Protected constructor to allow creation of configured clients.</summary>
+      protected SampleDataServiceClient(ClientBaseConfiguration configuration) : base(configuration)
       {
-        var call = CreateCall(__Method_AddSampleComments, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleCommentsResponse> AddSampleCommentsAsync(global::KillrVideo.SampleData.AddSampleCommentsRequest request, CallOptions options)
+
+      /// <summary>
+      ///  Adds sample comment data
+      /// </summary>
+      public virtual global::KillrVideo.SampleData.AddSampleCommentsResponse AddSampleComments(global::KillrVideo.SampleData.AddSampleCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_AddSampleComments, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return AddSampleComments(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.SampleData.AddSampleRatingsResponse AddSampleRatings(global::KillrVideo.SampleData.AddSampleRatingsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Adds sample comment data
+      /// </summary>
+      public virtual global::KillrVideo.SampleData.AddSampleCommentsResponse AddSampleComments(global::KillrVideo.SampleData.AddSampleCommentsRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_AddSampleRatings, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_AddSampleComments, null, options, request);
       }
-      public global::KillrVideo.SampleData.AddSampleRatingsResponse AddSampleRatings(global::KillrVideo.SampleData.AddSampleRatingsRequest request, CallOptions options)
+      /// <summary>
+      ///  Adds sample comment data
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleCommentsResponse> AddSampleCommentsAsync(global::KillrVideo.SampleData.AddSampleCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_AddSampleRatings, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return AddSampleCommentsAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleRatingsResponse> AddSampleRatingsAsync(global::KillrVideo.SampleData.AddSampleRatingsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Adds sample comment data
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleCommentsResponse> AddSampleCommentsAsync(global::KillrVideo.SampleData.AddSampleCommentsRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_AddSampleRatings, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_AddSampleComments, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleRatingsResponse> AddSampleRatingsAsync(global::KillrVideo.SampleData.AddSampleRatingsRequest request, CallOptions options)
+      /// <summary>
+      ///  Adds sample ratings data
+      /// </summary>
+      public virtual global::KillrVideo.SampleData.AddSampleRatingsResponse AddSampleRatings(global::KillrVideo.SampleData.AddSampleRatingsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_AddSampleRatings, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return AddSampleRatings(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.SampleData.AddSampleUsersResponse AddSampleUsers(global::KillrVideo.SampleData.AddSampleUsersRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Adds sample ratings data
+      /// </summary>
+      public virtual global::KillrVideo.SampleData.AddSampleRatingsResponse AddSampleRatings(global::KillrVideo.SampleData.AddSampleRatingsRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_AddSampleUsers, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_AddSampleRatings, null, options, request);
       }
-      public global::KillrVideo.SampleData.AddSampleUsersResponse AddSampleUsers(global::KillrVideo.SampleData.AddSampleUsersRequest request, CallOptions options)
+      /// <summary>
+      ///  Adds sample ratings data
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleRatingsResponse> AddSampleRatingsAsync(global::KillrVideo.SampleData.AddSampleRatingsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_AddSampleUsers, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return AddSampleRatingsAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleUsersResponse> AddSampleUsersAsync(global::KillrVideo.SampleData.AddSampleUsersRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Adds sample ratings data
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleRatingsResponse> AddSampleRatingsAsync(global::KillrVideo.SampleData.AddSampleRatingsRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_AddSampleUsers, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_AddSampleRatings, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleUsersResponse> AddSampleUsersAsync(global::KillrVideo.SampleData.AddSampleUsersRequest request, CallOptions options)
+      /// <summary>
+      ///  Adds sample users data
+      /// </summary>
+      public virtual global::KillrVideo.SampleData.AddSampleUsersResponse AddSampleUsers(global::KillrVideo.SampleData.AddSampleUsersRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_AddSampleUsers, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return AddSampleUsers(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.SampleData.AddSampleVideoViewsResponse AddSampleVideoViews(global::KillrVideo.SampleData.AddSampleVideoViewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Adds sample users data
+      /// </summary>
+      public virtual global::KillrVideo.SampleData.AddSampleUsersResponse AddSampleUsers(global::KillrVideo.SampleData.AddSampleUsersRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_AddSampleVideoViews, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_AddSampleUsers, null, options, request);
       }
-      public global::KillrVideo.SampleData.AddSampleVideoViewsResponse AddSampleVideoViews(global::KillrVideo.SampleData.AddSampleVideoViewsRequest request, CallOptions options)
+      /// <summary>
+      ///  Adds sample users data
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleUsersResponse> AddSampleUsersAsync(global::KillrVideo.SampleData.AddSampleUsersRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_AddSampleVideoViews, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return AddSampleUsersAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleVideoViewsResponse> AddSampleVideoViewsAsync(global::KillrVideo.SampleData.AddSampleVideoViewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Adds sample users data
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleUsersResponse> AddSampleUsersAsync(global::KillrVideo.SampleData.AddSampleUsersRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_AddSampleVideoViews, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_AddSampleUsers, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleVideoViewsResponse> AddSampleVideoViewsAsync(global::KillrVideo.SampleData.AddSampleVideoViewsRequest request, CallOptions options)
+      /// <summary>
+      ///  Adds sample video views data
+      /// </summary>
+      public virtual global::KillrVideo.SampleData.AddSampleVideoViewsResponse AddSampleVideoViews(global::KillrVideo.SampleData.AddSampleVideoViewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_AddSampleVideoViews, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return AddSampleVideoViews(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.SampleData.AddSampleYouTubeVideosResponse AddSampleYouTubeVideos(global::KillrVideo.SampleData.AddSampleYouTubeVideosRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Adds sample video views data
+      /// </summary>
+      public virtual global::KillrVideo.SampleData.AddSampleVideoViewsResponse AddSampleVideoViews(global::KillrVideo.SampleData.AddSampleVideoViewsRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_AddSampleYouTubeVideos, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_AddSampleVideoViews, null, options, request);
       }
-      public global::KillrVideo.SampleData.AddSampleYouTubeVideosResponse AddSampleYouTubeVideos(global::KillrVideo.SampleData.AddSampleYouTubeVideosRequest request, CallOptions options)
+      /// <summary>
+      ///  Adds sample video views data
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleVideoViewsResponse> AddSampleVideoViewsAsync(global::KillrVideo.SampleData.AddSampleVideoViewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_AddSampleYouTubeVideos, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return AddSampleVideoViewsAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleYouTubeVideosResponse> AddSampleYouTubeVideosAsync(global::KillrVideo.SampleData.AddSampleYouTubeVideosRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Adds sample video views data
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleVideoViewsResponse> AddSampleVideoViewsAsync(global::KillrVideo.SampleData.AddSampleVideoViewsRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_AddSampleYouTubeVideos, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_AddSampleVideoViews, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleYouTubeVideosResponse> AddSampleYouTubeVideosAsync(global::KillrVideo.SampleData.AddSampleYouTubeVideosRequest request, CallOptions options)
+      /// <summary>
+      ///  Adds sample YouTube video data
+      /// </summary>
+      public virtual global::KillrVideo.SampleData.AddSampleYouTubeVideosResponse AddSampleYouTubeVideos(global::KillrVideo.SampleData.AddSampleYouTubeVideosRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_AddSampleYouTubeVideos, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return AddSampleYouTubeVideos(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.SampleData.RefreshYouTubeSourcesResponse RefreshYouTubeSources(global::KillrVideo.SampleData.RefreshYouTubeSourcesRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Adds sample YouTube video data
+      /// </summary>
+      public virtual global::KillrVideo.SampleData.AddSampleYouTubeVideosResponse AddSampleYouTubeVideos(global::KillrVideo.SampleData.AddSampleYouTubeVideosRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_RefreshYouTubeSources, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_AddSampleYouTubeVideos, null, options, request);
       }
-      public global::KillrVideo.SampleData.RefreshYouTubeSourcesResponse RefreshYouTubeSources(global::KillrVideo.SampleData.RefreshYouTubeSourcesRequest request, CallOptions options)
+      /// <summary>
+      ///  Adds sample YouTube video data
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleYouTubeVideosResponse> AddSampleYouTubeVideosAsync(global::KillrVideo.SampleData.AddSampleYouTubeVideosRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_RefreshYouTubeSources, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return AddSampleYouTubeVideosAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.SampleData.RefreshYouTubeSourcesResponse> RefreshYouTubeSourcesAsync(global::KillrVideo.SampleData.RefreshYouTubeSourcesRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Adds sample YouTube video data
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.SampleData.AddSampleYouTubeVideosResponse> AddSampleYouTubeVideosAsync(global::KillrVideo.SampleData.AddSampleYouTubeVideosRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_RefreshYouTubeSources, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_AddSampleYouTubeVideos, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.SampleData.RefreshYouTubeSourcesResponse> RefreshYouTubeSourcesAsync(global::KillrVideo.SampleData.RefreshYouTubeSourcesRequest request, CallOptions options)
+      /// <summary>
+      ///  Triggers a refresh of the YouTube sample video data sources
+      /// </summary>
+      public virtual global::KillrVideo.SampleData.RefreshYouTubeSourcesResponse RefreshYouTubeSources(global::KillrVideo.SampleData.RefreshYouTubeSourcesRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_RefreshYouTubeSources, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return RefreshYouTubeSources(request, new CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///  Triggers a refresh of the YouTube sample video data sources
+      /// </summary>
+      public virtual global::KillrVideo.SampleData.RefreshYouTubeSourcesResponse RefreshYouTubeSources(global::KillrVideo.SampleData.RefreshYouTubeSourcesRequest request, CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_RefreshYouTubeSources, null, options, request);
+      }
+      /// <summary>
+      ///  Triggers a refresh of the YouTube sample video data sources
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.SampleData.RefreshYouTubeSourcesResponse> RefreshYouTubeSourcesAsync(global::KillrVideo.SampleData.RefreshYouTubeSourcesRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      {
+        return RefreshYouTubeSourcesAsync(request, new CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///  Triggers a refresh of the YouTube sample video data sources
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.SampleData.RefreshYouTubeSourcesResponse> RefreshYouTubeSourcesAsync(global::KillrVideo.SampleData.RefreshYouTubeSourcesRequest request, CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_RefreshYouTubeSources, null, options, request);
+      }
+      protected override SampleDataServiceClient NewInstance(ClientBaseConfiguration configuration)
+      {
+        return new SampleDataServiceClient(configuration);
       }
     }
 
-    // creates service definition that can be registered with a server
+    /// <summary>Creates a new client for SampleDataService</summary>
+    public static SampleDataServiceClient NewClient(Channel channel)
+    {
+      return new SampleDataServiceClient(channel);
+    }
+
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    #pragma warning disable 0618
     public static ServerServiceDefinition BindService(ISampleDataService serviceImpl)
+    #pragma warning restore 0618
     {
       return ServerServiceDefinition.CreateBuilder(__ServiceName)
           .AddMethod(__Method_AddSampleComments, serviceImpl.AddSampleComments)
@@ -253,10 +475,18 @@ namespace KillrVideo.SampleData {
           .AddMethod(__Method_RefreshYouTubeSources, serviceImpl.RefreshYouTubeSources).Build();
     }
 
-    // creates a new client
-    public static SampleDataServiceClient NewClient(Channel channel)
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    #pragma warning disable 0618
+    public static ServerServiceDefinition BindService(SampleDataServiceBase serviceImpl)
+    #pragma warning restore 0618
     {
-      return new SampleDataServiceClient(channel);
+      return ServerServiceDefinition.CreateBuilder(__ServiceName)
+          .AddMethod(__Method_AddSampleComments, serviceImpl.AddSampleComments)
+          .AddMethod(__Method_AddSampleRatings, serviceImpl.AddSampleRatings)
+          .AddMethod(__Method_AddSampleUsers, serviceImpl.AddSampleUsers)
+          .AddMethod(__Method_AddSampleVideoViews, serviceImpl.AddSampleVideoViews)
+          .AddMethod(__Method_AddSampleYouTubeVideos, serviceImpl.AddSampleYouTubeVideos)
+          .AddMethod(__Method_RefreshYouTubeSources, serviceImpl.RefreshYouTubeSources).Build();
     }
 
   }

@@ -3,18 +3,20 @@
   <PropertyGroup>
     <!-- Change these whenever upgrading the Google.Protobuf package or the Grpc.Tools package -->
     <ProtobufVersion>3.0.0-beta2</ProtobufVersion>
-    <GrpcToolsVersion>0.13.0</GrpcToolsVersion>
+    <GrpcToolsVersion>0.14.0</GrpcToolsVersion>
 
     <!-- Convert relative paths to full paths -->
     <KillrVideoRootPath>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..'))</KillrVideoRootPath>
-    <ProtobufCompilerPath>$(KillrVideoRootPath)\src\packages\Google.Protobuf.$(ProtobufVersion)\tools</ProtobufCompilerPath>
-    <GrpcPluginPath>$(KillrVideoRootPath)\src\packages\Grpc.Tools.$(GrpcToolsVersion)\tools</GrpcPluginPath>
+    <GrpcToolsPath>$(KillrVideoRootPath)\src\packages\Grpc.Tools.$(GrpcToolsVersion)\tools\windows_x64</GrpcToolsPath>
+    
+    <!-- Protobuf compiler import paths (for importing common Google protobufs and common KillrVideo protobufs) -->
+    <GoogleImportsPath>$(KillrVideoRootPath)\src\packages\Google.Protobuf.$(ProtobufVersion)\tools</GoogleImportsPath>
     <KillrVideoImportsPath>$(KillrVideoRootPath)\lib\killrvideo-service-protos\src</KillrVideoImportsPath>
 
     <!-- Commandline options for the Protobuf Compiler -->
-    <ProtobufPathOptions>-I=$(KillrVideoImportsPath) -I=$(ProtobufCompilerPath)</ProtobufPathOptions>
+    <ProtobufPathOptions>-I=$(KillrVideoImportsPath) -I=$(GoogleImportsPath)</ProtobufPathOptions>
     <ProtobufCsharpOptions>--csharp_out=$(MSBuildProjectDirectory)\protos --csharp_opt=file_extension=.generated.cs</ProtobufCsharpOptions>
-    <ProtobufPluginOptions>--grpc_out=$(MSBuildProjectDirectory)\protos --plugin=protoc-gen-grpc=$(GrpcPluginPath)\grpc_csharp_plugin.exe</ProtobufPluginOptions>
+    <ProtobufPluginOptions>--grpc_out=$(MSBuildProjectDirectory)\protos --plugin=protoc-gen-grpc=$(GrpcToolsPath)\grpc_csharp_plugin.exe</ProtobufPluginOptions>
   </PropertyGroup>
 
   <Target Name="CompileProtos">
@@ -25,6 +27,6 @@
 
     <!-- Run the Protobuf compiler on each .proto file found in the project -->
     <Exec Command="protoc $(ProtobufPathOptions) $(ProtobufCsharpOptions) $(ProtobufPluginOptions) %(Protos.FullPath)"
-          WorkingDirectory="$(ProtobufCompilerPath)"/>
+          WorkingDirectory="$(GrpcToolsPath)"/>
   </Target>
 </Project>

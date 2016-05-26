@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using Grpc.Core;
 
 namespace KillrVideo.Comments {
+  /// <summary>
+  ///  Manages comments
+  /// </summary>
   public static class CommentsService
   {
     static readonly string __ServiceName = "killrvideo.comments.CommentsService";
@@ -40,107 +43,233 @@ namespace KillrVideo.Comments {
         __Marshaller_GetVideoCommentsRequest,
         __Marshaller_GetVideoCommentsResponse);
 
-    // service descriptor
+    /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
       get { return global::KillrVideo.Comments.CommentsServiceReflection.Descriptor.Services[0]; }
     }
 
-    // client interface
+    /// <summary>Client for CommentsService</summary>
+    [System.Obsolete("Client side interfaced will be removed in the next release. Use client class directly.")]
     public interface ICommentsServiceClient
     {
+      /// <summary>
+      ///  Add a new comment to a video
+      /// </summary>
       global::KillrVideo.Comments.CommentOnVideoResponse CommentOnVideo(global::KillrVideo.Comments.CommentOnVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Add a new comment to a video
+      /// </summary>
       global::KillrVideo.Comments.CommentOnVideoResponse CommentOnVideo(global::KillrVideo.Comments.CommentOnVideoRequest request, CallOptions options);
+      /// <summary>
+      ///  Add a new comment to a video
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Comments.CommentOnVideoResponse> CommentOnVideoAsync(global::KillrVideo.Comments.CommentOnVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Add a new comment to a video
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Comments.CommentOnVideoResponse> CommentOnVideoAsync(global::KillrVideo.Comments.CommentOnVideoRequest request, CallOptions options);
+      /// <summary>
+      ///  Get comments made by a user
+      /// </summary>
       global::KillrVideo.Comments.GetUserCommentsResponse GetUserComments(global::KillrVideo.Comments.GetUserCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Get comments made by a user
+      /// </summary>
       global::KillrVideo.Comments.GetUserCommentsResponse GetUserComments(global::KillrVideo.Comments.GetUserCommentsRequest request, CallOptions options);
+      /// <summary>
+      ///  Get comments made by a user
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Comments.GetUserCommentsResponse> GetUserCommentsAsync(global::KillrVideo.Comments.GetUserCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Get comments made by a user
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Comments.GetUserCommentsResponse> GetUserCommentsAsync(global::KillrVideo.Comments.GetUserCommentsRequest request, CallOptions options);
+      /// <summary>
+      ///  Get comments made on a video
+      /// </summary>
       global::KillrVideo.Comments.GetVideoCommentsResponse GetVideoComments(global::KillrVideo.Comments.GetVideoCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Get comments made on a video
+      /// </summary>
       global::KillrVideo.Comments.GetVideoCommentsResponse GetVideoComments(global::KillrVideo.Comments.GetVideoCommentsRequest request, CallOptions options);
+      /// <summary>
+      ///  Get comments made on a video
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Comments.GetVideoCommentsResponse> GetVideoCommentsAsync(global::KillrVideo.Comments.GetVideoCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Get comments made on a video
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Comments.GetVideoCommentsResponse> GetVideoCommentsAsync(global::KillrVideo.Comments.GetVideoCommentsRequest request, CallOptions options);
     }
 
-    // server-side interface
+    /// <summary>Interface of server-side implementations of CommentsService</summary>
+    [System.Obsolete("Service implementations should inherit from the generated abstract base class instead.")]
     public interface ICommentsService
     {
-      Task<global::KillrVideo.Comments.CommentOnVideoResponse> CommentOnVideo(global::KillrVideo.Comments.CommentOnVideoRequest request, ServerCallContext context);
-      Task<global::KillrVideo.Comments.GetUserCommentsResponse> GetUserComments(global::KillrVideo.Comments.GetUserCommentsRequest request, ServerCallContext context);
-      Task<global::KillrVideo.Comments.GetVideoCommentsResponse> GetVideoComments(global::KillrVideo.Comments.GetVideoCommentsRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Add a new comment to a video
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.Comments.CommentOnVideoResponse> CommentOnVideo(global::KillrVideo.Comments.CommentOnVideoRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Get comments made by a user
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.Comments.GetUserCommentsResponse> GetUserComments(global::KillrVideo.Comments.GetUserCommentsRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Get comments made on a video
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.Comments.GetVideoCommentsResponse> GetVideoComments(global::KillrVideo.Comments.GetVideoCommentsRequest request, ServerCallContext context);
     }
 
-    // client stub
-    public class CommentsServiceClient : ClientBase, ICommentsServiceClient
+    /// <summary>Base class for server-side implementations of CommentsService</summary>
+    public abstract class CommentsServiceBase
+    {
+      /// <summary>
+      ///  Add a new comment to a video
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.Comments.CommentOnVideoResponse> CommentOnVideo(global::KillrVideo.Comments.CommentOnVideoRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Get comments made by a user
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.Comments.GetUserCommentsResponse> GetUserComments(global::KillrVideo.Comments.GetUserCommentsRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Get comments made on a video
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.Comments.GetVideoCommentsResponse> GetVideoComments(global::KillrVideo.Comments.GetVideoCommentsRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+    }
+
+    /// <summary>Client for CommentsService</summary>
+    #pragma warning disable 0618
+    public class CommentsServiceClient : ClientBase<CommentsServiceClient>, ICommentsServiceClient
+    #pragma warning restore 0618
     {
       public CommentsServiceClient(Channel channel) : base(channel)
       {
       }
-      public global::KillrVideo.Comments.CommentOnVideoResponse CommentOnVideo(global::KillrVideo.Comments.CommentOnVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      public CommentsServiceClient(CallInvoker callInvoker) : base(callInvoker)
       {
-        var call = CreateCall(__Method_CommentOnVideo, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
       }
-      public global::KillrVideo.Comments.CommentOnVideoResponse CommentOnVideo(global::KillrVideo.Comments.CommentOnVideoRequest request, CallOptions options)
+      ///<summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      protected CommentsServiceClient() : base()
       {
-        var call = CreateCall(__Method_CommentOnVideo, options);
-        return Calls.BlockingUnaryCall(call, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.Comments.CommentOnVideoResponse> CommentOnVideoAsync(global::KillrVideo.Comments.CommentOnVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      ///<summary>Protected constructor to allow creation of configured clients.</summary>
+      protected CommentsServiceClient(ClientBaseConfiguration configuration) : base(configuration)
       {
-        var call = CreateCall(__Method_CommentOnVideo, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.Comments.CommentOnVideoResponse> CommentOnVideoAsync(global::KillrVideo.Comments.CommentOnVideoRequest request, CallOptions options)
+
+      /// <summary>
+      ///  Add a new comment to a video
+      /// </summary>
+      public virtual global::KillrVideo.Comments.CommentOnVideoResponse CommentOnVideo(global::KillrVideo.Comments.CommentOnVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_CommentOnVideo, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return CommentOnVideo(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.Comments.GetUserCommentsResponse GetUserComments(global::KillrVideo.Comments.GetUserCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Add a new comment to a video
+      /// </summary>
+      public virtual global::KillrVideo.Comments.CommentOnVideoResponse CommentOnVideo(global::KillrVideo.Comments.CommentOnVideoRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetUserComments, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_CommentOnVideo, null, options, request);
       }
-      public global::KillrVideo.Comments.GetUserCommentsResponse GetUserComments(global::KillrVideo.Comments.GetUserCommentsRequest request, CallOptions options)
+      /// <summary>
+      ///  Add a new comment to a video
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Comments.CommentOnVideoResponse> CommentOnVideoAsync(global::KillrVideo.Comments.CommentOnVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetUserComments, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return CommentOnVideoAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.Comments.GetUserCommentsResponse> GetUserCommentsAsync(global::KillrVideo.Comments.GetUserCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Add a new comment to a video
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Comments.CommentOnVideoResponse> CommentOnVideoAsync(global::KillrVideo.Comments.CommentOnVideoRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetUserComments, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_CommentOnVideo, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.Comments.GetUserCommentsResponse> GetUserCommentsAsync(global::KillrVideo.Comments.GetUserCommentsRequest request, CallOptions options)
+      /// <summary>
+      ///  Get comments made by a user
+      /// </summary>
+      public virtual global::KillrVideo.Comments.GetUserCommentsResponse GetUserComments(global::KillrVideo.Comments.GetUserCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetUserComments, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return GetUserComments(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.Comments.GetVideoCommentsResponse GetVideoComments(global::KillrVideo.Comments.GetVideoCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Get comments made by a user
+      /// </summary>
+      public virtual global::KillrVideo.Comments.GetUserCommentsResponse GetUserComments(global::KillrVideo.Comments.GetUserCommentsRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetVideoComments, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_GetUserComments, null, options, request);
       }
-      public global::KillrVideo.Comments.GetVideoCommentsResponse GetVideoComments(global::KillrVideo.Comments.GetVideoCommentsRequest request, CallOptions options)
+      /// <summary>
+      ///  Get comments made by a user
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Comments.GetUserCommentsResponse> GetUserCommentsAsync(global::KillrVideo.Comments.GetUserCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetVideoComments, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return GetUserCommentsAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.Comments.GetVideoCommentsResponse> GetVideoCommentsAsync(global::KillrVideo.Comments.GetVideoCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Get comments made by a user
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Comments.GetUserCommentsResponse> GetUserCommentsAsync(global::KillrVideo.Comments.GetUserCommentsRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetVideoComments, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_GetUserComments, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.Comments.GetVideoCommentsResponse> GetVideoCommentsAsync(global::KillrVideo.Comments.GetVideoCommentsRequest request, CallOptions options)
+      /// <summary>
+      ///  Get comments made on a video
+      /// </summary>
+      public virtual global::KillrVideo.Comments.GetVideoCommentsResponse GetVideoComments(global::KillrVideo.Comments.GetVideoCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetVideoComments, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return GetVideoComments(request, new CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///  Get comments made on a video
+      /// </summary>
+      public virtual global::KillrVideo.Comments.GetVideoCommentsResponse GetVideoComments(global::KillrVideo.Comments.GetVideoCommentsRequest request, CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetVideoComments, null, options, request);
+      }
+      /// <summary>
+      ///  Get comments made on a video
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Comments.GetVideoCommentsResponse> GetVideoCommentsAsync(global::KillrVideo.Comments.GetVideoCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      {
+        return GetVideoCommentsAsync(request, new CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///  Get comments made on a video
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Comments.GetVideoCommentsResponse> GetVideoCommentsAsync(global::KillrVideo.Comments.GetVideoCommentsRequest request, CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetVideoComments, null, options, request);
+      }
+      protected override CommentsServiceClient NewInstance(ClientBaseConfiguration configuration)
+      {
+        return new CommentsServiceClient(configuration);
       }
     }
 
-    // creates service definition that can be registered with a server
+    /// <summary>Creates a new client for CommentsService</summary>
+    public static CommentsServiceClient NewClient(Channel channel)
+    {
+      return new CommentsServiceClient(channel);
+    }
+
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    #pragma warning disable 0618
     public static ServerServiceDefinition BindService(ICommentsService serviceImpl)
+    #pragma warning restore 0618
     {
       return ServerServiceDefinition.CreateBuilder(__ServiceName)
           .AddMethod(__Method_CommentOnVideo, serviceImpl.CommentOnVideo)
@@ -148,10 +277,15 @@ namespace KillrVideo.Comments {
           .AddMethod(__Method_GetVideoComments, serviceImpl.GetVideoComments).Build();
     }
 
-    // creates a new client
-    public static CommentsServiceClient NewClient(Channel channel)
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    #pragma warning disable 0618
+    public static ServerServiceDefinition BindService(CommentsServiceBase serviceImpl)
+    #pragma warning restore 0618
     {
-      return new CommentsServiceClient(channel);
+      return ServerServiceDefinition.CreateBuilder(__ServiceName)
+          .AddMethod(__Method_CommentOnVideo, serviceImpl.CommentOnVideo)
+          .AddMethod(__Method_GetUserComments, serviceImpl.GetUserComments)
+          .AddMethod(__Method_GetVideoComments, serviceImpl.GetVideoComments).Build();
     }
 
   }

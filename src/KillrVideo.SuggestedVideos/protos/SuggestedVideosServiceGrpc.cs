@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using Grpc.Core;
 
 namespace KillrVideo.SuggestedVideos {
+  /// <summary>
+  ///  Service responsible for generating video suggestions
+  /// </summary>
   public static class SuggestedVideoService
   {
     static readonly string __ServiceName = "killrvideo.suggested_videos.SuggestedVideoService";
@@ -31,92 +34,191 @@ namespace KillrVideo.SuggestedVideos {
         __Marshaller_GetSuggestedForUserRequest,
         __Marshaller_GetSuggestedForUserResponse);
 
-    // service descriptor
+    /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
       get { return global::KillrVideo.SuggestedVideos.SuggestedVideosServiceReflection.Descriptor.Services[0]; }
     }
 
-    // client interface
+    /// <summary>Client for SuggestedVideoService</summary>
+    [System.Obsolete("Client side interfaced will be removed in the next release. Use client class directly.")]
     public interface ISuggestedVideoServiceClient
     {
+      /// <summary>
+      ///  Gets videos related to another video
+      /// </summary>
       global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse GetRelatedVideos(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets videos related to another video
+      /// </summary>
       global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse GetRelatedVideos(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets videos related to another video
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse> GetRelatedVideosAsync(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets videos related to another video
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse> GetRelatedVideosAsync(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets personalized video suggestions for a user
+      /// </summary>
       global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse GetSuggestedForUser(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets personalized video suggestions for a user
+      /// </summary>
       global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse GetSuggestedForUser(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets personalized video suggestions for a user
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse> GetSuggestedForUserAsync(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets personalized video suggestions for a user
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse> GetSuggestedForUserAsync(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, CallOptions options);
     }
 
-    // server-side interface
+    /// <summary>Interface of server-side implementations of SuggestedVideoService</summary>
+    [System.Obsolete("Service implementations should inherit from the generated abstract base class instead.")]
     public interface ISuggestedVideoService
     {
-      Task<global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse> GetRelatedVideos(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, ServerCallContext context);
-      Task<global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse> GetSuggestedForUser(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Gets videos related to another video
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse> GetRelatedVideos(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Gets personalized video suggestions for a user
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse> GetSuggestedForUser(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, ServerCallContext context);
     }
 
-    // client stub
-    public class SuggestedVideoServiceClient : ClientBase, ISuggestedVideoServiceClient
+    /// <summary>Base class for server-side implementations of SuggestedVideoService</summary>
+    public abstract class SuggestedVideoServiceBase
+    {
+      /// <summary>
+      ///  Gets videos related to another video
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse> GetRelatedVideos(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Gets personalized video suggestions for a user
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse> GetSuggestedForUser(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+    }
+
+    /// <summary>Client for SuggestedVideoService</summary>
+    #pragma warning disable 0618
+    public class SuggestedVideoServiceClient : ClientBase<SuggestedVideoServiceClient>, ISuggestedVideoServiceClient
+    #pragma warning restore 0618
     {
       public SuggestedVideoServiceClient(Channel channel) : base(channel)
       {
       }
-      public global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse GetRelatedVideos(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      public SuggestedVideoServiceClient(CallInvoker callInvoker) : base(callInvoker)
       {
-        var call = CreateCall(__Method_GetRelatedVideos, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
       }
-      public global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse GetRelatedVideos(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, CallOptions options)
+      ///<summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      protected SuggestedVideoServiceClient() : base()
       {
-        var call = CreateCall(__Method_GetRelatedVideos, options);
-        return Calls.BlockingUnaryCall(call, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse> GetRelatedVideosAsync(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      ///<summary>Protected constructor to allow creation of configured clients.</summary>
+      protected SuggestedVideoServiceClient(ClientBaseConfiguration configuration) : base(configuration)
       {
-        var call = CreateCall(__Method_GetRelatedVideos, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse> GetRelatedVideosAsync(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, CallOptions options)
+
+      /// <summary>
+      ///  Gets videos related to another video
+      /// </summary>
+      public virtual global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse GetRelatedVideos(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetRelatedVideos, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return GetRelatedVideos(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse GetSuggestedForUser(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Gets videos related to another video
+      /// </summary>
+      public virtual global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse GetRelatedVideos(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetSuggestedForUser, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_GetRelatedVideos, null, options, request);
       }
-      public global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse GetSuggestedForUser(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, CallOptions options)
+      /// <summary>
+      ///  Gets videos related to another video
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse> GetRelatedVideosAsync(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetSuggestedForUser, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return GetRelatedVideosAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse> GetSuggestedForUserAsync(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Gets videos related to another video
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse> GetRelatedVideosAsync(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetSuggestedForUser, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_GetRelatedVideos, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse> GetSuggestedForUserAsync(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, CallOptions options)
+      /// <summary>
+      ///  Gets personalized video suggestions for a user
+      /// </summary>
+      public virtual global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse GetSuggestedForUser(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetSuggestedForUser, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return GetSuggestedForUser(request, new CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///  Gets personalized video suggestions for a user
+      /// </summary>
+      public virtual global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse GetSuggestedForUser(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetSuggestedForUser, null, options, request);
+      }
+      /// <summary>
+      ///  Gets personalized video suggestions for a user
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse> GetSuggestedForUserAsync(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      {
+        return GetSuggestedForUserAsync(request, new CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///  Gets personalized video suggestions for a user
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse> GetSuggestedForUserAsync(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetSuggestedForUser, null, options, request);
+      }
+      protected override SuggestedVideoServiceClient NewInstance(ClientBaseConfiguration configuration)
+      {
+        return new SuggestedVideoServiceClient(configuration);
       }
     }
 
-    // creates service definition that can be registered with a server
+    /// <summary>Creates a new client for SuggestedVideoService</summary>
+    public static SuggestedVideoServiceClient NewClient(Channel channel)
+    {
+      return new SuggestedVideoServiceClient(channel);
+    }
+
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    #pragma warning disable 0618
     public static ServerServiceDefinition BindService(ISuggestedVideoService serviceImpl)
+    #pragma warning restore 0618
     {
       return ServerServiceDefinition.CreateBuilder(__ServiceName)
           .AddMethod(__Method_GetRelatedVideos, serviceImpl.GetRelatedVideos)
           .AddMethod(__Method_GetSuggestedForUser, serviceImpl.GetSuggestedForUser).Build();
     }
 
-    // creates a new client
-    public static SuggestedVideoServiceClient NewClient(Channel channel)
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    #pragma warning disable 0618
+    public static ServerServiceDefinition BindService(SuggestedVideoServiceBase serviceImpl)
+    #pragma warning restore 0618
     {
-      return new SuggestedVideoServiceClient(channel);
+      return ServerServiceDefinition.CreateBuilder(__ServiceName)
+          .AddMethod(__Method_GetRelatedVideos, serviceImpl.GetRelatedVideos)
+          .AddMethod(__Method_GetSuggestedForUser, serviceImpl.GetSuggestedForUser).Build();
     }
 
   }

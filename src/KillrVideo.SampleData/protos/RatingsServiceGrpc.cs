@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using Grpc.Core;
 
 namespace KillrVideo.Ratings {
+  /// <summary>
+  ///  Service that manages user's ratings of videos
+  /// </summary>
   public static class RatingsService
   {
     static readonly string __ServiceName = "killrvideo.ratings.RatingsService";
@@ -40,107 +43,233 @@ namespace KillrVideo.Ratings {
         __Marshaller_GetUserRatingRequest,
         __Marshaller_GetUserRatingResponse);
 
-    // service descriptor
+    /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
       get { return global::KillrVideo.Ratings.RatingsServiceReflection.Descriptor.Services[0]; }
     }
 
-    // client interface
+    /// <summary>Client for RatingsService</summary>
+    [System.Obsolete("Client side interfaced will be removed in the next release. Use client class directly.")]
     public interface IRatingsServiceClient
     {
+      /// <summary>
+      ///  Rate a video
+      /// </summary>
       global::KillrVideo.Ratings.RateVideoResponse RateVideo(global::KillrVideo.Ratings.RateVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Rate a video
+      /// </summary>
       global::KillrVideo.Ratings.RateVideoResponse RateVideo(global::KillrVideo.Ratings.RateVideoRequest request, CallOptions options);
+      /// <summary>
+      ///  Rate a video
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Ratings.RateVideoResponse> RateVideoAsync(global::KillrVideo.Ratings.RateVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Rate a video
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Ratings.RateVideoResponse> RateVideoAsync(global::KillrVideo.Ratings.RateVideoRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets the current rating stats for a video
+      /// </summary>
       global::KillrVideo.Ratings.GetRatingResponse GetRating(global::KillrVideo.Ratings.GetRatingRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets the current rating stats for a video
+      /// </summary>
       global::KillrVideo.Ratings.GetRatingResponse GetRating(global::KillrVideo.Ratings.GetRatingRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets the current rating stats for a video
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Ratings.GetRatingResponse> GetRatingAsync(global::KillrVideo.Ratings.GetRatingRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets the current rating stats for a video
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Ratings.GetRatingResponse> GetRatingAsync(global::KillrVideo.Ratings.GetRatingRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets a user's rating of a specific video and returns 0 if the user hasn't rated the video
+      /// </summary>
       global::KillrVideo.Ratings.GetUserRatingResponse GetUserRating(global::KillrVideo.Ratings.GetUserRatingRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets a user's rating of a specific video and returns 0 if the user hasn't rated the video
+      /// </summary>
       global::KillrVideo.Ratings.GetUserRatingResponse GetUserRating(global::KillrVideo.Ratings.GetUserRatingRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets a user's rating of a specific video and returns 0 if the user hasn't rated the video
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Ratings.GetUserRatingResponse> GetUserRatingAsync(global::KillrVideo.Ratings.GetUserRatingRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets a user's rating of a specific video and returns 0 if the user hasn't rated the video
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Ratings.GetUserRatingResponse> GetUserRatingAsync(global::KillrVideo.Ratings.GetUserRatingRequest request, CallOptions options);
     }
 
-    // server-side interface
+    /// <summary>Interface of server-side implementations of RatingsService</summary>
+    [System.Obsolete("Service implementations should inherit from the generated abstract base class instead.")]
     public interface IRatingsService
     {
-      Task<global::KillrVideo.Ratings.RateVideoResponse> RateVideo(global::KillrVideo.Ratings.RateVideoRequest request, ServerCallContext context);
-      Task<global::KillrVideo.Ratings.GetRatingResponse> GetRating(global::KillrVideo.Ratings.GetRatingRequest request, ServerCallContext context);
-      Task<global::KillrVideo.Ratings.GetUserRatingResponse> GetUserRating(global::KillrVideo.Ratings.GetUserRatingRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Rate a video
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.Ratings.RateVideoResponse> RateVideo(global::KillrVideo.Ratings.RateVideoRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Gets the current rating stats for a video
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.Ratings.GetRatingResponse> GetRating(global::KillrVideo.Ratings.GetRatingRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Gets a user's rating of a specific video and returns 0 if the user hasn't rated the video
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.Ratings.GetUserRatingResponse> GetUserRating(global::KillrVideo.Ratings.GetUserRatingRequest request, ServerCallContext context);
     }
 
-    // client stub
-    public class RatingsServiceClient : ClientBase, IRatingsServiceClient
+    /// <summary>Base class for server-side implementations of RatingsService</summary>
+    public abstract class RatingsServiceBase
+    {
+      /// <summary>
+      ///  Rate a video
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.Ratings.RateVideoResponse> RateVideo(global::KillrVideo.Ratings.RateVideoRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Gets the current rating stats for a video
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.Ratings.GetRatingResponse> GetRating(global::KillrVideo.Ratings.GetRatingRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Gets a user's rating of a specific video and returns 0 if the user hasn't rated the video
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.Ratings.GetUserRatingResponse> GetUserRating(global::KillrVideo.Ratings.GetUserRatingRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+    }
+
+    /// <summary>Client for RatingsService</summary>
+    #pragma warning disable 0618
+    public class RatingsServiceClient : ClientBase<RatingsServiceClient>, IRatingsServiceClient
+    #pragma warning restore 0618
     {
       public RatingsServiceClient(Channel channel) : base(channel)
       {
       }
-      public global::KillrVideo.Ratings.RateVideoResponse RateVideo(global::KillrVideo.Ratings.RateVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      public RatingsServiceClient(CallInvoker callInvoker) : base(callInvoker)
       {
-        var call = CreateCall(__Method_RateVideo, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
       }
-      public global::KillrVideo.Ratings.RateVideoResponse RateVideo(global::KillrVideo.Ratings.RateVideoRequest request, CallOptions options)
+      ///<summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      protected RatingsServiceClient() : base()
       {
-        var call = CreateCall(__Method_RateVideo, options);
-        return Calls.BlockingUnaryCall(call, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.Ratings.RateVideoResponse> RateVideoAsync(global::KillrVideo.Ratings.RateVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      ///<summary>Protected constructor to allow creation of configured clients.</summary>
+      protected RatingsServiceClient(ClientBaseConfiguration configuration) : base(configuration)
       {
-        var call = CreateCall(__Method_RateVideo, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.Ratings.RateVideoResponse> RateVideoAsync(global::KillrVideo.Ratings.RateVideoRequest request, CallOptions options)
+
+      /// <summary>
+      ///  Rate a video
+      /// </summary>
+      public virtual global::KillrVideo.Ratings.RateVideoResponse RateVideo(global::KillrVideo.Ratings.RateVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_RateVideo, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return RateVideo(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.Ratings.GetRatingResponse GetRating(global::KillrVideo.Ratings.GetRatingRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Rate a video
+      /// </summary>
+      public virtual global::KillrVideo.Ratings.RateVideoResponse RateVideo(global::KillrVideo.Ratings.RateVideoRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetRating, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_RateVideo, null, options, request);
       }
-      public global::KillrVideo.Ratings.GetRatingResponse GetRating(global::KillrVideo.Ratings.GetRatingRequest request, CallOptions options)
+      /// <summary>
+      ///  Rate a video
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Ratings.RateVideoResponse> RateVideoAsync(global::KillrVideo.Ratings.RateVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetRating, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return RateVideoAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.Ratings.GetRatingResponse> GetRatingAsync(global::KillrVideo.Ratings.GetRatingRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Rate a video
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Ratings.RateVideoResponse> RateVideoAsync(global::KillrVideo.Ratings.RateVideoRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetRating, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_RateVideo, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.Ratings.GetRatingResponse> GetRatingAsync(global::KillrVideo.Ratings.GetRatingRequest request, CallOptions options)
+      /// <summary>
+      ///  Gets the current rating stats for a video
+      /// </summary>
+      public virtual global::KillrVideo.Ratings.GetRatingResponse GetRating(global::KillrVideo.Ratings.GetRatingRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetRating, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return GetRating(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.Ratings.GetUserRatingResponse GetUserRating(global::KillrVideo.Ratings.GetUserRatingRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Gets the current rating stats for a video
+      /// </summary>
+      public virtual global::KillrVideo.Ratings.GetRatingResponse GetRating(global::KillrVideo.Ratings.GetRatingRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetUserRating, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_GetRating, null, options, request);
       }
-      public global::KillrVideo.Ratings.GetUserRatingResponse GetUserRating(global::KillrVideo.Ratings.GetUserRatingRequest request, CallOptions options)
+      /// <summary>
+      ///  Gets the current rating stats for a video
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Ratings.GetRatingResponse> GetRatingAsync(global::KillrVideo.Ratings.GetRatingRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetUserRating, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return GetRatingAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.Ratings.GetUserRatingResponse> GetUserRatingAsync(global::KillrVideo.Ratings.GetUserRatingRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Gets the current rating stats for a video
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Ratings.GetRatingResponse> GetRatingAsync(global::KillrVideo.Ratings.GetRatingRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetUserRating, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_GetRating, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.Ratings.GetUserRatingResponse> GetUserRatingAsync(global::KillrVideo.Ratings.GetUserRatingRequest request, CallOptions options)
+      /// <summary>
+      ///  Gets a user's rating of a specific video and returns 0 if the user hasn't rated the video
+      /// </summary>
+      public virtual global::KillrVideo.Ratings.GetUserRatingResponse GetUserRating(global::KillrVideo.Ratings.GetUserRatingRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetUserRating, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return GetUserRating(request, new CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///  Gets a user's rating of a specific video and returns 0 if the user hasn't rated the video
+      /// </summary>
+      public virtual global::KillrVideo.Ratings.GetUserRatingResponse GetUserRating(global::KillrVideo.Ratings.GetUserRatingRequest request, CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetUserRating, null, options, request);
+      }
+      /// <summary>
+      ///  Gets a user's rating of a specific video and returns 0 if the user hasn't rated the video
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Ratings.GetUserRatingResponse> GetUserRatingAsync(global::KillrVideo.Ratings.GetUserRatingRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      {
+        return GetUserRatingAsync(request, new CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///  Gets a user's rating of a specific video and returns 0 if the user hasn't rated the video
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Ratings.GetUserRatingResponse> GetUserRatingAsync(global::KillrVideo.Ratings.GetUserRatingRequest request, CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetUserRating, null, options, request);
+      }
+      protected override RatingsServiceClient NewInstance(ClientBaseConfiguration configuration)
+      {
+        return new RatingsServiceClient(configuration);
       }
     }
 
-    // creates service definition that can be registered with a server
+    /// <summary>Creates a new client for RatingsService</summary>
+    public static RatingsServiceClient NewClient(Channel channel)
+    {
+      return new RatingsServiceClient(channel);
+    }
+
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    #pragma warning disable 0618
     public static ServerServiceDefinition BindService(IRatingsService serviceImpl)
+    #pragma warning restore 0618
     {
       return ServerServiceDefinition.CreateBuilder(__ServiceName)
           .AddMethod(__Method_RateVideo, serviceImpl.RateVideo)
@@ -148,10 +277,15 @@ namespace KillrVideo.Ratings {
           .AddMethod(__Method_GetUserRating, serviceImpl.GetUserRating).Build();
     }
 
-    // creates a new client
-    public static RatingsServiceClient NewClient(Channel channel)
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    #pragma warning disable 0618
+    public static ServerServiceDefinition BindService(RatingsServiceBase serviceImpl)
+    #pragma warning restore 0618
     {
-      return new RatingsServiceClient(channel);
+      return ServerServiceDefinition.CreateBuilder(__ServiceName)
+          .AddMethod(__Method_RateVideo, serviceImpl.RateVideo)
+          .AddMethod(__Method_GetRating, serviceImpl.GetRating)
+          .AddMethod(__Method_GetUserRating, serviceImpl.GetUserRating).Build();
     }
 
   }

@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using Grpc.Core;
 
 namespace KillrVideo.VideoCatalog {
+  /// <summary>
+  ///  Service responsible for tracking the catalog of available videos for playback
+  /// </summary>
   public static class VideoCatalogService
   {
     static readonly string __ServiceName = "killrvideo.video_catalog.VideoCatalogService";
@@ -67,182 +70,401 @@ namespace KillrVideo.VideoCatalog {
         __Marshaller_GetUserVideoPreviewsRequest,
         __Marshaller_GetUserVideoPreviewsResponse);
 
-    // service descriptor
+    /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
       get { return global::KillrVideo.VideoCatalog.VideoCatalogServiceReflection.Descriptor.Services[0]; }
     }
 
-    // client interface
+    /// <summary>Client for VideoCatalogService</summary>
+    [System.Obsolete("Client side interfaced will be removed in the next release. Use client class directly.")]
     public interface IVideoCatalogServiceClient
     {
+      /// <summary>
+      ///  Submit an uploaded video to the catalog
+      /// </summary>
       global::KillrVideo.VideoCatalog.SubmitUploadedVideoResponse SubmitUploadedVideo(global::KillrVideo.VideoCatalog.SubmitUploadedVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Submit an uploaded video to the catalog
+      /// </summary>
       global::KillrVideo.VideoCatalog.SubmitUploadedVideoResponse SubmitUploadedVideo(global::KillrVideo.VideoCatalog.SubmitUploadedVideoRequest request, CallOptions options);
+      /// <summary>
+      ///  Submit an uploaded video to the catalog
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.VideoCatalog.SubmitUploadedVideoResponse> SubmitUploadedVideoAsync(global::KillrVideo.VideoCatalog.SubmitUploadedVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Submit an uploaded video to the catalog
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.VideoCatalog.SubmitUploadedVideoResponse> SubmitUploadedVideoAsync(global::KillrVideo.VideoCatalog.SubmitUploadedVideoRequest request, CallOptions options);
+      /// <summary>
+      ///  Submit a YouTube video to the catalog
+      /// </summary>
       global::KillrVideo.VideoCatalog.SubmitYouTubeVideoResponse SubmitYouTubeVideo(global::KillrVideo.VideoCatalog.SubmitYouTubeVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Submit a YouTube video to the catalog
+      /// </summary>
       global::KillrVideo.VideoCatalog.SubmitYouTubeVideoResponse SubmitYouTubeVideo(global::KillrVideo.VideoCatalog.SubmitYouTubeVideoRequest request, CallOptions options);
+      /// <summary>
+      ///  Submit a YouTube video to the catalog
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.VideoCatalog.SubmitYouTubeVideoResponse> SubmitYouTubeVideoAsync(global::KillrVideo.VideoCatalog.SubmitYouTubeVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Submit a YouTube video to the catalog
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.VideoCatalog.SubmitYouTubeVideoResponse> SubmitYouTubeVideoAsync(global::KillrVideo.VideoCatalog.SubmitYouTubeVideoRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets a video from the catalog
+      /// </summary>
       global::KillrVideo.VideoCatalog.GetVideoResponse GetVideo(global::KillrVideo.VideoCatalog.GetVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets a video from the catalog
+      /// </summary>
       global::KillrVideo.VideoCatalog.GetVideoResponse GetVideo(global::KillrVideo.VideoCatalog.GetVideoRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets a video from the catalog
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetVideoResponse> GetVideoAsync(global::KillrVideo.VideoCatalog.GetVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets a video from the catalog
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetVideoResponse> GetVideoAsync(global::KillrVideo.VideoCatalog.GetVideoRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets video previews for a limited number of videos from the catalog
+      /// </summary>
       global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse GetVideoPreviews(global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets video previews for a limited number of videos from the catalog
+      /// </summary>
       global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse GetVideoPreviews(global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets video previews for a limited number of videos from the catalog
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse> GetVideoPreviewsAsync(global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets video previews for a limited number of videos from the catalog
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse> GetVideoPreviewsAsync(global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets video previews for the latest (i.e. newest) videos from the catalog
+      /// </summary>
       global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse GetLatestVideoPreviews(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets video previews for the latest (i.e. newest) videos from the catalog
+      /// </summary>
       global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse GetLatestVideoPreviews(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets video previews for the latest (i.e. newest) videos from the catalog
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse> GetLatestVideoPreviewsAsync(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets video previews for the latest (i.e. newest) videos from the catalog
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse> GetLatestVideoPreviewsAsync(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets video previews for videos added to the site by a particular user
+      /// </summary>
       global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse GetUserVideoPreviews(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets video previews for videos added to the site by a particular user
+      /// </summary>
       global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse GetUserVideoPreviews(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets video previews for videos added to the site by a particular user
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse> GetUserVideoPreviewsAsync(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets video previews for videos added to the site by a particular user
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse> GetUserVideoPreviewsAsync(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest request, CallOptions options);
     }
 
-    // server-side interface
+    /// <summary>Interface of server-side implementations of VideoCatalogService</summary>
+    [System.Obsolete("Service implementations should inherit from the generated abstract base class instead.")]
     public interface IVideoCatalogService
     {
-      Task<global::KillrVideo.VideoCatalog.SubmitUploadedVideoResponse> SubmitUploadedVideo(global::KillrVideo.VideoCatalog.SubmitUploadedVideoRequest request, ServerCallContext context);
-      Task<global::KillrVideo.VideoCatalog.SubmitYouTubeVideoResponse> SubmitYouTubeVideo(global::KillrVideo.VideoCatalog.SubmitYouTubeVideoRequest request, ServerCallContext context);
-      Task<global::KillrVideo.VideoCatalog.GetVideoResponse> GetVideo(global::KillrVideo.VideoCatalog.GetVideoRequest request, ServerCallContext context);
-      Task<global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse> GetVideoPreviews(global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest request, ServerCallContext context);
-      Task<global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse> GetLatestVideoPreviews(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest request, ServerCallContext context);
-      Task<global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse> GetUserVideoPreviews(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Submit an uploaded video to the catalog
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.VideoCatalog.SubmitUploadedVideoResponse> SubmitUploadedVideo(global::KillrVideo.VideoCatalog.SubmitUploadedVideoRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Submit a YouTube video to the catalog
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.VideoCatalog.SubmitYouTubeVideoResponse> SubmitYouTubeVideo(global::KillrVideo.VideoCatalog.SubmitYouTubeVideoRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Gets a video from the catalog
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.VideoCatalog.GetVideoResponse> GetVideo(global::KillrVideo.VideoCatalog.GetVideoRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Gets video previews for a limited number of videos from the catalog
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse> GetVideoPreviews(global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Gets video previews for the latest (i.e. newest) videos from the catalog
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse> GetLatestVideoPreviews(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Gets video previews for videos added to the site by a particular user
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse> GetUserVideoPreviews(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest request, ServerCallContext context);
     }
 
-    // client stub
-    public class VideoCatalogServiceClient : ClientBase, IVideoCatalogServiceClient
+    /// <summary>Base class for server-side implementations of VideoCatalogService</summary>
+    public abstract class VideoCatalogServiceBase
+    {
+      /// <summary>
+      ///  Submit an uploaded video to the catalog
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.VideoCatalog.SubmitUploadedVideoResponse> SubmitUploadedVideo(global::KillrVideo.VideoCatalog.SubmitUploadedVideoRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Submit a YouTube video to the catalog
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.VideoCatalog.SubmitYouTubeVideoResponse> SubmitYouTubeVideo(global::KillrVideo.VideoCatalog.SubmitYouTubeVideoRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Gets a video from the catalog
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.VideoCatalog.GetVideoResponse> GetVideo(global::KillrVideo.VideoCatalog.GetVideoRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Gets video previews for a limited number of videos from the catalog
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse> GetVideoPreviews(global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Gets video previews for the latest (i.e. newest) videos from the catalog
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse> GetLatestVideoPreviews(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Gets video previews for videos added to the site by a particular user
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse> GetUserVideoPreviews(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+    }
+
+    /// <summary>Client for VideoCatalogService</summary>
+    #pragma warning disable 0618
+    public class VideoCatalogServiceClient : ClientBase<VideoCatalogServiceClient>, IVideoCatalogServiceClient
+    #pragma warning restore 0618
     {
       public VideoCatalogServiceClient(Channel channel) : base(channel)
       {
       }
-      public global::KillrVideo.VideoCatalog.SubmitUploadedVideoResponse SubmitUploadedVideo(global::KillrVideo.VideoCatalog.SubmitUploadedVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      public VideoCatalogServiceClient(CallInvoker callInvoker) : base(callInvoker)
       {
-        var call = CreateCall(__Method_SubmitUploadedVideo, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
       }
-      public global::KillrVideo.VideoCatalog.SubmitUploadedVideoResponse SubmitUploadedVideo(global::KillrVideo.VideoCatalog.SubmitUploadedVideoRequest request, CallOptions options)
+      ///<summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      protected VideoCatalogServiceClient() : base()
       {
-        var call = CreateCall(__Method_SubmitUploadedVideo, options);
-        return Calls.BlockingUnaryCall(call, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.VideoCatalog.SubmitUploadedVideoResponse> SubmitUploadedVideoAsync(global::KillrVideo.VideoCatalog.SubmitUploadedVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      ///<summary>Protected constructor to allow creation of configured clients.</summary>
+      protected VideoCatalogServiceClient(ClientBaseConfiguration configuration) : base(configuration)
       {
-        var call = CreateCall(__Method_SubmitUploadedVideo, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.VideoCatalog.SubmitUploadedVideoResponse> SubmitUploadedVideoAsync(global::KillrVideo.VideoCatalog.SubmitUploadedVideoRequest request, CallOptions options)
+
+      /// <summary>
+      ///  Submit an uploaded video to the catalog
+      /// </summary>
+      public virtual global::KillrVideo.VideoCatalog.SubmitUploadedVideoResponse SubmitUploadedVideo(global::KillrVideo.VideoCatalog.SubmitUploadedVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_SubmitUploadedVideo, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return SubmitUploadedVideo(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.VideoCatalog.SubmitYouTubeVideoResponse SubmitYouTubeVideo(global::KillrVideo.VideoCatalog.SubmitYouTubeVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Submit an uploaded video to the catalog
+      /// </summary>
+      public virtual global::KillrVideo.VideoCatalog.SubmitUploadedVideoResponse SubmitUploadedVideo(global::KillrVideo.VideoCatalog.SubmitUploadedVideoRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_SubmitYouTubeVideo, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_SubmitUploadedVideo, null, options, request);
       }
-      public global::KillrVideo.VideoCatalog.SubmitYouTubeVideoResponse SubmitYouTubeVideo(global::KillrVideo.VideoCatalog.SubmitYouTubeVideoRequest request, CallOptions options)
+      /// <summary>
+      ///  Submit an uploaded video to the catalog
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.VideoCatalog.SubmitUploadedVideoResponse> SubmitUploadedVideoAsync(global::KillrVideo.VideoCatalog.SubmitUploadedVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_SubmitYouTubeVideo, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return SubmitUploadedVideoAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.VideoCatalog.SubmitYouTubeVideoResponse> SubmitYouTubeVideoAsync(global::KillrVideo.VideoCatalog.SubmitYouTubeVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Submit an uploaded video to the catalog
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.VideoCatalog.SubmitUploadedVideoResponse> SubmitUploadedVideoAsync(global::KillrVideo.VideoCatalog.SubmitUploadedVideoRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_SubmitYouTubeVideo, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_SubmitUploadedVideo, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.VideoCatalog.SubmitYouTubeVideoResponse> SubmitYouTubeVideoAsync(global::KillrVideo.VideoCatalog.SubmitYouTubeVideoRequest request, CallOptions options)
+      /// <summary>
+      ///  Submit a YouTube video to the catalog
+      /// </summary>
+      public virtual global::KillrVideo.VideoCatalog.SubmitYouTubeVideoResponse SubmitYouTubeVideo(global::KillrVideo.VideoCatalog.SubmitYouTubeVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_SubmitYouTubeVideo, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return SubmitYouTubeVideo(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.VideoCatalog.GetVideoResponse GetVideo(global::KillrVideo.VideoCatalog.GetVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Submit a YouTube video to the catalog
+      /// </summary>
+      public virtual global::KillrVideo.VideoCatalog.SubmitYouTubeVideoResponse SubmitYouTubeVideo(global::KillrVideo.VideoCatalog.SubmitYouTubeVideoRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetVideo, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_SubmitYouTubeVideo, null, options, request);
       }
-      public global::KillrVideo.VideoCatalog.GetVideoResponse GetVideo(global::KillrVideo.VideoCatalog.GetVideoRequest request, CallOptions options)
+      /// <summary>
+      ///  Submit a YouTube video to the catalog
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.VideoCatalog.SubmitYouTubeVideoResponse> SubmitYouTubeVideoAsync(global::KillrVideo.VideoCatalog.SubmitYouTubeVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetVideo, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return SubmitYouTubeVideoAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetVideoResponse> GetVideoAsync(global::KillrVideo.VideoCatalog.GetVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Submit a YouTube video to the catalog
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.VideoCatalog.SubmitYouTubeVideoResponse> SubmitYouTubeVideoAsync(global::KillrVideo.VideoCatalog.SubmitYouTubeVideoRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetVideo, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_SubmitYouTubeVideo, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetVideoResponse> GetVideoAsync(global::KillrVideo.VideoCatalog.GetVideoRequest request, CallOptions options)
+      /// <summary>
+      ///  Gets a video from the catalog
+      /// </summary>
+      public virtual global::KillrVideo.VideoCatalog.GetVideoResponse GetVideo(global::KillrVideo.VideoCatalog.GetVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetVideo, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return GetVideo(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse GetVideoPreviews(global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Gets a video from the catalog
+      /// </summary>
+      public virtual global::KillrVideo.VideoCatalog.GetVideoResponse GetVideo(global::KillrVideo.VideoCatalog.GetVideoRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetVideoPreviews, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_GetVideo, null, options, request);
       }
-      public global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse GetVideoPreviews(global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest request, CallOptions options)
+      /// <summary>
+      ///  Gets a video from the catalog
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetVideoResponse> GetVideoAsync(global::KillrVideo.VideoCatalog.GetVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetVideoPreviews, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return GetVideoAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse> GetVideoPreviewsAsync(global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Gets a video from the catalog
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetVideoResponse> GetVideoAsync(global::KillrVideo.VideoCatalog.GetVideoRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetVideoPreviews, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_GetVideo, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse> GetVideoPreviewsAsync(global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest request, CallOptions options)
+      /// <summary>
+      ///  Gets video previews for a limited number of videos from the catalog
+      /// </summary>
+      public virtual global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse GetVideoPreviews(global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetVideoPreviews, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return GetVideoPreviews(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse GetLatestVideoPreviews(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Gets video previews for a limited number of videos from the catalog
+      /// </summary>
+      public virtual global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse GetVideoPreviews(global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetLatestVideoPreviews, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_GetVideoPreviews, null, options, request);
       }
-      public global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse GetLatestVideoPreviews(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest request, CallOptions options)
+      /// <summary>
+      ///  Gets video previews for a limited number of videos from the catalog
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse> GetVideoPreviewsAsync(global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetLatestVideoPreviews, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return GetVideoPreviewsAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse> GetLatestVideoPreviewsAsync(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Gets video previews for a limited number of videos from the catalog
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse> GetVideoPreviewsAsync(global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetLatestVideoPreviews, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_GetVideoPreviews, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse> GetLatestVideoPreviewsAsync(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest request, CallOptions options)
+      /// <summary>
+      ///  Gets video previews for the latest (i.e. newest) videos from the catalog
+      /// </summary>
+      public virtual global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse GetLatestVideoPreviews(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetLatestVideoPreviews, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return GetLatestVideoPreviews(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse GetUserVideoPreviews(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Gets video previews for the latest (i.e. newest) videos from the catalog
+      /// </summary>
+      public virtual global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse GetLatestVideoPreviews(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetUserVideoPreviews, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_GetLatestVideoPreviews, null, options, request);
       }
-      public global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse GetUserVideoPreviews(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest request, CallOptions options)
+      /// <summary>
+      ///  Gets video previews for the latest (i.e. newest) videos from the catalog
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse> GetLatestVideoPreviewsAsync(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetUserVideoPreviews, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return GetLatestVideoPreviewsAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse> GetUserVideoPreviewsAsync(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Gets video previews for the latest (i.e. newest) videos from the catalog
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse> GetLatestVideoPreviewsAsync(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetUserVideoPreviews, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_GetLatestVideoPreviews, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse> GetUserVideoPreviewsAsync(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest request, CallOptions options)
+      /// <summary>
+      ///  Gets video previews for videos added to the site by a particular user
+      /// </summary>
+      public virtual global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse GetUserVideoPreviews(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetUserVideoPreviews, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return GetUserVideoPreviews(request, new CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///  Gets video previews for videos added to the site by a particular user
+      /// </summary>
+      public virtual global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse GetUserVideoPreviews(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest request, CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetUserVideoPreviews, null, options, request);
+      }
+      /// <summary>
+      ///  Gets video previews for videos added to the site by a particular user
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse> GetUserVideoPreviewsAsync(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      {
+        return GetUserVideoPreviewsAsync(request, new CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///  Gets video previews for videos added to the site by a particular user
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse> GetUserVideoPreviewsAsync(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest request, CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetUserVideoPreviews, null, options, request);
+      }
+      protected override VideoCatalogServiceClient NewInstance(ClientBaseConfiguration configuration)
+      {
+        return new VideoCatalogServiceClient(configuration);
       }
     }
 
-    // creates service definition that can be registered with a server
+    /// <summary>Creates a new client for VideoCatalogService</summary>
+    public static VideoCatalogServiceClient NewClient(Channel channel)
+    {
+      return new VideoCatalogServiceClient(channel);
+    }
+
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    #pragma warning disable 0618
     public static ServerServiceDefinition BindService(IVideoCatalogService serviceImpl)
+    #pragma warning restore 0618
     {
       return ServerServiceDefinition.CreateBuilder(__ServiceName)
           .AddMethod(__Method_SubmitUploadedVideo, serviceImpl.SubmitUploadedVideo)
@@ -253,10 +475,18 @@ namespace KillrVideo.VideoCatalog {
           .AddMethod(__Method_GetUserVideoPreviews, serviceImpl.GetUserVideoPreviews).Build();
     }
 
-    // creates a new client
-    public static VideoCatalogServiceClient NewClient(Channel channel)
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    #pragma warning disable 0618
+    public static ServerServiceDefinition BindService(VideoCatalogServiceBase serviceImpl)
+    #pragma warning restore 0618
     {
-      return new VideoCatalogServiceClient(channel);
+      return ServerServiceDefinition.CreateBuilder(__ServiceName)
+          .AddMethod(__Method_SubmitUploadedVideo, serviceImpl.SubmitUploadedVideo)
+          .AddMethod(__Method_SubmitYouTubeVideo, serviceImpl.SubmitYouTubeVideo)
+          .AddMethod(__Method_GetVideo, serviceImpl.GetVideo)
+          .AddMethod(__Method_GetVideoPreviews, serviceImpl.GetVideoPreviews)
+          .AddMethod(__Method_GetLatestVideoPreviews, serviceImpl.GetLatestVideoPreviews)
+          .AddMethod(__Method_GetUserVideoPreviews, serviceImpl.GetUserVideoPreviews).Build();
     }
 
   }

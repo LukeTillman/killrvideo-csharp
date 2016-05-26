@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using Grpc.Core;
 
 namespace KillrVideo.Uploads {
+  /// <summary>
+  ///  Service that handles processing/re-encoding of uploaded videos
+  /// </summary>
   public static class UploadsService
   {
     static readonly string __ServiceName = "killrvideo.uploads.UploadsService";
@@ -40,107 +43,233 @@ namespace KillrVideo.Uploads {
         __Marshaller_GetStatusOfVideoRequest,
         __Marshaller_GetStatusOfVideoResponse);
 
-    // service descriptor
+    /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
       get { return global::KillrVideo.Uploads.UploadsServiceReflection.Descriptor.Services[0]; }
     }
 
-    // client interface
+    /// <summary>Client for UploadsService</summary>
+    [System.Obsolete("Client side interfaced will be removed in the next release. Use client class directly.")]
     public interface IUploadsServiceClient
     {
+      /// <summary>
+      ///  Gets an upload destination for a user to upload a video
+      /// </summary>
       global::KillrVideo.Uploads.GetUploadDestinationResponse GetUploadDestination(global::KillrVideo.Uploads.GetUploadDestinationRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets an upload destination for a user to upload a video
+      /// </summary>
       global::KillrVideo.Uploads.GetUploadDestinationResponse GetUploadDestination(global::KillrVideo.Uploads.GetUploadDestinationRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets an upload destination for a user to upload a video
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Uploads.GetUploadDestinationResponse> GetUploadDestinationAsync(global::KillrVideo.Uploads.GetUploadDestinationRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets an upload destination for a user to upload a video
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Uploads.GetUploadDestinationResponse> GetUploadDestinationAsync(global::KillrVideo.Uploads.GetUploadDestinationRequest request, CallOptions options);
+      /// <summary>
+      ///  Marks an upload as complete
+      /// </summary>
       global::KillrVideo.Uploads.MarkUploadCompleteResponse MarkUploadComplete(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Marks an upload as complete
+      /// </summary>
       global::KillrVideo.Uploads.MarkUploadCompleteResponse MarkUploadComplete(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, CallOptions options);
+      /// <summary>
+      ///  Marks an upload as complete
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Uploads.MarkUploadCompleteResponse> MarkUploadCompleteAsync(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Marks an upload as complete
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Uploads.MarkUploadCompleteResponse> MarkUploadCompleteAsync(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets the status of an uploaded video
+      /// </summary>
       global::KillrVideo.Uploads.GetStatusOfVideoResponse GetStatusOfVideo(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets the status of an uploaded video
+      /// </summary>
       global::KillrVideo.Uploads.GetStatusOfVideoResponse GetStatusOfVideo(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, CallOptions options);
+      /// <summary>
+      ///  Gets the status of an uploaded video
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Uploads.GetStatusOfVideoResponse> GetStatusOfVideoAsync(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
+      /// <summary>
+      ///  Gets the status of an uploaded video
+      /// </summary>
       AsyncUnaryCall<global::KillrVideo.Uploads.GetStatusOfVideoResponse> GetStatusOfVideoAsync(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, CallOptions options);
     }
 
-    // server-side interface
+    /// <summary>Interface of server-side implementations of UploadsService</summary>
+    [System.Obsolete("Service implementations should inherit from the generated abstract base class instead.")]
     public interface IUploadsService
     {
-      Task<global::KillrVideo.Uploads.GetUploadDestinationResponse> GetUploadDestination(global::KillrVideo.Uploads.GetUploadDestinationRequest request, ServerCallContext context);
-      Task<global::KillrVideo.Uploads.MarkUploadCompleteResponse> MarkUploadComplete(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, ServerCallContext context);
-      Task<global::KillrVideo.Uploads.GetStatusOfVideoResponse> GetStatusOfVideo(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Gets an upload destination for a user to upload a video
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.Uploads.GetUploadDestinationResponse> GetUploadDestination(global::KillrVideo.Uploads.GetUploadDestinationRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Marks an upload as complete
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.Uploads.MarkUploadCompleteResponse> MarkUploadComplete(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, ServerCallContext context);
+      /// <summary>
+      ///  Gets the status of an uploaded video
+      /// </summary>
+      global::System.Threading.Tasks.Task<global::KillrVideo.Uploads.GetStatusOfVideoResponse> GetStatusOfVideo(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, ServerCallContext context);
     }
 
-    // client stub
-    public class UploadsServiceClient : ClientBase, IUploadsServiceClient
+    /// <summary>Base class for server-side implementations of UploadsService</summary>
+    public abstract class UploadsServiceBase
+    {
+      /// <summary>
+      ///  Gets an upload destination for a user to upload a video
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.Uploads.GetUploadDestinationResponse> GetUploadDestination(global::KillrVideo.Uploads.GetUploadDestinationRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Marks an upload as complete
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.Uploads.MarkUploadCompleteResponse> MarkUploadComplete(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///  Gets the status of an uploaded video
+      /// </summary>
+      public virtual global::System.Threading.Tasks.Task<global::KillrVideo.Uploads.GetStatusOfVideoResponse> GetStatusOfVideo(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, ServerCallContext context)
+      {
+        throw new RpcException(new Status(StatusCode.Unimplemented, ""));
+      }
+
+    }
+
+    /// <summary>Client for UploadsService</summary>
+    #pragma warning disable 0618
+    public class UploadsServiceClient : ClientBase<UploadsServiceClient>, IUploadsServiceClient
+    #pragma warning restore 0618
     {
       public UploadsServiceClient(Channel channel) : base(channel)
       {
       }
-      public global::KillrVideo.Uploads.GetUploadDestinationResponse GetUploadDestination(global::KillrVideo.Uploads.GetUploadDestinationRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      public UploadsServiceClient(CallInvoker callInvoker) : base(callInvoker)
       {
-        var call = CreateCall(__Method_GetUploadDestination, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
       }
-      public global::KillrVideo.Uploads.GetUploadDestinationResponse GetUploadDestination(global::KillrVideo.Uploads.GetUploadDestinationRequest request, CallOptions options)
+      ///<summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      protected UploadsServiceClient() : base()
       {
-        var call = CreateCall(__Method_GetUploadDestination, options);
-        return Calls.BlockingUnaryCall(call, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.Uploads.GetUploadDestinationResponse> GetUploadDestinationAsync(global::KillrVideo.Uploads.GetUploadDestinationRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      ///<summary>Protected constructor to allow creation of configured clients.</summary>
+      protected UploadsServiceClient(ClientBaseConfiguration configuration) : base(configuration)
       {
-        var call = CreateCall(__Method_GetUploadDestination, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.Uploads.GetUploadDestinationResponse> GetUploadDestinationAsync(global::KillrVideo.Uploads.GetUploadDestinationRequest request, CallOptions options)
+
+      /// <summary>
+      ///  Gets an upload destination for a user to upload a video
+      /// </summary>
+      public virtual global::KillrVideo.Uploads.GetUploadDestinationResponse GetUploadDestination(global::KillrVideo.Uploads.GetUploadDestinationRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetUploadDestination, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return GetUploadDestination(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.Uploads.MarkUploadCompleteResponse MarkUploadComplete(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Gets an upload destination for a user to upload a video
+      /// </summary>
+      public virtual global::KillrVideo.Uploads.GetUploadDestinationResponse GetUploadDestination(global::KillrVideo.Uploads.GetUploadDestinationRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_MarkUploadComplete, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_GetUploadDestination, null, options, request);
       }
-      public global::KillrVideo.Uploads.MarkUploadCompleteResponse MarkUploadComplete(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, CallOptions options)
+      /// <summary>
+      ///  Gets an upload destination for a user to upload a video
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Uploads.GetUploadDestinationResponse> GetUploadDestinationAsync(global::KillrVideo.Uploads.GetUploadDestinationRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_MarkUploadComplete, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return GetUploadDestinationAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.Uploads.MarkUploadCompleteResponse> MarkUploadCompleteAsync(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Gets an upload destination for a user to upload a video
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Uploads.GetUploadDestinationResponse> GetUploadDestinationAsync(global::KillrVideo.Uploads.GetUploadDestinationRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_MarkUploadComplete, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_GetUploadDestination, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.Uploads.MarkUploadCompleteResponse> MarkUploadCompleteAsync(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, CallOptions options)
+      /// <summary>
+      ///  Marks an upload as complete
+      /// </summary>
+      public virtual global::KillrVideo.Uploads.MarkUploadCompleteResponse MarkUploadComplete(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_MarkUploadComplete, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return MarkUploadComplete(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public global::KillrVideo.Uploads.GetStatusOfVideoResponse GetStatusOfVideo(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Marks an upload as complete
+      /// </summary>
+      public virtual global::KillrVideo.Uploads.MarkUploadCompleteResponse MarkUploadComplete(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetStatusOfVideo, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.BlockingUnaryCall(call, request);
+        return CallInvoker.BlockingUnaryCall(__Method_MarkUploadComplete, null, options, request);
       }
-      public global::KillrVideo.Uploads.GetStatusOfVideoResponse GetStatusOfVideo(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, CallOptions options)
+      /// <summary>
+      ///  Marks an upload as complete
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Uploads.MarkUploadCompleteResponse> MarkUploadCompleteAsync(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetStatusOfVideo, options);
-        return Calls.BlockingUnaryCall(call, request);
+        return MarkUploadCompleteAsync(request, new CallOptions(headers, deadline, cancellationToken));
       }
-      public AsyncUnaryCall<global::KillrVideo.Uploads.GetStatusOfVideoResponse> GetStatusOfVideoAsync(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      /// <summary>
+      ///  Marks an upload as complete
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Uploads.MarkUploadCompleteResponse> MarkUploadCompleteAsync(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, CallOptions options)
       {
-        var call = CreateCall(__Method_GetStatusOfVideo, new CallOptions(headers, deadline, cancellationToken));
-        return Calls.AsyncUnaryCall(call, request);
+        return CallInvoker.AsyncUnaryCall(__Method_MarkUploadComplete, null, options, request);
       }
-      public AsyncUnaryCall<global::KillrVideo.Uploads.GetStatusOfVideoResponse> GetStatusOfVideoAsync(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, CallOptions options)
+      /// <summary>
+      ///  Gets the status of an uploaded video
+      /// </summary>
+      public virtual global::KillrVideo.Uploads.GetStatusOfVideoResponse GetStatusOfVideo(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        var call = CreateCall(__Method_GetStatusOfVideo, options);
-        return Calls.AsyncUnaryCall(call, request);
+        return GetStatusOfVideo(request, new CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///  Gets the status of an uploaded video
+      /// </summary>
+      public virtual global::KillrVideo.Uploads.GetStatusOfVideoResponse GetStatusOfVideo(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetStatusOfVideo, null, options, request);
+      }
+      /// <summary>
+      ///  Gets the status of an uploaded video
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Uploads.GetStatusOfVideoResponse> GetStatusOfVideoAsync(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      {
+        return GetStatusOfVideoAsync(request, new CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///  Gets the status of an uploaded video
+      /// </summary>
+      public virtual AsyncUnaryCall<global::KillrVideo.Uploads.GetStatusOfVideoResponse> GetStatusOfVideoAsync(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetStatusOfVideo, null, options, request);
+      }
+      protected override UploadsServiceClient NewInstance(ClientBaseConfiguration configuration)
+      {
+        return new UploadsServiceClient(configuration);
       }
     }
 
-    // creates service definition that can be registered with a server
+    /// <summary>Creates a new client for UploadsService</summary>
+    public static UploadsServiceClient NewClient(Channel channel)
+    {
+      return new UploadsServiceClient(channel);
+    }
+
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    #pragma warning disable 0618
     public static ServerServiceDefinition BindService(IUploadsService serviceImpl)
+    #pragma warning restore 0618
     {
       return ServerServiceDefinition.CreateBuilder(__ServiceName)
           .AddMethod(__Method_GetUploadDestination, serviceImpl.GetUploadDestination)
@@ -148,10 +277,15 @@ namespace KillrVideo.Uploads {
           .AddMethod(__Method_GetStatusOfVideo, serviceImpl.GetStatusOfVideo).Build();
     }
 
-    // creates a new client
-    public static UploadsServiceClient NewClient(Channel channel)
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    #pragma warning disable 0618
+    public static ServerServiceDefinition BindService(UploadsServiceBase serviceImpl)
+    #pragma warning restore 0618
     {
-      return new UploadsServiceClient(channel);
+      return ServerServiceDefinition.CreateBuilder(__ServiceName)
+          .AddMethod(__Method_GetUploadDestination, serviceImpl.GetUploadDestination)
+          .AddMethod(__Method_MarkUploadComplete, serviceImpl.MarkUploadComplete)
+          .AddMethod(__Method_GetStatusOfVideo, serviceImpl.GetStatusOfVideo).Build();
     }
 
   }
