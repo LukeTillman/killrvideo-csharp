@@ -1,46 +1,56 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
+using System.Threading.Tasks;
 using Google.Protobuf.Reflection;
 using Grpc.Core;
-using KillrVideo.Protobuf.ServiceDiscovery;
+using KillrVideo.Host.ServiceDiscovery;
 using Serilog;
 
 namespace KillrVideo.Protobuf.Clients
 {
     /// <summary>
     /// Default Channel factory implementation that looks up services via service discovery and caches Channel instances
-    /// by IPEndPoint for reuse.
+    /// by location (host/port) for reuse.
     /// </summary>
     [Export(typeof(IChannelFactory))]
     public class ChannelFactory : IChannelFactory, IDisposable
     {
         private static readonly ILogger Logger = Log.ForContext<ChannelFactory>();
 
-        private readonly ConcurrentDictionary<ServiceLocation, Lazy<Channel>> _cache;
-        private readonly IFindGrpcServices _serviceDiscovery;
+        private readonly ConcurrentDictionary<string, Lazy<Channel>> _cache;
+        private readonly IFindServices _serviceDiscovery;
 
-        public ChannelFactory(IFindGrpcServices serviceDiscovery)
+        public ChannelFactory(IFindServices serviceDiscovery)
         {
             if (serviceDiscovery == null) throw new ArgumentNullException(nameof(serviceDiscovery));
             _serviceDiscovery = serviceDiscovery;
 
-            _cache = new ConcurrentDictionary<ServiceLocation, Lazy<Channel>>();
+            _cache = new ConcurrentDictionary<string, Lazy<Channel>>();
         }
 
-        public Channel GetChannel(ServiceDescriptor service)
+        public async Task<Channel> GetChannelAsync(ServiceDescriptor service)
         {
             // Find the service
-            ServiceLocation location = _serviceDiscovery.Find(service);
+            IEnumerable<string> locations = await _serviceDiscovery.LookupServiceAsync(service.Name).ConfigureAwait(false);
+            string location = locations.FirstOrDefault();
             if (location == null)
                 throw new ServiceNotFoundException(service);
 
             return _cache.GetOrAdd(location, CreateChannel).Value;
         }
 
-        private static Lazy<Channel> CreateChannel(ServiceLocation location)
+        private static Lazy<Channel> CreateChannel(string location)
         {
-            return new Lazy<Channel>(() => new Channel(location.Host, location.Port, ChannelCredentials.Insecure));
+            string[] locationParts = location.Split(':');
+            if (locationParts.Length != 2)
+                throw new ArgumentOutOfRangeException($"Location {location} does not contain host and port");
+
+            string host = locationParts[0];
+            int port = int.Parse(locationParts[1]);
+            return new Lazy<Channel>(() => new Channel(host, port, ChannelCredentials.Insecure));
         }
 
         public void Dispose()

@@ -3,9 +3,9 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
+using Google.Protobuf.Reflection;
 using Grpc.Core;
 using KillrVideo.Cassandra;
-using KillrVideo.Protobuf;
 using KillrVideo.Protobuf.Services;
 
 namespace KillrVideo.Statistics
@@ -18,7 +18,9 @@ namespace KillrVideo.Statistics
     {
         private readonly ISession _session;
         private readonly PreparedStatementCache _statementCache;
-        
+
+        public ServiceDescriptor Descriptor => StatisticsService.Descriptor;
+
         public StatisticsServiceImpl(ISession session, PreparedStatementCache statementCache)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));

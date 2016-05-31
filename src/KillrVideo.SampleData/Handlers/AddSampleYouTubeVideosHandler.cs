@@ -21,18 +21,18 @@ namespace KillrVideo.SampleData.Handlers
 
         private readonly IGetSampleData _sampleDataRetriever;
         private readonly IManageSampleYouTubeVideos _youTubeManager;
-        private readonly VideoCatalogService.VideoCatalogServiceClient _videoCatalog;
+        private readonly IServiceClientFactory _clientFactory;
 
-        public AddSampleYouTubeVideosHandler(IGetSampleData sampleDataRetriever, IManageSampleYouTubeVideos youTubeManager, 
-                                             VideoCatalogService.VideoCatalogServiceClient videoCatalog)
+        public AddSampleYouTubeVideosHandler(IGetSampleData sampleDataRetriever, IManageSampleYouTubeVideos youTubeManager,
+                                             IServiceClientFactory clientFactory)
         {
             if (sampleDataRetriever == null) throw new ArgumentNullException(nameof(sampleDataRetriever));
             if (youTubeManager == null) throw new ArgumentNullException(nameof(youTubeManager));
-            if (videoCatalog == null) throw new ArgumentNullException(nameof(videoCatalog));
+            if (clientFactory == null) throw new ArgumentNullException(nameof(clientFactory));
 
             _sampleDataRetriever = sampleDataRetriever;
             _youTubeManager = youTubeManager;
-            _videoCatalog = videoCatalog;
+            _clientFactory = clientFactory;
         }
 
         public async Task Handle(AddSampleYouTubeVideosRequest busCommand)
@@ -47,6 +47,9 @@ namespace KillrVideo.SampleData.Handlers
 
             // Get some unused sample videos
             List<YouTubeVideo> sampleVideos = await _youTubeManager.GetUnusedVideos(busCommand.NumberOfVideos).ConfigureAwait(false);
+
+            // Get video catalog client
+            var videoCatalog = await _clientFactory.GetVideoClientAsync().ConfigureAwait(false);
 
             // Add them to the site using sample users
             for (int idx = 0; idx < sampleVideos.Count; idx++)
@@ -65,7 +68,7 @@ namespace KillrVideo.SampleData.Handlers
                 request.Tags.Add(sampleVideo.SuggestedTags);
                 
                 // Submit the video
-                await _videoCatalog.SubmitYouTubeVideoAsync(request).ResponseAsync.ConfigureAwait(false);
+                await videoCatalog.SubmitYouTubeVideoAsync(request).ResponseAsync.ConfigureAwait(false);
 
                 // Mark them as used so we make a best effort not to reuse sample videos and post duplicates
                 await _youTubeManager.MarkVideoAsUsed(sampleVideo).ConfigureAwait(false);

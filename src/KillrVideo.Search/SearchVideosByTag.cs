@@ -3,6 +3,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
+using Google.Protobuf.Reflection;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
@@ -20,6 +21,8 @@ namespace KillrVideo.Search
     {
         private readonly ISession _session;
         private readonly PreparedStatementCache _statementCache;
+
+        public ServiceDescriptor Descriptor => SearchService.Descriptor;
 
         public SearchVideosByTag(ISession session, PreparedStatementCache statementCache)
         {

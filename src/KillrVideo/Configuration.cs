@@ -2,7 +2,6 @@
 using DryIocAttributes;
 using KillrVideo.Host.Config;
 using KillrVideo.MessageBus.Transport;
-using KillrVideo.Protobuf.ServiceDiscovery;
 
 namespace KillrVideo
 {
@@ -23,11 +22,5 @@ namespace KillrVideo
         /// </summary>
         [Export]
         public static IMessageTransport Transport = InMemoryTransport.Instance;
-
-        /// <summary>
-        /// Use local service discovery since all services are running in process together on the same IP.
-        /// </summary>
-        [Export]
-        public static readonly IFindGrpcServices ServiceDiscovery = new LocalServiceDiscovery(Config);
     }
 }

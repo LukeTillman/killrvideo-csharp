@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.Composition;
-using DryIocAttributes;
-using Grpc.Core;
+﻿using System;
+using System.ComponentModel.Composition;
+using System.Threading.Tasks;
 using KillrVideo.Comments;
 using KillrVideo.Protobuf.Clients;
 using KillrVideo.Ratings;
@@ -11,44 +11,42 @@ using KillrVideo.VideoCatalog;
 namespace KillrVideo.SampleData
 {
     /// <summary>
-    /// Static factory with methods for getting all the service clients needed by the SampleData message handlers.
+    /// Factory that gets service clients needed by message handlers.
     /// </summary>
-    [Export, AsFactory]
-    public static class ServiceClientFactory
+    [Export(typeof(IServiceClientFactory))]
+    public class ServiceClientFactory : IServiceClientFactory
     {
-        [Export]
-        public static CommentsService.CommentsServiceClient CreateCommentsClient(IChannelFactory channelFactory)
+        private readonly IChannelFactory _channelFactory;
+
+        public ServiceClientFactory(IChannelFactory channelFactory)
         {
-            Channel channel = channelFactory.GetChannel(CommentsService.Descriptor);
-            return CommentsService.NewClient(channel);
+            if (channelFactory == null) throw new ArgumentNullException(nameof(channelFactory));
+            _channelFactory = channelFactory;
         }
 
-        [Export]
-        public static RatingsService.RatingsServiceClient CreateRatingsClient(IChannelFactory channelFactory)
+        public Task<CommentsService.CommentsServiceClient> GetCommentsClientAsync()
         {
-            Channel channel = channelFactory.GetChannel(RatingsService.Descriptor);
-            return RatingsService.NewClient(channel);
+            throw new NotImplementedException();
         }
 
-        [Export]
-        public static UserManagementService.UserManagementServiceClient CreateUsersClient(IChannelFactory channelFactory)
+        public Task<RatingsService.RatingsServiceClient> GetRatingsClientAsync()
         {
-            Channel channel = channelFactory.GetChannel(UserManagementService.Descriptor);
-            return UserManagementService.NewClient(channel);
+            throw new NotImplementedException();
         }
 
-        [Export]
-        public static StatisticsService.StatisticsServiceClient CreateStatsClient(IChannelFactory channelFactory)
+        public Task<UserManagementService.UserManagementServiceClient> GetUsersClientAsync()
         {
-            Channel channel = channelFactory.GetChannel(StatisticsService.Descriptor);
-            return StatisticsService.NewClient(channel);
+            throw new NotImplementedException();
         }
 
-        [Export]
-        public static VideoCatalogService.VideoCatalogServiceClient CreateVideoClient(IChannelFactory channelFactory)
+        public Task<StatisticsService.StatisticsServiceClient> GetStatsClientAsync()
         {
-            Channel channel = channelFactory.GetChannel(VideoCatalogService.Descriptor);
-            return VideoCatalogService.NewClient(channel);
+            throw new NotImplementedException();
+        }
+
+        public Task<VideoCatalogService.VideoCatalogServiceClient> GetVideoClientAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }

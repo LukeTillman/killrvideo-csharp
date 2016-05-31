@@ -1,4 +1,5 @@
-﻿using Grpc.Core;
+﻿using Google.Protobuf.Reflection;
+using Grpc.Core;
 
 namespace KillrVideo.Protobuf.Services
 {
@@ -8,6 +9,11 @@ namespace KillrVideo.Protobuf.Services
     /// </summary>
     public interface IGrpcServerService
     {
+        /// <summary>
+        /// The descriptor for the service.
+        /// </summary>
+        ServiceDescriptor Descriptor { get; }
+
         /// <summary>
         /// Converts the service implementation to a ServerServiceDefinition for running on a Grpc Server.
         /// </summary>

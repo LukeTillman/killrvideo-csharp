@@ -19,15 +19,15 @@ namespace KillrVideo.SampleData.Handlers
         private static readonly ILogger Logger = Log.ForContext<AddSampleRatingsHandler>();
 
         private readonly IGetSampleData _sampleDataRetriever;
-        private readonly RatingsService.RatingsServiceClient _ratingsService;
+        private readonly IServiceClientFactory _clientFactory;
 
-        public AddSampleRatingsHandler(IGetSampleData sampleDataRetriever, RatingsService.RatingsServiceClient ratingsService)
+        public AddSampleRatingsHandler(IGetSampleData sampleDataRetriever, IServiceClientFactory clientFactory)
         {
             if (sampleDataRetriever == null) throw new ArgumentNullException(nameof(sampleDataRetriever));
-            if (ratingsService == null) throw new ArgumentNullException(nameof(ratingsService));
+            if (clientFactory == null) throw new ArgumentNullException(nameof(clientFactory));
 
             _sampleDataRetriever = sampleDataRetriever;
-            _ratingsService = ratingsService;
+            _clientFactory = clientFactory;
         }
 
         public async Task Handle(AddSampleRatingsRequest busCommand)
@@ -47,12 +47,15 @@ namespace KillrVideo.SampleData.Handlers
                 return;
             }
 
+            // Get ratings service client
+            var ratingsService = await _clientFactory.GetRatingsClientAsync().ConfigureAwait(false);
+
             // Rate some videos in parallel
             var ratingTasks = new List<Task>();
             var random = new Random();
             for (int i = 0; i < busCommand.NumberOfRatings; i++)
             {
-                ratingTasks.Add(_ratingsService.RateVideoAsync(new RateVideoRequest
+                ratingTasks.Add(ratingsService.RateVideoAsync(new RateVideoRequest
                 {
                     UserId = userIds[i].ToUuid(), 
                     VideoId = videoIds[i].ToUuid(), 

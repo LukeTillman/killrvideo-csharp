@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
+using Google.Protobuf.Reflection;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
@@ -23,6 +24,8 @@ namespace KillrVideo.SuggestedVideos
 
         private readonly ISession _session;
         private readonly PreparedStatementCache _statementCache;
+
+        public ServiceDescriptor Descriptor => SuggestedVideoService.Descriptor;
 
         public SuggestVideosByTag(ISession session, PreparedStatementCache statementCache)
         {

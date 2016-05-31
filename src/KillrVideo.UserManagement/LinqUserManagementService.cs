@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
 using Cassandra.Data.Linq;
+using Google.Protobuf.Reflection;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
@@ -29,7 +30,9 @@ namespace KillrVideo.UserManagement
         private readonly PreparedStatementCache _statementCache;
 
         private readonly Table<LinqDtos.UserProfile> _userProfileTable;
-        private readonly Table<UserCredentials> _userCredentialsTable; 
+        private readonly Table<UserCredentials> _userCredentialsTable;
+
+        public ServiceDescriptor Descriptor => UserManagementService.Descriptor;
 
         public LinqUserManagementService(ISession session, PreparedStatementCache statementCache, IBus bus)
         {

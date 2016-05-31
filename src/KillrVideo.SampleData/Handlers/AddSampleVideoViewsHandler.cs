@@ -19,14 +19,14 @@ namespace KillrVideo.SampleData.Handlers
         private static readonly ILogger Logger = Log.ForContext<AddSampleVideoViewsHandler>();
 
         private readonly IGetSampleData _sampleDataRetriever;
-        private readonly StatisticsService.StatisticsServiceClient _statsService;
+        private readonly IServiceClientFactory _clientFactory;
 
-        public AddSampleVideoViewsHandler(IGetSampleData sampleDataRetriever, StatisticsService.StatisticsServiceClient statsService)
+        public AddSampleVideoViewsHandler(IGetSampleData sampleDataRetriever, IServiceClientFactory clientFactory)
         {
             if (sampleDataRetriever == null) throw new ArgumentNullException(nameof(sampleDataRetriever));
-            if (statsService == null) throw new ArgumentNullException(nameof(statsService));
+            if (clientFactory == null) throw new ArgumentNullException(nameof(clientFactory));
             _sampleDataRetriever = sampleDataRetriever;
-            _statsService = statsService;
+            _clientFactory = clientFactory;
         }
 
         public async Task Handle(AddSampleVideoViewsRequest busCommand)
@@ -39,11 +39,14 @@ namespace KillrVideo.SampleData.Handlers
                 return;
             }
 
+            // Get stats client
+            var statsService = await _clientFactory.GetStatsClientAsync().ConfigureAwait(false);
+
             // Add some views in parallel
             var viewTasks = new List<Task>();
             for (int i = 0; i < busCommand.NumberOfViews; i++)
             {
-                viewTasks.Add(_statsService.RecordPlaybackStartedAsync(new RecordPlaybackStartedRequest
+                viewTasks.Add(statsService.RecordPlaybackStartedAsync(new RecordPlaybackStartedRequest
                 {
                     VideoId = videoIds[i].ToUuid()
                 }).ResponseAsync);

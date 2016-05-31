@@ -18,17 +18,17 @@ namespace KillrVideo.SampleData.Handlers
     public class AddSampleUsersHandler : IHandleMessage<AddSampleUsersRequest>
     {
         private readonly ISession _session;
-        private readonly UserManagementService.UserManagementServiceClient _userManagement;
         private readonly PreparedStatementCache _statementCache;
+        private readonly IServiceClientFactory _clientFactory;
 
-        public AddSampleUsersHandler(ISession session, PreparedStatementCache statementCache, UserManagementService.UserManagementServiceClient userManagement)
+        public AddSampleUsersHandler(ISession session, PreparedStatementCache statementCache, IServiceClientFactory clientFactory)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
-            if (userManagement == null) throw new ArgumentNullException(nameof(userManagement));
+            if (clientFactory == null) throw new ArgumentNullException(nameof(clientFactory));
             _session = session;
             _statementCache = statementCache;
-            _userManagement = userManagement;
+            _clientFactory = clientFactory;
         }
 
         public async Task Handle(AddSampleUsersRequest busCommand)
@@ -50,10 +50,13 @@ namespace KillrVideo.SampleData.Handlers
             // Get statement for recording sample users
             PreparedStatement prepared = await _statementCache.GetOrAddAsync("INSERT INTO sample_data_users (userid) VALUES (?)");
 
+            // Get user management client
+            var userManagement = await _clientFactory.GetUsersClientAsync().ConfigureAwait(false);
+
             // Add the user and record their Id in C* (not a big deal if we fail halfway through since this is sample data)
             foreach (CreateUserRequest user in users)
             {
-                await _userManagement.CreateUserAsync(user).ResponseAsync.ConfigureAwait(false);
+                await userManagement.CreateUserAsync(user).ResponseAsync.ConfigureAwait(false);
                 BoundStatement bound = prepared.Bind(user.UserId.ToGuid());
                 await _session.ExecuteAsync(bound).ConfigureAwait(false);
             }

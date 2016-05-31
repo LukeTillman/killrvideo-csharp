@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
+using Google.Protobuf.Reflection;
 using Grpc.Core;
 using KillrVideo.MessageBus;
-using KillrVideo.Protobuf;
 using KillrVideo.Protobuf.Services;
 
 namespace KillrVideo.SampleData
@@ -15,6 +15,8 @@ namespace KillrVideo.SampleData
     public class SampleDataServiceImpl : SampleDataService.SampleDataServiceBase, IGrpcServerService
     {
         private readonly IBus _bus;
+
+        public ServiceDescriptor Descriptor => SampleDataService.Descriptor;
 
         public SampleDataServiceImpl(IBus bus)
         {

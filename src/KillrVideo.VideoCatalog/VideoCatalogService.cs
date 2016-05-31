@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Cassandra;
+using Google.Protobuf.Reflection;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
@@ -29,6 +30,8 @@ namespace KillrVideo.VideoCatalog
         private readonly ISession _session;
         private readonly IBus _bus;
         private readonly PreparedStatementCache _statementCache;
+
+        public ServiceDescriptor Descriptor => VideoCatalogService.Descriptor;
 
         public VideoCatalogServiceImpl(ISession session, PreparedStatementCache statementCache, IBus bus)
         {

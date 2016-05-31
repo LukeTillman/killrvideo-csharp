@@ -1,4 +1,5 @@
-﻿using Google.Protobuf.Reflection;
+﻿using System.Threading.Tasks;
+using Google.Protobuf.Reflection;
 using Grpc.Core;
 
 namespace KillrVideo.Protobuf.Clients
@@ -11,6 +12,6 @@ namespace KillrVideo.Protobuf.Clients
         /// <summary>
         /// Gets a channel to the given service. Will throw if the service cannot be found.
         /// </summary>
-        Channel GetChannel(ServiceDescriptor service);
+        Task<Channel> GetChannelAsync(ServiceDescriptor service);
     }
 }

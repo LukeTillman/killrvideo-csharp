@@ -35,14 +35,15 @@ namespace KillrVideo.SampleData.Handlers
         };
 
         private readonly IGetSampleData _sampleDataRetriever;
-        private readonly CommentsService.CommentsServiceClient _commentService;
+        private readonly IServiceClientFactory _clientFactory;
+        
 
-        public AddSampleCommentsHandler(IGetSampleData sampleDataRetriever, CommentsService.CommentsServiceClient commentService)
+        public AddSampleCommentsHandler(IGetSampleData sampleDataRetriever, IServiceClientFactory clientFactory)
         {
             if (sampleDataRetriever == null) throw new ArgumentNullException(nameof(sampleDataRetriever));
-            if (commentService == null) throw new ArgumentNullException(nameof(commentService));
+            if (clientFactory == null) throw new ArgumentNullException(nameof(clientFactory));
             _sampleDataRetriever = sampleDataRetriever;
-            _commentService = commentService;
+            _clientFactory = clientFactory;
         }
 
         public async Task Handle(AddSampleCommentsRequest busCommand)
@@ -67,12 +68,15 @@ namespace KillrVideo.SampleData.Handlers
             int lipsumIdx = new Random().Next(LipsumSources.Length);
             var lipsum = new LipsumGenerator(LipsumSources[lipsumIdx](), false);
             var comments = lipsum.GenerateParagraphs(busCommand.NumberOfComments, Paragraph.Short);
+
+            // Get a client for the comments service
+            var commentsService = await _clientFactory.GetCommentsClientAsync().ConfigureAwait(false);
             
             // Add some sample comments in parallel
             var commentTasks = new List<Task>();
             for (int i = 0; i < busCommand.NumberOfComments; i++)
             {
-                commentTasks.Add(_commentService.CommentOnVideoAsync(new CommentOnVideoRequest
+                commentTasks.Add(commentsService.CommentOnVideoAsync(new CommentOnVideoRequest
                 {
                     CommentId = global::Cassandra.TimeUuid.NewId().ToGuid().ToTimeUuid(),
                     VideoId = videoIds[i].ToUuid(),

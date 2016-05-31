@@ -52,6 +52,10 @@
       <HintPath>..\packages\DryIocAttributes.dll.2.2.0\lib\net45\DryIocAttributes.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Google.Protobuf, Version=3.0.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Protobuf.3.0.0-beta2\lib\dotnet\Google.Protobuf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Grpc.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d754f35622e28bad, processorArchitecture=MSIL">
       <HintPath>..\packages\Grpc.Core.0.14.0\lib\net45\Grpc.Core.dll</HintPath>
       <Private>True</Private>
@@ -90,6 +94,7 @@
   <ItemGroup>
     <Compile Include="Configuration.cs" />
     <Compile Include="ContainerHandlerFactory.cs" />
+    <Compile Include="Listeners\LogServicesListener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

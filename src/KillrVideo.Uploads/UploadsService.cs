@@ -1,5 +1,6 @@
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
+using Google.Protobuf.Reflection;
 using Grpc.Core;
 using KillrVideo.Protobuf.Services;
 
@@ -12,6 +13,8 @@ namespace KillrVideo.Uploads
     [Export(typeof(IGrpcServerService))]
     public class UploadsServiceImpl : UploadsService.UploadsServiceBase, IGrpcServerService
     {
+        public ServiceDescriptor Descriptor => UploadsService.Descriptor;
+
         /// <summary>
         /// Convert this instance to a ServerServiceDefinition that can be run on a Grpc server.
         /// </summary>
