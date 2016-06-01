@@ -97,9 +97,23 @@ namespace KillrVideo.SampleData.Scheduler
 
                 acquired = row.GetValue<bool>("[applied]");
 
-                // If we failed, wait until the lease expires to try again
+                // If we failed to acquire the lease ...
                 if (acquired == false)
-                    await WaitUntilLeaseExpires(cancellationToken).ConfigureAwait(false);
+                {
+                    // See if we failed because we're already the owner (can happen if process is stopped while we're the owner and restarted)
+                    var currentOwner = row.GetValue<string>("owner");
+                    if (currentOwner == _uniqueId)
+                    {
+                        // Attempt (once) to renew the lease
+                        acquired = await RenewLeaseImpl(cancellationToken).ConfigureAwait(false);
+                        if (acquired) expiration = _leaseOwnerUntil;
+                    }
+                    else
+                    {
+                        // Wait until the lease expires and then try acquiring again
+                        await WaitUntilLeaseExpires(cancellationToken).ConfigureAwait(false);
+                    }
+                }
 
             } while (acquired == false);
 
@@ -163,10 +177,6 @@ namespace KillrVideo.SampleData.Scheduler
 
         private async Task<bool> RenewLeaseImpl(CancellationToken cancellationToken)
         {
-            // If we're not the lease owner, we can't renew
-            if (IsLeaseOwner() == false)
-                return false;
-
             bool acquired;
             DateTimeOffset expiration;
 
@@ -189,7 +199,7 @@ namespace KillrVideo.SampleData.Scheduler
                 acquired = row.GetValue<bool>("[applied]");
 
                 // If we failed, wait a few seconds and try again
-                if (acquired == false)
+                if (acquired == false && IsLeaseOwner())
                     await Task.Delay(TimeSpan.FromSeconds(2), cancellationToken).ConfigureAwait(false);
 
             } while (acquired == false && IsLeaseOwner());
