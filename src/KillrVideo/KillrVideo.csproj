@@ -108,6 +108,10 @@
     <Compile Include="ServiceDiscovery\EtcdServiceDiscovery.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\data\schema.cql">
+      <Link>schema.cql</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="user.config">

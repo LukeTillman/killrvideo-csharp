@@ -1,10 +1,3 @@
-// Drop and recreate the keyspace
-DROP KEYSPACE IF EXISTS killrvideo;
-CREATE KEYSPACE killrvideo WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
-
-// Create the schema
-USE killrvideo;
-
 // User credentials, keyed by email address so we can authenticate
 CREATE TABLE user_credentials (
     email text,
