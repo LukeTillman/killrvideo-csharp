@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\AppSettingsConfiguration.cs" />
+    <Compile Include="Config\EnvFileConfiguration.cs" />
     <Compile Include="Config\IHostConfiguration.cs" />
     <Compile Include="HelperExtensions.cs" />
     <Compile Include="Host.cs" />

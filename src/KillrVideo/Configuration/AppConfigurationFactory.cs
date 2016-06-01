@@ -3,13 +3,13 @@ using DryIocAttributes;
 using KillrVideo.Host.Config;
 using KillrVideo.MessageBus.Transport;
 
-namespace KillrVideo
+namespace KillrVideo.Configuration
 {
     /// <summary>
     /// Configuration for the application.
     /// </summary>
     [Export, AsFactory]
-    public static class Configuration
+    public static class AppConfigurationFactory
     {
         /// <summary>
         /// Get host settings from the App.config file.
