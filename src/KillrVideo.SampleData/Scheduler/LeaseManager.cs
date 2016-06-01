@@ -81,6 +81,10 @@ namespace KillrVideo.SampleData.Scheduler
             DateTimeOffset expiration;
             do
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                Logger.Debug("Attempting to acquire lease {LeaseName}", _leaseName);
+
                 // Calculate the expiration time in case of success
                 expiration = DateTimeOffset.UtcNow.Add(MaxLeaseTime);
 
@@ -98,6 +102,8 @@ namespace KillrVideo.SampleData.Scheduler
                     await WaitUntilLeaseExpires(cancellationToken).ConfigureAwait(false);
 
             } while (acquired == false);
+
+            Logger.Debug("Acquired lease {LeaseName} until {LeaseExpiration}", _leaseName, expiration);
             
             // We succeeded, so remember how long we're the lease owner for
             _leaseOwnerUntil = expiration;
@@ -116,13 +122,14 @@ namespace KillrVideo.SampleData.Scheduler
             if (row == null)
                 return;
 
-            var expiration = MicrosecondsSinceEpoch.ToDateTimeOffset(row.GetValue<long>("writetime(owner)"));
+            var expiration = MicrosecondsSinceEpoch.ToDateTimeOffset(row.GetValue<long>("writetime(owner)")).Add(MaxLeaseTime);
 
             // See how long we need to wait
             TimeSpan delay = expiration - DateTimeOffset.UtcNow;
             if (delay <= TimeSpan.Zero)
                 return;
 
+            Logger.Debug("Waiting {Delay} until lease {LeaseName} expires at {LeaseExpiration}", delay, _leaseName, expiration);
             await Task.Delay(delay, cancellationToken).ConfigureAwait(false);
         }
 
@@ -165,6 +172,10 @@ namespace KillrVideo.SampleData.Scheduler
 
             do
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                Logger.Debug("Attempting to renew lease {LeaseName}", _leaseName);
+
                 // Calculate the expiration time for successful renew
                 expiration = DateTimeOffset.UtcNow.Add(MaxLeaseTime);
 
@@ -185,7 +196,14 @@ namespace KillrVideo.SampleData.Scheduler
 
             // If we succeeded, update our state
             if (acquired)
+            {
+                Logger.Debug("Renewed lease {LeaseName} until {LeaseExpiration}", _leaseName, expiration);
                 _leaseOwnerUntil = expiration;
+            }
+            else
+            {
+                Logger.Debug("Failed to renew lease {LeaseName}", _leaseName);
+            }
 
             return acquired;
         }
