@@ -74,16 +74,16 @@ namespace KillrVideo.Protobuf
                 throw new InvalidOperationException("No services found to start");
 
             // Start the server
-            Logger.Information("Starting Grpc Server on {Host}:{Port} with {ServicesCount} services", host, port, _startedServices.Count);
+            Logger.Debug("Starting Grpc Server on {Host}:{Port} with {ServicesCount} services", host, port, _startedServices.Count);
             _server.Start();
             OnStart();
-            Logger.Information("Started Grpc Server");
+            Logger.Debug("Started Grpc Server");
         }
 
         public async Task StopAsync()
         {
             // Stop the server
-            Logger.Information("Stopping Grpc Server");
+            Logger.Debug("Stopping Grpc Server");
             try
             {
                 await _server.ShutdownAsync().ConfigureAwait(false);
@@ -93,7 +93,7 @@ namespace KillrVideo.Protobuf
             {
                 Logger.Error(e, "Error while stopping Grpc Server");
             }
-            Logger.Information("Stopped Grpc Server");
+            Logger.Debug("Stopped Grpc Server");
         }
 
         private void OnStart()

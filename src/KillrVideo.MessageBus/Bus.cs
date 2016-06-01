@@ -71,11 +71,11 @@ namespace KillrVideo.MessageBus
                 // Start the subscription server
                 try
                 {
-                    Logger.Information("Starting message bus subscription handlers");
+                    Logger.Debug("Starting message bus subscription handlers");
                     await _subscriptionServer.StartServer(token).ConfigureAwait(false);
-                    Logger.Information("Started subscription handlers, starting publisher");
+                    Logger.Debug("Started subscription handlers, starting publisher");
                     _publisher.Start();
-                    Logger.Information("Started publisher");
+                    Logger.Debug("Started publisher");
                     started = true;
                 }
                 catch (OperationCanceledException)
@@ -120,7 +120,7 @@ namespace KillrVideo.MessageBus
             if (state > 2)
                 throw new InvalidOperationException("Bus cannot be stopped multiple times");
 
-            Logger.Information("Stopping message bus publisher and subscription handlers");
+            Logger.Debug("Stopping message bus publisher and subscription handlers");
 
             // Tell the publisher to stop publishing new events
             _publisher.Stop();
@@ -148,7 +148,7 @@ namespace KillrVideo.MessageBus
             // Wait for the subsciption server to stop
             await _subscriptionServer.StopServer().ConfigureAwait(false);
 
-            Logger.Information("Stopped message bus publisher and subscription handlers");
+            Logger.Debug("Stopped message bus publisher and subscription handlers");
         }
         
         public Task Publish(IMessage message, CancellationToken token = new CancellationToken())

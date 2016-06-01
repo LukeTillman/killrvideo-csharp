@@ -41,14 +41,14 @@ namespace KillrVideo.SampleData.Scheduler
 
         public void Start()
         {
-            Logger.Information("Starting sample data job scheduler with {JobsCount} jobs", _jobs.Count);
+            Logger.Debug("Starting sample data job scheduler with {JobsCount} jobs", _jobs.Count);
             _runningServer = Run(_cancellation.Token);
-            Logger.Information("Started sample data job scheduler");
+            Logger.Debug("Started sample data job scheduler");
         }
 
         public async Task StopAsync()
         {
-            Logger.Information("Stopping sample data job scheduler");
+            Logger.Debug("Stopping sample data job scheduler");
 
             try
             {
@@ -65,7 +65,7 @@ namespace KillrVideo.SampleData.Scheduler
             }
 
             await _runningServer.ConfigureAwait(false);
-            Logger.Information("Stopped sample data job scheduler");
+            Logger.Debug("Stopped sample data job scheduler");
         }
 
         /// <summary>

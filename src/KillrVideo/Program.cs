@@ -5,7 +5,7 @@
 extern alias SampleData;
 using System;
 using System.Reflection;
-using Cassandra;
+using System.Threading;
 using DryIoc;
 using DryIoc.MefAttributedModel;
 using KillrVideo.Cassandra;
@@ -52,7 +52,7 @@ namespace KillrVideo
         static void Main(string[] args)
         {
             // Configure logging
-            Log.Logger = new LoggerConfiguration().MinimumLevel.Debug()
+            Log.Logger = new LoggerConfiguration().MinimumLevel.Information()
                 .WriteTo.ColoredConsole(outputTemplate: "{Timestamp:HH:mm:ss} [{SourceContext:l}] {Message}{NewLine}{Exception}")
                 .CreateLogger();
 
@@ -72,10 +72,24 @@ namespace KillrVideo
             var host = container.Resolve<Host.Host>();
             host.Start();
 
-            Console.ReadKey();
+            var logger = Log.ForContext<Program>();
+            logger.Information("Killrvideo has started. Press Ctrl+C to exit.");
+
+            var autoResetEvent = new AutoResetEvent(false);
+            Console.CancelKeyPress += (sender, eventArgs) =>
+            {
+                eventArgs.Cancel = true;
+                autoResetEvent.Set();
+            };
+
+            // Wait for Ctrl+C
+            autoResetEvent.WaitOne();
+            
+            // Stop everything
             host.Stop();
             container.Dispose();
 
+            logger.Information("KillrVideo has stopped. Press any key to exit.");
             Console.ReadKey();
         }
 

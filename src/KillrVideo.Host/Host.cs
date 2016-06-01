@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
 using System.Threading.Tasks;
 using KillrVideo.Host.Config;
 using KillrVideo.Host.Tasks;
@@ -49,10 +48,7 @@ namespace KillrVideo.Host
             {
                 var stopping = new List<Task>();
                 foreach (var task in _tasks)
-                {
-                    Logger.Information("Stopping Task {TaskName} on {ApplicationName}", task.Name, _hostConfig.ApplicationName);
-                    stopping.Add(task.StopAsync());
-                }
+                    stopping.Add(StopTask(task));
 
                 Task.WaitAll(stopping.ToArray());
             }
@@ -62,6 +58,13 @@ namespace KillrVideo.Host
             }
 
             Logger.Information("Stopped Host {ApplicationName}", _hostConfig.ApplicationName);
+        }
+
+        private async Task StopTask(IHostTask task)
+        {
+            Logger.Information("Stopping Task {TaskName} on {ApplicationName}", task.Name, _hostConfig.ApplicationName);
+            await task.StopAsync().ConfigureAwait(false);
+            Logger.Information("Stopped Task {TaskName} on {ApplicationName}", task.Name, _hostConfig.ApplicationName);
         }
     }
 }
