@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+  # Etcd for our service registry
+  etcd:
+    image: quay.io/coreos/etcd:v2.3.6
+    command: [ -advertise-client-urls, "http://${KILLRVIDEO_DOCKER_IP}:2379", -listen-client-urls, "http://0.0.0.0:2379" ]
+    ports:
+    # The client port
+    - "2379:2379"
+    environment:
+      SERVICE_2379_NAME: etcd
+
+  # Registrator to register containers with Etcd
+  registrator:
+    image: gliderlabs/registrator:latest
+    # Tell registrator where the etcd HTTP API is and to use the docker VM's IP
+    command: [ -ip, "$KILLRVIDEO_DOCKER_IP", "etcd://etcd:2379/killrvideo/services" ]
+    volumes:
+    # So registrator can use the docker API to inspect containers
+    - "/var/run/docker.sock:/tmp/docker.sock"
+    depends_on:
+    - etcd
+    
+  # DataStax Enterprise
+  dse:
+    image: luketillman/datastax-enterprise:4.8.7
+    ports:
+    - "9042:9042"
+    environment:
+      SERVICE_9042_NAME: cassandra
