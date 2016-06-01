@@ -115,11 +115,6 @@
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="user.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="user.template.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KillrVideo.Cassandra\KillrVideo.Cassandra.csproj">
