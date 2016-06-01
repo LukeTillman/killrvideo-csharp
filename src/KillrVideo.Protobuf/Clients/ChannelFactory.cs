@@ -35,10 +35,7 @@ namespace KillrVideo.Protobuf.Clients
         {
             // Find the service
             IEnumerable<string> locations = await _serviceDiscovery.LookupServiceAsync(service.Name).ConfigureAwait(false);
-            string location = locations.FirstOrDefault();
-            if (location == null)
-                throw new ServiceNotFoundException(service);
-
+            string location = locations.First();
             return _cache.GetOrAdd(location, CreateChannel).Value;
         }
 
