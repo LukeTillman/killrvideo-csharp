@@ -1,5 +1,5 @@
 // User credentials, keyed by email address so we can authenticate
-CREATE TABLE user_credentials (
+CREATE TABLE IF NOT EXISTS user_credentials (
     email text,
     password text,
     userid uuid,
@@ -7,7 +7,7 @@ CREATE TABLE user_credentials (
 );
 
 // Users keyed by id
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     userid uuid,
     firstname text,
     lastname text,
@@ -17,7 +17,7 @@ CREATE TABLE users (
 );
 
 // Videos by id
-CREATE TABLE videos (
+CREATE TABLE IF NOT EXISTS videos (
     videoid uuid,
     userid uuid,
     name text,
@@ -31,7 +31,7 @@ CREATE TABLE videos (
 );
 
 // One-to-many from user point of view (lookup table)
-CREATE TABLE user_videos (
+CREATE TABLE IF NOT EXISTS user_videos (
     userid uuid,
     added_date timestamp,
     videoid uuid,
@@ -42,7 +42,7 @@ CREATE TABLE user_videos (
 
 // Track latest videos, grouped by day (if we ever develop a bad hotspot from the daily grouping here, we could mitigate by
 // splitting the row using an arbitrary group number, making the partition key (yyyymmdd, group_number))
-CREATE TABLE latest_videos (
+CREATE TABLE IF NOT EXISTS latest_videos (
     yyyymmdd text,
     added_date timestamp,
     videoid uuid,
@@ -53,7 +53,7 @@ CREATE TABLE latest_videos (
 ) WITH CLUSTERING ORDER BY (added_date DESC, videoid ASC);
 
 // Video ratings (counter table)
-CREATE TABLE video_ratings (
+CREATE TABLE IF NOT EXISTS video_ratings (
     videoid uuid,
     rating_counter counter,
     rating_total counter,
@@ -61,7 +61,7 @@ CREATE TABLE video_ratings (
 );
 
 // Video ratings by user (to try and mitigate voting multiple times)
-CREATE TABLE video_ratings_by_user (
+CREATE TABLE IF NOT EXISTS video_ratings_by_user (
     videoid uuid,
     userid uuid,
     rating int,
@@ -69,14 +69,14 @@ CREATE TABLE video_ratings_by_user (
 );
 
 // Records the number of views/playbacks of a video
-CREATE TABLE video_playback_stats (
+CREATE TABLE IF NOT EXISTS video_playback_stats (
     videoid uuid,
     views counter,
     PRIMARY KEY (videoid)
 );
 
 // Recommendations by user (powered by Spark), with the newest videos added to the site always first
-CREATE TABLE video_recommendations ( 
+CREATE TABLE IF NOT EXISTS video_recommendations ( 
     userid uuid,
     added_date timestamp,
     videoid uuid,
@@ -88,7 +88,7 @@ CREATE TABLE video_recommendations (
 ) WITH CLUSTERING ORDER BY (added_date DESC, videoid ASC);
 
 // Recommendations by video (powered by Spark)
-CREATE TABLE video_recommendations_by_video (
+CREATE TABLE IF NOT EXISTS video_recommendations_by_video (
     videoid uuid,
     userid uuid,
     rating float,
@@ -100,7 +100,7 @@ CREATE TABLE video_recommendations_by_video (
 );
 
 // Index for tag keywords
-CREATE TABLE videos_by_tag (
+CREATE TABLE IF NOT EXISTS videos_by_tag (
     tag text,
     videoid uuid,
     added_date timestamp,
@@ -112,14 +112,14 @@ CREATE TABLE videos_by_tag (
 );
 
 // Index for tags by first letter in the tag
-CREATE TABLE tags_by_letter (
+CREATE TABLE IF NOT EXISTS tags_by_letter (
     first_letter text,
     tag text,
     PRIMARY KEY (first_letter, tag)
 );
 
 // Comments for a given video
-CREATE TABLE comments_by_video (
+CREATE TABLE IF NOT EXISTS comments_by_video (
     videoid uuid,
     commentid timeuuid,
     userid uuid,
@@ -128,7 +128,7 @@ CREATE TABLE comments_by_video (
 ) WITH CLUSTERING ORDER BY (commentid DESC);
 
 // Comments for a given user
-CREATE TABLE comments_by_user (
+CREATE TABLE IF NOT EXISTS comments_by_user (
     userid uuid,
     commentid timeuuid,
     videoid uuid,
@@ -137,7 +137,7 @@ CREATE TABLE comments_by_user (
 ) WITH CLUSTERING ORDER BY (commentid DESC);
 
 // Uploaded video assets that have been created in Azure Media Services
-CREATE TABLE uploaded_video_destinations (
+CREATE TABLE IF NOT EXISTS uploaded_video_destinations (
     upload_url text,
     assetid text,
     filename text,
@@ -145,14 +145,14 @@ CREATE TABLE uploaded_video_destinations (
     PRIMARY KEY (upload_url)
 );
 
-CREATE TABLE uploaded_video_jobs (
+CREATE TABLE IF NOT EXISTS uploaded_video_jobs (
     videoid uuid,
     upload_url text,
     jobid text,
     PRIMARY KEY (videoid)
 );
 
-CREATE TABLE uploaded_video_jobs_by_jobid (
+CREATE TABLE IF NOT EXISTS uploaded_video_jobs_by_jobid (
     jobid text,
     videoid uuid,
     upload_url text,
@@ -160,7 +160,7 @@ CREATE TABLE uploaded_video_jobs_by_jobid (
 );
 
 // Log of notifications from Azure Media Services encoding jobs (latest updates first)
-CREATE TABLE encoding_job_notifications (
+CREATE TABLE IF NOT EXISTS encoding_job_notifications (
     videoid uuid,
     status_date timestamp,
     etag text,
@@ -171,7 +171,7 @@ CREATE TABLE encoding_job_notifications (
 ) WITH CLUSTERING ORDER BY (status_date DESC, etag ASC);
 
 // Log of sample data jobs that have been run (keep logs for max of 14 days)
-CREATE TABLE sample_data_job_log (
+CREATE TABLE IF NOT EXISTS sample_data_job_log (
     job_name text,
     scheduled_run_time timestamp,
     actual_run_time timestamp,
@@ -180,26 +180,26 @@ CREATE TABLE sample_data_job_log (
   AND default_time_to_live = 1209600;
 
 // Lease table for sample data worker (max lease time 180 seconds)
-CREATE TABLE sample_data_leases (
+CREATE TABLE IF NOT EXISTS sample_data_leases (
     name text,
     owner text,
     PRIMARY KEY (name)
 ) WITH default_time_to_live = 180;
 
 // Table to keep track of sample users added to the site
-CREATE TABLE sample_data_users (
+CREATE TABLE IF NOT EXISTS sample_data_users (
     userid uuid,
     PRIMARY KEY(userid)
 );
 
 // Table to be able to retrieve random videos to add sample data to (comments, ratings, etc)
-CREATE TABLE sample_data_videos (
+CREATE TABLE IF NOT EXISTS sample_data_videos (
     videoid uuid,
     PRIMARY KEY (videoid)
 );
 
 // Table to keep track of sample YouTube videos that have been added
-CREATE TABLE sample_data_youtube_videos (
+CREATE TABLE IF NOT EXISTS sample_data_youtube_videos (
     sourceid text,
     published_at timestamp,
     youtube_video_id text,
