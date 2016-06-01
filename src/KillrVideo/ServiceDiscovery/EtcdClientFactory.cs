@@ -18,7 +18,7 @@ namespace KillrVideo.ServiceDiscovery
             string etcdHost = config.GetRequiredConfigurationValue(ConfigConstants.DockerIp);
             var opts = new EtcdClientOpitions()
             {
-                Urls = new[] {$"http://{etcdHost}/killrvideo"}
+                Urls = new[] {$"http://{etcdHost}:2379"}
             };
             return new EtcdClient(opts);
         }

@@ -1,57 +1,82 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Cassandra;
-using DryIocAttributes;
-using KillrVideo.Host.Config;
+using KillrVideo.Host.ServiceDiscovery;
 using Serilog;
 
 namespace KillrVideo.Cassandra
 {
     /// <summary>
-    /// A factory that can create a Cassandra ISession instance based on the host configuration.
+    /// A factory that can create a Cassandra ISession instances and caches them so there is only one per keyspace.
     /// </summary>
-    [Export, AsFactory]
-    public static class CassandraSessionFactory
+    [Export(typeof(CassandraSessionFactory))]
+    public class CassandraSessionFactory
     {
+        private const string NoKeyspace = "NO_KEYSPACE";
+
         private static readonly ILogger Logger = Log.ForContext(typeof (CassandraSessionFactory));
 
-        public const string CassandraHostsConfigKey = "CassandraHosts";
+        private readonly ConcurrentDictionary<string, Lazy<Task<ISession>>> _sessionCache =
+            new ConcurrentDictionary<string, Lazy<Task<ISession>>>(StringComparer.OrdinalIgnoreCase);
 
-        [Export]
-        public static ISession CreateSession(IHostConfiguration config)
+        private readonly IFindServices _serviceDiscovery;
+
+        public CassandraSessionFactory(IFindServices serviceDiscovery)
         {
-            string[] hosts = config.GetRequiredConfigurationValue(CassandraHostsConfigKey).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            if (hosts.Length == 0)
-                throw new InvalidOperationException("You must specify the CassandraHosts configuration option");
+            if (serviceDiscovery == null) throw new ArgumentNullException(nameof(serviceDiscovery));
+            _serviceDiscovery = serviceDiscovery;
+        }
+        
+        public Task<ISession> GetSessionAsync(string keyspace)
+        {
+            if (string.IsNullOrEmpty(keyspace))
+                keyspace = NoKeyspace;
 
-            Builder builder = Cluster.Builder();
+            return _sessionCache.AddOrUpdate(keyspace, CreateTask, UpdateTaskIfFaulted).Value;
+        }
 
-            // Allow for multiple hosts
-            foreach (string host in hosts)
-            {
-                Logger.Debug("Adding Cassandra contact point {CassandraHost}", host);
+        private Lazy<Task<ISession>> CreateTask(string keyspace)
+        {
+            return new Lazy<Task<ISession>>(() => CreateSession(keyspace));
+        }
 
-                string[] hostAndPort = host.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                switch (hostAndPort.Length)
-                {
-                    case 1:
-                        builder.AddContactPoint(hostAndPort[0]);
-                        break;
-                    case 2:
-                        builder.AddContactPoint(new IPEndPoint(IPAddress.Parse(hostAndPort[0]), int.Parse(hostAndPort[1])));
-                        break;
-                    default:
-                        throw new InvalidOperationException($"Unable to parse host {host} from CassandraHosts configuration option");
-                }
-            }
+        private Lazy<Task<ISession>> UpdateTaskIfFaulted(string keyspace, Lazy<Task<ISession>> currentValue)
+        {
+            return currentValue.Value.IsFaulted ? CreateTask(keyspace) : currentValue;
+        }
 
+        private async Task<ISession> CreateSession(string keyspace)
+        {
+            // Find the cassandra service
+            IEnumerable<string> hosts = await _serviceDiscovery.LookupServiceAsync("cassandra").ConfigureAwait(false);
+            IEnumerable<IPEndPoint> hostIpAndPorts = hosts.Select(ToIpEndPoint);
+
+            // Create cluster builder with contact points
+            var builder = Cluster.Builder().AddContactPoints(hostIpAndPorts);
+
+            // Set default query options
             var queryOptions = new QueryOptions();
             queryOptions.SetConsistencyLevel(ConsistencyLevel.LocalQuorum);
             builder.WithQueryOptions(queryOptions);
 
-            Logger.Information("Creating Cassandra session connection to killrvideo schema");
-            return builder.Build().Connect("killrvideo");
+            Logger.Information("Creating Cassandra session connection to {Keyspace}", keyspace);
+            return keyspace == NoKeyspace
+                ? builder.Build().Connect()
+                : builder.Build().Connect(keyspace);
+        }
+
+        private static IPEndPoint ToIpEndPoint(string hostAndPort)
+        {
+            string[] parts = hostAndPort.Split(':');
+            if (parts.Length != 2)
+                throw new ArgumentException($"{hostAndPort} is not format host:port");
+
+            return new IPEndPoint(IPAddress.Parse(parts[0]), int.Parse(parts[1]));
         }
     }
 }

@@ -5,6 +5,7 @@
 extern alias SampleData;
 using System;
 using System.Reflection;
+using Cassandra;
 using DryIoc;
 using DryIoc.MefAttributedModel;
 using KillrVideo.Cassandra;
@@ -62,6 +63,10 @@ namespace KillrVideo
             // exported Grpc server definitions, message bus handlers, and background tasks in the referenced services)
             container = container.WithMefAttributedModel();
             container.RegisterExports(ProjectAssemblies);
+
+            // Wait for Cassandra to become available
+            var cassandraInit = container.Resolve<BootstrapCassandra>();
+            cassandraInit.RegisterCassandraOnceAvailable(container).Wait();
 
             // Start host
             var host = container.Resolve<Host.Host>();

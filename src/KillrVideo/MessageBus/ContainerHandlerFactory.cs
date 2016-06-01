@@ -2,10 +2,9 @@
 using System.ComponentModel.Composition;
 using System.Linq;
 using DryIoc;
-using KillrVideo.MessageBus;
 using KillrVideo.MessageBus.Subscribe;
 
-namespace KillrVideo
+namespace KillrVideo.MessageBus
 {
     /// <summary>
     /// An IHandlerFactory implementation for the message bus that creates handlers from the DryIoc container.

@@ -96,10 +96,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\AppConfigurationFactory.cs" />
+    <Compile Include="Cassandra\BootstrapCassandra.cs" />
+    <Compile Include="Configuration\HostConfigurationFactory.cs" />
     <Compile Include="Configuration\ConfigConstants.cs" />
-    <Compile Include="ContainerHandlerFactory.cs" />
+    <Compile Include="MessageBus\ContainerHandlerFactory.cs" />
     <Compile Include="Listeners\LogServicesListener.cs" />
+    <Compile Include="MessageBus\TransportFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceDiscovery\EtcdClientFactory.cs" />

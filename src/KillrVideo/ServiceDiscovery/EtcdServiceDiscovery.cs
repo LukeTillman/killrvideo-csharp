@@ -24,7 +24,7 @@ namespace KillrVideo.ServiceDiscovery
 
         public async Task<IEnumerable<string>> LookupServiceAsync(string serviceName)
         {
-            EtcdResponse response = await _client.GetNodeAsync($"/services/{serviceName}").ConfigureAwait(false);
+            EtcdResponse response = await _client.GetNodeAsync($"/killrvideo/services/{serviceName}").ConfigureAwait(false);
             return response.Node.Nodes.Select(n => n.Value);
         }
     }
