@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A5939168-C879-4C7E-90AB-F4040C8D0ED8}"
 	ProjectSection(SolutionItems) = preProject
@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.SuggestedVideos"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.SampleData", "KillrVideo.SampleData\KillrVideo.SampleData.csproj", "{F7088371-8ED3-4827-B15A-05F598C27399}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{B35E0A26-3D33-4058-8205-032B1E8D74DA}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{B35E0A26-3D33-4058-8205-032B1E8D74DA}"
 	ProjectSection(SolutionItems) = preProject
 		..\build\CompileProtos.bat = ..\build\CompileProtos.bat
 		..\build\CompileProtos.proj = ..\build\CompileProtos.proj
@@ -48,6 +48,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.Cassandra", "KillrVideo.Cassandra\KillrVideo.Cassandra.csproj", "{FFE7DA21-41A2-436B-9E4D-C036DBF33D62}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.Host", "KillrVideo.Host\KillrVideo.Host.csproj", "{98070BE4-E3EB-4703-81D3-277A6C08721C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".scripts", ".scripts", "{0A65944B-04D6-4C30-A5B4-7ADD5EF37C45}"
+	ProjectSection(SolutionItems) = preProject
+		..\scripts\create-docker-compose-env.ps1 = ..\scripts\create-docker-compose-env.ps1
+		..\scripts\git-subtree-pull.ps1 = ..\scripts\git-subtree-pull.ps1
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -85,3 +85,6 @@ user.config
 
 .ipynb_checkpoints
 src/spark/*.ipynb
+
+# User environment file
+/.env
