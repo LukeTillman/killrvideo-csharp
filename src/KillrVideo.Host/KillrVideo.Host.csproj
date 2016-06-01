@@ -58,7 +58,6 @@
     <Compile Include="Host.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceDiscovery\IFindServices.cs" />
-    <Compile Include="ServiceDiscovery\IRegisterServices.cs" />
     <Compile Include="ServiceDiscovery\ServiceNotFoundException.cs" />
     <Compile Include="Tasks\IHostTask.cs" />
   </ItemGroup>

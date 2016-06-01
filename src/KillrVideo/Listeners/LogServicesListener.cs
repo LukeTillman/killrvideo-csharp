@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using Grpc.Core;
 using KillrVideo.Protobuf;
@@ -10,16 +11,17 @@ namespace KillrVideo.Listeners
     /// <summary>
     /// Listener that logs started Grpc services to Serilog.
     /// </summary>
+    [Export(typeof(IServerListener))]
     public class LogServicesListener : IServerListener
     {
         private static readonly ILogger Logger = Log.ForContext<LogServicesListener>();
         
         public void OnStart(IEnumerable<ServerPort> serverPorts, IEnumerable<IGrpcServerService> servicesStarted)
         {
-            ServerPort[] servers = serverPorts.ToArray();
+            string[] servers = serverPorts.Select(s => $"{s.Host}:{s.Port}").ToArray();
             foreach (IGrpcServerService service in servicesStarted)
             {
-                Logger.Information("Service {ServiceName} is available on {ServerAddresses}", service.Descriptor.Name, servers);
+                Logger.Information("Service {ServiceName} is listening on {ServerAddresses}", service.Descriptor.Name, servers);
             }
         }
 

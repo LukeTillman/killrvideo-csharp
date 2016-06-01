@@ -29,6 +29,7 @@ namespace KillrVideo.Protobuf
 
         public string Name => "Grpc Server";
 
+        [Import]
         public IEnumerable<IServerListener> Listeners { get; set; }
 
         public GrpcServerTask(IEnumerable<IGrpcServerService> availableServices, IHostConfiguration hostConfiguration)

@@ -52,7 +52,7 @@ namespace KillrVideo
         static void Main(string[] args)
         {
             // Configure logging
-            Log.Logger = new LoggerConfiguration().MinimumLevel.Information()
+            Log.Logger = new LoggerConfiguration().MinimumLevel.Debug()
                 .WriteTo.ColoredConsole(outputTemplate: "{Timestamp:HH:mm:ss} [{SourceContext:l}] {Message}{NewLine}{Exception}")
                 .CreateLogger();
 
