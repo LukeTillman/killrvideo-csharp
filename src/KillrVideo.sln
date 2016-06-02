@@ -34,6 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{B35E0A
 	ProjectSection(SolutionItems) = preProject
 		..\build\CompileProtos.bat = ..\build\CompileProtos.bat
 		..\build\CompileProtos.proj = ..\build\CompileProtos.proj
+		..\build\CreateEnvFile.ps1 = ..\build\CreateEnvFile.ps1
 		..\build\Protobuf.targets = ..\build\Protobuf.targets
 	EndProjectSection
 EndProject
@@ -51,7 +52,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillrVideo.Host", "KillrVid
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".scripts", ".scripts", "{0A65944B-04D6-4C30-A5B4-7ADD5EF37C45}"
 	ProjectSection(SolutionItems) = preProject
-		..\scripts\create-docker-compose-env.ps1 = ..\scripts\create-docker-compose-env.ps1
 		..\scripts\git-subtree-pull.ps1 = ..\scripts\git-subtree-pull.ps1
 	EndProjectSection
 EndProject
