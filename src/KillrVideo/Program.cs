@@ -10,6 +10,7 @@ using DryIoc;
 using DryIoc.MefAttributedModel;
 using KillrVideo.Cassandra;
 using KillrVideo.Comments;
+using KillrVideo.Docker;
 using KillrVideo.Host.Config;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
@@ -64,6 +65,10 @@ namespace KillrVideo
             container = container.WithMefAttributedModel();
             container.RegisterExports(ProjectAssemblies);
 
+            // Start docker dependencies
+            var dockerInit = container.Resolve<BootstrapDocker>();
+            dockerInit.Start();
+
             // Wait for Cassandra to become available
             var cassandraInit = container.Resolve<BootstrapCassandra>();
             cassandraInit.RegisterCassandraOnceAvailable(container).Wait();
@@ -87,6 +92,7 @@ namespace KillrVideo
             
             // Stop everything
             host.Stop();
+            dockerInit.Stop();
             container.Dispose();
 
             logger.Information("KillrVideo has stopped. Press any key to exit.");
