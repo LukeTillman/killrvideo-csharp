@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+  # Start the KillrVideo web UI on port 3000
+  web:
+    image: luketillman/killrvideo-web:1.0.0
+    ports:
+    - "3000:3000"
+    depends_on:
+    - dse
+    - etcd
+    environment:
+      SERVICE_3000_NAME: web
+      KILLRVIDEO_ETCD: "etcd:2379"

@@ -97,6 +97,7 @@
     <Compile Include="Cassandra\BootstrapCassandra.cs" />
     <Compile Include="Configuration\HostConfigurationFactory.cs" />
     <Compile Include="Configuration\ConfigConstants.cs" />
+    <Compile Include="Configuration\TemporaryHybridConfiguration.cs" />
     <Compile Include="Listeners\RegisterWithEtcdListener.cs" />
     <Compile Include="MessageBus\ContainerHandlerFactory.cs" />
     <Compile Include="Listeners\LogServicesListener.cs" />
@@ -111,14 +112,21 @@
       <Link>schema.cql</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\lib\killrvideo-docker-common\docker-compose.yaml">
+      <Link>docker-compose.yaml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include=".env">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="docker-compose.yaml">
+    <None Include="docker-compose.override.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="user.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KillrVideo.Cassandra\KillrVideo.Cassandra.csproj">

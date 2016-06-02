@@ -14,6 +14,6 @@ namespace KillrVideo.Configuration
         /// Get host settings from the App.config file.
         /// </summary>
         [Export]
-        public static readonly IHostConfiguration Config = new AppSettingsConfiguration("KillrVideo", "1");
+        public static readonly IHostConfiguration Config = new TemporaryHybridConfiguration("KillrVideo", "1");
     }
 }
