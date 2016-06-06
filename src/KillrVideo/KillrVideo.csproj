@@ -97,7 +97,6 @@
     <Compile Include="Cassandra\BootstrapCassandra.cs" />
     <Compile Include="Configuration\HostConfigurationFactory.cs" />
     <Compile Include="Configuration\ConfigConstants.cs" />
-    <Compile Include="Configuration\TemporaryHybridConfiguration.cs" />
     <Compile Include="Docker\BootstrapDocker.cs" />
     <Compile Include="Listeners\RegisterWithEtcdListener.cs" />
     <Compile Include="MessageBus\ContainerHandlerFactory.cs" />
@@ -125,9 +124,6 @@
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="user.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KillrVideo.Cassandra\KillrVideo.Cassandra.csproj">

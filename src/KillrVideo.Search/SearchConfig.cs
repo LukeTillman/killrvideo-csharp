@@ -1,4 +1,5 @@
-﻿using KillrVideo.Host.Config;
+﻿using KillrVideo.Host;
+using KillrVideo.Host.Config;
 
 namespace KillrVideo.Search
 {
@@ -10,15 +11,15 @@ namespace KillrVideo.Search
         /// <summary>
         /// The configuration key that determines whether to use DSE search for the Search Service.
         /// </summary>
-        public const string UseDseKey = "Search.UseDse";
+        public const string UseDseKey = "UseDse";
 
         /// <summary>
         /// Returns true if using DSE Search is enabled.
         /// </summary>
         internal static bool UseDseSearch(IHostConfiguration config)
         {
-            string useDse = config.GetConfigurationValue(UseDseKey);
-            return !string.IsNullOrWhiteSpace(useDse) && bool.Parse(useDse);
+            string useDse = config.GetConfigurationValueOrDefault(UseDseKey, bool.FalseString);
+            return bool.Parse(useDse);
         }
     }
 }

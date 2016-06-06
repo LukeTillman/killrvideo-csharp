@@ -15,12 +15,12 @@ namespace KillrVideo.SampleData
         /// <summary>
         /// The key in the Host configuration used to find the YouTube API key.
         /// </summary>
-        public const string YouTubeApiConfigKey = "YouTube.ApiKey";
+        public const string YouTubeApiConfigKey = "YouTubeApiKey";
 
         [Export]
         public static YouTubeService Create(IHostConfiguration hostConfig)
         {
-            string apiKey = hostConfig.GetRequiredConfigurationValue(YouTubeApiConfigKey);
+            string apiKey = hostConfig.GetConfigurationValue(YouTubeApiConfigKey);
             return new YouTubeService(new BaseClientService.Initializer
             {
                 ApiKey = apiKey,

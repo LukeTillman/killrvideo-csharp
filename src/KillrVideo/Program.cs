@@ -11,7 +11,6 @@ using DryIoc.MefAttributedModel;
 using KillrVideo.Cassandra;
 using KillrVideo.Comments;
 using KillrVideo.Docker;
-using KillrVideo.Host.Config;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
 using KillrVideo.Ratings;
@@ -43,7 +42,7 @@ namespace KillrVideo
             typeof (VideoCatalogService).Assembly,
             typeof (SearchService).Assembly,
             typeof (SampleDataService).Assembly,
-            typeof (AppSettingsConfiguration).Assembly,
+            typeof (Host.Host).Assembly,
             typeof (GrpcServerTask).Assembly,
             typeof (CassandraSessionFactory).Assembly,
             typeof (Bus).Assembly,

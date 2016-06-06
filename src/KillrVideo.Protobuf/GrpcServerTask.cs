@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Grpc.Core;
+using KillrVideo.Host;
 using KillrVideo.Host.Config;
 using KillrVideo.Host.Tasks;
 using KillrVideo.Protobuf.Services;
@@ -17,8 +18,8 @@ namespace KillrVideo.Protobuf
     [Export(typeof(IHostTask))]
     public class GrpcServerTask : IHostTask
     {
-        public const string HostConfigKey = "Grpc.Host";
-        public const string HostPortKey = "Grpc.Port";
+        public const string AddressConfigKey = "GrpcListenAddress";
+        public const string PortConfigKey = "GrpcListenPort";
 
         private static readonly ILogger Logger = Log.ForContext<GrpcServerTask>();
 
@@ -48,8 +49,8 @@ namespace KillrVideo.Protobuf
         public void Start()
         {
             // Get the host/port configuration for the Grpc Server
-            string host = _hostConfiguration.GetRequiredConfigurationValue(HostConfigKey);
-            string portVal = _hostConfiguration.GetRequiredConfigurationValue(HostPortKey);
+            string host = _hostConfiguration.GetConfigurationValueOrDefault(AddressConfigKey, "0.0.0.0");
+            string portVal = _hostConfiguration.GetConfigurationValueOrDefault(PortConfigKey, "50101");
             int port = int.Parse(portVal);
 
             _server.Ports.Add(host, port, ServerCredentials.Insecure);

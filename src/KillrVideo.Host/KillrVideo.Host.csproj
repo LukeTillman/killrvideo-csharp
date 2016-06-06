@@ -51,9 +51,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\AppSettingsConfiguration.cs" />
-    <Compile Include="Config\EnvFileConfiguration.cs" />
+    <Compile Include="Config\AppSettingsConfigurationSource.cs" />
+    <Compile Include="Config\EnvironmentConfigurationSource.cs" />
+    <Compile Include="Config\HostConfiguration.cs" />
     <Compile Include="Config\IHostConfiguration.cs" />
+    <Compile Include="Config\IHostConfigurationSource.cs" />
     <Compile Include="HelperExtensions.cs" />
     <Compile Include="Host.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
