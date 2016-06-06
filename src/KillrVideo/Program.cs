@@ -10,7 +10,9 @@ using DryIoc;
 using DryIoc.MefAttributedModel;
 using KillrVideo.Cassandra;
 using KillrVideo.Comments;
+using KillrVideo.Configuration;
 using KillrVideo.Docker;
+using KillrVideo.Host.Config;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
 using KillrVideo.Ratings;
@@ -76,7 +78,12 @@ namespace KillrVideo
             var host = container.Resolve<Host.Host>();
             host.Start();
 
+            // Calculate the web UI's address
+            var config = container.Resolve<IHostConfiguration>();
+            string uiAddress = $"http://{config.GetRequiredConfigurationValue(ConfigConstants.DockerIp)}:3000";
+
             var logger = Log.ForContext<Program>();
+            logger.Information("Open {WebAddress} in a web browser to see the UI", uiAddress);
             logger.Information("Killrvideo has started. Press Ctrl+C to exit.");
 
             var autoResetEvent = new AutoResetEvent(false);
