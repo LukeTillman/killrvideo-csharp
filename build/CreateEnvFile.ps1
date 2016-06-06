@@ -19,7 +19,7 @@ $scriptPath = Split-Path -parent $PSCommandPath
 $getEnvCommand = Resolve-Path "$scriptPath\..\lib\killrvideo-docker-common\get-environment.ps1"
 
 # Base environment variables to be written
-$dockerEnv = @("COMPOSE_PROJECT_NAME=killrvideocsharp")
+$dockerEnv = @("COMPOSE_PROJECT_NAME=killrvideo")
 
 # Get the docker environment using the common script and add to array
 & "$getEnvCommand" |% { $dockerEnv += $_ }
