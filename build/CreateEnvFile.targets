@@ -13,7 +13,7 @@
     </PropertyGroup>
 
     <!-- Only run when the environment file doesn't already exist -->
-    <Exec Condition="!Exists('%(EnvFile.FullPath)')"
-          Command="$(PowershellBaseCommand) -Command &quot;&amp; { &amp;&apos;$(ScriptFile)&apos; -FilePath &apos;%(EnvFile.FullPath)&apos; } &quot;" />
+    <Exec Condition="!Exists('%(EnvFile.FullPath)')" StandardOutputImportance="high"
+          Command="$(PowershellBaseCommand) -File $(ScriptFile) -FilePath %(EnvFile.FullPath)" />
   </Target>
 </Project>
