@@ -3,6 +3,9 @@ using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using KillrVideo.Configuration;
+using KillrVideo.Host;
+using KillrVideo.Host.Config;
 using Serilog;
 
 namespace KillrVideo.Docker
@@ -14,9 +17,26 @@ namespace KillrVideo.Docker
     public class BootstrapDocker
     {
         private static readonly ILogger Logger = Log.ForContext(typeof(BootstrapDocker));
+        private readonly IHostConfiguration _config;
+
+        public BootstrapDocker(IHostConfiguration config)
+        {
+            if (config == null) throw new ArgumentNullException(nameof(config));
+            _config = config;
+        }
 
         public void Start()
         {
+            // See if we need to start docker-compose
+            string shouldStart = _config.GetConfigurationValueOrDefault(ConfigConstants.StartDockerCompose,
+                bool.TrueString);
+
+            if (bool.Parse(shouldStart) == false)
+            {
+                Logger.Debug("Starting Docker is disabled, skipping");
+                return;
+            }
+
             Logger.Information("Starting Docker dependencies via docker-compose");
 
             using (Process process = CreateDockerComposeProcess("up -d"))
@@ -41,6 +61,15 @@ namespace KillrVideo.Docker
 
         public void Stop()
         {
+            // See if we should stop docker dependencies
+            string shouldStop = _config.GetConfigurationValueOrDefault(ConfigConstants.StopDockerCompose,
+                bool.TrueString);
+            if (bool.Parse(shouldStop) == false)
+            {
+                Logger.Debug("Stopping Docker is disabled, skipping");
+                return;
+            }
+
             Logger.Information("Stopping Docker dependencies via docker-compose");
 
             using (Process process = CreateDockerComposeProcess("stop"))
