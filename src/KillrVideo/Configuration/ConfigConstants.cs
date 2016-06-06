@@ -16,6 +16,11 @@
         public const string DockerIp = "DockerIp";
 
         /// <summary>
+        /// Whether or not we are in a Docker Toolbox environment.
+        /// </summary>
+        public const string DockerToolbox = "DockerToolbox";
+
+        /// <summary>
         /// Indicates whether to start docker compose when this project starts.
         /// </summary>
         public const string StartDockerCompose = "StartDockerCompose";
