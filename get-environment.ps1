@@ -58,7 +58,11 @@ function Get-DockerVirtualMachineIp {
         }
         throw "Unable to resolve host '$DOCKER_WINDOWS_HOST_NAME'. Is Docker for Windows started?"
     } else {
-        # When run from the docker shell, we should be able to get the IP from docker-machine
+        # Make sure the docker VM is started
+        Write-Host 'Ensuring Docker virtual machine is started'
+        Invoke-Expression "docker-machine start 2>&1" | Write-Host
+        
+        # When using Docker Toolbox, we should be able to get the IP from docker-machine
         $dockerHost = Invoke-Expression 'docker-machine ip 2>&1'
         if ($LastExitCode -eq 0) {
             Write-Verbose " => Docker machine returned $dockerHost"
