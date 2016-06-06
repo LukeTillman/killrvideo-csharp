@@ -6,7 +6,7 @@
 Param ()
 
 # Custom type representing the type of docker installation
-Add-Type -TypeDefinition "public enum DockerType { Windows, Toolbox }"
+Add-Type -TypeDefinition "public enum DockerInstallType { Windows, Toolbox }"
 
 function Get-DockerType {
     <#
@@ -14,7 +14,7 @@ function Get-DockerType {
     Determines what type of docker installation is present (Docker for Windows or Docker Toolbox)
     
     .OUTPUTS
-    A DockerType enum value indicating the docker environment
+    A DockerInstallType enum value indicating the docker environment
     #>
     [CmdletBinding()]
     Param()
@@ -22,9 +22,9 @@ function Get-DockerType {
     Write-Host 'Determining docker installation type'
     
     # Docker toolbox sets an install path environment variable so check for it
-    $dt = [DockerType]::Windows
+    $dt = [DockerInstallType]::Windows
     if ($Env:DOCKER_TOOLBOX_INSTALL_PATH) {
-        $dt = [DockerType]::Toolbox
+        $dt = [DockerInstallType]::Toolbox
     }
     
     Write-Verbose " => Using docker type $dt"
@@ -36,18 +36,22 @@ function Get-DockerVirtualMachineIp {
     .DESCRIPTION
     Find the IP address of the docker virtual machine
     
+    .PARAMETER DockerType
+    The type of docker installation.
+    
     .OUTPUTS
     The IP Address of the docker virtual machine
     #>
     [CmdletBinding()]
-    Param ()
-    
-    # Determine what type of docker installation we have
-    $dockerType = Get-DockerType
+    Param (
+        [parameter(Mandatory=$true)]
+        [DockerInstallType]
+        $DockerType
+    )
     
     Write-Host 'Finding docker Virtual Machine IP'
     
-    if ($dockerType -eq [DockerType]::Windows) {
+    if ($DockerType -eq [DockerInstallType]::Windows) {
         # In the DfW beta, the VM will be reachable via a host named 'docker'
         $DOCKER_WINDOWS_HOST_NAME = 'docker'
         $dnsResults = Resolve-DnsName $DOCKER_WINDOWS_HOST_NAME -ErrorAction SilentlyContinue
@@ -155,8 +159,12 @@ function Get-HostIp {
 }
 
 # Figure out the network setup
-$dockerVmIp = Get-DockerVirtualMachineIp
+$dockerType = Get-DockerType
+$dockerVmIp = Get-DockerVirtualMachineIp -DockerType $dockerType
 $hostIp = Get-HostIp $dockerVmIp
+$isToolbox = $dockerType -eq [DockerInstallType]::Toolbox
 
+# Write environment variable key value pairs to output
+Write-Output "KILLRVIDEO_DOCKER_TOOLBOX=$($isToolbox.ToString().ToLower())"
 Write-Output "KILLRVIDEO_HOST_IP=$hostIp"
 Write-Output "KILLRVIDEO_DOCKER_IP=$dockerVmIp"
