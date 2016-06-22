@@ -1,0 +1,128 @@
+syntax = "proto3";
+
+package killrvideo.video_catalog;
+option csharp_namespace = "KillrVideo.VideoCatalog";
+
+import "google/protobuf/timestamp.proto";
+import "common/common_types.proto";
+
+// Service responsible for tracking the catalog of available videos for playback
+service VideoCatalogService {
+  // Submit an uploaded video to the catalog
+  rpc SubmitUploadedVideo(SubmitUploadedVideoRequest) returns (SubmitUploadedVideoResponse);
+  
+  // Submit a YouTube video to the catalog
+  rpc SubmitYouTubeVideo(SubmitYouTubeVideoRequest) returns (SubmitYouTubeVideoResponse);
+  
+  // Gets a video from the catalog
+  rpc GetVideo(GetVideoRequest) returns (GetVideoResponse);
+  
+  // Gets video previews for a limited number of videos from the catalog
+  rpc GetVideoPreviews(GetVideoPreviewsRequest) returns (GetVideoPreviewsResponse);
+  
+  // Gets video previews for the latest (i.e. newest) videos from the catalog
+  rpc GetLatestVideoPreviews(GetLatestVideoPreviewsRequest) returns (GetLatestVideoPreviewsResponse);
+  
+  // Gets video previews for videos added to the site by a particular user
+  rpc GetUserVideoPreviews(GetUserVideoPreviewsRequest) returns (GetUserVideoPreviewsResponse);
+}
+
+// Request to submit a new uploaded video to the catalog
+message SubmitUploadedVideoRequest {
+  killrvideo.common.Uuid video_id = 1;
+  killrvideo.common.Uuid user_id = 2;
+  string name = 3;
+  string description = 4;
+  repeated string tags = 5;
+  string upload_url = 6;
+}
+
+// Response when submitting a new uploaded video to the catalog
+message SubmitUploadedVideoResponse {
+}
+
+// Request to submit a new YouTube video to the catalog
+message SubmitYouTubeVideoRequest {
+  killrvideo.common.Uuid video_id = 1;
+  killrvideo.common.Uuid user_id = 2;
+  string name = 3;
+  string description = 4;
+  repeated string tags = 5;
+  string you_tube_video_id = 6;
+}
+
+// Response when submitting a new YouTube video to the catalog
+message SubmitYouTubeVideoResponse {
+}
+
+// Request to get a video and all its details from the catalog
+message GetVideoRequest {
+  killrvideo.common.Uuid video_id = 1;
+}
+
+// Response when getting a video and all its details from the catalog
+message GetVideoResponse {
+  killrvideo.common.Uuid video_id = 1;
+  killrvideo.common.Uuid user_id = 2;
+  string name = 3;
+  string description = 4;
+  string location = 5;
+  VideoLocationType location_type = 6;
+  repeated string tags = 7;
+  google.protobuf.Timestamp added_date = 8;
+}
+
+// Enum representing what kind of video location is present for a video
+enum VideoLocationType {
+  YOUTUBE = 0;
+  UPLOAD = 1;
+}
+
+// Request for getting some video previews by the video ids
+message GetVideoPreviewsRequest {
+  repeated killrvideo.common.Uuid video_ids = 1;
+}
+
+// Response when getting some video previews by their ids
+message GetVideoPreviewsResponse {
+  repeated VideoPreview video_previews = 1;
+}
+
+// A video preview (i.e. limited details about a video)
+message VideoPreview {
+  killrvideo.common.Uuid video_id = 1;
+  google.protobuf.Timestamp added_date = 2;
+  string name = 3;
+  string preview_image_location = 4;
+  killrvideo.common.Uuid user_id = 5;
+}
+
+// Request for getting a page of the latest (i.e. newest) videos in the catalog
+message GetLatestVideoPreviewsRequest {
+  int32 page_size = 1;
+  google.protobuf.Timestamp starting_added_date = 2;
+  killrvideo.common.Uuid starting_video_id = 3;
+  string paging_state = 16;
+}
+
+// Response when getting a page of the latest videos in the catalog
+message GetLatestVideoPreviewsResponse {
+  repeated VideoPreview video_previews = 1;
+  string paging_state = 2;
+}
+
+// Request for getting videos a particular user has added to the catalog
+message GetUserVideoPreviewsRequest {
+  killrvideo.common.Uuid user_id = 1;
+  int32 page_size = 2;
+  google.protobuf.Timestamp starting_added_date = 3;
+  killrvideo.common.Uuid starting_video_id = 4;
+  string paging_state = 16;
+}
+
+// Response when getting videos for a particular user
+message GetUserVideoPreviewsResponse {
+  killrvideo.common.Uuid user_id = 1;
+  repeated VideoPreview video_previews = 2;
+  string paging_state = 3;
+}

@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package killrvideo.sample_data;
+option csharp_namespace = "KillrVideo.SampleData";
+
+// Service for managing sample data on the site
+service SampleDataService {
+  // Adds sample comment data
+  rpc AddSampleComments(AddSampleCommentsRequest) returns (AddSampleCommentsResponse);
+  
+  // Adds sample ratings data
+  rpc AddSampleRatings(AddSampleRatingsRequest) returns (AddSampleRatingsResponse);
+  
+  // Adds sample users data
+  rpc AddSampleUsers(AddSampleUsersRequest) returns (AddSampleUsersResponse);
+  
+  // Adds sample video views data
+  rpc AddSampleVideoViews(AddSampleVideoViewsRequest) returns (AddSampleVideoViewsResponse);
+  
+  // Adds sample YouTube video data
+  rpc AddSampleYouTubeVideos(AddSampleYouTubeVideosRequest) returns (AddSampleYouTubeVideosResponse);
+  
+  // Triggers a refresh of the YouTube sample video data sources
+  rpc RefreshYouTubeSources(RefreshYouTubeSourcesRequest) returns (RefreshYouTubeSourcesResponse);
+}
+
+// Request for adding sample comments
+message AddSampleCommentsRequest {
+  int32 number_of_comments = 1;
+}
+
+// Response for adding sample comments
+message AddSampleCommentsResponse {
+}
+
+// Request for adding sample ratings
+message AddSampleRatingsRequest {
+  int32 number_of_ratings = 1;
+}
+
+// Response when adding sample ratings
+message AddSampleRatingsResponse {
+}
+
+// Request for adding sample users
+message AddSampleUsersRequest {
+  int32 number_of_users = 1;
+}
+
+// Response when adding sample users
+message AddSampleUsersResponse {
+}
+
+// Request to add sample video views
+message AddSampleVideoViewsRequest {
+  int32 number_of_views = 1;
+}
+
+// Response when adding sample video views
+message AddSampleVideoViewsResponse {
+}
+
+// Request to add sample YouTube videos
+message AddSampleYouTubeVideosRequest {
+  int32 number_of_videos = 1;
+}
+
+// Response when adding sample YouTube videos
+message AddSampleYouTubeVideosResponse {
+}
+
+// Request to refresh the list of videos from YouTube video sources
+message RefreshYouTubeSourcesRequest {
+}
+
+// Response when refreshing the list of videos from YouTube
+message RefreshYouTubeSourcesResponse {
+}

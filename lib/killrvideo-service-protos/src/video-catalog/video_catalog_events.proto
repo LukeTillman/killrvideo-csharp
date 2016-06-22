@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package killrvideo.video_catalog.events;
+option csharp_namespace = "KillrVideo.VideoCatalog.Events";
+
+import "google/protobuf/timestamp.proto";
+import "common/common_types.proto";
+
+// Event published when uploaded video has been accepted by the catalog, but isn't ready for playback yet
+message UploadedVideoAccepted {
+  killrvideo.common.Uuid video_id = 1;
+  string upload_url = 2;
+  google.protobuf.Timestamp timestamp = 3;
+}
+
+// Event published when an uploaded video has been added to the catalog and is ready for playback
+message UploadedVideoAdded {
+  killrvideo.common.Uuid video_id = 1;
+  killrvideo.common.Uuid user_id = 2;
+  string name = 3;
+  string description = 4;
+  string location = 5;
+  string preview_image_location = 6;
+  repeated string tags = 7;
+  google.protobuf.Timestamp added_date = 8;
+  google.protobuf.Timestamp timestamp = 9;
+}
+
+// Event published when a YouTube video has been added to the catalog and is ready for playback
+message YouTubeVideoAdded {
+  killrvideo.common.Uuid video_id = 1;
+  killrvideo.common.Uuid user_id = 2;
+  string name = 3;
+  string description = 4;
+  string location = 5;
+  string preview_image_location = 6;
+  repeated string tags = 7;
+  google.protobuf.Timestamp added_date = 8;
+  google.protobuf.Timestamp timestamp = 9;
+}

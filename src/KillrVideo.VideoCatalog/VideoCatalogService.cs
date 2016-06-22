@@ -1,57 +1,75 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Utils;
-using KillrVideo.VideoCatalog.Dtos;
-using KillrVideo.VideoCatalog.Messages.Events;
-using Nimbus;
+using Google.Protobuf.Reflection;
+using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
+using KillrVideo.Cassandra;
+using KillrVideo.MessageBus;
+using KillrVideo.Protobuf;
+using KillrVideo.Protobuf.Services;
+using KillrVideo.VideoCatalog.Events;
 
 namespace KillrVideo.VideoCatalog
 {
     /// <summary>
     /// An implementation of the video catalog service that stores catalog data in Cassandra and publishes events on a message bus.
     /// </summary>
-    public class VideoCatalogService : IVideoCatalogService
+    [Export(typeof(IGrpcServerService))]
+    public class VideoCatalogServiceImpl : VideoCatalogService.VideoCatalogServiceBase, IGrpcServerService
     {
+        public static readonly int LatestVideosTtlSeconds = Convert.ToInt32(TimeSpan.FromDays(MaxDaysInPastForLatestVideos).TotalSeconds);
+
         private const int MaxDaysInPastForLatestVideos = 7;
         private static readonly Regex ParseLatestPagingState = new Regex("([0-9]{8}){8}([0-9]{1})(.*)", RegexOptions.Compiled | RegexOptions.Singleline);
         
         private readonly ISession _session;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
         private readonly IBus _bus;
+        private readonly PreparedStatementCache _statementCache;
 
-        public VideoCatalogService(ISession session, TaskCache<string, PreparedStatement> statementCache, IBus bus)
+        public ServiceDescriptor Descriptor => VideoCatalogService.Descriptor;
+
+        public VideoCatalogServiceImpl(ISession session, PreparedStatementCache statementCache, IBus bus)
         {
-            if (session == null) throw new ArgumentNullException("session");
-            if (statementCache == null) throw new ArgumentNullException("statementCache");
+            if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
+            if (bus == null) throw new ArgumentNullException(nameof(bus));
             _session = session;
             _statementCache = statementCache;
             _bus = bus;
         }
 
         /// <summary>
+        /// Convert this instance to a ServerServiceDefinition that can be run on a Grpc server.
+        /// </summary>
+        public ServerServiceDefinition ToServerServiceDefinition()
+        {
+            return VideoCatalogService.BindService(this);
+        }
+
+        /// <summary>
         /// Submits an uploaded video to the catalog.
         /// </summary>
-        public async Task SubmitUploadedVideo(SubmitUploadedVideo uploadedVideo)
+        public override async Task<SubmitUploadedVideoResponse> SubmitUploadedVideo(SubmitUploadedVideoRequest request, ServerCallContext context)
         {
             var timestamp = DateTimeOffset.UtcNow;
 
             // Store the information we have now in Cassandra
-            PreparedStatement[] prepared = await _statementCache.NoContext.GetOrAddAllAsync(
-                "INSERT INTO videos (videoid, userid, name, description, tags, location_type, added_date) VALUES (?, ?, ?, ?, ?, ?, ?) USING TIMESTAMP ?",
-                "INSERT INTO user_videos (userid, added_date, videoid, name) VALUES (?, ?, ?, ?) USING TIMESTAMP ?"
+            PreparedStatement[] prepared = await _statementCache.GetOrAddAllAsync(
+                "INSERT INTO videos (videoid, userid, name, description, tags, location_type, added_date) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO user_videos (userid, added_date, videoid, name) VALUES (?, ?, ?, ?)"
             );
 
             var batch = new BatchStatement();
 
-            batch.Add(prepared[0].Bind(uploadedVideo.VideoId, uploadedVideo.UserId, uploadedVideo.Name, uploadedVideo.Description,
-                                       uploadedVideo.Tags, VideoCatalogConstants.UploadedVideoType, timestamp,
-                                       timestamp.ToMicrosecondsSinceEpoch()));
-            batch.Add(prepared[1].Bind(uploadedVideo.UserId, timestamp, uploadedVideo.VideoId, uploadedVideo.Name,
-                                       timestamp.ToMicrosecondsSinceEpoch()));
+            batch.Add(prepared[0].Bind(request.VideoId.ToGuid(), request.UserId.ToGuid(), request.Name, request.Description,
+                                       request.Tags.ToArray(), (int) VideoLocationType.UPLOAD, timestamp))
+                 .Add(prepared[1].Bind(request.UserId.ToGuid(), timestamp, request.VideoId.ToGuid(), request.Name))
+                 .SetTimestamp(timestamp);
 
             await _session.ExecuteAsync(batch).ConfigureAwait(false);
 
@@ -59,104 +77,137 @@ namespace KillrVideo.VideoCatalog
             // video playback and thumbnail)
             await _bus.Publish(new UploadedVideoAccepted
             {
-                VideoId = uploadedVideo.VideoId,
-                UploadUrl = uploadedVideo.UploadUrl,
-                Timestamp = timestamp
+                VideoId = request.VideoId,
+                UploadUrl = request.UploadUrl,
+                Timestamp = timestamp.ToTimestamp()
             }).ConfigureAwait(false);
+
+            return new SubmitUploadedVideoResponse();
         }
 
         /// <summary>
         /// Submits a YouTube video to the catalog.
         /// </summary>
-        public async Task SubmitYouTubeVideo(SubmitYouTubeVideo youTubeVideo)
+        public override async Task<SubmitYouTubeVideoResponse> SubmitYouTubeVideo(SubmitYouTubeVideoRequest request, ServerCallContext context)
         {
             // Use a batch to insert the YouTube video into multiple tables
-            PreparedStatement[] prepared = await _statementCache.NoContext.GetOrAddAllAsync(
+            PreparedStatement[] prepared = await _statementCache.GetOrAddAllAsync(
                 "INSERT INTO videos (videoid, userid, name, description, location, preview_image_location, tags, added_date, location_type) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) USING TIMESTAMP ?",
-                "INSERT INTO user_videos (userid, added_date, videoid, name, preview_image_location) VALUES (?, ?, ?, ?, ?) USING TIMESTAMP ?",
-                "INSERT INTO latest_videos (yyyymmdd, added_date, videoid, userid, name, preview_image_location) VALUES (?, ?, ?, ?, ?, ?) USING TIMESTAMP ? AND TTL ?");
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO user_videos (userid, added_date, videoid, name, preview_image_location) VALUES (?, ?, ?, ?, ?)",
+                "INSERT INTO latest_videos (yyyymmdd, added_date, videoid, userid, name, preview_image_location) VALUES (?, ?, ?, ?, ?, ?) USING TTL ?");
 
             // Calculate date-related info and location/thumbnail for YouTube video
             var addDate = DateTimeOffset.UtcNow;
             string yyyymmdd = addDate.ToString("yyyyMMdd");
 
-            string location = youTubeVideo.YouTubeVideoId;      // TODO: Store URL instead of ID?
-            string previewImageLocation = string.Format("//img.youtube.com/vi/{0}/hqdefault.jpg", youTubeVideo.YouTubeVideoId);
+            string location = request.YouTubeVideoId;      // TODO: Store URL instead of ID?
+            string previewImageLocation = $"//img.youtube.com/vi/{request.YouTubeVideoId}/hqdefault.jpg";
 
             var batch = new BatchStatement();
-            batch.Add(prepared[0].Bind(youTubeVideo.VideoId, youTubeVideo.UserId, youTubeVideo.Name, youTubeVideo.Description, location,
-                                       previewImageLocation, youTubeVideo.Tags, addDate, VideoCatalogConstants.YouTubeVideoType,
-                                       addDate.ToMicrosecondsSinceEpoch()));
-            batch.Add(prepared[1].Bind(youTubeVideo.UserId, addDate, youTubeVideo.VideoId, youTubeVideo.Name, previewImageLocation,
-                                       addDate.ToMicrosecondsSinceEpoch()));
-            batch.Add(prepared[2].Bind(yyyymmdd, addDate, youTubeVideo.VideoId, youTubeVideo.UserId, youTubeVideo.Name, previewImageLocation,
-                                       addDate.ToMicrosecondsSinceEpoch(), VideoCatalogConstants.LatestVideosTtlSeconds));
+            batch.Add(prepared[0].Bind(request.VideoId.ToGuid(), request.UserId.ToGuid(), request.Name, request.Description, location,
+                                       previewImageLocation, request.Tags.ToArray(), addDate, (int) VideoLocationType.YOUTUBE))
+                 .Add(prepared[1].Bind(request.UserId.ToGuid(), addDate, request.VideoId.ToGuid(), request.Name, previewImageLocation))
+                 .Add(prepared[2].Bind(yyyymmdd, addDate, request.VideoId.ToGuid(), request.UserId.ToGuid(), request.Name, previewImageLocation, LatestVideosTtlSeconds))
+                 .SetTimestamp(addDate);
             
             // Send the batch to Cassandra
             await _session.ExecuteAsync(batch).ConfigureAwait(false);
 
             // Tell the world about the new YouTube video
-            await _bus.Publish(new YouTubeVideoAdded
+            var message = new YouTubeVideoAdded
             {
-                VideoId = youTubeVideo.VideoId,
-                UserId = youTubeVideo.UserId,
-                Name = youTubeVideo.Name,
-                Description = youTubeVideo.Description,
+                VideoId = request.VideoId,
+                UserId = request.UserId,
+                Name = request.Name,
+                Description = request.Description,
                 Location = location,
                 PreviewImageLocation = previewImageLocation,
-                Tags = youTubeVideo.Tags,
-                AddedDate = addDate,
-                Timestamp = addDate
-            }).ConfigureAwait(false);
+                AddedDate = addDate.ToTimestamp(),
+                Timestamp = addDate.ToTimestamp()
+            };
+            message.Tags.Add(request.Tags);
+            await _bus.Publish(message).ConfigureAwait(false);
+
+            return new SubmitYouTubeVideoResponse();
         }
 
         /// <summary>
         /// Gets the details of a specific video.
         /// </summary>
-        public async Task<VideoDetails> GetVideo(Guid videoId)
+        public override async Task<GetVideoResponse> GetVideo(GetVideoRequest request, ServerCallContext context)
         {
-            PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM videos WHERE videoid = ?");
-            RowSet rows = await _session.ExecuteAsync(preparedStatement.Bind(videoId)).ConfigureAwait(false);
-            return MapRowToVideoDetails(rows.SingleOrDefault());
+            PreparedStatement preparedStatement = await _statementCache.GetOrAddAsync("SELECT * FROM videos WHERE videoid = ?");
+            RowSet rows = await _session.ExecuteAsync(preparedStatement.Bind(request.VideoId.ToGuid())).ConfigureAwait(false);
+            Row row = rows.SingleOrDefault();
+            if (row == null)
+            {
+                var status = new Status(StatusCode.NotFound, $"Video with id {request.VideoId.Value} was not found");
+                throw new RpcException(status);
+            }
+
+            var response = new GetVideoResponse
+            {
+                VideoId = row.GetValue<Guid>("videoid").ToUuid(),
+                UserId = row.GetValue<Guid>("userid").ToUuid(),
+                Name = row.GetValue<string>("name"),
+                Description = row.GetValue<string>("description"),
+                Location = row.GetValue<string>("location"),
+                LocationType = (VideoLocationType) row.GetValue<int>("location_type"),
+                AddedDate = row.GetValue<DateTimeOffset>("added_date").ToTimestamp()
+            };
+
+            var tags = row.GetValue<IEnumerable<string>>("tags");
+            if (tags != null)
+                response.Tags.Add(tags);
+
+            return response;
         }
 
         /// <summary>
         /// Gets a limited number of video preview data by video id.
         /// </summary>
-        public async Task<IEnumerable<VideoPreview>> GetVideoPreviews(ISet<Guid> videoIds)
+        public override async Task<GetVideoPreviewsResponse> GetVideoPreviews(GetVideoPreviewsRequest request, ServerCallContext context)
         {
-            if (videoIds == null || videoIds.Count == 0) return Enumerable.Empty<VideoPreview>();
+            var response = new GetVideoPreviewsResponse();
+
+            if (request.VideoIds == null || request.VideoIds.Count == 0)
+                return response;
 
             // Since we're doing a multi-get here, limit the number of previews to 20 to try and enforce some
             // performance sanity.  If we ever needed to do more than that, we might think about a different
             // data model that doesn't involve a multi-get.
-            if (videoIds.Count > 20) throw new ArgumentOutOfRangeException("videoIds", "videoIds cannot contain more than 20 video id keys.");
+            if (request.VideoIds.Count > 20)
+            {
+                var status = new Status(StatusCode.InvalidArgument, "Cannot fetch more than 20 videos at once");
+                throw new RpcException(status);
+            }
 
             // As an example, let's do the multi-get using multiple statements at the driver level.  For an example of doing this at
-            // the CQL level with an IN() clause, see UserReadModel.GetUserProfiles
-            PreparedStatement prepared = await _statementCache.NoContext.GetOrAddAsync(
+            // the CQL level with an IN() clause, see UserManagement's GetUserProfiles
+            PreparedStatement prepared = await _statementCache.GetOrAddAsync(
                 "SELECT videoid, userid, added_date, name, preview_image_location FROM videos WHERE videoid = ?");
 
             // Bind multiple times to the prepared statement with each video id and execute all the gets in parallel, then await
             // the completion of all the gets
-            RowSet[] rowSets = await Task.WhenAll(videoIds.Select(id => _session.ExecuteAsync(prepared.Bind(id)))).ConfigureAwait(false);
+            RowSet[] rowSets = await Task.WhenAll(request.VideoIds.Select(id => _session.ExecuteAsync(prepared.Bind(id.ToGuid())))).ConfigureAwait(false);
 
             // Flatten the rows in the rowsets to VideoPreview objects
-            return rowSets.SelectMany(rowSet => rowSet, (_, row) => MapRowToVideoPreview(row));
+            response.VideoPreviews.Add(rowSets.SelectMany(rowSet => rowSet, (_, row) => MapRowToVideoPreview(row)));
+            return response;
         }
 
         /// <summary>
         /// Gets the latest videos added to the site.
         /// </summary>
-        public async Task<LatestVideos> GetLastestVideos(GetLatestVideos getVideos)
+        public override async Task<GetLatestVideoPreviewsResponse> GetLatestVideoPreviews(GetLatestVideoPreviewsRequest request, ServerCallContext context)
         {
             string[] buckets;
             int bucketIndex;
             string rowPagingState;
 
             // See if we have paging state from a previous page of videos
-            if (TryParsePagingState(getVideos.PagingState, out buckets, out bucketIndex, out rowPagingState) == false)
+            if (TryParsePagingState(request.PagingState, out buckets, out bucketIndex, out rowPagingState) == false)
             {
                 // Generate a list of all the possibly bucket dates by truncating now to the day, then subtracting days from that day
                 // going back as many days as we're allowed to query back
@@ -170,19 +221,33 @@ namespace KillrVideo.VideoCatalog
             
             // We may need multiple queries to fill the quota so build up a list of results
             var results = new List<VideoPreview>();
-            string nextPageState = null;
+            string nextPageState = string.Empty;
+
+            DateTimeOffset? startingAddedDate = request.StartingAddedDate?.ToDateTimeOffset();
+            Guid? startingVideoId = request.StartingVideoId?.ToGuid();
+            PreparedStatement preparedStatement;
+            if (startingVideoId == null)
+            {
+                preparedStatement = await _statementCache.GetOrAddAsync("SELECT * FROM latest_videos WHERE yyyymmdd = ?");
+            }
+            else
+            {
+                preparedStatement = await _statementCache.GetOrAddAsync("SELECT * FROM latest_videos WHERE yyyymmdd = ? AND (added_date, videoid) <= (?, ?)");
+            }
 
             // TODO: Run queries in parallel?
             while (bucketIndex < buckets.Length)
             {
-                int recordsStillNeeded = getVideos.PageSize - results.Count;
+                int recordsStillNeeded = request.PageSize - results.Count;
                 string bucket = buckets[bucketIndex];
 
                 // Get a page of records but don't automatically load more pages when enumerating the RowSet
-                PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM latest_videos WHERE yyyymmdd = ?");
-                IStatement boundStatement = preparedStatement.Bind(bucket)
-                                                             .SetAutoPage(false)
-                                                             .SetPageSize(recordsStillNeeded);
+                IStatement boundStatement = startingVideoId == null
+                                                ? preparedStatement.Bind(bucket)
+                                                : preparedStatement.Bind(bucket, startingAddedDate, startingVideoId);
+
+                boundStatement.SetAutoPage(false)
+                              .SetPageSize(recordsStillNeeded);
 
                 // Start from where we left off in this bucket
                 if (string.IsNullOrEmpty(rowPagingState) == false)
@@ -192,7 +257,7 @@ namespace KillrVideo.VideoCatalog
                 results.AddRange(rows.Select(MapRowToVideoPreview));
 
                 // See if we can stop querying
-                if (results.Count == getVideos.PageSize)
+                if (results.Count == request.PageSize)
                 {
                     // Are there more rows in the current bucket?
                     if (rows.PagingState != null && rows.PagingState.Length > 0)
@@ -211,57 +276,50 @@ namespace KillrVideo.VideoCatalog
 
                 bucketIndex++;
             }
-            
-            return new LatestVideos
-            {
-                Videos = results,
-                PagingState = nextPageState
-            };
+
+            var response = new GetLatestVideoPreviewsResponse { PagingState = nextPageState };
+            response.VideoPreviews.Add(results);
+            return response;
         }
 
         /// <summary>
         /// Gets a page of videos for a particular user.
         /// </summary>
-        public async Task<UserVideos> GetUserVideos(GetUserVideos getVideos)
+        public override async Task<GetUserVideoPreviewsResponse> GetUserVideoPreviews(GetUserVideoPreviewsRequest request, ServerCallContext context)
         {
             // Figure out if we're getting first page or subsequent page
-            PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM user_videos WHERE userid = ?");
-            IStatement boundStatement = preparedStatement.Bind(getVideos.UserId)
-                                                         .SetAutoPage(false)
-                                                         .SetPageSize(getVideos.PageSize);
+            PreparedStatement prepared;
+            IStatement bound;
+            DateTimeOffset? startingAddedDate = request.StartingAddedDate?.ToDateTimeOffset();
+            Guid? startingVideoId = request.StartingVideoId?.ToGuid();
+            Guid userId = request.UserId.ToGuid();
+            if (startingVideoId == null)
+            {
+                prepared = await _statementCache.GetOrAddAsync("SELECT * FROM user_videos WHERE userid = ?");
+                bound = prepared.Bind(userId);
+            }
+            else
+            {
+                prepared = await _statementCache.GetOrAddAsync("SELECT * FROM user_videos WHERE userid = ? AND (added_date, videoid) <= (?, ?)");
+                bound = prepared.Bind(userId, startingAddedDate, startingVideoId);
+            }
+
+            bound.SetAutoPage(false)
+                 .SetPageSize(request.PageSize);
 
             // The initial query won't have a paging state, but subsequent calls should if there are more pages
-            if (string.IsNullOrEmpty(getVideos.PagingState) == false)
-                boundStatement.SetPagingState(Convert.FromBase64String(getVideos.PagingState));
+            if (string.IsNullOrEmpty(request.PagingState) == false)
+                bound.SetPagingState(Convert.FromBase64String(request.PagingState));
 
-            RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
-            return new UserVideos
+            RowSet rows = await _session.ExecuteAsync(bound).ConfigureAwait(false);
+            var response = new GetUserVideoPreviewsResponse
             {
-                UserId = getVideos.UserId,
-                Videos = rows.Select(MapRowToVideoPreview).ToList(),
-                PagingState = rows.PagingState != null && rows.PagingState.Length > 0 ? Convert.ToBase64String(rows.PagingState) : null
+                UserId = request.UserId,
+                PagingState = rows.PagingState != null && rows.PagingState.Length > 0 ? Convert.ToBase64String(rows.PagingState) : string.Empty
             };
-        }
-        
-        /// <summary>
-        /// Maps a row to a VideoDetails object.
-        /// </summary>
-        private static VideoDetails MapRowToVideoDetails(Row row)
-        {
-            if (row == null) return null;
 
-            var tags = row.GetValue<IEnumerable<string>>("tags");
-            return new VideoDetails
-            {
-                VideoId = row.GetValue<Guid>("videoid"),
-                UserId = row.GetValue<Guid>("userid"),
-                Name = row.GetValue<string>("name"),
-                Description = row.GetValue<string>("description"),
-                Location = row.GetValue<string>("location"),
-                LocationType = (VideoLocationType) row.GetValue<int>("location_type"),
-                Tags = tags == null ? new HashSet<string>() : new HashSet<string>(tags),
-                AddedDate = row.GetValue<DateTimeOffset>("added_date")
-            };
+            response.VideoPreviews.Add(rows.Select(MapRowToVideoPreview));
+            return response;
         }
 
         /// <summary>
@@ -271,11 +329,11 @@ namespace KillrVideo.VideoCatalog
         {
             return new VideoPreview
             {
-                VideoId = row.GetValue<Guid>("videoid"),
-                AddedDate = row.GetValue<DateTimeOffset>("added_date"),
+                VideoId = row.GetValue<Guid>("videoid").ToUuid(),
+                AddedDate = row.GetValue<DateTimeOffset>("added_date").ToTimestamp(),
                 Name = row.GetValue<string>("name"),
                 PreviewImageLocation = row.GetValue<string>("preview_image_location"),
-                UserId = row.GetValue<Guid>("userid")
+                UserId = row.GetValue<Guid>("userid").ToUuid()
             };
         }
 
@@ -284,7 +342,7 @@ namespace KillrVideo.VideoCatalog
         /// </summary>
         private static string CreatePagingState(string[] buckets, int bucketIndex, string rowsPagingState)
         {
-            return string.Format("{0}{1}{2}", string.Join(string.Empty, buckets), bucketIndex, rowsPagingState);
+            return $"{string.Join(string.Empty, buckets)}{bucketIndex}{rowsPagingState}";
         }
 
         /// <summary>

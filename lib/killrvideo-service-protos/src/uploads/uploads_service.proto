@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package killrvideo.uploads;
+option csharp_namespace = "KillrVideo.Uploads";
+
+import "google/protobuf/timestamp.proto";
+import "common/common_types.proto";
+
+// Service that handles processing/re-encoding of uploaded videos
+service UploadsService {
+  // Gets an upload destination for a user to upload a video
+  rpc GetUploadDestination(GetUploadDestinationRequest) returns (GetUploadDestinationResponse);
+  
+  // Marks an upload as complete
+  rpc MarkUploadComplete(MarkUploadCompleteRequest) returns (MarkUploadCompleteResponse);
+  
+  // Gets the status of an uploaded video
+  rpc GetStatusOfVideo(GetStatusOfVideoRequest) returns (GetStatusOfVideoResponse);
+}
+
+// Request to get/generate a location where a video can be uploaded
+message GetUploadDestinationRequest {
+  string file_name = 1;
+}
+
+// Response that has the location where a video can be uploaded
+message GetUploadDestinationResponse {
+  string upload_url = 1;
+}
+
+// Request to tell the upload service that a video is finished uploading
+message MarkUploadCompleteRequest {
+  string upload_url = 1;
+}
+
+// Response when marking an upload complete
+message MarkUploadCompleteResponse {
+}
+
+// Get the current status of an uploaded video
+message GetStatusOfVideoRequest {
+  killrvideo.common.Uuid video_id = 1;
+}
+
+// Response with the current status of an uploaded video
+message GetStatusOfVideoResponse {
+  google.protobuf.Timestamp status_date = 1;
+  string current_state = 2;
+}

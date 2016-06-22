@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package killrvideo.suggested_videos;
+option csharp_namespace = "KillrVideo.SuggestedVideos";
+
+import "google/protobuf/timestamp.proto";
+import "common/common_types.proto";
+
+// Service responsible for generating video suggestions
+service SuggestedVideoService {
+  // Gets videos related to another video
+  rpc GetRelatedVideos(GetRelatedVideosRequest) returns (GetRelatedVideosResponse);
+  
+  // Gets personalized video suggestions for a user
+  rpc GetSuggestedForUser(GetSuggestedForUserRequest) returns (GetSuggestedForUserResponse);
+}
+
+// Request to get videos related to another video
+message GetRelatedVideosRequest {
+  killrvideo.common.Uuid video_id = 1;
+  int32 page_size = 2;
+  string paging_state = 16;
+}
+
+// Response when getting messages related to another video
+message GetRelatedVideosResponse {
+  killrvideo.common.Uuid video_id = 1;
+  repeated SuggestedVideoPreview videos = 2;
+  string paging_state = 3;
+}
+
+// Request to get personalized video suggestions for a user
+message GetSuggestedForUserRequest {
+  killrvideo.common.Uuid user_id = 1;
+  int32 page_size = 2;
+  string paging_state = 16;
+}
+
+// Response when getting personalized suggestions for a user
+message GetSuggestedForUserResponse {
+  killrvideo.common.Uuid user_id = 1;
+  repeated SuggestedVideoPreview videos = 2;
+  string paging_state = 3;
+}
+
+// Video preview data for a video returned as a video suggestion
+message SuggestedVideoPreview {
+  killrvideo.common.Uuid video_id = 1;
+  google.protobuf.Timestamp added_date = 2;
+  string name = 3;
+  string preview_image_location = 4;
+  killrvideo.common.Uuid user_id = 5;
+}

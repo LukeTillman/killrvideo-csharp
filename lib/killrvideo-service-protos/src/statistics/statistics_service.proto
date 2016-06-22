@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package killrvideo.statistics;
+option csharp_namespace = "KillrVideo.Statistics";
+
+import "common/common_types.proto";
+
+// Service that tracks playback statistics for videos
+service StatisticsService {
+  // Record that playback started for a given video
+  rpc RecordPlaybackStarted(RecordPlaybackStartedRequest) returns (RecordPlaybackStartedResponse);
+  
+  // Get the number of plays for a given video or set of videos
+  rpc GetNumberOfPlays(GetNumberOfPlaysRequest) returns (GetNumberOfPlaysResponse);
+}
+
+// Request for recording that a user started playing back a video
+message RecordPlaybackStartedRequest {
+  killrvideo.common.Uuid video_id = 1;
+}
+
+// Response when recording that a user started playing back a video
+message RecordPlaybackStartedResponse {
+}
+
+// Request for getting the number of times a video or set of videos has been played back
+message GetNumberOfPlaysRequest {
+  repeated killrvideo.common.Uuid video_ids = 1;
+}
+
+// Response when getting playback stats for a video or set of videos
+message GetNumberOfPlaysResponse {
+  repeated PlayStats stats = 1;
+}
+
+// The playback stats for a given video id
+message PlayStats {
+  killrvideo.common.Uuid video_id = 1;
+  int64 views = 2;
+}

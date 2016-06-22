@@ -1,71 +1,53 @@
-using System;
-using System.Linq;
+using System.ComponentModel.Composition;
 using System.Threading.Tasks;
-using Cassandra;
-using KillrVideo.Uploads.Dtos;
-using KillrVideo.Utils;
-using Nimbus;
+using Google.Protobuf.Reflection;
+using Grpc.Core;
+using KillrVideo.Protobuf.Services;
 
 namespace KillrVideo.Uploads
 {
     /// <summary>
-    /// An implementation of the video uploads service that stores data in Cassandra and uses a message bus for sending commands to
-    /// backend processes and publishing events.
+    /// The default implementation of the Uploads service currently doesn't support uploaded videos. (We need some way to support
+    /// processing and extracting thumbnails locally in order to support this.)
     /// </summary>
-    public class UploadsService : IUploadsService
+    [Export(typeof(IGrpcServerService))]
+    public class UploadsServiceImpl : UploadsService.UploadsServiceBase, IGrpcServerService
     {
-        private readonly ISession _session;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
-        private readonly IBus _bus;
+        public ServiceDescriptor Descriptor => UploadsService.Descriptor;
 
-        public UploadsService(ISession session, TaskCache<string, PreparedStatement> statementCache, IBus bus)
+        /// <summary>
+        /// Convert this instance to a ServerServiceDefinition that can be run on a Grpc server.
+        /// </summary>
+        public ServerServiceDefinition ToServerServiceDefinition()
         {
-            if (session == null) throw new ArgumentNullException("session");
-            if (statementCache == null) throw new ArgumentNullException("statementCache");
-            if (bus == null) throw new ArgumentNullException("bus");
-            _session = session;
-            _statementCache = statementCache;
-            _bus = bus;
+            return UploadsService.BindService(this);
         }
 
         /// <summary>
         /// Generates upload destinations for users to upload videos.
         /// </summary>
-        public Task<UploadDestination> GenerateUploadDestination(GenerateUploadDestination uploadDestination)
+        public override Task<GetUploadDestinationResponse> GetUploadDestination(GetUploadDestinationRequest request, ServerCallContext context)
         {
-            // Do request/response via the bus
-            return _bus.Request(uploadDestination);
+            var status = new Status(StatusCode.Unimplemented, "Uploading videos is currently not supported");
+            throw new RpcException(status);
         }
 
         /// <summary>
         /// Marks an upload as complete.
         /// </summary>
-        public Task MarkUploadComplete(MarkUploadComplete upload)
+        public override Task<MarkUploadCompleteResponse> MarkUploadComplete(MarkUploadCompleteRequest request, ServerCallContext context)
         {
-            // Send command via the bus
-            return _bus.Send(upload);
+            var status = new Status(StatusCode.Unimplemented, "Uploading videos is currently not supported");
+            throw new RpcException(status);
         }
 
         /// <summary>
         /// Gets the status of an uploaded video's encoding job by the video Id.
         /// </summary>
-        public async Task<EncodingJobProgress> GetStatusForVideo(Guid videoId)
+        public override Task<GetStatusOfVideoResponse> GetStatusOfVideo(GetStatusOfVideoRequest request, ServerCallContext context)
         {
-            PreparedStatement preparedStatement =
-                await _statementCache.NoContext.GetOrAddAsync("SELECT newstate, status_date FROM encoding_job_notifications WHERE videoid = ? LIMIT 1");
-            RowSet rows = await _session.ExecuteAsync(preparedStatement.Bind(videoId)).ConfigureAwait(false);
-            return MapRowToEncodingJobProgress(rows.SingleOrDefault());
-        }
-
-        private static EncodingJobProgress MapRowToEncodingJobProgress(Row row)
-        {
-            if (row == null) return null;
-
-            return new EncodingJobProgress
-            {
-                CurrentState = row.GetValue<string>("newstate"),
-                StatusDate = row.GetValue<DateTimeOffset>("status_date")
-            };
+            var status = new Status(StatusCode.Unimplemented, "Uploading videos is currently not supported");
+            throw new RpcException(status);
         }
     }
 }

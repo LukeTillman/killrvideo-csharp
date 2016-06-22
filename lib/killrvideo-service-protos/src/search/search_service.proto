@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package killrvideo.search;
+option csharp_namespace = "KillrVideo.Search";
+
+import "google/protobuf/timestamp.proto";
+import "common/common_types.proto";
+
+// Searches for videos
+service SearchService {
+  // Searches for videos by a given query term
+  rpc SearchVideos(SearchVideosRequest) returns (SearchVideosResponse);
+  
+  // Gets search query suggestions (could be used for typeahead support)
+  rpc GetQuerySuggestions(GetQuerySuggestionsRequest) returns (GetQuerySuggestionsResponse);
+}
+
+// Request when searching for videos by a query term
+message SearchVideosRequest {
+  string query = 1;
+  int32 page_size = 2;
+  string paging_state = 16;
+}
+
+// Response when searching for videos
+message SearchVideosResponse {
+  string query = 1;
+  repeated SearchResultsVideoPreview videos = 2;
+  string paging_state = 3;
+}
+
+// A video preview returned in search results
+message SearchResultsVideoPreview {
+  killrvideo.common.Uuid video_id = 1;
+  google.protobuf.Timestamp added_date = 2;
+  string name = 3;
+  string preview_image_location = 4;
+  killrvideo.common.Uuid user_id = 5;
+}
+
+// Request for getting query suggestions based on some user input
+message GetQuerySuggestionsRequest {
+  string query = 1;
+  int32 page_size = 2;
+}
+
+// Response with top query suggestions for the user input 
+message GetQuerySuggestionsResponse {
+  string query = 1;
+  repeated string suggestions = 2;
+}

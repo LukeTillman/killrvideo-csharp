@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package killrvideo.user_management.events;
+option csharp_namespace = "KillrVideo.UserManagement.Events";
+
+import "google/protobuf/timestamp.proto";
+import "common/common_types.proto";
+
+// Event published when a new user is created
+message UserCreated {
+  killrvideo.common.Uuid user_id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string email = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}

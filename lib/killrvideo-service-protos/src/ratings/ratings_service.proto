@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package killrvideo.ratings;
+option csharp_namespace = "KillrVideo.Ratings";
+
+import "common/common_types.proto";
+
+// Service that manages user's ratings of videos
+service RatingsService {
+  // Rate a video
+  rpc RateVideo(RateVideoRequest) returns (RateVideoResponse);
+  
+  // Gets the current rating stats for a video
+  rpc GetRating(GetRatingRequest) returns (GetRatingResponse);
+  
+  // Gets a user's rating of a specific video and returns 0 if the user hasn't rated the video
+  rpc GetUserRating(GetUserRatingRequest) returns (GetUserRatingResponse);
+}
+
+// Request for a user rating a video
+message RateVideoRequest {
+  killrvideo.common.Uuid video_id = 1;
+  killrvideo.common.Uuid user_id = 2;
+  int32 rating = 3;
+}
+
+// Response when a user rates a video
+message RateVideoResponse {
+}
+
+// Request to get the ratings stats for a video
+message GetRatingRequest {
+  killrvideo.common.Uuid video_id = 1;
+}
+
+// Response when getting the ratings stats for a video
+message GetRatingResponse {
+  killrvideo.common.Uuid video_id = 1;
+  int64 ratings_count = 2;
+  int64 ratings_total = 3;
+}
+
+// Request to get a specific user's rating of a video
+message GetUserRatingRequest {
+  killrvideo.common.Uuid video_id = 1;
+  killrvideo.common.Uuid user_id = 2;
+}
+
+// Response when getting a specific user's rating of a video
+message GetUserRatingResponse {
+  killrvideo.common.Uuid video_id = 1;
+  killrvideo.common.Uuid user_id = 2;
+  int32 rating = 3;
+}

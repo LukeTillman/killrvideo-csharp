@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package killrvideo.ratings.events;
+option csharp_namespace = "KillrVideo.Ratings.Events";
+
+import "common/common_types.proto";
+import "google/protobuf/timestamp.proto";
+
+// Event published when a user rates a video
+message UserRatedVideo {
+  killrvideo.common.Uuid video_id = 1;
+  killrvideo.common.Uuid user_id = 2;
+  int32 rating = 3;
+  google.protobuf.Timestamp rating_timestamp = 4;
+}

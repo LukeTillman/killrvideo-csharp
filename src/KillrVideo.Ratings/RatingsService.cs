@@ -1,41 +1,56 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
-using KillrVideo.Ratings.Dtos;
-using KillrVideo.Ratings.Messages.Events;
-using KillrVideo.Utils;
-using Nimbus;
+using Google.Protobuf.Reflection;
+using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
+using KillrVideo.Cassandra;
+using KillrVideo.MessageBus;
+using KillrVideo.Protobuf.Services;
+using KillrVideo.Ratings.Events;
 
 namespace KillrVideo.Ratings
 {
     /// <summary>
     /// An implementation of the video ratings service that stores ratings in Cassandra and publishes events on a message bus.
     /// </summary>
-    public class RatingsService : IRatingsService
+    [Export(typeof(IGrpcServerService))]
+    public class RatingsServiceImpl : RatingsService.RatingsServiceBase, IGrpcServerService
     {
         private readonly ISession _session;
-        private readonly TaskCache<string, PreparedStatement> _statementCache;
         private readonly IBus _bus;
+        private readonly PreparedStatementCache _statementCache;
 
-        public RatingsService(ISession session, TaskCache<string, PreparedStatement> statementCache, IBus bus)
+        public ServiceDescriptor Descriptor => RatingsService.Descriptor;
+
+        public RatingsServiceImpl(ISession session, PreparedStatementCache statementCache, IBus bus)
         {
-            if (session == null) throw new ArgumentNullException("session");
-            if (statementCache == null) throw new ArgumentNullException("statementCache");
-            if (bus == null) throw new ArgumentNullException("bus");
+            if (session == null) throw new ArgumentNullException(nameof(session));
+            if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
+            if (bus == null) throw new ArgumentNullException(nameof(bus));
             _session = session;
             _statementCache = statementCache;
             _bus = bus;
         }
 
         /// <summary>
+        /// Convert this instance to a ServerServiceDefinition that can be run on a Grpc server.
+        /// </summary>
+        public ServerServiceDefinition ToServerServiceDefinition()
+        {
+            return RatingsService.BindService(this);
+        }
+
+        /// <summary>
         /// Adds a user's rating of a video.
         /// </summary>
-        public async Task RateVideo(RateVideo videoRating)
+        public override async Task<RateVideoResponse> RateVideo(RateVideoRequest request, ServerCallContext context)
         {
-            PreparedStatement[] preparedStatements = await _statementCache.NoContext.GetOrAddAllAsync(
+            PreparedStatement[] preparedStatements = await _statementCache.GetOrAddAllAsync(
                 "UPDATE video_ratings SET rating_counter = rating_counter + 1, rating_total = rating_total + ? WHERE videoid = ?",
-                "INSERT INTO video_ratings_by_user (videoid, userid, rating) VALUES (?, ?, ?) USING TIMESTAMP ?");
+                "INSERT INTO video_ratings_by_user (videoid, userid, rating) VALUES (?, ?, ?)");
 
             DateTimeOffset timestamp = DateTimeOffset.UtcNow;
 
@@ -43,9 +58,9 @@ namespace KillrVideo.Ratings
             var bound = new[]
             {
                 // UPDATE video_ratings... (Driver will throw if we don't cast the rating to a long I guess because counters are data type long)
-                preparedStatements[0].Bind((long) videoRating.Rating, videoRating.VideoId),
+                preparedStatements[0].Bind((long) request.Rating, request.VideoId.ToGuid()),
                 // INSERT INTO video_ratings_by_user
-                preparedStatements[1].Bind(videoRating.VideoId, videoRating.UserId, videoRating.Rating, timestamp.ToMicrosecondsSinceEpoch())
+                preparedStatements[1].Bind(request.VideoId.ToGuid(), request.UserId.ToGuid(), request.Rating).SetTimestamp(timestamp)
             };
 
             await Task.WhenAll(bound.Select(b => _session.ExecuteAsync(b))).ConfigureAwait(false);
@@ -53,59 +68,49 @@ namespace KillrVideo.Ratings
             // Tell the world about the rating
             await _bus.Publish(new UserRatedVideo
             {
-                VideoId = videoRating.VideoId,
-                UserId = videoRating.UserId,
-                Rating = videoRating.Rating,
-                Timestamp = timestamp
+                VideoId = request.VideoId,
+                UserId = request.UserId,
+                Rating = request.Rating,
+                RatingTimestamp = timestamp.ToTimestamp()
             }).ConfigureAwait(false);
+
+            return new RateVideoResponse();
         }
 
         /// <summary>
         /// Gets the current rating stats for the specified video.
         /// </summary>
-        public async Task<VideoRating> GetRating(Guid videoId)
+        public override async Task<GetRatingResponse> GetRating(GetRatingRequest request, ServerCallContext context)
         {
-            PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT * FROM video_ratings WHERE videoid = ?");
-            BoundStatement boundStatement = preparedStatement.Bind(videoId);
+            PreparedStatement preparedStatement = await _statementCache.GetOrAddAsync("SELECT * FROM video_ratings WHERE videoid = ?");
+            BoundStatement boundStatement = preparedStatement.Bind(request.VideoId.ToGuid());
             RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
-
-            // Use SingleOrDefault here because it's possible a video doesn't have any ratings yet and thus has no record
-            return MapRowToVideoRating(rows.SingleOrDefault(), videoId);
+            Row row = rows.SingleOrDefault();
+            
+            return new GetRatingResponse
+            {
+                VideoId = request.VideoId,
+                RatingsCount = row?.GetValue<long>("rating_counter") ?? 0,
+                RatingsTotal = row?.GetValue<long>("rating_total") ?? 0
+            };
         }
 
         /// <summary>
         /// Gets the rating given by a user for a specific video.  Will return 0 for the rating if the user hasn't rated the video.
         /// </summary>
-        public async Task<UserVideoRating> GetRatingFromUser(Guid videoId, Guid userId)
+        public override async Task<GetUserRatingResponse> GetUserRating(GetUserRatingRequest request, ServerCallContext context)
         {
-            PreparedStatement preparedStatement = await _statementCache.NoContext.GetOrAddAsync("SELECT rating FROM video_ratings_by_user WHERE videoid = ? AND userid = ?");
-            BoundStatement boundStatement = preparedStatement.Bind(videoId, userId);
+            PreparedStatement preparedStatement = await _statementCache.GetOrAddAsync("SELECT rating FROM video_ratings_by_user WHERE videoid = ? AND userid = ?");
+            BoundStatement boundStatement = preparedStatement.Bind(request.VideoId.ToGuid(), request.UserId.ToGuid());
             RowSet rows = await _session.ExecuteAsync(boundStatement).ConfigureAwait(false);
 
             // We may or may not have a rating
             Row row = rows.SingleOrDefault();
-            return new UserVideoRating
+            return new GetUserRatingResponse
             {
-                VideoId = videoId,
-                UserId = userId,
-                Rating = row == null ? 0 : row.GetValue<int>("rating")
-            };
-        }
-
-        /// <summary>
-        /// Maps a row to a VideoRating object.
-        /// </summary>
-        private static VideoRating MapRowToVideoRating(Row row, Guid videoId)
-        {
-            // If we get null, just return an object with 0s as the rating tallys
-            if (row == null)
-                return new VideoRating { VideoId = videoId, RatingsCount = 0, RatingsTotal = 0 };
-
-            return new VideoRating
-            {
-                VideoId = videoId,
-                RatingsCount = row.GetValue<long>("rating_counter"),
-                RatingsTotal = row.GetValue<long>("rating_total")
+                VideoId = request.VideoId,
+                UserId = request.UserId,
+                Rating = row?.GetValue<int>("rating") ?? 0
             };
         }
     }
