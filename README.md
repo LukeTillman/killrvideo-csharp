@@ -1,4 +1,4 @@
-# KillrVideo
+# KillrVideo C#
 A reference application for learning about using [Apache Cassandra][2] and [DataStax Enterprise][4] with .NET. The
 application has sample code that uses:
 - The [DataStax .NET Driver][1] for Cassandra
@@ -32,7 +32,7 @@ containers:
 This project will continue to evolve along with Cassandra and you can expect that as Cassandra and the DataStax driver add new features, this sample application will try and provide examples of those.  I'll gladly accept any pull requests for bug fixes, new features, etc.  and if you have a request for an example that you don't see in the code currently, send me a message [@LukeTillman][3] on Twitter or open an issue here on GitHub.
 
 ## License
-Copyright 2014 Luke Tillman
+Copyright 2016 Luke Tillman
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
