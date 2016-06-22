@@ -1,4 +1,4 @@
-# KillrVideo C#
+# KillrVideo C\#
 A reference application for learning about using [Apache Cassandra][2] and [DataStax Enterprise][4] with .NET. The
 application has sample code that uses:
 - The [DataStax .NET Driver][1] for Cassandra
