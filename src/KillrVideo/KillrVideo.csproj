@@ -150,11 +150,6 @@
       <Project>{c054a489-a037-49e5-8461-546cd61817eb}</Project>
       <Name>KillrVideo.Ratings</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KillrVideo.SampleData\KillrVideo.SampleData.csproj">
-      <Project>{f7088371-8ed3-4827-b15a-05f598c27399}</Project>
-      <Name>KillrVideo.SampleData</Name>
-      <Aliases>SampleData</Aliases>
-    </ProjectReference>
     <ProjectReference Include="..\KillrVideo.Search\KillrVideo.Search.csproj">
       <Project>{3da30c11-33c7-4ee8-aa9e-c18a9483efca}</Project>
       <Name>KillrVideo.Search</Name>

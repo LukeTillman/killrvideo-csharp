@@ -1,9 +1,4 @@
-﻿// The reference to KillrVideo.SampleData is aliased because it has namespaces/types from Protos (since it consumes other services' protos)
-// that collide with others defined in the services that own them. For example, it has KillrVideo.Comments types since it consumes the
-// Comments service to post sample comments, which would conflict with the same types defined in the KillrVideo.Comments service project/DLL
-// which is also referenced by this project
-extern alias SampleData;
-using System;
+﻿using System;
 using System.Reflection;
 using System.Threading;
 using DryIoc;
@@ -23,7 +18,6 @@ using KillrVideo.Uploads;
 using KillrVideo.UserManagement;
 using KillrVideo.VideoCatalog;
 using RestSharp;
-using SampleData::KillrVideo.SampleData;
 using Serilog;
 
 namespace KillrVideo
@@ -43,7 +37,6 @@ namespace KillrVideo
             typeof (UserManagementService).Assembly,
             typeof (VideoCatalogService).Assembly,
             typeof (SearchService).Assembly,
-            typeof (SampleDataService).Assembly,
             typeof (Host.Host).Assembly,
             typeof (GrpcServerTask).Assembly,
             typeof (CassandraSessionFactory).Assembly,
