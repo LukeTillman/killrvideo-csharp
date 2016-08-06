@@ -12,3 +12,11 @@ services:
     environment:
       SERVICE_3000_NAME: web
       KILLRVIDEO_ETCD: "etcd:2379"
+  # The sample data generator
+  generator:
+    image: luketillman/killrvideo-generator:1.0.0
+    depends_on:
+    - dse
+    - etcd
+    environment:
+      KILLRVIDEO_ETCD: "etcd:2379"
