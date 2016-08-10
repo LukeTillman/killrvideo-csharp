@@ -1,170 +1,63 @@
 <#
     .DESCRIPTION
-    Gets the environment variables needed to run the Killrvideo docker-compose commands.
+    Gets the environment variables needed to run the Killrvideo docker-compose commands and outputs
+    them to stdout.
 #>
 [CmdletBinding()]
 Param ()
 
-# Custom type representing the type of docker installation
-Add-Type -TypeDefinition "public enum DockerInstallType { Windows, Toolbox }"
-
-function Get-DockerType {
-    <#
-    .DESCRIPTION
-    Determines what type of docker installation is present (Docker for Windows or Docker Toolbox)
+# Figure out if we're Docker for Windows or Docker Toolbox setup
+Write-Host 'Determining docker installation type'
     
-    .OUTPUTS
-    A DockerInstallType enum value indicating the docker environment
-    #>
-    [CmdletBinding()]
-    Param()
-    
-    Write-Host 'Determining docker installation type'
-    
-    # Docker toolbox sets an install path environment variable so check for it
-    $dt = [DockerInstallType]::Windows
-    if ($Env:DOCKER_TOOLBOX_INSTALL_PATH) {
-        $dt = [DockerInstallType]::Toolbox
-    }
-    
-    Write-Verbose " => Using docker type $dt"
-    $dt
+# Docker toolbox sets an install path environment variable so check for it
+$isToolbox = $false
+if ($Env:DOCKER_TOOLBOX_INSTALL_PATH) {
+    $isToolbox = $true
 }
 
-function Get-DockerVirtualMachineIp {
-    <#
-    .DESCRIPTION
-    Find the IP address of the docker virtual machine
-    
-    .PARAMETER DockerType
-    The type of docker installation.
-    
-    .OUTPUTS
-    The IP Address of the docker virtual machine
-    #>
-    [CmdletBinding()]
-    Param (
-        [parameter(Mandatory=$true)]
-        [DockerInstallType]
-        $DockerType
-    )
-    
-    Write-Host 'Finding docker Virtual Machine IP'
-    
-    if ($DockerType -eq [DockerInstallType]::Windows) {
-        # In the DfW beta, the VM will be reachable via a host named 'docker'
-        $DOCKER_WINDOWS_HOST_NAME = 'docker'
-        $dnsResults = Resolve-DnsName $DOCKER_WINDOWS_HOST_NAME -ErrorAction SilentlyContinue
-        if ($dnsResults) {
-            Write-Verbose " => Able to resolve hostname '$DOCKER_WINDOWS_HOST_NAME' at $($dnsResults.IPAddress)"
-            $dnsResults.IPAddress
-            return
-        }
-        throw "Unable to resolve host '$DOCKER_WINDOWS_HOST_NAME'. Is Docker for Windows started?"
-    } else {
-        # Make sure the docker VM is started
-        Write-Host 'Ensuring Docker virtual machine is started'
-        Invoke-Expression "docker-machine start 2>&1" | Write-Host
-        
-        # When using Docker Toolbox, we should be able to get the IP from docker-machine
-        $dockerHost = Invoke-Expression 'docker-machine ip 2>&1'
-        if ($LastExitCode -eq 0) {
-            Write-Verbose " => Docker machine returned $dockerHost"
-            $dockerHost
-            return
-        }
-        
-        Write-Host 'Could not resolve the Docker IP with docker-machine ip command'
-        throw $dockerHost
+Write-Verbose " => Is Docker Toolbox: $isToolbox"
+
+# Do things differently for Toolbox vs Docker for Windows
+if ($isToolbox) {
+    # See if the docker VM is running
+    & docker-machine status default | Tee-Object -Variable dockerMachineStatus | Out-Null
+    if ($dockerMachineStatus -ne 'Running') {
+        & docker-machine start default | Out-Null
     }
+
+    # Add environment to this shell
+    & docker-machine env | Invoke-Expression
 }
 
-function Get-NetworkAddress {
-    <#
-    .DESCRIPTION
-    Get a network address from an IP address and subnet mask
-    
-    .PARAMETER Address
-    The IP address
-    
-    .PARAMETER SubnetMask
-    The subnet mask
-    
-    .OUTPUTS
-    The IP address of the network.
-    #>
-    [CmdletBinding()]
-    Param (
-        [parameter(Mandatory=$true)]
-        [System.Net.IPAddress]
-        $Address,
-        
-        [parameter(Mandatory=$false)]
-        [System.Net.IPAddress]
-        $SubnetMask
-    )
-    
-    # Set default subnet mask if not provided
-    if ($SubnetMask -eq $null) {
-        $SubnetMask = [System.Net.IPAddress]::Parse("255.255.255.0")
-    }
-    
-    # Get as bytes
-    $ipBytes = $Address.GetAddressBytes()
-    $subnetBytes = $SubnetMask.GetAddressBytes()
-    
-    # Create array for network bytes and use bitwise and to apply subnet mask
-    $networkBytes = @()
-    for ($i = 0; $i -le 3; $i++) {
-        $networkBytes += $ipBytes[$i] -band $subnetBytes[$i]
-    }
-    
-    # Return as IPAddress (constructor takes a single array as argument)
-    New-Object System.Net.IPAddress -ArgumentList @(,$networkBytes)
+# Determine the Docker VM's IP address
+Write-Host 'Getting Docker VM IP'
+if ($isToolbox) {
+    # Just use the command that comes with docker-machine
+    & docker-machine ip | Tee-Object -Variable dockerIp | Out-Null
+} else {
+    # The VM's IP should be the IP address for eth0 when running a container in host networking mode
+    $dockerIpCmd = "ip -4 addr show scope global dev eth0 | grep inet | awk `'{print `$2}`' | cut -d / -f 1"
+    & docker run --rm --net=host busybox bin/sh -c $dockerIpCmd | Tee-Object -Variable dockerIp | Out-Null
 }
+Write-Verbose " => Got Docker IP: $dockerIp"
 
-function Get-HostIp {
-    <#
-    .DESCRIPTION
-    Get the Host's IP address that's on the same network as the provided vmIp
-    
-    .PARAMETER VirtualMachineIPAddress
-    The virtual machine's IP address
-    
-    .OUTPUTS
-    The IP address on the host that's on the same network.
-    #>
-    [CmdletBinding()]
-    Param (
-        [parameter(Mandatory=$true)]
-        [string]
-        $VirtualMachineIPAddress
-    )
-    
-    Write-Host 'Finding host IP on same network as docker Virtual Machine'
-    
-    $addresses = Get-NetIPAddress | ? AddressFamily -eq IPv4 | Select IPAddress, SubnetMask
-    foreach($address in $addresses) {
-        $vmNetworkAddress = Get-NetworkAddress -Address $VirtualMachineIPAddress -SubnetMask $address.SubnetMask
-        $networkAddress = Get-NetworkAddress -Address $address.IPAddress -SubnetMask $address.SubnetMask
-        
-        if ($networkAddress.Equals($vmNetworkAddress)) {
-            Write-Verbose " => Found host IP $($address.IPAddress)"
-            $address.IPAddress
-            return
-        }
-    }
-    
-    throw "Could not find a host IP address on same network as $VirtualMachineIPAddress"
+# Determine the VM host's IP address
+Write-Host 'Getting corresponding local machine IP'
+if ($isToolbox) {
+    # The host only CIDR address will contain the host's IP (along with a suffix like /24)
+    & docker-machine inspect --format '{{ .Driver.HostOnlyCIDR }}' default |
+        Tee-Object -Variable hostCidr |
+        Out-Null
+    $hostIp = $hostCidr -replace "\/\d{2}", ""
+} else {
+    # The host's IP should be the default route for eth0 when running a container in host networking mode
+    $hostIpCmd = "ip -4 route list dev eth0 0/0 | cut -d `' `' -f 3"
+    & docker run --rm --net=host busybox bin/sh -c $hostIpCmd | Tee-Object -Variable hostIp | Out-Null
 }
+Write-Verbose " => Got Host IP: $hostIp"
 
-# Figure out the network setup
-$dockerType = Get-DockerType
-$dockerVmIp = Get-DockerVirtualMachineIp -DockerType $dockerType
-$hostIp = Get-HostIp $dockerVmIp
-$isToolbox = $dockerType -eq [DockerInstallType]::Toolbox
-
-# Write environment variable key value pairs to output
+# Write environment variable pairs to stdout (so this can be piped to a file)
 Write-Output "KILLRVIDEO_DOCKER_TOOLBOX=$($isToolbox.ToString().ToLower())"
 Write-Output "KILLRVIDEO_HOST_IP=$hostIp"
-Write-Output "KILLRVIDEO_DOCKER_IP=$dockerVmIp"
+Write-Output "KILLRVIDEO_DOCKER_IP=$dockerIp"
+
