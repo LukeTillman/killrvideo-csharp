@@ -14,7 +14,7 @@ services:
       KILLRVIDEO_ETCD: "etcd:2379"
   # The sample data generator
   generator:
-    image: luketillman/killrvideo-generator:1.0.0
+    image: luketillman/killrvideo-generator:1.1.0
     depends_on:
     - dse
     - etcd
