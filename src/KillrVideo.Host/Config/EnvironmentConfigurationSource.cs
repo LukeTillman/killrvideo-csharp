@@ -64,7 +64,8 @@ namespace KillrVideo.Host.Config
         }
 
         /// <summary>
-        /// Utility method to convert a config key to an approriate environment variable name.
+        /// Utility method to convert a config key to an approriate environment variable name (e.g. "DockerIp"
+        /// becomes "KILLRVIDEO_DOCKER_IP", etc.)
         /// </summary>
         private static string ConfigKeyToEnvironmentVariableName(string key)
         {

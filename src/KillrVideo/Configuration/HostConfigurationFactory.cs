@@ -22,8 +22,7 @@ namespace KillrVideo.Configuration
             ReadEnvironmentFile();
             var sources = new IHostConfigurationSource[]
             {
-                new EnvironmentConfigurationSource(),
-                new AppSettingsConfigurationSource()
+                new EnvironmentConfigurationSource()
             };
             return new HostConfiguration(sources, "KillrVideo", "1");
         }
