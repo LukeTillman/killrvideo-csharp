@@ -97,7 +97,6 @@
     <Compile Include="Cassandra\BootstrapCassandra.cs" />
     <Compile Include="Configuration\HostConfigurationFactory.cs" />
     <Compile Include="Configuration\ConfigConstants.cs" />
-    <Compile Include="Docker\BootstrapDocker.cs" />
     <Compile Include="Listeners\RegisterWithEtcdListener.cs" />
     <Compile Include="MessageBus\ContainerHandlerFactory.cs" />
     <Compile Include="Listeners\LogServicesListener.cs" />
