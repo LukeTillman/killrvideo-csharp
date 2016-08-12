@@ -87,4 +87,4 @@ user.config
 src/spark/*.ipynb
 
 # User environment file
-src/KillrVideo/.env
+.env
