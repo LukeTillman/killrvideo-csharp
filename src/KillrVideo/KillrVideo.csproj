@@ -107,6 +107,10 @@
     <Compile Include="ServiceDiscovery\EtcdServiceDiscovery.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\.env">
+      <Link>.env</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\data\schema.cql">
       <Link>schema.cql</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
