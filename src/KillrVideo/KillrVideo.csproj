@@ -111,7 +111,7 @@
       <Link>.env</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\data\schema.cql">
+    <None Include="..\..\lib\killrvideo-data\schema.cql">
       <Link>schema.cql</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
