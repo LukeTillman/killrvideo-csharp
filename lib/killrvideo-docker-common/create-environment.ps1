@@ -49,18 +49,26 @@ if ((Test-Path $envFilePath) -and ($Force -eq $false)) {
     Exit
 }
 
-# Base environment variables
-$dockerEnv = @("COMPOSE_PROJECT_NAME=$ProjectName")
-
-# Get path to the get-environment script and run it, adding each value to the env array
-$scriptPath = Split-Path -parent $PSCommandPath
-$getEnvCommand = Resolve-Path "$scriptPath\get-environment.ps1"
-& "$getEnvCommand" |% { $dockerEnv += $_ }
-
-# Make sure the path exists for the file
+# Make sure the path exists for the .env we're generating
 if ((Test-Path $Path) -eq $false) {
     New-Item -Path $Path -Type Directory | Out-Null
 }
+
+$scriptPath = Split-Path -parent $PSCommandPath
+
+# Use the base compose file from this project, plus one that should be in the same location
+# as the .env file we're generating
+Push-Location $Path
+$composeFile = Resolve-Path -Relative "$scriptPath\docker-compose.yaml"
+Pop-Location
+$composeFile += ";.\docker-compose.yaml"
+
+# Base environment variables
+$dockerEnv = @("COMPOSE_PROJECT_NAME=$ProjectName", "COMPOSE_FILE=$composeFile")
+
+# Get path to the get-environment script and run it, adding each value to the env array
+$getEnvCommand = Resolve-Path "$scriptPath\get-environment.ps1"
+& "$getEnvCommand" |% { $dockerEnv += $_ }
 
 # Write the file (have to use the .NET API here because we need UTF-8 WITHOUT the BOM)
 $Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
