@@ -20,6 +20,7 @@ namespace KillrVideo.Listeners
     {
         private readonly EtcdClient _client;
         private readonly IHostConfiguration _config;
+        private readonly Lazy<string> _uniqueId;
 
         public RegisterWithEtcdListener(EtcdClient client, IHostConfiguration config)
         {
@@ -27,12 +28,12 @@ namespace KillrVideo.Listeners
             if (config == null) throw new ArgumentNullException(nameof(config));
             _client = client;
             _config = config;
+            _uniqueId = new Lazy<string>(() => $"{_config.ApplicationName}:{_config.ApplicationInstanceId}");
         }
 
         public void OnStart(IEnumerable<ServerPort> serverPorts, IEnumerable<IGrpcServerService> servicesStarted)
         {
             string ip = _config.GetRequiredConfigurationValue(ConfigConstants.HostIp);
-            string uniqueId = $"{_config.ApplicationName}:{_config.ApplicationInstanceId}";
         
             int[] ports = serverPorts.Select(p => p.Port).ToArray();
 
@@ -42,7 +43,7 @@ namespace KillrVideo.Listeners
             {
                 foreach (int port in ports)
                 {
-                    var t = _client.SetNodeAsync($"/killrvideo/services/{service.Descriptor.Name}/{uniqueId}", $"{ip}:{port}");
+                    var t = _client.SetNodeAsync(GetServiceKey(service), $"{ip}:{port}");
                     registerTasks.Add(t);
                 }
             }
@@ -52,6 +53,20 @@ namespace KillrVideo.Listeners
 
         public void OnStop(IEnumerable<ServerPort> serverPorts, IEnumerable<IGrpcServerService> servicesStopped)
         {
+            // Remove all services from etcd that were registered on startup
+            var removeTasks = new List<Task>();
+            foreach (IGrpcServerService service in servicesStopped)
+            {
+                var t = _client.DeleteNodeAsync(GetServiceKey(service));
+                removeTasks.Add(t);
+            }
+
+            Task.WaitAll(removeTasks.ToArray());
+        }
+
+        private string GetServiceKey(IGrpcServerService service)
+        {
+            return $"/killrvideo/services/{service.Descriptor.Name}/{_uniqueId.Value}";
         }
     }
 }
