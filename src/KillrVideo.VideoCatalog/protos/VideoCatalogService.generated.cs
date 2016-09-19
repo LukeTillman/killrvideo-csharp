@@ -10,7 +10,6 @@ using scg = global::System.Collections.Generic;
 namespace KillrVideo.VideoCatalog {
 
   /// <summary>Holder for reflection information generated from video-catalog/video_catalog_service.proto</summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public static partial class VideoCatalogServiceReflection {
 
     #region Descriptor
@@ -88,20 +87,20 @@ namespace KillrVideo.VideoCatalog {
             "ZXNwb25zZUIaqgIXS2lsbHJWaWRlby5WaWRlb0NhdGFsb2diBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::KillrVideo.Protobuf.CommonTypesReflection.Descriptor, },
-          new pbr::GeneratedCodeInfo(new[] {typeof(global::KillrVideo.VideoCatalog.VideoLocationType), }, new pbr::GeneratedCodeInfo[] {
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.SubmitUploadedVideoRequest), global::KillrVideo.VideoCatalog.SubmitUploadedVideoRequest.Parser, new[]{ "VideoId", "UserId", "Name", "Description", "Tags", "UploadUrl" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.SubmitUploadedVideoResponse), global::KillrVideo.VideoCatalog.SubmitUploadedVideoResponse.Parser, null, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.SubmitYouTubeVideoRequest), global::KillrVideo.VideoCatalog.SubmitYouTubeVideoRequest.Parser, new[]{ "VideoId", "UserId", "Name", "Description", "Tags", "YouTubeVideoId" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.SubmitYouTubeVideoResponse), global::KillrVideo.VideoCatalog.SubmitYouTubeVideoResponse.Parser, null, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.GetVideoRequest), global::KillrVideo.VideoCatalog.GetVideoRequest.Parser, new[]{ "VideoId" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.GetVideoResponse), global::KillrVideo.VideoCatalog.GetVideoResponse.Parser, new[]{ "VideoId", "UserId", "Name", "Description", "Location", "LocationType", "Tags", "AddedDate" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest), global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest.Parser, new[]{ "VideoIds" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse), global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse.Parser, new[]{ "VideoPreviews" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.VideoPreview), global::KillrVideo.VideoCatalog.VideoPreview.Parser, new[]{ "VideoId", "AddedDate", "Name", "PreviewImageLocation", "UserId" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest), global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest.Parser, new[]{ "PageSize", "StartingAddedDate", "StartingVideoId", "PagingState" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse), global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse.Parser, new[]{ "VideoPreviews", "PagingState" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest), global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest.Parser, new[]{ "UserId", "PageSize", "StartingAddedDate", "StartingVideoId", "PagingState" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse), global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse.Parser, new[]{ "UserId", "VideoPreviews", "PagingState" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::KillrVideo.VideoCatalog.VideoLocationType), }, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.VideoCatalog.SubmitUploadedVideoRequest), global::KillrVideo.VideoCatalog.SubmitUploadedVideoRequest.Parser, new[]{ "VideoId", "UserId", "Name", "Description", "Tags", "UploadUrl" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.VideoCatalog.SubmitUploadedVideoResponse), global::KillrVideo.VideoCatalog.SubmitUploadedVideoResponse.Parser, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.VideoCatalog.SubmitYouTubeVideoRequest), global::KillrVideo.VideoCatalog.SubmitYouTubeVideoRequest.Parser, new[]{ "VideoId", "UserId", "Name", "Description", "Tags", "YouTubeVideoId" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.VideoCatalog.SubmitYouTubeVideoResponse), global::KillrVideo.VideoCatalog.SubmitYouTubeVideoResponse.Parser, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.VideoCatalog.GetVideoRequest), global::KillrVideo.VideoCatalog.GetVideoRequest.Parser, new[]{ "VideoId" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.VideoCatalog.GetVideoResponse), global::KillrVideo.VideoCatalog.GetVideoResponse.Parser, new[]{ "VideoId", "UserId", "Name", "Description", "Location", "LocationType", "Tags", "AddedDate" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest), global::KillrVideo.VideoCatalog.GetVideoPreviewsRequest.Parser, new[]{ "VideoIds" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse), global::KillrVideo.VideoCatalog.GetVideoPreviewsResponse.Parser, new[]{ "VideoPreviews" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.VideoCatalog.VideoPreview), global::KillrVideo.VideoCatalog.VideoPreview.Parser, new[]{ "VideoId", "AddedDate", "Name", "PreviewImageLocation", "UserId" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest), global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsRequest.Parser, new[]{ "PageSize", "StartingAddedDate", "StartingVideoId", "PagingState" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse), global::KillrVideo.VideoCatalog.GetLatestVideoPreviewsResponse.Parser, new[]{ "VideoPreviews", "PagingState" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest), global::KillrVideo.VideoCatalog.GetUserVideoPreviewsRequest.Parser, new[]{ "UserId", "PageSize", "StartingAddedDate", "StartingVideoId", "PagingState" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse), global::KillrVideo.VideoCatalog.GetUserVideoPreviewsResponse.Parser, new[]{ "UserId", "VideoPreviews", "PagingState" }, null, null, null)
           }));
     }
     #endregion
@@ -112,8 +111,8 @@ namespace KillrVideo.VideoCatalog {
   ///  Enum representing what kind of video location is present for a video
   /// </summary>
   public enum VideoLocationType {
-    YOUTUBE = 0,
-    UPLOAD = 1,
+    [pbr::OriginalName("YOUTUBE")] Youtube = 0,
+    [pbr::OriginalName("UPLOAD")] Upload = 1,
   }
 
   #endregion
@@ -122,25 +121,29 @@ namespace KillrVideo.VideoCatalog {
   /// <summary>
   ///  Request to submit a new uploaded video to the catalog
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class SubmitUploadedVideoRequest : pb::IMessage<SubmitUploadedVideoRequest> {
     private static readonly pb::MessageParser<SubmitUploadedVideoRequest> _parser = new pb::MessageParser<SubmitUploadedVideoRequest>(() => new SubmitUploadedVideoRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<SubmitUploadedVideoRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.VideoCatalog.VideoCatalogServiceReflection.Descriptor.MessageTypes[0]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SubmitUploadedVideoRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SubmitUploadedVideoRequest(SubmitUploadedVideoRequest other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
@@ -150,6 +153,7 @@ namespace KillrVideo.VideoCatalog {
       uploadUrl_ = other.uploadUrl_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SubmitUploadedVideoRequest Clone() {
       return new SubmitUploadedVideoRequest(this);
     }
@@ -157,6 +161,7 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -167,6 +172,7 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 2;
     private global::KillrVideo.Protobuf.Uuid userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
@@ -177,20 +183,22 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "name" field.</summary>
     public const int NameFieldNumber = 3;
     private string name_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Name {
       get { return name_; }
       set {
-        name_ = pb::Preconditions.CheckNotNull(value, "value");
+        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "description" field.</summary>
     public const int DescriptionFieldNumber = 4;
     private string description_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Description {
       get { return description_; }
       set {
-        description_ = pb::Preconditions.CheckNotNull(value, "value");
+        description_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -199,6 +207,7 @@ namespace KillrVideo.VideoCatalog {
     private static readonly pb::FieldCodec<string> _repeated_tags_codec
         = pb::FieldCodec.ForString(42);
     private readonly pbc::RepeatedField<string> tags_ = new pbc::RepeatedField<string>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<string> Tags {
       get { return tags_; }
     }
@@ -206,17 +215,20 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "upload_url" field.</summary>
     public const int UploadUrlFieldNumber = 6;
     private string uploadUrl_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string UploadUrl {
       get { return uploadUrl_; }
       set {
-        uploadUrl_ = pb::Preconditions.CheckNotNull(value, "value");
+        uploadUrl_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as SubmitUploadedVideoRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(SubmitUploadedVideoRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -233,6 +245,7 @@ namespace KillrVideo.VideoCatalog {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
@@ -244,10 +257,12 @@ namespace KillrVideo.VideoCatalog {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -272,6 +287,7 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -293,6 +309,7 @@ namespace KillrVideo.VideoCatalog {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(SubmitUploadedVideoRequest other) {
       if (other == null) {
         return;
@@ -321,6 +338,7 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -367,36 +385,43 @@ namespace KillrVideo.VideoCatalog {
   /// <summary>
   ///  Response when submitting a new uploaded video to the catalog
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class SubmitUploadedVideoResponse : pb::IMessage<SubmitUploadedVideoResponse> {
     private static readonly pb::MessageParser<SubmitUploadedVideoResponse> _parser = new pb::MessageParser<SubmitUploadedVideoResponse>(() => new SubmitUploadedVideoResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<SubmitUploadedVideoResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.VideoCatalog.VideoCatalogServiceReflection.Descriptor.MessageTypes[1]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SubmitUploadedVideoResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SubmitUploadedVideoResponse(SubmitUploadedVideoResponse other) : this() {
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SubmitUploadedVideoResponse Clone() {
       return new SubmitUploadedVideoResponse(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as SubmitUploadedVideoResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(SubmitUploadedVideoResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -407,29 +432,35 @@ namespace KillrVideo.VideoCatalog {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(SubmitUploadedVideoResponse other) {
       if (other == null) {
         return;
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -446,25 +477,29 @@ namespace KillrVideo.VideoCatalog {
   /// <summary>
   ///  Request to submit a new YouTube video to the catalog
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class SubmitYouTubeVideoRequest : pb::IMessage<SubmitYouTubeVideoRequest> {
     private static readonly pb::MessageParser<SubmitYouTubeVideoRequest> _parser = new pb::MessageParser<SubmitYouTubeVideoRequest>(() => new SubmitYouTubeVideoRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<SubmitYouTubeVideoRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.VideoCatalog.VideoCatalogServiceReflection.Descriptor.MessageTypes[2]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SubmitYouTubeVideoRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SubmitYouTubeVideoRequest(SubmitYouTubeVideoRequest other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
@@ -474,6 +509,7 @@ namespace KillrVideo.VideoCatalog {
       youTubeVideoId_ = other.youTubeVideoId_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SubmitYouTubeVideoRequest Clone() {
       return new SubmitYouTubeVideoRequest(this);
     }
@@ -481,6 +517,7 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -491,6 +528,7 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 2;
     private global::KillrVideo.Protobuf.Uuid userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
@@ -501,20 +539,22 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "name" field.</summary>
     public const int NameFieldNumber = 3;
     private string name_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Name {
       get { return name_; }
       set {
-        name_ = pb::Preconditions.CheckNotNull(value, "value");
+        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "description" field.</summary>
     public const int DescriptionFieldNumber = 4;
     private string description_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Description {
       get { return description_; }
       set {
-        description_ = pb::Preconditions.CheckNotNull(value, "value");
+        description_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -523,6 +563,7 @@ namespace KillrVideo.VideoCatalog {
     private static readonly pb::FieldCodec<string> _repeated_tags_codec
         = pb::FieldCodec.ForString(42);
     private readonly pbc::RepeatedField<string> tags_ = new pbc::RepeatedField<string>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<string> Tags {
       get { return tags_; }
     }
@@ -530,17 +571,20 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "you_tube_video_id" field.</summary>
     public const int YouTubeVideoIdFieldNumber = 6;
     private string youTubeVideoId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string YouTubeVideoId {
       get { return youTubeVideoId_; }
       set {
-        youTubeVideoId_ = pb::Preconditions.CheckNotNull(value, "value");
+        youTubeVideoId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as SubmitYouTubeVideoRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(SubmitYouTubeVideoRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -557,6 +601,7 @@ namespace KillrVideo.VideoCatalog {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
@@ -568,10 +613,12 @@ namespace KillrVideo.VideoCatalog {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -596,6 +643,7 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -617,6 +665,7 @@ namespace KillrVideo.VideoCatalog {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(SubmitYouTubeVideoRequest other) {
       if (other == null) {
         return;
@@ -645,6 +694,7 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -691,36 +741,43 @@ namespace KillrVideo.VideoCatalog {
   /// <summary>
   ///  Response when submitting a new YouTube video to the catalog
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class SubmitYouTubeVideoResponse : pb::IMessage<SubmitYouTubeVideoResponse> {
     private static readonly pb::MessageParser<SubmitYouTubeVideoResponse> _parser = new pb::MessageParser<SubmitYouTubeVideoResponse>(() => new SubmitYouTubeVideoResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<SubmitYouTubeVideoResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.VideoCatalog.VideoCatalogServiceReflection.Descriptor.MessageTypes[3]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SubmitYouTubeVideoResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SubmitYouTubeVideoResponse(SubmitYouTubeVideoResponse other) : this() {
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SubmitYouTubeVideoResponse Clone() {
       return new SubmitYouTubeVideoResponse(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as SubmitYouTubeVideoResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(SubmitYouTubeVideoResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -731,29 +788,35 @@ namespace KillrVideo.VideoCatalog {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(SubmitYouTubeVideoResponse other) {
       if (other == null) {
         return;
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -770,29 +833,34 @@ namespace KillrVideo.VideoCatalog {
   /// <summary>
   ///  Request to get a video and all its details from the catalog
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetVideoRequest : pb::IMessage<GetVideoRequest> {
     private static readonly pb::MessageParser<GetVideoRequest> _parser = new pb::MessageParser<GetVideoRequest>(() => new GetVideoRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetVideoRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.VideoCatalog.VideoCatalogServiceReflection.Descriptor.MessageTypes[4]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetVideoRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetVideoRequest(GetVideoRequest other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetVideoRequest Clone() {
       return new GetVideoRequest(this);
     }
@@ -800,6 +868,7 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -807,10 +876,12 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetVideoRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetVideoRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -822,16 +893,19 @@ namespace KillrVideo.VideoCatalog {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -839,6 +913,7 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -847,6 +922,7 @@ namespace KillrVideo.VideoCatalog {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetVideoRequest other) {
       if (other == null) {
         return;
@@ -859,6 +935,7 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -882,25 +959,29 @@ namespace KillrVideo.VideoCatalog {
   /// <summary>
   ///  Response when getting a video and all its details from the catalog
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetVideoResponse : pb::IMessage<GetVideoResponse> {
     private static readonly pb::MessageParser<GetVideoResponse> _parser = new pb::MessageParser<GetVideoResponse>(() => new GetVideoResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetVideoResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.VideoCatalog.VideoCatalogServiceReflection.Descriptor.MessageTypes[5]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetVideoResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetVideoResponse(GetVideoResponse other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
@@ -912,6 +993,7 @@ namespace KillrVideo.VideoCatalog {
       AddedDate = other.addedDate_ != null ? other.AddedDate.Clone() : null;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetVideoResponse Clone() {
       return new GetVideoResponse(this);
     }
@@ -919,6 +1001,7 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -929,6 +1012,7 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 2;
     private global::KillrVideo.Protobuf.Uuid userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
@@ -939,36 +1023,40 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "name" field.</summary>
     public const int NameFieldNumber = 3;
     private string name_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Name {
       get { return name_; }
       set {
-        name_ = pb::Preconditions.CheckNotNull(value, "value");
+        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "description" field.</summary>
     public const int DescriptionFieldNumber = 4;
     private string description_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Description {
       get { return description_; }
       set {
-        description_ = pb::Preconditions.CheckNotNull(value, "value");
+        description_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "location" field.</summary>
     public const int LocationFieldNumber = 5;
     private string location_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Location {
       get { return location_; }
       set {
-        location_ = pb::Preconditions.CheckNotNull(value, "value");
+        location_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "location_type" field.</summary>
     public const int LocationTypeFieldNumber = 6;
-    private global::KillrVideo.VideoCatalog.VideoLocationType locationType_ = global::KillrVideo.VideoCatalog.VideoLocationType.YOUTUBE;
+    private global::KillrVideo.VideoCatalog.VideoLocationType locationType_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.VideoCatalog.VideoLocationType LocationType {
       get { return locationType_; }
       set {
@@ -981,6 +1069,7 @@ namespace KillrVideo.VideoCatalog {
     private static readonly pb::FieldCodec<string> _repeated_tags_codec
         = pb::FieldCodec.ForString(58);
     private readonly pbc::RepeatedField<string> tags_ = new pbc::RepeatedField<string>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<string> Tags {
       get { return tags_; }
     }
@@ -988,6 +1077,7 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "added_date" field.</summary>
     public const int AddedDateFieldNumber = 8;
     private global::Google.Protobuf.WellKnownTypes.Timestamp addedDate_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Google.Protobuf.WellKnownTypes.Timestamp AddedDate {
       get { return addedDate_; }
       set {
@@ -995,10 +1085,12 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetVideoResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetVideoResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -1017,6 +1109,7 @@ namespace KillrVideo.VideoCatalog {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
@@ -1024,16 +1117,18 @@ namespace KillrVideo.VideoCatalog {
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       if (Description.Length != 0) hash ^= Description.GetHashCode();
       if (Location.Length != 0) hash ^= Location.GetHashCode();
-      if (LocationType != global::KillrVideo.VideoCatalog.VideoLocationType.YOUTUBE) hash ^= LocationType.GetHashCode();
+      if (LocationType != 0) hash ^= LocationType.GetHashCode();
       hash ^= tags_.GetHashCode();
       if (addedDate_ != null) hash ^= AddedDate.GetHashCode();
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -1055,7 +1150,7 @@ namespace KillrVideo.VideoCatalog {
         output.WriteRawTag(42);
         output.WriteString(Location);
       }
-      if (LocationType != global::KillrVideo.VideoCatalog.VideoLocationType.YOUTUBE) {
+      if (LocationType != 0) {
         output.WriteRawTag(48);
         output.WriteEnum((int) LocationType);
       }
@@ -1066,6 +1161,7 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -1083,7 +1179,7 @@ namespace KillrVideo.VideoCatalog {
       if (Location.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Location);
       }
-      if (LocationType != global::KillrVideo.VideoCatalog.VideoLocationType.YOUTUBE) {
+      if (LocationType != 0) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) LocationType);
       }
       size += tags_.CalculateSize(_repeated_tags_codec);
@@ -1093,6 +1189,7 @@ namespace KillrVideo.VideoCatalog {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetVideoResponse other) {
       if (other == null) {
         return;
@@ -1118,7 +1215,7 @@ namespace KillrVideo.VideoCatalog {
       if (other.Location.Length != 0) {
         Location = other.Location;
       }
-      if (other.LocationType != global::KillrVideo.VideoCatalog.VideoLocationType.YOUTUBE) {
+      if (other.LocationType != 0) {
         LocationType = other.LocationType;
       }
       tags_.Add(other.tags_);
@@ -1130,6 +1227,7 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -1187,29 +1285,34 @@ namespace KillrVideo.VideoCatalog {
   /// <summary>
   ///  Request for getting some video previews by the video ids
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetVideoPreviewsRequest : pb::IMessage<GetVideoPreviewsRequest> {
     private static readonly pb::MessageParser<GetVideoPreviewsRequest> _parser = new pb::MessageParser<GetVideoPreviewsRequest>(() => new GetVideoPreviewsRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetVideoPreviewsRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.VideoCatalog.VideoCatalogServiceReflection.Descriptor.MessageTypes[6]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetVideoPreviewsRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetVideoPreviewsRequest(GetVideoPreviewsRequest other) : this() {
       videoIds_ = other.videoIds_.Clone();
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetVideoPreviewsRequest Clone() {
       return new GetVideoPreviewsRequest(this);
     }
@@ -1219,14 +1322,17 @@ namespace KillrVideo.VideoCatalog {
     private static readonly pb::FieldCodec<global::KillrVideo.Protobuf.Uuid> _repeated_videoIds_codec
         = pb::FieldCodec.ForMessage(10, global::KillrVideo.Protobuf.Uuid.Parser);
     private readonly pbc::RepeatedField<global::KillrVideo.Protobuf.Uuid> videoIds_ = new pbc::RepeatedField<global::KillrVideo.Protobuf.Uuid>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::KillrVideo.Protobuf.Uuid> VideoIds {
       get { return videoIds_; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetVideoPreviewsRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetVideoPreviewsRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -1238,26 +1344,31 @@ namespace KillrVideo.VideoCatalog {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       hash ^= videoIds_.GetHashCode();
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       videoIds_.WriteTo(output, _repeated_videoIds_codec);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       size += videoIds_.CalculateSize(_repeated_videoIds_codec);
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetVideoPreviewsRequest other) {
       if (other == null) {
         return;
@@ -1265,6 +1376,7 @@ namespace KillrVideo.VideoCatalog {
       videoIds_.Add(other.videoIds_);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -1285,29 +1397,34 @@ namespace KillrVideo.VideoCatalog {
   /// <summary>
   ///  Response when getting some video previews by their ids
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetVideoPreviewsResponse : pb::IMessage<GetVideoPreviewsResponse> {
     private static readonly pb::MessageParser<GetVideoPreviewsResponse> _parser = new pb::MessageParser<GetVideoPreviewsResponse>(() => new GetVideoPreviewsResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetVideoPreviewsResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.VideoCatalog.VideoCatalogServiceReflection.Descriptor.MessageTypes[7]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetVideoPreviewsResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetVideoPreviewsResponse(GetVideoPreviewsResponse other) : this() {
       videoPreviews_ = other.videoPreviews_.Clone();
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetVideoPreviewsResponse Clone() {
       return new GetVideoPreviewsResponse(this);
     }
@@ -1317,14 +1434,17 @@ namespace KillrVideo.VideoCatalog {
     private static readonly pb::FieldCodec<global::KillrVideo.VideoCatalog.VideoPreview> _repeated_videoPreviews_codec
         = pb::FieldCodec.ForMessage(10, global::KillrVideo.VideoCatalog.VideoPreview.Parser);
     private readonly pbc::RepeatedField<global::KillrVideo.VideoCatalog.VideoPreview> videoPreviews_ = new pbc::RepeatedField<global::KillrVideo.VideoCatalog.VideoPreview>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::KillrVideo.VideoCatalog.VideoPreview> VideoPreviews {
       get { return videoPreviews_; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetVideoPreviewsResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetVideoPreviewsResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -1336,26 +1456,31 @@ namespace KillrVideo.VideoCatalog {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       hash ^= videoPreviews_.GetHashCode();
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       videoPreviews_.WriteTo(output, _repeated_videoPreviews_codec);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       size += videoPreviews_.CalculateSize(_repeated_videoPreviews_codec);
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetVideoPreviewsResponse other) {
       if (other == null) {
         return;
@@ -1363,6 +1488,7 @@ namespace KillrVideo.VideoCatalog {
       videoPreviews_.Add(other.videoPreviews_);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -1383,25 +1509,29 @@ namespace KillrVideo.VideoCatalog {
   /// <summary>
   ///  A video preview (i.e. limited details about a video)
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class VideoPreview : pb::IMessage<VideoPreview> {
     private static readonly pb::MessageParser<VideoPreview> _parser = new pb::MessageParser<VideoPreview>(() => new VideoPreview());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<VideoPreview> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.VideoCatalog.VideoCatalogServiceReflection.Descriptor.MessageTypes[8]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public VideoPreview() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public VideoPreview(VideoPreview other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
       AddedDate = other.addedDate_ != null ? other.AddedDate.Clone() : null;
@@ -1410,6 +1540,7 @@ namespace KillrVideo.VideoCatalog {
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public VideoPreview Clone() {
       return new VideoPreview(this);
     }
@@ -1417,6 +1548,7 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -1427,6 +1559,7 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "added_date" field.</summary>
     public const int AddedDateFieldNumber = 2;
     private global::Google.Protobuf.WellKnownTypes.Timestamp addedDate_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Google.Protobuf.WellKnownTypes.Timestamp AddedDate {
       get { return addedDate_; }
       set {
@@ -1437,26 +1570,29 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "name" field.</summary>
     public const int NameFieldNumber = 3;
     private string name_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Name {
       get { return name_; }
       set {
-        name_ = pb::Preconditions.CheckNotNull(value, "value");
+        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "preview_image_location" field.</summary>
     public const int PreviewImageLocationFieldNumber = 4;
     private string previewImageLocation_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string PreviewImageLocation {
       get { return previewImageLocation_; }
       set {
-        previewImageLocation_ = pb::Preconditions.CheckNotNull(value, "value");
+        previewImageLocation_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 5;
     private global::KillrVideo.Protobuf.Uuid userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
@@ -1464,10 +1600,12 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as VideoPreview);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(VideoPreview other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -1483,6 +1621,7 @@ namespace KillrVideo.VideoCatalog {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
@@ -1493,10 +1632,12 @@ namespace KillrVideo.VideoCatalog {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -1520,6 +1661,7 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -1540,6 +1682,7 @@ namespace KillrVideo.VideoCatalog {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(VideoPreview other) {
       if (other == null) {
         return;
@@ -1570,6 +1713,7 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -1615,25 +1759,29 @@ namespace KillrVideo.VideoCatalog {
   /// <summary>
   ///  Request for getting a page of the latest (i.e. newest) videos in the catalog
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetLatestVideoPreviewsRequest : pb::IMessage<GetLatestVideoPreviewsRequest> {
     private static readonly pb::MessageParser<GetLatestVideoPreviewsRequest> _parser = new pb::MessageParser<GetLatestVideoPreviewsRequest>(() => new GetLatestVideoPreviewsRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetLatestVideoPreviewsRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.VideoCatalog.VideoCatalogServiceReflection.Descriptor.MessageTypes[9]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetLatestVideoPreviewsRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetLatestVideoPreviewsRequest(GetLatestVideoPreviewsRequest other) : this() {
       pageSize_ = other.pageSize_;
       StartingAddedDate = other.startingAddedDate_ != null ? other.StartingAddedDate.Clone() : null;
@@ -1641,6 +1789,7 @@ namespace KillrVideo.VideoCatalog {
       pagingState_ = other.pagingState_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetLatestVideoPreviewsRequest Clone() {
       return new GetLatestVideoPreviewsRequest(this);
     }
@@ -1648,6 +1797,7 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "page_size" field.</summary>
     public const int PageSizeFieldNumber = 1;
     private int pageSize_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int PageSize {
       get { return pageSize_; }
       set {
@@ -1658,6 +1808,7 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "starting_added_date" field.</summary>
     public const int StartingAddedDateFieldNumber = 2;
     private global::Google.Protobuf.WellKnownTypes.Timestamp startingAddedDate_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Google.Protobuf.WellKnownTypes.Timestamp StartingAddedDate {
       get { return startingAddedDate_; }
       set {
@@ -1668,6 +1819,7 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "starting_video_id" field.</summary>
     public const int StartingVideoIdFieldNumber = 3;
     private global::KillrVideo.Protobuf.Uuid startingVideoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid StartingVideoId {
       get { return startingVideoId_; }
       set {
@@ -1678,17 +1830,20 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "paging_state" field.</summary>
     public const int PagingStateFieldNumber = 16;
     private string pagingState_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string PagingState {
       get { return pagingState_; }
       set {
-        pagingState_ = pb::Preconditions.CheckNotNull(value, "value");
+        pagingState_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetLatestVideoPreviewsRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetLatestVideoPreviewsRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -1703,6 +1858,7 @@ namespace KillrVideo.VideoCatalog {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (PageSize != 0) hash ^= PageSize.GetHashCode();
@@ -1712,10 +1868,12 @@ namespace KillrVideo.VideoCatalog {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (PageSize != 0) {
         output.WriteRawTag(8);
@@ -1735,6 +1893,7 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (PageSize != 0) {
@@ -1752,6 +1911,7 @@ namespace KillrVideo.VideoCatalog {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetLatestVideoPreviewsRequest other) {
       if (other == null) {
         return;
@@ -1776,6 +1936,7 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -1814,30 +1975,35 @@ namespace KillrVideo.VideoCatalog {
   /// <summary>
   ///  Response when getting a page of the latest videos in the catalog
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetLatestVideoPreviewsResponse : pb::IMessage<GetLatestVideoPreviewsResponse> {
     private static readonly pb::MessageParser<GetLatestVideoPreviewsResponse> _parser = new pb::MessageParser<GetLatestVideoPreviewsResponse>(() => new GetLatestVideoPreviewsResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetLatestVideoPreviewsResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.VideoCatalog.VideoCatalogServiceReflection.Descriptor.MessageTypes[10]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetLatestVideoPreviewsResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetLatestVideoPreviewsResponse(GetLatestVideoPreviewsResponse other) : this() {
       videoPreviews_ = other.videoPreviews_.Clone();
       pagingState_ = other.pagingState_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetLatestVideoPreviewsResponse Clone() {
       return new GetLatestVideoPreviewsResponse(this);
     }
@@ -1847,6 +2013,7 @@ namespace KillrVideo.VideoCatalog {
     private static readonly pb::FieldCodec<global::KillrVideo.VideoCatalog.VideoPreview> _repeated_videoPreviews_codec
         = pb::FieldCodec.ForMessage(10, global::KillrVideo.VideoCatalog.VideoPreview.Parser);
     private readonly pbc::RepeatedField<global::KillrVideo.VideoCatalog.VideoPreview> videoPreviews_ = new pbc::RepeatedField<global::KillrVideo.VideoCatalog.VideoPreview>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::KillrVideo.VideoCatalog.VideoPreview> VideoPreviews {
       get { return videoPreviews_; }
     }
@@ -1854,17 +2021,20 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "paging_state" field.</summary>
     public const int PagingStateFieldNumber = 2;
     private string pagingState_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string PagingState {
       get { return pagingState_; }
       set {
-        pagingState_ = pb::Preconditions.CheckNotNull(value, "value");
+        pagingState_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetLatestVideoPreviewsResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetLatestVideoPreviewsResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -1877,6 +2047,7 @@ namespace KillrVideo.VideoCatalog {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       hash ^= videoPreviews_.GetHashCode();
@@ -1884,10 +2055,12 @@ namespace KillrVideo.VideoCatalog {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       videoPreviews_.WriteTo(output, _repeated_videoPreviews_codec);
       if (PagingState.Length != 0) {
@@ -1896,6 +2069,7 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       size += videoPreviews_.CalculateSize(_repeated_videoPreviews_codec);
@@ -1905,6 +2079,7 @@ namespace KillrVideo.VideoCatalog {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetLatestVideoPreviewsResponse other) {
       if (other == null) {
         return;
@@ -1915,6 +2090,7 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -1939,25 +2115,29 @@ namespace KillrVideo.VideoCatalog {
   /// <summary>
   ///  Request for getting videos a particular user has added to the catalog
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetUserVideoPreviewsRequest : pb::IMessage<GetUserVideoPreviewsRequest> {
     private static readonly pb::MessageParser<GetUserVideoPreviewsRequest> _parser = new pb::MessageParser<GetUserVideoPreviewsRequest>(() => new GetUserVideoPreviewsRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetUserVideoPreviewsRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.VideoCatalog.VideoCatalogServiceReflection.Descriptor.MessageTypes[11]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserVideoPreviewsRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserVideoPreviewsRequest(GetUserVideoPreviewsRequest other) : this() {
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
       pageSize_ = other.pageSize_;
@@ -1966,6 +2146,7 @@ namespace KillrVideo.VideoCatalog {
       pagingState_ = other.pagingState_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserVideoPreviewsRequest Clone() {
       return new GetUserVideoPreviewsRequest(this);
     }
@@ -1973,6 +2154,7 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
@@ -1983,6 +2165,7 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "page_size" field.</summary>
     public const int PageSizeFieldNumber = 2;
     private int pageSize_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int PageSize {
       get { return pageSize_; }
       set {
@@ -1993,6 +2176,7 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "starting_added_date" field.</summary>
     public const int StartingAddedDateFieldNumber = 3;
     private global::Google.Protobuf.WellKnownTypes.Timestamp startingAddedDate_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Google.Protobuf.WellKnownTypes.Timestamp StartingAddedDate {
       get { return startingAddedDate_; }
       set {
@@ -2003,6 +2187,7 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "starting_video_id" field.</summary>
     public const int StartingVideoIdFieldNumber = 4;
     private global::KillrVideo.Protobuf.Uuid startingVideoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid StartingVideoId {
       get { return startingVideoId_; }
       set {
@@ -2013,17 +2198,20 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "paging_state" field.</summary>
     public const int PagingStateFieldNumber = 16;
     private string pagingState_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string PagingState {
       get { return pagingState_; }
       set {
-        pagingState_ = pb::Preconditions.CheckNotNull(value, "value");
+        pagingState_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetUserVideoPreviewsRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetUserVideoPreviewsRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -2039,6 +2227,7 @@ namespace KillrVideo.VideoCatalog {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (userId_ != null) hash ^= UserId.GetHashCode();
@@ -2049,10 +2238,12 @@ namespace KillrVideo.VideoCatalog {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (userId_ != null) {
         output.WriteRawTag(10);
@@ -2076,6 +2267,7 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (userId_ != null) {
@@ -2096,6 +2288,7 @@ namespace KillrVideo.VideoCatalog {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetUserVideoPreviewsRequest other) {
       if (other == null) {
         return;
@@ -2126,6 +2319,7 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -2171,31 +2365,36 @@ namespace KillrVideo.VideoCatalog {
   /// <summary>
   ///  Response when getting videos for a particular user
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetUserVideoPreviewsResponse : pb::IMessage<GetUserVideoPreviewsResponse> {
     private static readonly pb::MessageParser<GetUserVideoPreviewsResponse> _parser = new pb::MessageParser<GetUserVideoPreviewsResponse>(() => new GetUserVideoPreviewsResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetUserVideoPreviewsResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.VideoCatalog.VideoCatalogServiceReflection.Descriptor.MessageTypes[12]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserVideoPreviewsResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserVideoPreviewsResponse(GetUserVideoPreviewsResponse other) : this() {
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
       videoPreviews_ = other.videoPreviews_.Clone();
       pagingState_ = other.pagingState_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserVideoPreviewsResponse Clone() {
       return new GetUserVideoPreviewsResponse(this);
     }
@@ -2203,6 +2402,7 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
@@ -2215,6 +2415,7 @@ namespace KillrVideo.VideoCatalog {
     private static readonly pb::FieldCodec<global::KillrVideo.VideoCatalog.VideoPreview> _repeated_videoPreviews_codec
         = pb::FieldCodec.ForMessage(18, global::KillrVideo.VideoCatalog.VideoPreview.Parser);
     private readonly pbc::RepeatedField<global::KillrVideo.VideoCatalog.VideoPreview> videoPreviews_ = new pbc::RepeatedField<global::KillrVideo.VideoCatalog.VideoPreview>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::KillrVideo.VideoCatalog.VideoPreview> VideoPreviews {
       get { return videoPreviews_; }
     }
@@ -2222,17 +2423,20 @@ namespace KillrVideo.VideoCatalog {
     /// <summary>Field number for the "paging_state" field.</summary>
     public const int PagingStateFieldNumber = 3;
     private string pagingState_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string PagingState {
       get { return pagingState_; }
       set {
-        pagingState_ = pb::Preconditions.CheckNotNull(value, "value");
+        pagingState_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetUserVideoPreviewsResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetUserVideoPreviewsResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -2246,6 +2450,7 @@ namespace KillrVideo.VideoCatalog {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (userId_ != null) hash ^= UserId.GetHashCode();
@@ -2254,10 +2459,12 @@ namespace KillrVideo.VideoCatalog {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (userId_ != null) {
         output.WriteRawTag(10);
@@ -2270,6 +2477,7 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (userId_ != null) {
@@ -2282,6 +2490,7 @@ namespace KillrVideo.VideoCatalog {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetUserVideoPreviewsResponse other) {
       if (other == null) {
         return;
@@ -2298,6 +2507,7 @@ namespace KillrVideo.VideoCatalog {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {

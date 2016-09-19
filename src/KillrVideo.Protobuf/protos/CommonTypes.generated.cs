@@ -10,7 +10,6 @@ using scg = global::System.Collections.Generic;
 namespace KillrVideo.Protobuf {
 
   /// <summary>Holder for reflection information generated from common/common_types.proto</summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public static partial class CommonTypesReflection {
 
     #region Descriptor
@@ -28,9 +27,9 @@ namespace KillrVideo.Protobuf {
             "GAEgASgJQhaqAhNLaWxsclZpZGVvLlByb3RvYnVmYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedCodeInfo(null, new pbr::GeneratedCodeInfo[] {
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Protobuf.Uuid), global::KillrVideo.Protobuf.Uuid.Parser, new[]{ "Value" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Protobuf.TimeUuid), global::KillrVideo.Protobuf.TimeUuid.Parser, new[]{ "Value" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Protobuf.Uuid), global::KillrVideo.Protobuf.Uuid.Parser, new[]{ "Value" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Protobuf.TimeUuid), global::KillrVideo.Protobuf.TimeUuid.Parser, new[]{ "Value" }, null, null, null)
           }));
     }
     #endregion
@@ -40,29 +39,34 @@ namespace KillrVideo.Protobuf {
   /// <summary>
   ///  Represents a v4 UUID/GUID
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class Uuid : pb::IMessage<Uuid> {
     private static readonly pb::MessageParser<Uuid> _parser = new pb::MessageParser<Uuid>(() => new Uuid());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<Uuid> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Protobuf.CommonTypesReflection.Descriptor.MessageTypes[0]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public Uuid() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public Uuid(Uuid other) : this() {
       value_ = other.value_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public Uuid Clone() {
       return new Uuid(this);
     }
@@ -74,17 +78,20 @@ namespace KillrVideo.Protobuf {
     ///  Use string for simplicity sake since most programming languages provide a way
     ///  to parse to/from a UUID string (e.g. 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX')
     /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Value {
       get { return value_; }
       set {
-        value_ = pb::Preconditions.CheckNotNull(value, "value");
+        value_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as Uuid);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(Uuid other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -96,16 +103,19 @@ namespace KillrVideo.Protobuf {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (Value.Length != 0) hash ^= Value.GetHashCode();
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (Value.Length != 0) {
         output.WriteRawTag(10);
@@ -113,6 +123,7 @@ namespace KillrVideo.Protobuf {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (Value.Length != 0) {
@@ -121,6 +132,7 @@ namespace KillrVideo.Protobuf {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(Uuid other) {
       if (other == null) {
         return;
@@ -130,6 +142,7 @@ namespace KillrVideo.Protobuf {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -150,29 +163,34 @@ namespace KillrVideo.Protobuf {
   /// <summary>
   ///  Represents a v1 UUID/GUID (i.e. time-based UUID)
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class TimeUuid : pb::IMessage<TimeUuid> {
     private static readonly pb::MessageParser<TimeUuid> _parser = new pb::MessageParser<TimeUuid>(() => new TimeUuid());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<TimeUuid> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Protobuf.CommonTypesReflection.Descriptor.MessageTypes[1]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public TimeUuid() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public TimeUuid(TimeUuid other) : this() {
       value_ = other.value_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public TimeUuid Clone() {
       return new TimeUuid(this);
     }
@@ -183,17 +201,20 @@ namespace KillrVideo.Protobuf {
     /// <summary>
     ///  Just like Uuid, use string to represent TimeUuids (see Uuid comment)
     /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Value {
       get { return value_; }
       set {
-        value_ = pb::Preconditions.CheckNotNull(value, "value");
+        value_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as TimeUuid);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(TimeUuid other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -205,16 +226,19 @@ namespace KillrVideo.Protobuf {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (Value.Length != 0) hash ^= Value.GetHashCode();
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (Value.Length != 0) {
         output.WriteRawTag(10);
@@ -222,6 +246,7 @@ namespace KillrVideo.Protobuf {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (Value.Length != 0) {
@@ -230,6 +255,7 @@ namespace KillrVideo.Protobuf {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(TimeUuid other) {
       if (other == null) {
         return;
@@ -239,6 +265,7 @@ namespace KillrVideo.Protobuf {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {

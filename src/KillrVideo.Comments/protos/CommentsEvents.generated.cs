@@ -10,7 +10,6 @@ using scg = global::System.Collections.Generic;
 namespace KillrVideo.Comments.Events {
 
   /// <summary>Holder for reflection information generated from comments/comments_events.proto</summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public static partial class CommentsEventsReflection {
 
     #region Descriptor
@@ -34,8 +33,8 @@ namespace KillrVideo.Comments.Events {
             "dmVudHNiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::KillrVideo.Protobuf.CommonTypesReflection.Descriptor, },
-          new pbr::GeneratedCodeInfo(null, new pbr::GeneratedCodeInfo[] {
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Comments.Events.UserCommentedOnVideo), global::KillrVideo.Comments.Events.UserCommentedOnVideo.Parser, new[]{ "UserId", "VideoId", "CommentId", "CommentTimestamp" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Comments.Events.UserCommentedOnVideo), global::KillrVideo.Comments.Events.UserCommentedOnVideo.Parser, new[]{ "UserId", "VideoId", "CommentId", "CommentTimestamp" }, null, null, null)
           }));
     }
     #endregion
@@ -45,25 +44,29 @@ namespace KillrVideo.Comments.Events {
   /// <summary>
   ///  Message published when a user commented on a video
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class UserCommentedOnVideo : pb::IMessage<UserCommentedOnVideo> {
     private static readonly pb::MessageParser<UserCommentedOnVideo> _parser = new pb::MessageParser<UserCommentedOnVideo>(() => new UserCommentedOnVideo());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<UserCommentedOnVideo> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Comments.Events.CommentsEventsReflection.Descriptor.MessageTypes[0]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UserCommentedOnVideo() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UserCommentedOnVideo(UserCommentedOnVideo other) : this() {
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
@@ -71,6 +74,7 @@ namespace KillrVideo.Comments.Events {
       CommentTimestamp = other.commentTimestamp_ != null ? other.CommentTimestamp.Clone() : null;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UserCommentedOnVideo Clone() {
       return new UserCommentedOnVideo(this);
     }
@@ -78,6 +82,7 @@ namespace KillrVideo.Comments.Events {
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
@@ -88,6 +93,7 @@ namespace KillrVideo.Comments.Events {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 2;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -98,6 +104,7 @@ namespace KillrVideo.Comments.Events {
     /// <summary>Field number for the "comment_id" field.</summary>
     public const int CommentIdFieldNumber = 3;
     private global::KillrVideo.Protobuf.TimeUuid commentId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.TimeUuid CommentId {
       get { return commentId_; }
       set {
@@ -108,6 +115,7 @@ namespace KillrVideo.Comments.Events {
     /// <summary>Field number for the "comment_timestamp" field.</summary>
     public const int CommentTimestampFieldNumber = 4;
     private global::Google.Protobuf.WellKnownTypes.Timestamp commentTimestamp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Google.Protobuf.WellKnownTypes.Timestamp CommentTimestamp {
       get { return commentTimestamp_; }
       set {
@@ -115,10 +123,12 @@ namespace KillrVideo.Comments.Events {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as UserCommentedOnVideo);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(UserCommentedOnVideo other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -133,6 +143,7 @@ namespace KillrVideo.Comments.Events {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (userId_ != null) hash ^= UserId.GetHashCode();
@@ -142,10 +153,12 @@ namespace KillrVideo.Comments.Events {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (userId_ != null) {
         output.WriteRawTag(10);
@@ -165,6 +178,7 @@ namespace KillrVideo.Comments.Events {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (userId_ != null) {
@@ -182,6 +196,7 @@ namespace KillrVideo.Comments.Events {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(UserCommentedOnVideo other) {
       if (other == null) {
         return;
@@ -212,6 +227,7 @@ namespace KillrVideo.Comments.Events {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {

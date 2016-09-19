@@ -49,78 +49,6 @@ namespace KillrVideo.Comments {
       get { return global::KillrVideo.Comments.CommentsServiceReflection.Descriptor.Services[0]; }
     }
 
-    /// <summary>Client for CommentsService</summary>
-    [System.Obsolete("Client side interfaced will be removed in the next release. Use client class directly.")]
-    public interface ICommentsServiceClient
-    {
-      /// <summary>
-      ///  Add a new comment to a video
-      /// </summary>
-      global::KillrVideo.Comments.CommentOnVideoResponse CommentOnVideo(global::KillrVideo.Comments.CommentOnVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Add a new comment to a video
-      /// </summary>
-      global::KillrVideo.Comments.CommentOnVideoResponse CommentOnVideo(global::KillrVideo.Comments.CommentOnVideoRequest request, CallOptions options);
-      /// <summary>
-      ///  Add a new comment to a video
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Comments.CommentOnVideoResponse> CommentOnVideoAsync(global::KillrVideo.Comments.CommentOnVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Add a new comment to a video
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Comments.CommentOnVideoResponse> CommentOnVideoAsync(global::KillrVideo.Comments.CommentOnVideoRequest request, CallOptions options);
-      /// <summary>
-      ///  Get comments made by a user
-      /// </summary>
-      global::KillrVideo.Comments.GetUserCommentsResponse GetUserComments(global::KillrVideo.Comments.GetUserCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Get comments made by a user
-      /// </summary>
-      global::KillrVideo.Comments.GetUserCommentsResponse GetUserComments(global::KillrVideo.Comments.GetUserCommentsRequest request, CallOptions options);
-      /// <summary>
-      ///  Get comments made by a user
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Comments.GetUserCommentsResponse> GetUserCommentsAsync(global::KillrVideo.Comments.GetUserCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Get comments made by a user
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Comments.GetUserCommentsResponse> GetUserCommentsAsync(global::KillrVideo.Comments.GetUserCommentsRequest request, CallOptions options);
-      /// <summary>
-      ///  Get comments made on a video
-      /// </summary>
-      global::KillrVideo.Comments.GetVideoCommentsResponse GetVideoComments(global::KillrVideo.Comments.GetVideoCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Get comments made on a video
-      /// </summary>
-      global::KillrVideo.Comments.GetVideoCommentsResponse GetVideoComments(global::KillrVideo.Comments.GetVideoCommentsRequest request, CallOptions options);
-      /// <summary>
-      ///  Get comments made on a video
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Comments.GetVideoCommentsResponse> GetVideoCommentsAsync(global::KillrVideo.Comments.GetVideoCommentsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Get comments made on a video
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Comments.GetVideoCommentsResponse> GetVideoCommentsAsync(global::KillrVideo.Comments.GetVideoCommentsRequest request, CallOptions options);
-    }
-
-    /// <summary>Interface of server-side implementations of CommentsService</summary>
-    [System.Obsolete("Service implementations should inherit from the generated abstract base class instead.")]
-    public interface ICommentsService
-    {
-      /// <summary>
-      ///  Add a new comment to a video
-      /// </summary>
-      global::System.Threading.Tasks.Task<global::KillrVideo.Comments.CommentOnVideoResponse> CommentOnVideo(global::KillrVideo.Comments.CommentOnVideoRequest request, ServerCallContext context);
-      /// <summary>
-      ///  Get comments made by a user
-      /// </summary>
-      global::System.Threading.Tasks.Task<global::KillrVideo.Comments.GetUserCommentsResponse> GetUserComments(global::KillrVideo.Comments.GetUserCommentsRequest request, ServerCallContext context);
-      /// <summary>
-      ///  Get comments made on a video
-      /// </summary>
-      global::System.Threading.Tasks.Task<global::KillrVideo.Comments.GetVideoCommentsResponse> GetVideoComments(global::KillrVideo.Comments.GetVideoCommentsRequest request, ServerCallContext context);
-    }
-
     /// <summary>Base class for server-side implementations of CommentsService</summary>
     public abstract class CommentsServiceBase
     {
@@ -151,21 +79,24 @@ namespace KillrVideo.Comments {
     }
 
     /// <summary>Client for CommentsService</summary>
-    #pragma warning disable 0618
-    public class CommentsServiceClient : ClientBase<CommentsServiceClient>, ICommentsServiceClient
-    #pragma warning restore 0618
+    public class CommentsServiceClient : ClientBase<CommentsServiceClient>
     {
+      /// <summary>Creates a new client for CommentsService</summary>
+      /// <param name="channel">The channel to use to make remote calls.</param>
       public CommentsServiceClient(Channel channel) : base(channel)
       {
       }
+      /// <summary>Creates a new client for CommentsService that uses a custom <c>CallInvoker</c>.</summary>
+      /// <param name="callInvoker">The callInvoker to use to make remote calls.</param>
       public CommentsServiceClient(CallInvoker callInvoker) : base(callInvoker)
       {
       }
-      ///<summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      /// <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
       protected CommentsServiceClient() : base()
       {
       }
-      ///<summary>Protected constructor to allow creation of configured clients.</summary>
+      /// <summary>Protected constructor to allow creation of configured clients.</summary>
+      /// <param name="configuration">The client configuration.</param>
       protected CommentsServiceClient(ClientBaseConfiguration configuration) : base(configuration)
       {
       }
@@ -260,29 +191,10 @@ namespace KillrVideo.Comments {
       }
     }
 
-    /// <summary>Creates a new client for CommentsService</summary>
-    public static CommentsServiceClient NewClient(Channel channel)
-    {
-      return new CommentsServiceClient(channel);
-    }
-
     /// <summary>Creates service definition that can be registered with a server</summary>
-    #pragma warning disable 0618
-    public static ServerServiceDefinition BindService(ICommentsService serviceImpl)
-    #pragma warning restore 0618
-    {
-      return ServerServiceDefinition.CreateBuilder(__ServiceName)
-          .AddMethod(__Method_CommentOnVideo, serviceImpl.CommentOnVideo)
-          .AddMethod(__Method_GetUserComments, serviceImpl.GetUserComments)
-          .AddMethod(__Method_GetVideoComments, serviceImpl.GetVideoComments).Build();
-    }
-
-    /// <summary>Creates service definition that can be registered with a server</summary>
-    #pragma warning disable 0618
     public static ServerServiceDefinition BindService(CommentsServiceBase serviceImpl)
-    #pragma warning restore 0618
     {
-      return ServerServiceDefinition.CreateBuilder(__ServiceName)
+      return ServerServiceDefinition.CreateBuilder()
           .AddMethod(__Method_CommentOnVideo, serviceImpl.CommentOnVideo)
           .AddMethod(__Method_GetUserComments, serviceImpl.GetUserComments)
           .AddMethod(__Method_GetVideoComments, serviceImpl.GetVideoComments).Build();

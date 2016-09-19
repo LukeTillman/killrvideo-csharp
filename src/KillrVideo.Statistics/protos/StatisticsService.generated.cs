@@ -10,7 +10,6 @@ using scg = global::System.Collections.Generic;
 namespace KillrVideo.Statistics {
 
   /// <summary>Holder for reflection information generated from statistics/statistics_service.proto</summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public static partial class StatisticsServiceReflection {
 
     #region Descriptor
@@ -41,12 +40,12 @@ namespace KillrVideo.Statistics {
             "YXlzUmVzcG9uc2VCGKoCFUtpbGxyVmlkZW8uU3RhdGlzdGljc2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::KillrVideo.Protobuf.CommonTypesReflection.Descriptor, },
-          new pbr::GeneratedCodeInfo(null, new pbr::GeneratedCodeInfo[] {
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Statistics.RecordPlaybackStartedRequest), global::KillrVideo.Statistics.RecordPlaybackStartedRequest.Parser, new[]{ "VideoId" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Statistics.RecordPlaybackStartedResponse), global::KillrVideo.Statistics.RecordPlaybackStartedResponse.Parser, null, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Statistics.GetNumberOfPlaysRequest), global::KillrVideo.Statistics.GetNumberOfPlaysRequest.Parser, new[]{ "VideoIds" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Statistics.GetNumberOfPlaysResponse), global::KillrVideo.Statistics.GetNumberOfPlaysResponse.Parser, new[]{ "Stats" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Statistics.PlayStats), global::KillrVideo.Statistics.PlayStats.Parser, new[]{ "VideoId", "Views" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Statistics.RecordPlaybackStartedRequest), global::KillrVideo.Statistics.RecordPlaybackStartedRequest.Parser, new[]{ "VideoId" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Statistics.RecordPlaybackStartedResponse), global::KillrVideo.Statistics.RecordPlaybackStartedResponse.Parser, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Statistics.GetNumberOfPlaysRequest), global::KillrVideo.Statistics.GetNumberOfPlaysRequest.Parser, new[]{ "VideoIds" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Statistics.GetNumberOfPlaysResponse), global::KillrVideo.Statistics.GetNumberOfPlaysResponse.Parser, new[]{ "Stats" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Statistics.PlayStats), global::KillrVideo.Statistics.PlayStats.Parser, new[]{ "VideoId", "Views" }, null, null, null)
           }));
     }
     #endregion
@@ -56,29 +55,34 @@ namespace KillrVideo.Statistics {
   /// <summary>
   ///  Request for recording that a user started playing back a video
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class RecordPlaybackStartedRequest : pb::IMessage<RecordPlaybackStartedRequest> {
     private static readonly pb::MessageParser<RecordPlaybackStartedRequest> _parser = new pb::MessageParser<RecordPlaybackStartedRequest>(() => new RecordPlaybackStartedRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<RecordPlaybackStartedRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Statistics.StatisticsServiceReflection.Descriptor.MessageTypes[0]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public RecordPlaybackStartedRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public RecordPlaybackStartedRequest(RecordPlaybackStartedRequest other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public RecordPlaybackStartedRequest Clone() {
       return new RecordPlaybackStartedRequest(this);
     }
@@ -86,6 +90,7 @@ namespace KillrVideo.Statistics {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -93,10 +98,12 @@ namespace KillrVideo.Statistics {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as RecordPlaybackStartedRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(RecordPlaybackStartedRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -108,16 +115,19 @@ namespace KillrVideo.Statistics {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -125,6 +135,7 @@ namespace KillrVideo.Statistics {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -133,6 +144,7 @@ namespace KillrVideo.Statistics {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(RecordPlaybackStartedRequest other) {
       if (other == null) {
         return;
@@ -145,6 +157,7 @@ namespace KillrVideo.Statistics {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -168,36 +181,43 @@ namespace KillrVideo.Statistics {
   /// <summary>
   ///  Response when recording that a user started playing back a video
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class RecordPlaybackStartedResponse : pb::IMessage<RecordPlaybackStartedResponse> {
     private static readonly pb::MessageParser<RecordPlaybackStartedResponse> _parser = new pb::MessageParser<RecordPlaybackStartedResponse>(() => new RecordPlaybackStartedResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<RecordPlaybackStartedResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Statistics.StatisticsServiceReflection.Descriptor.MessageTypes[1]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public RecordPlaybackStartedResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public RecordPlaybackStartedResponse(RecordPlaybackStartedResponse other) : this() {
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public RecordPlaybackStartedResponse Clone() {
       return new RecordPlaybackStartedResponse(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as RecordPlaybackStartedResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(RecordPlaybackStartedResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -208,29 +228,35 @@ namespace KillrVideo.Statistics {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(RecordPlaybackStartedResponse other) {
       if (other == null) {
         return;
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -247,29 +273,34 @@ namespace KillrVideo.Statistics {
   /// <summary>
   ///  Request for getting the number of times a video or set of videos has been played back
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetNumberOfPlaysRequest : pb::IMessage<GetNumberOfPlaysRequest> {
     private static readonly pb::MessageParser<GetNumberOfPlaysRequest> _parser = new pb::MessageParser<GetNumberOfPlaysRequest>(() => new GetNumberOfPlaysRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetNumberOfPlaysRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Statistics.StatisticsServiceReflection.Descriptor.MessageTypes[2]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetNumberOfPlaysRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetNumberOfPlaysRequest(GetNumberOfPlaysRequest other) : this() {
       videoIds_ = other.videoIds_.Clone();
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetNumberOfPlaysRequest Clone() {
       return new GetNumberOfPlaysRequest(this);
     }
@@ -279,14 +310,17 @@ namespace KillrVideo.Statistics {
     private static readonly pb::FieldCodec<global::KillrVideo.Protobuf.Uuid> _repeated_videoIds_codec
         = pb::FieldCodec.ForMessage(10, global::KillrVideo.Protobuf.Uuid.Parser);
     private readonly pbc::RepeatedField<global::KillrVideo.Protobuf.Uuid> videoIds_ = new pbc::RepeatedField<global::KillrVideo.Protobuf.Uuid>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::KillrVideo.Protobuf.Uuid> VideoIds {
       get { return videoIds_; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetNumberOfPlaysRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetNumberOfPlaysRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -298,26 +332,31 @@ namespace KillrVideo.Statistics {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       hash ^= videoIds_.GetHashCode();
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       videoIds_.WriteTo(output, _repeated_videoIds_codec);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       size += videoIds_.CalculateSize(_repeated_videoIds_codec);
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetNumberOfPlaysRequest other) {
       if (other == null) {
         return;
@@ -325,6 +364,7 @@ namespace KillrVideo.Statistics {
       videoIds_.Add(other.videoIds_);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -345,29 +385,34 @@ namespace KillrVideo.Statistics {
   /// <summary>
   ///  Response when getting playback stats for a video or set of videos
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetNumberOfPlaysResponse : pb::IMessage<GetNumberOfPlaysResponse> {
     private static readonly pb::MessageParser<GetNumberOfPlaysResponse> _parser = new pb::MessageParser<GetNumberOfPlaysResponse>(() => new GetNumberOfPlaysResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetNumberOfPlaysResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Statistics.StatisticsServiceReflection.Descriptor.MessageTypes[3]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetNumberOfPlaysResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetNumberOfPlaysResponse(GetNumberOfPlaysResponse other) : this() {
       stats_ = other.stats_.Clone();
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetNumberOfPlaysResponse Clone() {
       return new GetNumberOfPlaysResponse(this);
     }
@@ -377,14 +422,17 @@ namespace KillrVideo.Statistics {
     private static readonly pb::FieldCodec<global::KillrVideo.Statistics.PlayStats> _repeated_stats_codec
         = pb::FieldCodec.ForMessage(10, global::KillrVideo.Statistics.PlayStats.Parser);
     private readonly pbc::RepeatedField<global::KillrVideo.Statistics.PlayStats> stats_ = new pbc::RepeatedField<global::KillrVideo.Statistics.PlayStats>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::KillrVideo.Statistics.PlayStats> Stats {
       get { return stats_; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetNumberOfPlaysResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetNumberOfPlaysResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -396,26 +444,31 @@ namespace KillrVideo.Statistics {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       hash ^= stats_.GetHashCode();
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       stats_.WriteTo(output, _repeated_stats_codec);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       size += stats_.CalculateSize(_repeated_stats_codec);
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetNumberOfPlaysResponse other) {
       if (other == null) {
         return;
@@ -423,6 +476,7 @@ namespace KillrVideo.Statistics {
       stats_.Add(other.stats_);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -443,30 +497,35 @@ namespace KillrVideo.Statistics {
   /// <summary>
   ///  The playback stats for a given video id
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class PlayStats : pb::IMessage<PlayStats> {
     private static readonly pb::MessageParser<PlayStats> _parser = new pb::MessageParser<PlayStats>(() => new PlayStats());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<PlayStats> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Statistics.StatisticsServiceReflection.Descriptor.MessageTypes[4]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public PlayStats() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public PlayStats(PlayStats other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
       views_ = other.views_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public PlayStats Clone() {
       return new PlayStats(this);
     }
@@ -474,6 +533,7 @@ namespace KillrVideo.Statistics {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -484,6 +544,7 @@ namespace KillrVideo.Statistics {
     /// <summary>Field number for the "views" field.</summary>
     public const int ViewsFieldNumber = 2;
     private long views_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public long Views {
       get { return views_; }
       set {
@@ -491,10 +552,12 @@ namespace KillrVideo.Statistics {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as PlayStats);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(PlayStats other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -507,6 +570,7 @@ namespace KillrVideo.Statistics {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
@@ -514,10 +578,12 @@ namespace KillrVideo.Statistics {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -529,6 +595,7 @@ namespace KillrVideo.Statistics {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -540,6 +607,7 @@ namespace KillrVideo.Statistics {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(PlayStats other) {
       if (other == null) {
         return;
@@ -555,6 +623,7 @@ namespace KillrVideo.Statistics {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {

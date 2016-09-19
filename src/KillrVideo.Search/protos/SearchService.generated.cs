@@ -10,7 +10,6 @@ using scg = global::System.Collections.Generic;
 namespace KillrVideo.Search {
 
   /// <summary>Holder for reflection information generated from search/search_service.proto</summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public static partial class SearchServiceReflection {
 
     #region Descriptor
@@ -46,12 +45,12 @@ namespace KillrVideo.Search {
             "ZWFyY2hiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::KillrVideo.Protobuf.CommonTypesReflection.Descriptor, },
-          new pbr::GeneratedCodeInfo(null, new pbr::GeneratedCodeInfo[] {
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Search.SearchVideosRequest), global::KillrVideo.Search.SearchVideosRequest.Parser, new[]{ "Query", "PageSize", "PagingState" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Search.SearchVideosResponse), global::KillrVideo.Search.SearchVideosResponse.Parser, new[]{ "Query", "Videos", "PagingState" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Search.SearchResultsVideoPreview), global::KillrVideo.Search.SearchResultsVideoPreview.Parser, new[]{ "VideoId", "AddedDate", "Name", "PreviewImageLocation", "UserId" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Search.GetQuerySuggestionsRequest), global::KillrVideo.Search.GetQuerySuggestionsRequest.Parser, new[]{ "Query", "PageSize" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Search.GetQuerySuggestionsResponse), global::KillrVideo.Search.GetQuerySuggestionsResponse.Parser, new[]{ "Query", "Suggestions" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Search.SearchVideosRequest), global::KillrVideo.Search.SearchVideosRequest.Parser, new[]{ "Query", "PageSize", "PagingState" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Search.SearchVideosResponse), global::KillrVideo.Search.SearchVideosResponse.Parser, new[]{ "Query", "Videos", "PagingState" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Search.SearchResultsVideoPreview), global::KillrVideo.Search.SearchResultsVideoPreview.Parser, new[]{ "VideoId", "AddedDate", "Name", "PreviewImageLocation", "UserId" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Search.GetQuerySuggestionsRequest), global::KillrVideo.Search.GetQuerySuggestionsRequest.Parser, new[]{ "Query", "PageSize" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Search.GetQuerySuggestionsResponse), global::KillrVideo.Search.GetQuerySuggestionsResponse.Parser, new[]{ "Query", "Suggestions" }, null, null, null)
           }));
     }
     #endregion
@@ -61,31 +60,36 @@ namespace KillrVideo.Search {
   /// <summary>
   ///  Request when searching for videos by a query term
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class SearchVideosRequest : pb::IMessage<SearchVideosRequest> {
     private static readonly pb::MessageParser<SearchVideosRequest> _parser = new pb::MessageParser<SearchVideosRequest>(() => new SearchVideosRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<SearchVideosRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Search.SearchServiceReflection.Descriptor.MessageTypes[0]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SearchVideosRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SearchVideosRequest(SearchVideosRequest other) : this() {
       query_ = other.query_;
       pageSize_ = other.pageSize_;
       pagingState_ = other.pagingState_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SearchVideosRequest Clone() {
       return new SearchVideosRequest(this);
     }
@@ -93,16 +97,18 @@ namespace KillrVideo.Search {
     /// <summary>Field number for the "query" field.</summary>
     public const int QueryFieldNumber = 1;
     private string query_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Query {
       get { return query_; }
       set {
-        query_ = pb::Preconditions.CheckNotNull(value, "value");
+        query_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "page_size" field.</summary>
     public const int PageSizeFieldNumber = 2;
     private int pageSize_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int PageSize {
       get { return pageSize_; }
       set {
@@ -113,17 +119,20 @@ namespace KillrVideo.Search {
     /// <summary>Field number for the "paging_state" field.</summary>
     public const int PagingStateFieldNumber = 16;
     private string pagingState_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string PagingState {
       get { return pagingState_; }
       set {
-        pagingState_ = pb::Preconditions.CheckNotNull(value, "value");
+        pagingState_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as SearchVideosRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(SearchVideosRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -137,6 +146,7 @@ namespace KillrVideo.Search {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (Query.Length != 0) hash ^= Query.GetHashCode();
@@ -145,10 +155,12 @@ namespace KillrVideo.Search {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (Query.Length != 0) {
         output.WriteRawTag(10);
@@ -164,6 +176,7 @@ namespace KillrVideo.Search {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (Query.Length != 0) {
@@ -178,6 +191,7 @@ namespace KillrVideo.Search {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(SearchVideosRequest other) {
       if (other == null) {
         return;
@@ -193,6 +207,7 @@ namespace KillrVideo.Search {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -221,31 +236,36 @@ namespace KillrVideo.Search {
   /// <summary>
   ///  Response when searching for videos
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class SearchVideosResponse : pb::IMessage<SearchVideosResponse> {
     private static readonly pb::MessageParser<SearchVideosResponse> _parser = new pb::MessageParser<SearchVideosResponse>(() => new SearchVideosResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<SearchVideosResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Search.SearchServiceReflection.Descriptor.MessageTypes[1]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SearchVideosResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SearchVideosResponse(SearchVideosResponse other) : this() {
       query_ = other.query_;
       videos_ = other.videos_.Clone();
       pagingState_ = other.pagingState_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SearchVideosResponse Clone() {
       return new SearchVideosResponse(this);
     }
@@ -253,10 +273,11 @@ namespace KillrVideo.Search {
     /// <summary>Field number for the "query" field.</summary>
     public const int QueryFieldNumber = 1;
     private string query_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Query {
       get { return query_; }
       set {
-        query_ = pb::Preconditions.CheckNotNull(value, "value");
+        query_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -265,6 +286,7 @@ namespace KillrVideo.Search {
     private static readonly pb::FieldCodec<global::KillrVideo.Search.SearchResultsVideoPreview> _repeated_videos_codec
         = pb::FieldCodec.ForMessage(18, global::KillrVideo.Search.SearchResultsVideoPreview.Parser);
     private readonly pbc::RepeatedField<global::KillrVideo.Search.SearchResultsVideoPreview> videos_ = new pbc::RepeatedField<global::KillrVideo.Search.SearchResultsVideoPreview>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::KillrVideo.Search.SearchResultsVideoPreview> Videos {
       get { return videos_; }
     }
@@ -272,17 +294,20 @@ namespace KillrVideo.Search {
     /// <summary>Field number for the "paging_state" field.</summary>
     public const int PagingStateFieldNumber = 3;
     private string pagingState_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string PagingState {
       get { return pagingState_; }
       set {
-        pagingState_ = pb::Preconditions.CheckNotNull(value, "value");
+        pagingState_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as SearchVideosResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(SearchVideosResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -296,6 +321,7 @@ namespace KillrVideo.Search {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (Query.Length != 0) hash ^= Query.GetHashCode();
@@ -304,10 +330,12 @@ namespace KillrVideo.Search {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (Query.Length != 0) {
         output.WriteRawTag(10);
@@ -320,6 +348,7 @@ namespace KillrVideo.Search {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (Query.Length != 0) {
@@ -332,6 +361,7 @@ namespace KillrVideo.Search {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(SearchVideosResponse other) {
       if (other == null) {
         return;
@@ -345,6 +375,7 @@ namespace KillrVideo.Search {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -373,25 +404,29 @@ namespace KillrVideo.Search {
   /// <summary>
   ///  A video preview returned in search results
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class SearchResultsVideoPreview : pb::IMessage<SearchResultsVideoPreview> {
     private static readonly pb::MessageParser<SearchResultsVideoPreview> _parser = new pb::MessageParser<SearchResultsVideoPreview>(() => new SearchResultsVideoPreview());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<SearchResultsVideoPreview> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Search.SearchServiceReflection.Descriptor.MessageTypes[2]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SearchResultsVideoPreview() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SearchResultsVideoPreview(SearchResultsVideoPreview other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
       AddedDate = other.addedDate_ != null ? other.AddedDate.Clone() : null;
@@ -400,6 +435,7 @@ namespace KillrVideo.Search {
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SearchResultsVideoPreview Clone() {
       return new SearchResultsVideoPreview(this);
     }
@@ -407,6 +443,7 @@ namespace KillrVideo.Search {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -417,6 +454,7 @@ namespace KillrVideo.Search {
     /// <summary>Field number for the "added_date" field.</summary>
     public const int AddedDateFieldNumber = 2;
     private global::Google.Protobuf.WellKnownTypes.Timestamp addedDate_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Google.Protobuf.WellKnownTypes.Timestamp AddedDate {
       get { return addedDate_; }
       set {
@@ -427,26 +465,29 @@ namespace KillrVideo.Search {
     /// <summary>Field number for the "name" field.</summary>
     public const int NameFieldNumber = 3;
     private string name_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Name {
       get { return name_; }
       set {
-        name_ = pb::Preconditions.CheckNotNull(value, "value");
+        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "preview_image_location" field.</summary>
     public const int PreviewImageLocationFieldNumber = 4;
     private string previewImageLocation_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string PreviewImageLocation {
       get { return previewImageLocation_; }
       set {
-        previewImageLocation_ = pb::Preconditions.CheckNotNull(value, "value");
+        previewImageLocation_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 5;
     private global::KillrVideo.Protobuf.Uuid userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
@@ -454,10 +495,12 @@ namespace KillrVideo.Search {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as SearchResultsVideoPreview);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(SearchResultsVideoPreview other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -473,6 +516,7 @@ namespace KillrVideo.Search {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
@@ -483,10 +527,12 @@ namespace KillrVideo.Search {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -510,6 +556,7 @@ namespace KillrVideo.Search {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -530,6 +577,7 @@ namespace KillrVideo.Search {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(SearchResultsVideoPreview other) {
       if (other == null) {
         return;
@@ -560,6 +608,7 @@ namespace KillrVideo.Search {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -605,30 +654,35 @@ namespace KillrVideo.Search {
   /// <summary>
   ///  Request for getting query suggestions based on some user input
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetQuerySuggestionsRequest : pb::IMessage<GetQuerySuggestionsRequest> {
     private static readonly pb::MessageParser<GetQuerySuggestionsRequest> _parser = new pb::MessageParser<GetQuerySuggestionsRequest>(() => new GetQuerySuggestionsRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetQuerySuggestionsRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Search.SearchServiceReflection.Descriptor.MessageTypes[3]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetQuerySuggestionsRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetQuerySuggestionsRequest(GetQuerySuggestionsRequest other) : this() {
       query_ = other.query_;
       pageSize_ = other.pageSize_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetQuerySuggestionsRequest Clone() {
       return new GetQuerySuggestionsRequest(this);
     }
@@ -636,16 +690,18 @@ namespace KillrVideo.Search {
     /// <summary>Field number for the "query" field.</summary>
     public const int QueryFieldNumber = 1;
     private string query_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Query {
       get { return query_; }
       set {
-        query_ = pb::Preconditions.CheckNotNull(value, "value");
+        query_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "page_size" field.</summary>
     public const int PageSizeFieldNumber = 2;
     private int pageSize_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int PageSize {
       get { return pageSize_; }
       set {
@@ -653,10 +709,12 @@ namespace KillrVideo.Search {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetQuerySuggestionsRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetQuerySuggestionsRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -669,6 +727,7 @@ namespace KillrVideo.Search {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (Query.Length != 0) hash ^= Query.GetHashCode();
@@ -676,10 +735,12 @@ namespace KillrVideo.Search {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (Query.Length != 0) {
         output.WriteRawTag(10);
@@ -691,6 +752,7 @@ namespace KillrVideo.Search {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (Query.Length != 0) {
@@ -702,6 +764,7 @@ namespace KillrVideo.Search {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetQuerySuggestionsRequest other) {
       if (other == null) {
         return;
@@ -714,6 +777,7 @@ namespace KillrVideo.Search {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -738,30 +802,35 @@ namespace KillrVideo.Search {
   /// <summary>
   ///  Response with top query suggestions for the user input 
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetQuerySuggestionsResponse : pb::IMessage<GetQuerySuggestionsResponse> {
     private static readonly pb::MessageParser<GetQuerySuggestionsResponse> _parser = new pb::MessageParser<GetQuerySuggestionsResponse>(() => new GetQuerySuggestionsResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetQuerySuggestionsResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Search.SearchServiceReflection.Descriptor.MessageTypes[4]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetQuerySuggestionsResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetQuerySuggestionsResponse(GetQuerySuggestionsResponse other) : this() {
       query_ = other.query_;
       suggestions_ = other.suggestions_.Clone();
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetQuerySuggestionsResponse Clone() {
       return new GetQuerySuggestionsResponse(this);
     }
@@ -769,10 +838,11 @@ namespace KillrVideo.Search {
     /// <summary>Field number for the "query" field.</summary>
     public const int QueryFieldNumber = 1;
     private string query_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Query {
       get { return query_; }
       set {
-        query_ = pb::Preconditions.CheckNotNull(value, "value");
+        query_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -781,14 +851,17 @@ namespace KillrVideo.Search {
     private static readonly pb::FieldCodec<string> _repeated_suggestions_codec
         = pb::FieldCodec.ForString(18);
     private readonly pbc::RepeatedField<string> suggestions_ = new pbc::RepeatedField<string>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<string> Suggestions {
       get { return suggestions_; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetQuerySuggestionsResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetQuerySuggestionsResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -801,6 +874,7 @@ namespace KillrVideo.Search {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (Query.Length != 0) hash ^= Query.GetHashCode();
@@ -808,10 +882,12 @@ namespace KillrVideo.Search {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (Query.Length != 0) {
         output.WriteRawTag(10);
@@ -820,6 +896,7 @@ namespace KillrVideo.Search {
       suggestions_.WriteTo(output, _repeated_suggestions_codec);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (Query.Length != 0) {
@@ -829,6 +906,7 @@ namespace KillrVideo.Search {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetQuerySuggestionsResponse other) {
       if (other == null) {
         return;
@@ -839,6 +917,7 @@ namespace KillrVideo.Search {
       suggestions_.Add(other.suggestions_);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {

@@ -10,7 +10,6 @@ using scg = global::System.Collections.Generic;
 namespace KillrVideo.Comments {
 
   /// <summary>Holder for reflection information generated from comments/comments_service.proto</summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public static partial class CommentsServiceReflection {
 
     #region Descriptor
@@ -63,15 +62,15 @@ namespace KillrVideo.Comments {
             "clZpZGVvLkNvbW1lbnRzYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::KillrVideo.Protobuf.CommonTypesReflection.Descriptor, },
-          new pbr::GeneratedCodeInfo(null, new pbr::GeneratedCodeInfo[] {
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Comments.CommentOnVideoRequest), global::KillrVideo.Comments.CommentOnVideoRequest.Parser, new[]{ "VideoId", "UserId", "CommentId", "Comment" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Comments.CommentOnVideoResponse), global::KillrVideo.Comments.CommentOnVideoResponse.Parser, null, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Comments.GetUserCommentsRequest), global::KillrVideo.Comments.GetUserCommentsRequest.Parser, new[]{ "UserId", "PageSize", "StartingCommentId", "PagingState" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Comments.GetUserCommentsResponse), global::KillrVideo.Comments.GetUserCommentsResponse.Parser, new[]{ "UserId", "Comments", "PagingState" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Comments.UserComment), global::KillrVideo.Comments.UserComment.Parser, new[]{ "CommentId", "VideoId", "Comment", "CommentTimestamp" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Comments.GetVideoCommentsRequest), global::KillrVideo.Comments.GetVideoCommentsRequest.Parser, new[]{ "VideoId", "PageSize", "StartingCommentId", "PagingState" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Comments.GetVideoCommentsResponse), global::KillrVideo.Comments.GetVideoCommentsResponse.Parser, new[]{ "VideoId", "Comments", "PagingState" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Comments.VideoComment), global::KillrVideo.Comments.VideoComment.Parser, new[]{ "CommentId", "UserId", "Comment", "CommentTimestamp" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Comments.CommentOnVideoRequest), global::KillrVideo.Comments.CommentOnVideoRequest.Parser, new[]{ "VideoId", "UserId", "CommentId", "Comment" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Comments.CommentOnVideoResponse), global::KillrVideo.Comments.CommentOnVideoResponse.Parser, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Comments.GetUserCommentsRequest), global::KillrVideo.Comments.GetUserCommentsRequest.Parser, new[]{ "UserId", "PageSize", "StartingCommentId", "PagingState" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Comments.GetUserCommentsResponse), global::KillrVideo.Comments.GetUserCommentsResponse.Parser, new[]{ "UserId", "Comments", "PagingState" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Comments.UserComment), global::KillrVideo.Comments.UserComment.Parser, new[]{ "CommentId", "VideoId", "Comment", "CommentTimestamp" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Comments.GetVideoCommentsRequest), global::KillrVideo.Comments.GetVideoCommentsRequest.Parser, new[]{ "VideoId", "PageSize", "StartingCommentId", "PagingState" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Comments.GetVideoCommentsResponse), global::KillrVideo.Comments.GetVideoCommentsResponse.Parser, new[]{ "VideoId", "Comments", "PagingState" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Comments.VideoComment), global::KillrVideo.Comments.VideoComment.Parser, new[]{ "CommentId", "UserId", "Comment", "CommentTimestamp" }, null, null, null)
           }));
     }
     #endregion
@@ -81,25 +80,29 @@ namespace KillrVideo.Comments {
   /// <summary>
   ///  Add a comment to a video
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class CommentOnVideoRequest : pb::IMessage<CommentOnVideoRequest> {
     private static readonly pb::MessageParser<CommentOnVideoRequest> _parser = new pb::MessageParser<CommentOnVideoRequest>(() => new CommentOnVideoRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<CommentOnVideoRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Comments.CommentsServiceReflection.Descriptor.MessageTypes[0]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CommentOnVideoRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CommentOnVideoRequest(CommentOnVideoRequest other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
@@ -107,6 +110,7 @@ namespace KillrVideo.Comments {
       comment_ = other.comment_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CommentOnVideoRequest Clone() {
       return new CommentOnVideoRequest(this);
     }
@@ -114,6 +118,7 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -124,6 +129,7 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 2;
     private global::KillrVideo.Protobuf.Uuid userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
@@ -134,6 +140,7 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "comment_id" field.</summary>
     public const int CommentIdFieldNumber = 3;
     private global::KillrVideo.Protobuf.TimeUuid commentId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.TimeUuid CommentId {
       get { return commentId_; }
       set {
@@ -144,17 +151,20 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "comment" field.</summary>
     public const int CommentFieldNumber = 4;
     private string comment_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Comment {
       get { return comment_; }
       set {
-        comment_ = pb::Preconditions.CheckNotNull(value, "value");
+        comment_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as CommentOnVideoRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(CommentOnVideoRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -169,6 +179,7 @@ namespace KillrVideo.Comments {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
@@ -178,10 +189,12 @@ namespace KillrVideo.Comments {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -201,6 +214,7 @@ namespace KillrVideo.Comments {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -218,6 +232,7 @@ namespace KillrVideo.Comments {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(CommentOnVideoRequest other) {
       if (other == null) {
         return;
@@ -245,6 +260,7 @@ namespace KillrVideo.Comments {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -286,36 +302,43 @@ namespace KillrVideo.Comments {
   /// <summary>
   ///  Response to adding a comment to a video
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class CommentOnVideoResponse : pb::IMessage<CommentOnVideoResponse> {
     private static readonly pb::MessageParser<CommentOnVideoResponse> _parser = new pb::MessageParser<CommentOnVideoResponse>(() => new CommentOnVideoResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<CommentOnVideoResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Comments.CommentsServiceReflection.Descriptor.MessageTypes[1]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CommentOnVideoResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CommentOnVideoResponse(CommentOnVideoResponse other) : this() {
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CommentOnVideoResponse Clone() {
       return new CommentOnVideoResponse(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as CommentOnVideoResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(CommentOnVideoResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -326,29 +349,35 @@ namespace KillrVideo.Comments {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(CommentOnVideoResponse other) {
       if (other == null) {
         return;
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -365,25 +394,29 @@ namespace KillrVideo.Comments {
   /// <summary>
   ///  Get a page of comments made by a specific user
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetUserCommentsRequest : pb::IMessage<GetUserCommentsRequest> {
     private static readonly pb::MessageParser<GetUserCommentsRequest> _parser = new pb::MessageParser<GetUserCommentsRequest>(() => new GetUserCommentsRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetUserCommentsRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Comments.CommentsServiceReflection.Descriptor.MessageTypes[2]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserCommentsRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserCommentsRequest(GetUserCommentsRequest other) : this() {
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
       pageSize_ = other.pageSize_;
@@ -391,6 +424,7 @@ namespace KillrVideo.Comments {
       pagingState_ = other.pagingState_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserCommentsRequest Clone() {
       return new GetUserCommentsRequest(this);
     }
@@ -398,6 +432,7 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
@@ -408,6 +443,7 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "page_size" field.</summary>
     public const int PageSizeFieldNumber = 2;
     private int pageSize_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int PageSize {
       get { return pageSize_; }
       set {
@@ -418,6 +454,7 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "starting_comment_id" field.</summary>
     public const int StartingCommentIdFieldNumber = 3;
     private global::KillrVideo.Protobuf.TimeUuid startingCommentId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.TimeUuid StartingCommentId {
       get { return startingCommentId_; }
       set {
@@ -428,17 +465,20 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "paging_state" field.</summary>
     public const int PagingStateFieldNumber = 16;
     private string pagingState_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string PagingState {
       get { return pagingState_; }
       set {
-        pagingState_ = pb::Preconditions.CheckNotNull(value, "value");
+        pagingState_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetUserCommentsRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetUserCommentsRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -453,6 +493,7 @@ namespace KillrVideo.Comments {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (userId_ != null) hash ^= UserId.GetHashCode();
@@ -462,10 +503,12 @@ namespace KillrVideo.Comments {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (userId_ != null) {
         output.WriteRawTag(10);
@@ -485,6 +528,7 @@ namespace KillrVideo.Comments {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (userId_ != null) {
@@ -502,6 +546,7 @@ namespace KillrVideo.Comments {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetUserCommentsRequest other) {
       if (other == null) {
         return;
@@ -526,6 +571,7 @@ namespace KillrVideo.Comments {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -564,31 +610,36 @@ namespace KillrVideo.Comments {
   /// <summary>
   ///  Response when getting a page of comments made by a user
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetUserCommentsResponse : pb::IMessage<GetUserCommentsResponse> {
     private static readonly pb::MessageParser<GetUserCommentsResponse> _parser = new pb::MessageParser<GetUserCommentsResponse>(() => new GetUserCommentsResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetUserCommentsResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Comments.CommentsServiceReflection.Descriptor.MessageTypes[3]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserCommentsResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserCommentsResponse(GetUserCommentsResponse other) : this() {
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
       comments_ = other.comments_.Clone();
       pagingState_ = other.pagingState_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserCommentsResponse Clone() {
       return new GetUserCommentsResponse(this);
     }
@@ -596,6 +647,7 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
@@ -608,6 +660,7 @@ namespace KillrVideo.Comments {
     private static readonly pb::FieldCodec<global::KillrVideo.Comments.UserComment> _repeated_comments_codec
         = pb::FieldCodec.ForMessage(18, global::KillrVideo.Comments.UserComment.Parser);
     private readonly pbc::RepeatedField<global::KillrVideo.Comments.UserComment> comments_ = new pbc::RepeatedField<global::KillrVideo.Comments.UserComment>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::KillrVideo.Comments.UserComment> Comments {
       get { return comments_; }
     }
@@ -615,17 +668,20 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "paging_state" field.</summary>
     public const int PagingStateFieldNumber = 3;
     private string pagingState_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string PagingState {
       get { return pagingState_; }
       set {
-        pagingState_ = pb::Preconditions.CheckNotNull(value, "value");
+        pagingState_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetUserCommentsResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetUserCommentsResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -639,6 +695,7 @@ namespace KillrVideo.Comments {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (userId_ != null) hash ^= UserId.GetHashCode();
@@ -647,10 +704,12 @@ namespace KillrVideo.Comments {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (userId_ != null) {
         output.WriteRawTag(10);
@@ -663,6 +722,7 @@ namespace KillrVideo.Comments {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (userId_ != null) {
@@ -675,6 +735,7 @@ namespace KillrVideo.Comments {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetUserCommentsResponse other) {
       if (other == null) {
         return;
@@ -691,6 +752,7 @@ namespace KillrVideo.Comments {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -722,25 +784,29 @@ namespace KillrVideo.Comments {
   /// <summary>
   ///  A comment made by a user
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class UserComment : pb::IMessage<UserComment> {
     private static readonly pb::MessageParser<UserComment> _parser = new pb::MessageParser<UserComment>(() => new UserComment());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<UserComment> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Comments.CommentsServiceReflection.Descriptor.MessageTypes[4]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UserComment() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UserComment(UserComment other) : this() {
       CommentId = other.commentId_ != null ? other.CommentId.Clone() : null;
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
@@ -748,6 +814,7 @@ namespace KillrVideo.Comments {
       CommentTimestamp = other.commentTimestamp_ != null ? other.CommentTimestamp.Clone() : null;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UserComment Clone() {
       return new UserComment(this);
     }
@@ -755,6 +822,7 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "comment_id" field.</summary>
     public const int CommentIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.TimeUuid commentId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.TimeUuid CommentId {
       get { return commentId_; }
       set {
@@ -765,6 +833,7 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 2;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -775,16 +844,18 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "comment" field.</summary>
     public const int CommentFieldNumber = 3;
     private string comment_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Comment {
       get { return comment_; }
       set {
-        comment_ = pb::Preconditions.CheckNotNull(value, "value");
+        comment_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "comment_timestamp" field.</summary>
     public const int CommentTimestampFieldNumber = 4;
     private global::Google.Protobuf.WellKnownTypes.Timestamp commentTimestamp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Google.Protobuf.WellKnownTypes.Timestamp CommentTimestamp {
       get { return commentTimestamp_; }
       set {
@@ -792,10 +863,12 @@ namespace KillrVideo.Comments {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as UserComment);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(UserComment other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -810,6 +883,7 @@ namespace KillrVideo.Comments {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (commentId_ != null) hash ^= CommentId.GetHashCode();
@@ -819,10 +893,12 @@ namespace KillrVideo.Comments {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (commentId_ != null) {
         output.WriteRawTag(10);
@@ -842,6 +918,7 @@ namespace KillrVideo.Comments {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (commentId_ != null) {
@@ -859,6 +936,7 @@ namespace KillrVideo.Comments {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(UserComment other) {
       if (other == null) {
         return;
@@ -886,6 +964,7 @@ namespace KillrVideo.Comments {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -927,25 +1006,29 @@ namespace KillrVideo.Comments {
   /// <summary>
   ///  Request for getting a page of comments on a video
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetVideoCommentsRequest : pb::IMessage<GetVideoCommentsRequest> {
     private static readonly pb::MessageParser<GetVideoCommentsRequest> _parser = new pb::MessageParser<GetVideoCommentsRequest>(() => new GetVideoCommentsRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetVideoCommentsRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Comments.CommentsServiceReflection.Descriptor.MessageTypes[5]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetVideoCommentsRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetVideoCommentsRequest(GetVideoCommentsRequest other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
       pageSize_ = other.pageSize_;
@@ -953,6 +1036,7 @@ namespace KillrVideo.Comments {
       pagingState_ = other.pagingState_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetVideoCommentsRequest Clone() {
       return new GetVideoCommentsRequest(this);
     }
@@ -960,6 +1044,7 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -970,6 +1055,7 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "page_size" field.</summary>
     public const int PageSizeFieldNumber = 2;
     private int pageSize_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int PageSize {
       get { return pageSize_; }
       set {
@@ -980,6 +1066,7 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "starting_comment_id" field.</summary>
     public const int StartingCommentIdFieldNumber = 3;
     private global::KillrVideo.Protobuf.TimeUuid startingCommentId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.TimeUuid StartingCommentId {
       get { return startingCommentId_; }
       set {
@@ -990,17 +1077,20 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "paging_state" field.</summary>
     public const int PagingStateFieldNumber = 16;
     private string pagingState_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string PagingState {
       get { return pagingState_; }
       set {
-        pagingState_ = pb::Preconditions.CheckNotNull(value, "value");
+        pagingState_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetVideoCommentsRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetVideoCommentsRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -1015,6 +1105,7 @@ namespace KillrVideo.Comments {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
@@ -1024,10 +1115,12 @@ namespace KillrVideo.Comments {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -1047,6 +1140,7 @@ namespace KillrVideo.Comments {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -1064,6 +1158,7 @@ namespace KillrVideo.Comments {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetVideoCommentsRequest other) {
       if (other == null) {
         return;
@@ -1088,6 +1183,7 @@ namespace KillrVideo.Comments {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -1126,31 +1222,36 @@ namespace KillrVideo.Comments {
   /// <summary>
   ///  Response when getting a page of comments for a video
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetVideoCommentsResponse : pb::IMessage<GetVideoCommentsResponse> {
     private static readonly pb::MessageParser<GetVideoCommentsResponse> _parser = new pb::MessageParser<GetVideoCommentsResponse>(() => new GetVideoCommentsResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetVideoCommentsResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Comments.CommentsServiceReflection.Descriptor.MessageTypes[6]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetVideoCommentsResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetVideoCommentsResponse(GetVideoCommentsResponse other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
       comments_ = other.comments_.Clone();
       pagingState_ = other.pagingState_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetVideoCommentsResponse Clone() {
       return new GetVideoCommentsResponse(this);
     }
@@ -1158,6 +1259,7 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -1170,6 +1272,7 @@ namespace KillrVideo.Comments {
     private static readonly pb::FieldCodec<global::KillrVideo.Comments.VideoComment> _repeated_comments_codec
         = pb::FieldCodec.ForMessage(18, global::KillrVideo.Comments.VideoComment.Parser);
     private readonly pbc::RepeatedField<global::KillrVideo.Comments.VideoComment> comments_ = new pbc::RepeatedField<global::KillrVideo.Comments.VideoComment>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::KillrVideo.Comments.VideoComment> Comments {
       get { return comments_; }
     }
@@ -1177,17 +1280,20 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "paging_state" field.</summary>
     public const int PagingStateFieldNumber = 3;
     private string pagingState_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string PagingState {
       get { return pagingState_; }
       set {
-        pagingState_ = pb::Preconditions.CheckNotNull(value, "value");
+        pagingState_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetVideoCommentsResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetVideoCommentsResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -1201,6 +1307,7 @@ namespace KillrVideo.Comments {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
@@ -1209,10 +1316,12 @@ namespace KillrVideo.Comments {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -1225,6 +1334,7 @@ namespace KillrVideo.Comments {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -1237,6 +1347,7 @@ namespace KillrVideo.Comments {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetVideoCommentsResponse other) {
       if (other == null) {
         return;
@@ -1253,6 +1364,7 @@ namespace KillrVideo.Comments {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -1284,25 +1396,29 @@ namespace KillrVideo.Comments {
   /// <summary>
   ///  A comment on a video
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class VideoComment : pb::IMessage<VideoComment> {
     private static readonly pb::MessageParser<VideoComment> _parser = new pb::MessageParser<VideoComment>(() => new VideoComment());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<VideoComment> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Comments.CommentsServiceReflection.Descriptor.MessageTypes[7]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public VideoComment() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public VideoComment(VideoComment other) : this() {
       CommentId = other.commentId_ != null ? other.CommentId.Clone() : null;
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
@@ -1310,6 +1426,7 @@ namespace KillrVideo.Comments {
       CommentTimestamp = other.commentTimestamp_ != null ? other.CommentTimestamp.Clone() : null;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public VideoComment Clone() {
       return new VideoComment(this);
     }
@@ -1317,6 +1434,7 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "comment_id" field.</summary>
     public const int CommentIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.TimeUuid commentId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.TimeUuid CommentId {
       get { return commentId_; }
       set {
@@ -1327,6 +1445,7 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 2;
     private global::KillrVideo.Protobuf.Uuid userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
@@ -1337,16 +1456,18 @@ namespace KillrVideo.Comments {
     /// <summary>Field number for the "comment" field.</summary>
     public const int CommentFieldNumber = 3;
     private string comment_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Comment {
       get { return comment_; }
       set {
-        comment_ = pb::Preconditions.CheckNotNull(value, "value");
+        comment_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "comment_timestamp" field.</summary>
     public const int CommentTimestampFieldNumber = 4;
     private global::Google.Protobuf.WellKnownTypes.Timestamp commentTimestamp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Google.Protobuf.WellKnownTypes.Timestamp CommentTimestamp {
       get { return commentTimestamp_; }
       set {
@@ -1354,10 +1475,12 @@ namespace KillrVideo.Comments {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as VideoComment);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(VideoComment other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -1372,6 +1495,7 @@ namespace KillrVideo.Comments {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (commentId_ != null) hash ^= CommentId.GetHashCode();
@@ -1381,10 +1505,12 @@ namespace KillrVideo.Comments {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (commentId_ != null) {
         output.WriteRawTag(10);
@@ -1404,6 +1530,7 @@ namespace KillrVideo.Comments {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (commentId_ != null) {
@@ -1421,6 +1548,7 @@ namespace KillrVideo.Comments {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(VideoComment other) {
       if (other == null) {
         return;
@@ -1448,6 +1576,7 @@ namespace KillrVideo.Comments {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {

@@ -49,78 +49,6 @@ namespace KillrVideo.Uploads {
       get { return global::KillrVideo.Uploads.UploadsServiceReflection.Descriptor.Services[0]; }
     }
 
-    /// <summary>Client for UploadsService</summary>
-    [System.Obsolete("Client side interfaced will be removed in the next release. Use client class directly.")]
-    public interface IUploadsServiceClient
-    {
-      /// <summary>
-      ///  Gets an upload destination for a user to upload a video
-      /// </summary>
-      global::KillrVideo.Uploads.GetUploadDestinationResponse GetUploadDestination(global::KillrVideo.Uploads.GetUploadDestinationRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Gets an upload destination for a user to upload a video
-      /// </summary>
-      global::KillrVideo.Uploads.GetUploadDestinationResponse GetUploadDestination(global::KillrVideo.Uploads.GetUploadDestinationRequest request, CallOptions options);
-      /// <summary>
-      ///  Gets an upload destination for a user to upload a video
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Uploads.GetUploadDestinationResponse> GetUploadDestinationAsync(global::KillrVideo.Uploads.GetUploadDestinationRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Gets an upload destination for a user to upload a video
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Uploads.GetUploadDestinationResponse> GetUploadDestinationAsync(global::KillrVideo.Uploads.GetUploadDestinationRequest request, CallOptions options);
-      /// <summary>
-      ///  Marks an upload as complete
-      /// </summary>
-      global::KillrVideo.Uploads.MarkUploadCompleteResponse MarkUploadComplete(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Marks an upload as complete
-      /// </summary>
-      global::KillrVideo.Uploads.MarkUploadCompleteResponse MarkUploadComplete(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, CallOptions options);
-      /// <summary>
-      ///  Marks an upload as complete
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Uploads.MarkUploadCompleteResponse> MarkUploadCompleteAsync(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Marks an upload as complete
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Uploads.MarkUploadCompleteResponse> MarkUploadCompleteAsync(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, CallOptions options);
-      /// <summary>
-      ///  Gets the status of an uploaded video
-      /// </summary>
-      global::KillrVideo.Uploads.GetStatusOfVideoResponse GetStatusOfVideo(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Gets the status of an uploaded video
-      /// </summary>
-      global::KillrVideo.Uploads.GetStatusOfVideoResponse GetStatusOfVideo(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, CallOptions options);
-      /// <summary>
-      ///  Gets the status of an uploaded video
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Uploads.GetStatusOfVideoResponse> GetStatusOfVideoAsync(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Gets the status of an uploaded video
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Uploads.GetStatusOfVideoResponse> GetStatusOfVideoAsync(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, CallOptions options);
-    }
-
-    /// <summary>Interface of server-side implementations of UploadsService</summary>
-    [System.Obsolete("Service implementations should inherit from the generated abstract base class instead.")]
-    public interface IUploadsService
-    {
-      /// <summary>
-      ///  Gets an upload destination for a user to upload a video
-      /// </summary>
-      global::System.Threading.Tasks.Task<global::KillrVideo.Uploads.GetUploadDestinationResponse> GetUploadDestination(global::KillrVideo.Uploads.GetUploadDestinationRequest request, ServerCallContext context);
-      /// <summary>
-      ///  Marks an upload as complete
-      /// </summary>
-      global::System.Threading.Tasks.Task<global::KillrVideo.Uploads.MarkUploadCompleteResponse> MarkUploadComplete(global::KillrVideo.Uploads.MarkUploadCompleteRequest request, ServerCallContext context);
-      /// <summary>
-      ///  Gets the status of an uploaded video
-      /// </summary>
-      global::System.Threading.Tasks.Task<global::KillrVideo.Uploads.GetStatusOfVideoResponse> GetStatusOfVideo(global::KillrVideo.Uploads.GetStatusOfVideoRequest request, ServerCallContext context);
-    }
-
     /// <summary>Base class for server-side implementations of UploadsService</summary>
     public abstract class UploadsServiceBase
     {
@@ -151,21 +79,24 @@ namespace KillrVideo.Uploads {
     }
 
     /// <summary>Client for UploadsService</summary>
-    #pragma warning disable 0618
-    public class UploadsServiceClient : ClientBase<UploadsServiceClient>, IUploadsServiceClient
-    #pragma warning restore 0618
+    public class UploadsServiceClient : ClientBase<UploadsServiceClient>
     {
+      /// <summary>Creates a new client for UploadsService</summary>
+      /// <param name="channel">The channel to use to make remote calls.</param>
       public UploadsServiceClient(Channel channel) : base(channel)
       {
       }
+      /// <summary>Creates a new client for UploadsService that uses a custom <c>CallInvoker</c>.</summary>
+      /// <param name="callInvoker">The callInvoker to use to make remote calls.</param>
       public UploadsServiceClient(CallInvoker callInvoker) : base(callInvoker)
       {
       }
-      ///<summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      /// <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
       protected UploadsServiceClient() : base()
       {
       }
-      ///<summary>Protected constructor to allow creation of configured clients.</summary>
+      /// <summary>Protected constructor to allow creation of configured clients.</summary>
+      /// <param name="configuration">The client configuration.</param>
       protected UploadsServiceClient(ClientBaseConfiguration configuration) : base(configuration)
       {
       }
@@ -260,29 +191,10 @@ namespace KillrVideo.Uploads {
       }
     }
 
-    /// <summary>Creates a new client for UploadsService</summary>
-    public static UploadsServiceClient NewClient(Channel channel)
-    {
-      return new UploadsServiceClient(channel);
-    }
-
     /// <summary>Creates service definition that can be registered with a server</summary>
-    #pragma warning disable 0618
-    public static ServerServiceDefinition BindService(IUploadsService serviceImpl)
-    #pragma warning restore 0618
-    {
-      return ServerServiceDefinition.CreateBuilder(__ServiceName)
-          .AddMethod(__Method_GetUploadDestination, serviceImpl.GetUploadDestination)
-          .AddMethod(__Method_MarkUploadComplete, serviceImpl.MarkUploadComplete)
-          .AddMethod(__Method_GetStatusOfVideo, serviceImpl.GetStatusOfVideo).Build();
-    }
-
-    /// <summary>Creates service definition that can be registered with a server</summary>
-    #pragma warning disable 0618
     public static ServerServiceDefinition BindService(UploadsServiceBase serviceImpl)
-    #pragma warning restore 0618
     {
-      return ServerServiceDefinition.CreateBuilder(__ServiceName)
+      return ServerServiceDefinition.CreateBuilder()
           .AddMethod(__Method_GetUploadDestination, serviceImpl.GetUploadDestination)
           .AddMethod(__Method_MarkUploadComplete, serviceImpl.MarkUploadComplete)
           .AddMethod(__Method_GetStatusOfVideo, serviceImpl.GetStatusOfVideo).Build();

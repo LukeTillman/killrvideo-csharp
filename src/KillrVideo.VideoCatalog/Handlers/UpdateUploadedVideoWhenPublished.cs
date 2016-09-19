@@ -44,8 +44,8 @@ namespace KillrVideo.VideoCatalog.Handlers
                 throw new InvalidOperationException($"Could not find video with id {publishedVideo.VideoId}");
 
             var locationType = videoRow.GetValue<int>("location_type");
-            if (locationType != (int) VideoLocationType.UPLOAD)
-                throw new InvalidOperationException($"Video {publishedVideo.VideoId} is not an uploaded video of type {VideoLocationType.UPLOAD} but is type {locationType}");
+            if (locationType != (int) VideoLocationType.Upload)
+                throw new InvalidOperationException($"Video {publishedVideo.VideoId} is not an uploaded video of type {VideoLocationType.Upload} but is type {locationType}");
 
             // Get some data from the Row
             var userId = videoRow.GetValue<Guid>("userid");

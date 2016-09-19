@@ -10,7 +10,6 @@ using scg = global::System.Collections.Generic;
 namespace KillrVideo.Ratings {
 
   /// <summary>Holder for reflection information generated from ratings/ratings_service.proto</summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public static partial class RatingsServiceReflection {
 
     #region Descriptor
@@ -47,13 +46,13 @@ namespace KillrVideo.Ratings {
             "UmF0aW5nc2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::KillrVideo.Protobuf.CommonTypesReflection.Descriptor, },
-          new pbr::GeneratedCodeInfo(null, new pbr::GeneratedCodeInfo[] {
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Ratings.RateVideoRequest), global::KillrVideo.Ratings.RateVideoRequest.Parser, new[]{ "VideoId", "UserId", "Rating" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Ratings.RateVideoResponse), global::KillrVideo.Ratings.RateVideoResponse.Parser, null, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Ratings.GetRatingRequest), global::KillrVideo.Ratings.GetRatingRequest.Parser, new[]{ "VideoId" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Ratings.GetRatingResponse), global::KillrVideo.Ratings.GetRatingResponse.Parser, new[]{ "VideoId", "RatingsCount", "RatingsTotal" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Ratings.GetUserRatingRequest), global::KillrVideo.Ratings.GetUserRatingRequest.Parser, new[]{ "VideoId", "UserId" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Ratings.GetUserRatingResponse), global::KillrVideo.Ratings.GetUserRatingResponse.Parser, new[]{ "VideoId", "UserId", "Rating" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Ratings.RateVideoRequest), global::KillrVideo.Ratings.RateVideoRequest.Parser, new[]{ "VideoId", "UserId", "Rating" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Ratings.RateVideoResponse), global::KillrVideo.Ratings.RateVideoResponse.Parser, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Ratings.GetRatingRequest), global::KillrVideo.Ratings.GetRatingRequest.Parser, new[]{ "VideoId" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Ratings.GetRatingResponse), global::KillrVideo.Ratings.GetRatingResponse.Parser, new[]{ "VideoId", "RatingsCount", "RatingsTotal" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Ratings.GetUserRatingRequest), global::KillrVideo.Ratings.GetUserRatingRequest.Parser, new[]{ "VideoId", "UserId" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Ratings.GetUserRatingResponse), global::KillrVideo.Ratings.GetUserRatingResponse.Parser, new[]{ "VideoId", "UserId", "Rating" }, null, null, null)
           }));
     }
     #endregion
@@ -63,31 +62,36 @@ namespace KillrVideo.Ratings {
   /// <summary>
   ///  Request for a user rating a video
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class RateVideoRequest : pb::IMessage<RateVideoRequest> {
     private static readonly pb::MessageParser<RateVideoRequest> _parser = new pb::MessageParser<RateVideoRequest>(() => new RateVideoRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<RateVideoRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Ratings.RatingsServiceReflection.Descriptor.MessageTypes[0]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public RateVideoRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public RateVideoRequest(RateVideoRequest other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
       rating_ = other.rating_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public RateVideoRequest Clone() {
       return new RateVideoRequest(this);
     }
@@ -95,6 +99,7 @@ namespace KillrVideo.Ratings {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -105,6 +110,7 @@ namespace KillrVideo.Ratings {
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 2;
     private global::KillrVideo.Protobuf.Uuid userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
@@ -115,6 +121,7 @@ namespace KillrVideo.Ratings {
     /// <summary>Field number for the "rating" field.</summary>
     public const int RatingFieldNumber = 3;
     private int rating_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Rating {
       get { return rating_; }
       set {
@@ -122,10 +129,12 @@ namespace KillrVideo.Ratings {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as RateVideoRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(RateVideoRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -139,6 +148,7 @@ namespace KillrVideo.Ratings {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
@@ -147,10 +157,12 @@ namespace KillrVideo.Ratings {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -166,6 +178,7 @@ namespace KillrVideo.Ratings {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -180,6 +193,7 @@ namespace KillrVideo.Ratings {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(RateVideoRequest other) {
       if (other == null) {
         return;
@@ -201,6 +215,7 @@ namespace KillrVideo.Ratings {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -235,36 +250,43 @@ namespace KillrVideo.Ratings {
   /// <summary>
   ///  Response when a user rates a video
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class RateVideoResponse : pb::IMessage<RateVideoResponse> {
     private static readonly pb::MessageParser<RateVideoResponse> _parser = new pb::MessageParser<RateVideoResponse>(() => new RateVideoResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<RateVideoResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Ratings.RatingsServiceReflection.Descriptor.MessageTypes[1]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public RateVideoResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public RateVideoResponse(RateVideoResponse other) : this() {
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public RateVideoResponse Clone() {
       return new RateVideoResponse(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as RateVideoResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(RateVideoResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -275,29 +297,35 @@ namespace KillrVideo.Ratings {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(RateVideoResponse other) {
       if (other == null) {
         return;
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -314,29 +342,34 @@ namespace KillrVideo.Ratings {
   /// <summary>
   ///  Request to get the ratings stats for a video
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetRatingRequest : pb::IMessage<GetRatingRequest> {
     private static readonly pb::MessageParser<GetRatingRequest> _parser = new pb::MessageParser<GetRatingRequest>(() => new GetRatingRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetRatingRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Ratings.RatingsServiceReflection.Descriptor.MessageTypes[2]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetRatingRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetRatingRequest(GetRatingRequest other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetRatingRequest Clone() {
       return new GetRatingRequest(this);
     }
@@ -344,6 +377,7 @@ namespace KillrVideo.Ratings {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -351,10 +385,12 @@ namespace KillrVideo.Ratings {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetRatingRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetRatingRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -366,16 +402,19 @@ namespace KillrVideo.Ratings {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -383,6 +422,7 @@ namespace KillrVideo.Ratings {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -391,6 +431,7 @@ namespace KillrVideo.Ratings {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetRatingRequest other) {
       if (other == null) {
         return;
@@ -403,6 +444,7 @@ namespace KillrVideo.Ratings {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -426,31 +468,36 @@ namespace KillrVideo.Ratings {
   /// <summary>
   ///  Response when getting the ratings stats for a video
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetRatingResponse : pb::IMessage<GetRatingResponse> {
     private static readonly pb::MessageParser<GetRatingResponse> _parser = new pb::MessageParser<GetRatingResponse>(() => new GetRatingResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetRatingResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Ratings.RatingsServiceReflection.Descriptor.MessageTypes[3]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetRatingResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetRatingResponse(GetRatingResponse other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
       ratingsCount_ = other.ratingsCount_;
       ratingsTotal_ = other.ratingsTotal_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetRatingResponse Clone() {
       return new GetRatingResponse(this);
     }
@@ -458,6 +505,7 @@ namespace KillrVideo.Ratings {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -468,6 +516,7 @@ namespace KillrVideo.Ratings {
     /// <summary>Field number for the "ratings_count" field.</summary>
     public const int RatingsCountFieldNumber = 2;
     private long ratingsCount_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public long RatingsCount {
       get { return ratingsCount_; }
       set {
@@ -478,6 +527,7 @@ namespace KillrVideo.Ratings {
     /// <summary>Field number for the "ratings_total" field.</summary>
     public const int RatingsTotalFieldNumber = 3;
     private long ratingsTotal_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public long RatingsTotal {
       get { return ratingsTotal_; }
       set {
@@ -485,10 +535,12 @@ namespace KillrVideo.Ratings {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetRatingResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetRatingResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -502,6 +554,7 @@ namespace KillrVideo.Ratings {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
@@ -510,10 +563,12 @@ namespace KillrVideo.Ratings {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -529,6 +584,7 @@ namespace KillrVideo.Ratings {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -543,6 +599,7 @@ namespace KillrVideo.Ratings {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetRatingResponse other) {
       if (other == null) {
         return;
@@ -561,6 +618,7 @@ namespace KillrVideo.Ratings {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -592,30 +650,35 @@ namespace KillrVideo.Ratings {
   /// <summary>
   ///  Request to get a specific user's rating of a video
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetUserRatingRequest : pb::IMessage<GetUserRatingRequest> {
     private static readonly pb::MessageParser<GetUserRatingRequest> _parser = new pb::MessageParser<GetUserRatingRequest>(() => new GetUserRatingRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetUserRatingRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Ratings.RatingsServiceReflection.Descriptor.MessageTypes[4]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserRatingRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserRatingRequest(GetUserRatingRequest other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserRatingRequest Clone() {
       return new GetUserRatingRequest(this);
     }
@@ -623,6 +686,7 @@ namespace KillrVideo.Ratings {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -633,6 +697,7 @@ namespace KillrVideo.Ratings {
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 2;
     private global::KillrVideo.Protobuf.Uuid userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
@@ -640,10 +705,12 @@ namespace KillrVideo.Ratings {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetUserRatingRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetUserRatingRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -656,6 +723,7 @@ namespace KillrVideo.Ratings {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
@@ -663,10 +731,12 @@ namespace KillrVideo.Ratings {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -678,6 +748,7 @@ namespace KillrVideo.Ratings {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -689,6 +760,7 @@ namespace KillrVideo.Ratings {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetUserRatingRequest other) {
       if (other == null) {
         return;
@@ -707,6 +779,7 @@ namespace KillrVideo.Ratings {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -737,31 +810,36 @@ namespace KillrVideo.Ratings {
   /// <summary>
   ///  Response when getting a specific user's rating of a video
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetUserRatingResponse : pb::IMessage<GetUserRatingResponse> {
     private static readonly pb::MessageParser<GetUserRatingResponse> _parser = new pb::MessageParser<GetUserRatingResponse>(() => new GetUserRatingResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetUserRatingResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Ratings.RatingsServiceReflection.Descriptor.MessageTypes[5]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserRatingResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserRatingResponse(GetUserRatingResponse other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
       rating_ = other.rating_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserRatingResponse Clone() {
       return new GetUserRatingResponse(this);
     }
@@ -769,6 +847,7 @@ namespace KillrVideo.Ratings {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -779,6 +858,7 @@ namespace KillrVideo.Ratings {
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 2;
     private global::KillrVideo.Protobuf.Uuid userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
@@ -789,6 +869,7 @@ namespace KillrVideo.Ratings {
     /// <summary>Field number for the "rating" field.</summary>
     public const int RatingFieldNumber = 3;
     private int rating_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Rating {
       get { return rating_; }
       set {
@@ -796,10 +877,12 @@ namespace KillrVideo.Ratings {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetUserRatingResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetUserRatingResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -813,6 +896,7 @@ namespace KillrVideo.Ratings {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
@@ -821,10 +905,12 @@ namespace KillrVideo.Ratings {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -840,6 +926,7 @@ namespace KillrVideo.Ratings {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -854,6 +941,7 @@ namespace KillrVideo.Ratings {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetUserRatingResponse other) {
       if (other == null) {
         return;
@@ -875,6 +963,7 @@ namespace KillrVideo.Ratings {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {

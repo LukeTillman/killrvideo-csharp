@@ -40,58 +40,6 @@ namespace KillrVideo.SuggestedVideos {
       get { return global::KillrVideo.SuggestedVideos.SuggestedVideosServiceReflection.Descriptor.Services[0]; }
     }
 
-    /// <summary>Client for SuggestedVideoService</summary>
-    [System.Obsolete("Client side interfaced will be removed in the next release. Use client class directly.")]
-    public interface ISuggestedVideoServiceClient
-    {
-      /// <summary>
-      ///  Gets videos related to another video
-      /// </summary>
-      global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse GetRelatedVideos(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Gets videos related to another video
-      /// </summary>
-      global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse GetRelatedVideos(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, CallOptions options);
-      /// <summary>
-      ///  Gets videos related to another video
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse> GetRelatedVideosAsync(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Gets videos related to another video
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse> GetRelatedVideosAsync(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, CallOptions options);
-      /// <summary>
-      ///  Gets personalized video suggestions for a user
-      /// </summary>
-      global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse GetSuggestedForUser(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Gets personalized video suggestions for a user
-      /// </summary>
-      global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse GetSuggestedForUser(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, CallOptions options);
-      /// <summary>
-      ///  Gets personalized video suggestions for a user
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse> GetSuggestedForUserAsync(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Gets personalized video suggestions for a user
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse> GetSuggestedForUserAsync(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, CallOptions options);
-    }
-
-    /// <summary>Interface of server-side implementations of SuggestedVideoService</summary>
-    [System.Obsolete("Service implementations should inherit from the generated abstract base class instead.")]
-    public interface ISuggestedVideoService
-    {
-      /// <summary>
-      ///  Gets videos related to another video
-      /// </summary>
-      global::System.Threading.Tasks.Task<global::KillrVideo.SuggestedVideos.GetRelatedVideosResponse> GetRelatedVideos(global::KillrVideo.SuggestedVideos.GetRelatedVideosRequest request, ServerCallContext context);
-      /// <summary>
-      ///  Gets personalized video suggestions for a user
-      /// </summary>
-      global::System.Threading.Tasks.Task<global::KillrVideo.SuggestedVideos.GetSuggestedForUserResponse> GetSuggestedForUser(global::KillrVideo.SuggestedVideos.GetSuggestedForUserRequest request, ServerCallContext context);
-    }
-
     /// <summary>Base class for server-side implementations of SuggestedVideoService</summary>
     public abstract class SuggestedVideoServiceBase
     {
@@ -114,21 +62,24 @@ namespace KillrVideo.SuggestedVideos {
     }
 
     /// <summary>Client for SuggestedVideoService</summary>
-    #pragma warning disable 0618
-    public class SuggestedVideoServiceClient : ClientBase<SuggestedVideoServiceClient>, ISuggestedVideoServiceClient
-    #pragma warning restore 0618
+    public class SuggestedVideoServiceClient : ClientBase<SuggestedVideoServiceClient>
     {
+      /// <summary>Creates a new client for SuggestedVideoService</summary>
+      /// <param name="channel">The channel to use to make remote calls.</param>
       public SuggestedVideoServiceClient(Channel channel) : base(channel)
       {
       }
+      /// <summary>Creates a new client for SuggestedVideoService that uses a custom <c>CallInvoker</c>.</summary>
+      /// <param name="callInvoker">The callInvoker to use to make remote calls.</param>
       public SuggestedVideoServiceClient(CallInvoker callInvoker) : base(callInvoker)
       {
       }
-      ///<summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      /// <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
       protected SuggestedVideoServiceClient() : base()
       {
       }
-      ///<summary>Protected constructor to allow creation of configured clients.</summary>
+      /// <summary>Protected constructor to allow creation of configured clients.</summary>
+      /// <param name="configuration">The client configuration.</param>
       protected SuggestedVideoServiceClient(ClientBaseConfiguration configuration) : base(configuration)
       {
       }
@@ -195,28 +146,10 @@ namespace KillrVideo.SuggestedVideos {
       }
     }
 
-    /// <summary>Creates a new client for SuggestedVideoService</summary>
-    public static SuggestedVideoServiceClient NewClient(Channel channel)
-    {
-      return new SuggestedVideoServiceClient(channel);
-    }
-
     /// <summary>Creates service definition that can be registered with a server</summary>
-    #pragma warning disable 0618
-    public static ServerServiceDefinition BindService(ISuggestedVideoService serviceImpl)
-    #pragma warning restore 0618
-    {
-      return ServerServiceDefinition.CreateBuilder(__ServiceName)
-          .AddMethod(__Method_GetRelatedVideos, serviceImpl.GetRelatedVideos)
-          .AddMethod(__Method_GetSuggestedForUser, serviceImpl.GetSuggestedForUser).Build();
-    }
-
-    /// <summary>Creates service definition that can be registered with a server</summary>
-    #pragma warning disable 0618
     public static ServerServiceDefinition BindService(SuggestedVideoServiceBase serviceImpl)
-    #pragma warning restore 0618
     {
-      return ServerServiceDefinition.CreateBuilder(__ServiceName)
+      return ServerServiceDefinition.CreateBuilder()
           .AddMethod(__Method_GetRelatedVideos, serviceImpl.GetRelatedVideos)
           .AddMethod(__Method_GetSuggestedForUser, serviceImpl.GetSuggestedForUser).Build();
     }

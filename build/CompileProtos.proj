@@ -8,7 +8,6 @@
     <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.Protobuf\KillrVideo.Protobuf.csproj" />
     <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.Comments\KillrVideo.Comments.csproj" />
     <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.Ratings\KillrVideo.Ratings.csproj" />
-    <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.SampleData\KillrVideo.SampleData.csproj" />
     <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.Search\KillrVideo.Search.csproj" />
     <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.Statistics\KillrVideo.Statistics.csproj" />
     <ProjectsWithProtos Include="$(SourceFolder)\KillrVideo.SuggestedVideos\KillrVideo.SuggestedVideos.csproj" />

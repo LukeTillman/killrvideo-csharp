@@ -2,15 +2,15 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <!-- Change these whenever upgrading the Google.Protobuf package or the Grpc.Tools package -->
-    <ProtobufVersion>3.0.0-beta2</ProtobufVersion>
-    <GrpcToolsVersion>0.14.0</GrpcToolsVersion>
+    <ProtobufToolsVersion>3.0.0</ProtobufToolsVersion>
+    <GrpcToolsVersion>1.0.0</GrpcToolsVersion>
 
     <!-- Convert relative paths to full paths -->
     <KillrVideoRootPath>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..'))</KillrVideoRootPath>
     <GrpcToolsPath>$(KillrVideoRootPath)\src\packages\Grpc.Tools.$(GrpcToolsVersion)\tools\windows_x64</GrpcToolsPath>
     
     <!-- Protobuf compiler import paths (for importing common Google protobufs and common KillrVideo protobufs) -->
-    <GoogleImportsPath>$(KillrVideoRootPath)\src\packages\Google.Protobuf.$(ProtobufVersion)\tools</GoogleImportsPath>
+    <GoogleImportsPath>$(KillrVideoRootPath)\src\packages\Google.Protobuf.Tools.$(ProtobufToolsVersion)\tools</GoogleImportsPath>
     <KillrVideoImportsPath>$(KillrVideoRootPath)\lib\killrvideo-service-protos\src</KillrVideoImportsPath>
 
     <!-- Commandline options for the Protobuf Compiler -->

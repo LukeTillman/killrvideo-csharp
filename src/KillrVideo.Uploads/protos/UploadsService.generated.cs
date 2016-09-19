@@ -10,7 +10,6 @@ using scg = global::System.Collections.Generic;
 namespace KillrVideo.Uploads {
 
   /// <summary>Holder for reflection information generated from uploads/uploads_service.proto</summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public static partial class UploadsServiceReflection {
 
     #region Descriptor
@@ -45,13 +44,13 @@ namespace KillrVideo.Uploads {
             "YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::KillrVideo.Protobuf.CommonTypesReflection.Descriptor, },
-          new pbr::GeneratedCodeInfo(null, new pbr::GeneratedCodeInfo[] {
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Uploads.GetUploadDestinationRequest), global::KillrVideo.Uploads.GetUploadDestinationRequest.Parser, new[]{ "FileName" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Uploads.GetUploadDestinationResponse), global::KillrVideo.Uploads.GetUploadDestinationResponse.Parser, new[]{ "UploadUrl" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Uploads.MarkUploadCompleteRequest), global::KillrVideo.Uploads.MarkUploadCompleteRequest.Parser, new[]{ "UploadUrl" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Uploads.MarkUploadCompleteResponse), global::KillrVideo.Uploads.MarkUploadCompleteResponse.Parser, null, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Uploads.GetStatusOfVideoRequest), global::KillrVideo.Uploads.GetStatusOfVideoRequest.Parser, new[]{ "VideoId" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Uploads.GetStatusOfVideoResponse), global::KillrVideo.Uploads.GetStatusOfVideoResponse.Parser, new[]{ "StatusDate", "CurrentState" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Uploads.GetUploadDestinationRequest), global::KillrVideo.Uploads.GetUploadDestinationRequest.Parser, new[]{ "FileName" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Uploads.GetUploadDestinationResponse), global::KillrVideo.Uploads.GetUploadDestinationResponse.Parser, new[]{ "UploadUrl" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Uploads.MarkUploadCompleteRequest), global::KillrVideo.Uploads.MarkUploadCompleteRequest.Parser, new[]{ "UploadUrl" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Uploads.MarkUploadCompleteResponse), global::KillrVideo.Uploads.MarkUploadCompleteResponse.Parser, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Uploads.GetStatusOfVideoRequest), global::KillrVideo.Uploads.GetStatusOfVideoRequest.Parser, new[]{ "VideoId" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Uploads.GetStatusOfVideoResponse), global::KillrVideo.Uploads.GetStatusOfVideoResponse.Parser, new[]{ "StatusDate", "CurrentState" }, null, null, null)
           }));
     }
     #endregion
@@ -61,29 +60,34 @@ namespace KillrVideo.Uploads {
   /// <summary>
   ///  Request to get/generate a location where a video can be uploaded
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetUploadDestinationRequest : pb::IMessage<GetUploadDestinationRequest> {
     private static readonly pb::MessageParser<GetUploadDestinationRequest> _parser = new pb::MessageParser<GetUploadDestinationRequest>(() => new GetUploadDestinationRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetUploadDestinationRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Uploads.UploadsServiceReflection.Descriptor.MessageTypes[0]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUploadDestinationRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUploadDestinationRequest(GetUploadDestinationRequest other) : this() {
       fileName_ = other.fileName_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUploadDestinationRequest Clone() {
       return new GetUploadDestinationRequest(this);
     }
@@ -91,17 +95,20 @@ namespace KillrVideo.Uploads {
     /// <summary>Field number for the "file_name" field.</summary>
     public const int FileNameFieldNumber = 1;
     private string fileName_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string FileName {
       get { return fileName_; }
       set {
-        fileName_ = pb::Preconditions.CheckNotNull(value, "value");
+        fileName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetUploadDestinationRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetUploadDestinationRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -113,16 +120,19 @@ namespace KillrVideo.Uploads {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (FileName.Length != 0) hash ^= FileName.GetHashCode();
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (FileName.Length != 0) {
         output.WriteRawTag(10);
@@ -130,6 +140,7 @@ namespace KillrVideo.Uploads {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (FileName.Length != 0) {
@@ -138,6 +149,7 @@ namespace KillrVideo.Uploads {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetUploadDestinationRequest other) {
       if (other == null) {
         return;
@@ -147,6 +159,7 @@ namespace KillrVideo.Uploads {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -167,29 +180,34 @@ namespace KillrVideo.Uploads {
   /// <summary>
   ///  Response that has the location where a video can be uploaded
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetUploadDestinationResponse : pb::IMessage<GetUploadDestinationResponse> {
     private static readonly pb::MessageParser<GetUploadDestinationResponse> _parser = new pb::MessageParser<GetUploadDestinationResponse>(() => new GetUploadDestinationResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetUploadDestinationResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Uploads.UploadsServiceReflection.Descriptor.MessageTypes[1]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUploadDestinationResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUploadDestinationResponse(GetUploadDestinationResponse other) : this() {
       uploadUrl_ = other.uploadUrl_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUploadDestinationResponse Clone() {
       return new GetUploadDestinationResponse(this);
     }
@@ -197,17 +215,20 @@ namespace KillrVideo.Uploads {
     /// <summary>Field number for the "upload_url" field.</summary>
     public const int UploadUrlFieldNumber = 1;
     private string uploadUrl_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string UploadUrl {
       get { return uploadUrl_; }
       set {
-        uploadUrl_ = pb::Preconditions.CheckNotNull(value, "value");
+        uploadUrl_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetUploadDestinationResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetUploadDestinationResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -219,16 +240,19 @@ namespace KillrVideo.Uploads {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (UploadUrl.Length != 0) hash ^= UploadUrl.GetHashCode();
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (UploadUrl.Length != 0) {
         output.WriteRawTag(10);
@@ -236,6 +260,7 @@ namespace KillrVideo.Uploads {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (UploadUrl.Length != 0) {
@@ -244,6 +269,7 @@ namespace KillrVideo.Uploads {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetUploadDestinationResponse other) {
       if (other == null) {
         return;
@@ -253,6 +279,7 @@ namespace KillrVideo.Uploads {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -273,29 +300,34 @@ namespace KillrVideo.Uploads {
   /// <summary>
   ///  Request to tell the upload service that a video is finished uploading
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class MarkUploadCompleteRequest : pb::IMessage<MarkUploadCompleteRequest> {
     private static readonly pb::MessageParser<MarkUploadCompleteRequest> _parser = new pb::MessageParser<MarkUploadCompleteRequest>(() => new MarkUploadCompleteRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<MarkUploadCompleteRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Uploads.UploadsServiceReflection.Descriptor.MessageTypes[2]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public MarkUploadCompleteRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public MarkUploadCompleteRequest(MarkUploadCompleteRequest other) : this() {
       uploadUrl_ = other.uploadUrl_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public MarkUploadCompleteRequest Clone() {
       return new MarkUploadCompleteRequest(this);
     }
@@ -303,17 +335,20 @@ namespace KillrVideo.Uploads {
     /// <summary>Field number for the "upload_url" field.</summary>
     public const int UploadUrlFieldNumber = 1;
     private string uploadUrl_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string UploadUrl {
       get { return uploadUrl_; }
       set {
-        uploadUrl_ = pb::Preconditions.CheckNotNull(value, "value");
+        uploadUrl_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as MarkUploadCompleteRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(MarkUploadCompleteRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -325,16 +360,19 @@ namespace KillrVideo.Uploads {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (UploadUrl.Length != 0) hash ^= UploadUrl.GetHashCode();
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (UploadUrl.Length != 0) {
         output.WriteRawTag(10);
@@ -342,6 +380,7 @@ namespace KillrVideo.Uploads {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (UploadUrl.Length != 0) {
@@ -350,6 +389,7 @@ namespace KillrVideo.Uploads {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(MarkUploadCompleteRequest other) {
       if (other == null) {
         return;
@@ -359,6 +399,7 @@ namespace KillrVideo.Uploads {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -379,36 +420,43 @@ namespace KillrVideo.Uploads {
   /// <summary>
   ///  Response when marking an upload complete
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class MarkUploadCompleteResponse : pb::IMessage<MarkUploadCompleteResponse> {
     private static readonly pb::MessageParser<MarkUploadCompleteResponse> _parser = new pb::MessageParser<MarkUploadCompleteResponse>(() => new MarkUploadCompleteResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<MarkUploadCompleteResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Uploads.UploadsServiceReflection.Descriptor.MessageTypes[3]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public MarkUploadCompleteResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public MarkUploadCompleteResponse(MarkUploadCompleteResponse other) : this() {
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public MarkUploadCompleteResponse Clone() {
       return new MarkUploadCompleteResponse(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as MarkUploadCompleteResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(MarkUploadCompleteResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -419,29 +467,35 @@ namespace KillrVideo.Uploads {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(MarkUploadCompleteResponse other) {
       if (other == null) {
         return;
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -458,29 +512,34 @@ namespace KillrVideo.Uploads {
   /// <summary>
   ///  Get the current status of an uploaded video
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetStatusOfVideoRequest : pb::IMessage<GetStatusOfVideoRequest> {
     private static readonly pb::MessageParser<GetStatusOfVideoRequest> _parser = new pb::MessageParser<GetStatusOfVideoRequest>(() => new GetStatusOfVideoRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetStatusOfVideoRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Uploads.UploadsServiceReflection.Descriptor.MessageTypes[4]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetStatusOfVideoRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetStatusOfVideoRequest(GetStatusOfVideoRequest other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetStatusOfVideoRequest Clone() {
       return new GetStatusOfVideoRequest(this);
     }
@@ -488,6 +547,7 @@ namespace KillrVideo.Uploads {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -495,10 +555,12 @@ namespace KillrVideo.Uploads {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetStatusOfVideoRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetStatusOfVideoRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -510,16 +572,19 @@ namespace KillrVideo.Uploads {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -527,6 +592,7 @@ namespace KillrVideo.Uploads {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -535,6 +601,7 @@ namespace KillrVideo.Uploads {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetStatusOfVideoRequest other) {
       if (other == null) {
         return;
@@ -547,6 +614,7 @@ namespace KillrVideo.Uploads {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -570,30 +638,35 @@ namespace KillrVideo.Uploads {
   /// <summary>
   ///  Response with the current status of an uploaded video
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetStatusOfVideoResponse : pb::IMessage<GetStatusOfVideoResponse> {
     private static readonly pb::MessageParser<GetStatusOfVideoResponse> _parser = new pb::MessageParser<GetStatusOfVideoResponse>(() => new GetStatusOfVideoResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetStatusOfVideoResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Uploads.UploadsServiceReflection.Descriptor.MessageTypes[5]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetStatusOfVideoResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetStatusOfVideoResponse(GetStatusOfVideoResponse other) : this() {
       StatusDate = other.statusDate_ != null ? other.StatusDate.Clone() : null;
       currentState_ = other.currentState_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetStatusOfVideoResponse Clone() {
       return new GetStatusOfVideoResponse(this);
     }
@@ -601,6 +674,7 @@ namespace KillrVideo.Uploads {
     /// <summary>Field number for the "status_date" field.</summary>
     public const int StatusDateFieldNumber = 1;
     private global::Google.Protobuf.WellKnownTypes.Timestamp statusDate_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Google.Protobuf.WellKnownTypes.Timestamp StatusDate {
       get { return statusDate_; }
       set {
@@ -611,17 +685,20 @@ namespace KillrVideo.Uploads {
     /// <summary>Field number for the "current_state" field.</summary>
     public const int CurrentStateFieldNumber = 2;
     private string currentState_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string CurrentState {
       get { return currentState_; }
       set {
-        currentState_ = pb::Preconditions.CheckNotNull(value, "value");
+        currentState_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetStatusOfVideoResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetStatusOfVideoResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -634,6 +711,7 @@ namespace KillrVideo.Uploads {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (statusDate_ != null) hash ^= StatusDate.GetHashCode();
@@ -641,10 +719,12 @@ namespace KillrVideo.Uploads {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (statusDate_ != null) {
         output.WriteRawTag(10);
@@ -656,6 +736,7 @@ namespace KillrVideo.Uploads {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (statusDate_ != null) {
@@ -667,6 +748,7 @@ namespace KillrVideo.Uploads {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetStatusOfVideoResponse other) {
       if (other == null) {
         return;
@@ -682,6 +764,7 @@ namespace KillrVideo.Uploads {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {

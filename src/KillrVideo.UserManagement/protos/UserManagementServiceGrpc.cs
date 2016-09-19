@@ -49,78 +49,6 @@ namespace KillrVideo.UserManagement {
       get { return global::KillrVideo.UserManagement.UserManagementServiceReflection.Descriptor.Services[0]; }
     }
 
-    /// <summary>Client for UserManagementService</summary>
-    [System.Obsolete("Client side interfaced will be removed in the next release. Use client class directly.")]
-    public interface IUserManagementServiceClient
-    {
-      /// <summary>
-      ///  Creates a new user
-      /// </summary>
-      global::KillrVideo.UserManagement.CreateUserResponse CreateUser(global::KillrVideo.UserManagement.CreateUserRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Creates a new user
-      /// </summary>
-      global::KillrVideo.UserManagement.CreateUserResponse CreateUser(global::KillrVideo.UserManagement.CreateUserRequest request, CallOptions options);
-      /// <summary>
-      ///  Creates a new user
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.UserManagement.CreateUserResponse> CreateUserAsync(global::KillrVideo.UserManagement.CreateUserRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Creates a new user
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.UserManagement.CreateUserResponse> CreateUserAsync(global::KillrVideo.UserManagement.CreateUserRequest request, CallOptions options);
-      /// <summary>
-      ///  Verify a user's username and password
-      /// </summary>
-      global::KillrVideo.UserManagement.VerifyCredentialsResponse VerifyCredentials(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Verify a user's username and password
-      /// </summary>
-      global::KillrVideo.UserManagement.VerifyCredentialsResponse VerifyCredentials(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, CallOptions options);
-      /// <summary>
-      ///  Verify a user's username and password
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.UserManagement.VerifyCredentialsResponse> VerifyCredentialsAsync(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Verify a user's username and password
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.UserManagement.VerifyCredentialsResponse> VerifyCredentialsAsync(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, CallOptions options);
-      /// <summary>
-      ///  Gets a user or group of user's profiles
-      /// </summary>
-      global::KillrVideo.UserManagement.GetUserProfileResponse GetUserProfile(global::KillrVideo.UserManagement.GetUserProfileRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Gets a user or group of user's profiles
-      /// </summary>
-      global::KillrVideo.UserManagement.GetUserProfileResponse GetUserProfile(global::KillrVideo.UserManagement.GetUserProfileRequest request, CallOptions options);
-      /// <summary>
-      ///  Gets a user or group of user's profiles
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.UserManagement.GetUserProfileResponse> GetUserProfileAsync(global::KillrVideo.UserManagement.GetUserProfileRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Gets a user or group of user's profiles
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.UserManagement.GetUserProfileResponse> GetUserProfileAsync(global::KillrVideo.UserManagement.GetUserProfileRequest request, CallOptions options);
-    }
-
-    /// <summary>Interface of server-side implementations of UserManagementService</summary>
-    [System.Obsolete("Service implementations should inherit from the generated abstract base class instead.")]
-    public interface IUserManagementService
-    {
-      /// <summary>
-      ///  Creates a new user
-      /// </summary>
-      global::System.Threading.Tasks.Task<global::KillrVideo.UserManagement.CreateUserResponse> CreateUser(global::KillrVideo.UserManagement.CreateUserRequest request, ServerCallContext context);
-      /// <summary>
-      ///  Verify a user's username and password
-      /// </summary>
-      global::System.Threading.Tasks.Task<global::KillrVideo.UserManagement.VerifyCredentialsResponse> VerifyCredentials(global::KillrVideo.UserManagement.VerifyCredentialsRequest request, ServerCallContext context);
-      /// <summary>
-      ///  Gets a user or group of user's profiles
-      /// </summary>
-      global::System.Threading.Tasks.Task<global::KillrVideo.UserManagement.GetUserProfileResponse> GetUserProfile(global::KillrVideo.UserManagement.GetUserProfileRequest request, ServerCallContext context);
-    }
-
     /// <summary>Base class for server-side implementations of UserManagementService</summary>
     public abstract class UserManagementServiceBase
     {
@@ -151,21 +79,24 @@ namespace KillrVideo.UserManagement {
     }
 
     /// <summary>Client for UserManagementService</summary>
-    #pragma warning disable 0618
-    public class UserManagementServiceClient : ClientBase<UserManagementServiceClient>, IUserManagementServiceClient
-    #pragma warning restore 0618
+    public class UserManagementServiceClient : ClientBase<UserManagementServiceClient>
     {
+      /// <summary>Creates a new client for UserManagementService</summary>
+      /// <param name="channel">The channel to use to make remote calls.</param>
       public UserManagementServiceClient(Channel channel) : base(channel)
       {
       }
+      /// <summary>Creates a new client for UserManagementService that uses a custom <c>CallInvoker</c>.</summary>
+      /// <param name="callInvoker">The callInvoker to use to make remote calls.</param>
       public UserManagementServiceClient(CallInvoker callInvoker) : base(callInvoker)
       {
       }
-      ///<summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      /// <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
       protected UserManagementServiceClient() : base()
       {
       }
-      ///<summary>Protected constructor to allow creation of configured clients.</summary>
+      /// <summary>Protected constructor to allow creation of configured clients.</summary>
+      /// <param name="configuration">The client configuration.</param>
       protected UserManagementServiceClient(ClientBaseConfiguration configuration) : base(configuration)
       {
       }
@@ -260,29 +191,10 @@ namespace KillrVideo.UserManagement {
       }
     }
 
-    /// <summary>Creates a new client for UserManagementService</summary>
-    public static UserManagementServiceClient NewClient(Channel channel)
-    {
-      return new UserManagementServiceClient(channel);
-    }
-
     /// <summary>Creates service definition that can be registered with a server</summary>
-    #pragma warning disable 0618
-    public static ServerServiceDefinition BindService(IUserManagementService serviceImpl)
-    #pragma warning restore 0618
-    {
-      return ServerServiceDefinition.CreateBuilder(__ServiceName)
-          .AddMethod(__Method_CreateUser, serviceImpl.CreateUser)
-          .AddMethod(__Method_VerifyCredentials, serviceImpl.VerifyCredentials)
-          .AddMethod(__Method_GetUserProfile, serviceImpl.GetUserProfile).Build();
-    }
-
-    /// <summary>Creates service definition that can be registered with a server</summary>
-    #pragma warning disable 0618
     public static ServerServiceDefinition BindService(UserManagementServiceBase serviceImpl)
-    #pragma warning restore 0618
     {
-      return ServerServiceDefinition.CreateBuilder(__ServiceName)
+      return ServerServiceDefinition.CreateBuilder()
           .AddMethod(__Method_CreateUser, serviceImpl.CreateUser)
           .AddMethod(__Method_VerifyCredentials, serviceImpl.VerifyCredentials)
           .AddMethod(__Method_GetUserProfile, serviceImpl.GetUserProfile).Build();

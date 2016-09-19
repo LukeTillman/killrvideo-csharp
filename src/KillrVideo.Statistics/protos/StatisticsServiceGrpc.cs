@@ -40,58 +40,6 @@ namespace KillrVideo.Statistics {
       get { return global::KillrVideo.Statistics.StatisticsServiceReflection.Descriptor.Services[0]; }
     }
 
-    /// <summary>Client for StatisticsService</summary>
-    [System.Obsolete("Client side interfaced will be removed in the next release. Use client class directly.")]
-    public interface IStatisticsServiceClient
-    {
-      /// <summary>
-      ///  Record that playback started for a given video
-      /// </summary>
-      global::KillrVideo.Statistics.RecordPlaybackStartedResponse RecordPlaybackStarted(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Record that playback started for a given video
-      /// </summary>
-      global::KillrVideo.Statistics.RecordPlaybackStartedResponse RecordPlaybackStarted(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, CallOptions options);
-      /// <summary>
-      ///  Record that playback started for a given video
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Statistics.RecordPlaybackStartedResponse> RecordPlaybackStartedAsync(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Record that playback started for a given video
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Statistics.RecordPlaybackStartedResponse> RecordPlaybackStartedAsync(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, CallOptions options);
-      /// <summary>
-      ///  Get the number of plays for a given video or set of videos
-      /// </summary>
-      global::KillrVideo.Statistics.GetNumberOfPlaysResponse GetNumberOfPlays(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Get the number of plays for a given video or set of videos
-      /// </summary>
-      global::KillrVideo.Statistics.GetNumberOfPlaysResponse GetNumberOfPlays(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, CallOptions options);
-      /// <summary>
-      ///  Get the number of plays for a given video or set of videos
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Statistics.GetNumberOfPlaysResponse> GetNumberOfPlaysAsync(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Get the number of plays for a given video or set of videos
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Statistics.GetNumberOfPlaysResponse> GetNumberOfPlaysAsync(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, CallOptions options);
-    }
-
-    /// <summary>Interface of server-side implementations of StatisticsService</summary>
-    [System.Obsolete("Service implementations should inherit from the generated abstract base class instead.")]
-    public interface IStatisticsService
-    {
-      /// <summary>
-      ///  Record that playback started for a given video
-      /// </summary>
-      global::System.Threading.Tasks.Task<global::KillrVideo.Statistics.RecordPlaybackStartedResponse> RecordPlaybackStarted(global::KillrVideo.Statistics.RecordPlaybackStartedRequest request, ServerCallContext context);
-      /// <summary>
-      ///  Get the number of plays for a given video or set of videos
-      /// </summary>
-      global::System.Threading.Tasks.Task<global::KillrVideo.Statistics.GetNumberOfPlaysResponse> GetNumberOfPlays(global::KillrVideo.Statistics.GetNumberOfPlaysRequest request, ServerCallContext context);
-    }
-
     /// <summary>Base class for server-side implementations of StatisticsService</summary>
     public abstract class StatisticsServiceBase
     {
@@ -114,21 +62,24 @@ namespace KillrVideo.Statistics {
     }
 
     /// <summary>Client for StatisticsService</summary>
-    #pragma warning disable 0618
-    public class StatisticsServiceClient : ClientBase<StatisticsServiceClient>, IStatisticsServiceClient
-    #pragma warning restore 0618
+    public class StatisticsServiceClient : ClientBase<StatisticsServiceClient>
     {
+      /// <summary>Creates a new client for StatisticsService</summary>
+      /// <param name="channel">The channel to use to make remote calls.</param>
       public StatisticsServiceClient(Channel channel) : base(channel)
       {
       }
+      /// <summary>Creates a new client for StatisticsService that uses a custom <c>CallInvoker</c>.</summary>
+      /// <param name="callInvoker">The callInvoker to use to make remote calls.</param>
       public StatisticsServiceClient(CallInvoker callInvoker) : base(callInvoker)
       {
       }
-      ///<summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      /// <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
       protected StatisticsServiceClient() : base()
       {
       }
-      ///<summary>Protected constructor to allow creation of configured clients.</summary>
+      /// <summary>Protected constructor to allow creation of configured clients.</summary>
+      /// <param name="configuration">The client configuration.</param>
       protected StatisticsServiceClient(ClientBaseConfiguration configuration) : base(configuration)
       {
       }
@@ -195,28 +146,10 @@ namespace KillrVideo.Statistics {
       }
     }
 
-    /// <summary>Creates a new client for StatisticsService</summary>
-    public static StatisticsServiceClient NewClient(Channel channel)
-    {
-      return new StatisticsServiceClient(channel);
-    }
-
     /// <summary>Creates service definition that can be registered with a server</summary>
-    #pragma warning disable 0618
-    public static ServerServiceDefinition BindService(IStatisticsService serviceImpl)
-    #pragma warning restore 0618
-    {
-      return ServerServiceDefinition.CreateBuilder(__ServiceName)
-          .AddMethod(__Method_RecordPlaybackStarted, serviceImpl.RecordPlaybackStarted)
-          .AddMethod(__Method_GetNumberOfPlays, serviceImpl.GetNumberOfPlays).Build();
-    }
-
-    /// <summary>Creates service definition that can be registered with a server</summary>
-    #pragma warning disable 0618
     public static ServerServiceDefinition BindService(StatisticsServiceBase serviceImpl)
-    #pragma warning restore 0618
     {
-      return ServerServiceDefinition.CreateBuilder(__ServiceName)
+      return ServerServiceDefinition.CreateBuilder()
           .AddMethod(__Method_RecordPlaybackStarted, serviceImpl.RecordPlaybackStarted)
           .AddMethod(__Method_GetNumberOfPlays, serviceImpl.GetNumberOfPlays).Build();
     }

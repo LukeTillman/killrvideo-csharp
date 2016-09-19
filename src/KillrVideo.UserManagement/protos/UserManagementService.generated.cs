@@ -10,7 +10,6 @@ using scg = global::System.Collections.Generic;
 namespace KillrVideo.UserManagement {
 
   /// <summary>Holder for reflection information generated from user-management/user_management_service.proto</summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public static partial class UserManagementServiceReflection {
 
     #region Descriptor
@@ -50,14 +49,14 @@ namespace KillrVideo.UserManagement {
             "Mw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::KillrVideo.Protobuf.CommonTypesReflection.Descriptor, },
-          new pbr::GeneratedCodeInfo(null, new pbr::GeneratedCodeInfo[] {
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.UserManagement.CreateUserRequest), global::KillrVideo.UserManagement.CreateUserRequest.Parser, new[]{ "UserId", "FirstName", "LastName", "Email", "Password" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.UserManagement.CreateUserResponse), global::KillrVideo.UserManagement.CreateUserResponse.Parser, null, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.UserManagement.VerifyCredentialsRequest), global::KillrVideo.UserManagement.VerifyCredentialsRequest.Parser, new[]{ "Email", "Password" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.UserManagement.VerifyCredentialsResponse), global::KillrVideo.UserManagement.VerifyCredentialsResponse.Parser, new[]{ "UserId" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.UserManagement.GetUserProfileRequest), global::KillrVideo.UserManagement.GetUserProfileRequest.Parser, new[]{ "UserIds" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.UserManagement.GetUserProfileResponse), global::KillrVideo.UserManagement.GetUserProfileResponse.Parser, new[]{ "Profiles" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.UserManagement.UserProfile), global::KillrVideo.UserManagement.UserProfile.Parser, new[]{ "UserId", "FirstName", "LastName", "Email" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.UserManagement.CreateUserRequest), global::KillrVideo.UserManagement.CreateUserRequest.Parser, new[]{ "UserId", "FirstName", "LastName", "Email", "Password" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.UserManagement.CreateUserResponse), global::KillrVideo.UserManagement.CreateUserResponse.Parser, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.UserManagement.VerifyCredentialsRequest), global::KillrVideo.UserManagement.VerifyCredentialsRequest.Parser, new[]{ "Email", "Password" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.UserManagement.VerifyCredentialsResponse), global::KillrVideo.UserManagement.VerifyCredentialsResponse.Parser, new[]{ "UserId" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.UserManagement.GetUserProfileRequest), global::KillrVideo.UserManagement.GetUserProfileRequest.Parser, new[]{ "UserIds" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.UserManagement.GetUserProfileResponse), global::KillrVideo.UserManagement.GetUserProfileResponse.Parser, new[]{ "Profiles" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.UserManagement.UserProfile), global::KillrVideo.UserManagement.UserProfile.Parser, new[]{ "UserId", "FirstName", "LastName", "Email" }, null, null, null)
           }));
     }
     #endregion
@@ -67,25 +66,29 @@ namespace KillrVideo.UserManagement {
   /// <summary>
   ///  Request to create a new user
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class CreateUserRequest : pb::IMessage<CreateUserRequest> {
     private static readonly pb::MessageParser<CreateUserRequest> _parser = new pb::MessageParser<CreateUserRequest>(() => new CreateUserRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<CreateUserRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.UserManagement.UserManagementServiceReflection.Descriptor.MessageTypes[0]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CreateUserRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CreateUserRequest(CreateUserRequest other) : this() {
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
       firstName_ = other.firstName_;
@@ -94,6 +97,7 @@ namespace KillrVideo.UserManagement {
       password_ = other.password_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CreateUserRequest Clone() {
       return new CreateUserRequest(this);
     }
@@ -101,6 +105,7 @@ namespace KillrVideo.UserManagement {
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
@@ -111,47 +116,53 @@ namespace KillrVideo.UserManagement {
     /// <summary>Field number for the "first_name" field.</summary>
     public const int FirstNameFieldNumber = 2;
     private string firstName_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string FirstName {
       get { return firstName_; }
       set {
-        firstName_ = pb::Preconditions.CheckNotNull(value, "value");
+        firstName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "last_name" field.</summary>
     public const int LastNameFieldNumber = 3;
     private string lastName_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string LastName {
       get { return lastName_; }
       set {
-        lastName_ = pb::Preconditions.CheckNotNull(value, "value");
+        lastName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "email" field.</summary>
     public const int EmailFieldNumber = 4;
     private string email_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Email {
       get { return email_; }
       set {
-        email_ = pb::Preconditions.CheckNotNull(value, "value");
+        email_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "password" field.</summary>
     public const int PasswordFieldNumber = 5;
     private string password_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Password {
       get { return password_; }
       set {
-        password_ = pb::Preconditions.CheckNotNull(value, "value");
+        password_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as CreateUserRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(CreateUserRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -167,6 +178,7 @@ namespace KillrVideo.UserManagement {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (userId_ != null) hash ^= UserId.GetHashCode();
@@ -177,10 +189,12 @@ namespace KillrVideo.UserManagement {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (userId_ != null) {
         output.WriteRawTag(10);
@@ -204,6 +218,7 @@ namespace KillrVideo.UserManagement {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (userId_ != null) {
@@ -224,6 +239,7 @@ namespace KillrVideo.UserManagement {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(CreateUserRequest other) {
       if (other == null) {
         return;
@@ -248,6 +264,7 @@ namespace KillrVideo.UserManagement {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -287,36 +304,43 @@ namespace KillrVideo.UserManagement {
   /// <summary>
   ///  Response when creating a new user
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class CreateUserResponse : pb::IMessage<CreateUserResponse> {
     private static readonly pb::MessageParser<CreateUserResponse> _parser = new pb::MessageParser<CreateUserResponse>(() => new CreateUserResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<CreateUserResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.UserManagement.UserManagementServiceReflection.Descriptor.MessageTypes[1]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CreateUserResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CreateUserResponse(CreateUserResponse other) : this() {
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CreateUserResponse Clone() {
       return new CreateUserResponse(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as CreateUserResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(CreateUserResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -327,29 +351,35 @@ namespace KillrVideo.UserManagement {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(CreateUserResponse other) {
       if (other == null) {
         return;
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -366,30 +396,35 @@ namespace KillrVideo.UserManagement {
   /// <summary>
   ///  Request to verify a user's credentials (i.e. for logging them in)
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class VerifyCredentialsRequest : pb::IMessage<VerifyCredentialsRequest> {
     private static readonly pb::MessageParser<VerifyCredentialsRequest> _parser = new pb::MessageParser<VerifyCredentialsRequest>(() => new VerifyCredentialsRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<VerifyCredentialsRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.UserManagement.UserManagementServiceReflection.Descriptor.MessageTypes[2]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public VerifyCredentialsRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public VerifyCredentialsRequest(VerifyCredentialsRequest other) : this() {
       email_ = other.email_;
       password_ = other.password_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public VerifyCredentialsRequest Clone() {
       return new VerifyCredentialsRequest(this);
     }
@@ -397,27 +432,31 @@ namespace KillrVideo.UserManagement {
     /// <summary>Field number for the "email" field.</summary>
     public const int EmailFieldNumber = 1;
     private string email_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Email {
       get { return email_; }
       set {
-        email_ = pb::Preconditions.CheckNotNull(value, "value");
+        email_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "password" field.</summary>
     public const int PasswordFieldNumber = 2;
     private string password_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Password {
       get { return password_; }
       set {
-        password_ = pb::Preconditions.CheckNotNull(value, "value");
+        password_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as VerifyCredentialsRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(VerifyCredentialsRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -430,6 +469,7 @@ namespace KillrVideo.UserManagement {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (Email.Length != 0) hash ^= Email.GetHashCode();
@@ -437,10 +477,12 @@ namespace KillrVideo.UserManagement {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (Email.Length != 0) {
         output.WriteRawTag(10);
@@ -452,6 +494,7 @@ namespace KillrVideo.UserManagement {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (Email.Length != 0) {
@@ -463,6 +506,7 @@ namespace KillrVideo.UserManagement {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(VerifyCredentialsRequest other) {
       if (other == null) {
         return;
@@ -475,6 +519,7 @@ namespace KillrVideo.UserManagement {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -499,29 +544,34 @@ namespace KillrVideo.UserManagement {
   /// <summary>
   ///  Response that indicates the user's id if the credentials were correct
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class VerifyCredentialsResponse : pb::IMessage<VerifyCredentialsResponse> {
     private static readonly pb::MessageParser<VerifyCredentialsResponse> _parser = new pb::MessageParser<VerifyCredentialsResponse>(() => new VerifyCredentialsResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<VerifyCredentialsResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.UserManagement.UserManagementServiceReflection.Descriptor.MessageTypes[3]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public VerifyCredentialsResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public VerifyCredentialsResponse(VerifyCredentialsResponse other) : this() {
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public VerifyCredentialsResponse Clone() {
       return new VerifyCredentialsResponse(this);
     }
@@ -529,6 +579,7 @@ namespace KillrVideo.UserManagement {
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
@@ -536,10 +587,12 @@ namespace KillrVideo.UserManagement {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as VerifyCredentialsResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(VerifyCredentialsResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -551,16 +604,19 @@ namespace KillrVideo.UserManagement {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (userId_ != null) hash ^= UserId.GetHashCode();
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (userId_ != null) {
         output.WriteRawTag(10);
@@ -568,6 +624,7 @@ namespace KillrVideo.UserManagement {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (userId_ != null) {
@@ -576,6 +633,7 @@ namespace KillrVideo.UserManagement {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(VerifyCredentialsResponse other) {
       if (other == null) {
         return;
@@ -588,6 +646,7 @@ namespace KillrVideo.UserManagement {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -611,29 +670,34 @@ namespace KillrVideo.UserManagement {
   /// <summary>
   ///  Request to get a user or multiple users profiles
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetUserProfileRequest : pb::IMessage<GetUserProfileRequest> {
     private static readonly pb::MessageParser<GetUserProfileRequest> _parser = new pb::MessageParser<GetUserProfileRequest>(() => new GetUserProfileRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetUserProfileRequest> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.UserManagement.UserManagementServiceReflection.Descriptor.MessageTypes[4]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserProfileRequest() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserProfileRequest(GetUserProfileRequest other) : this() {
       userIds_ = other.userIds_.Clone();
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserProfileRequest Clone() {
       return new GetUserProfileRequest(this);
     }
@@ -643,14 +707,17 @@ namespace KillrVideo.UserManagement {
     private static readonly pb::FieldCodec<global::KillrVideo.Protobuf.Uuid> _repeated_userIds_codec
         = pb::FieldCodec.ForMessage(10, global::KillrVideo.Protobuf.Uuid.Parser);
     private readonly pbc::RepeatedField<global::KillrVideo.Protobuf.Uuid> userIds_ = new pbc::RepeatedField<global::KillrVideo.Protobuf.Uuid>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::KillrVideo.Protobuf.Uuid> UserIds {
       get { return userIds_; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetUserProfileRequest);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetUserProfileRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -662,26 +729,31 @@ namespace KillrVideo.UserManagement {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       hash ^= userIds_.GetHashCode();
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       userIds_.WriteTo(output, _repeated_userIds_codec);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       size += userIds_.CalculateSize(_repeated_userIds_codec);
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetUserProfileRequest other) {
       if (other == null) {
         return;
@@ -689,6 +761,7 @@ namespace KillrVideo.UserManagement {
       userIds_.Add(other.userIds_);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -709,29 +782,34 @@ namespace KillrVideo.UserManagement {
   /// <summary>
   ///  Response with user profiles
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class GetUserProfileResponse : pb::IMessage<GetUserProfileResponse> {
     private static readonly pb::MessageParser<GetUserProfileResponse> _parser = new pb::MessageParser<GetUserProfileResponse>(() => new GetUserProfileResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<GetUserProfileResponse> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.UserManagement.UserManagementServiceReflection.Descriptor.MessageTypes[5]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserProfileResponse() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserProfileResponse(GetUserProfileResponse other) : this() {
       profiles_ = other.profiles_.Clone();
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetUserProfileResponse Clone() {
       return new GetUserProfileResponse(this);
     }
@@ -741,14 +819,17 @@ namespace KillrVideo.UserManagement {
     private static readonly pb::FieldCodec<global::KillrVideo.UserManagement.UserProfile> _repeated_profiles_codec
         = pb::FieldCodec.ForMessage(10, global::KillrVideo.UserManagement.UserProfile.Parser);
     private readonly pbc::RepeatedField<global::KillrVideo.UserManagement.UserProfile> profiles_ = new pbc::RepeatedField<global::KillrVideo.UserManagement.UserProfile>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::KillrVideo.UserManagement.UserProfile> Profiles {
       get { return profiles_; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GetUserProfileResponse);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(GetUserProfileResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -760,26 +841,31 @@ namespace KillrVideo.UserManagement {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       hash ^= profiles_.GetHashCode();
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       profiles_.WriteTo(output, _repeated_profiles_codec);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       size += profiles_.CalculateSize(_repeated_profiles_codec);
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(GetUserProfileResponse other) {
       if (other == null) {
         return;
@@ -787,6 +873,7 @@ namespace KillrVideo.UserManagement {
       profiles_.Add(other.profiles_);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -807,25 +894,29 @@ namespace KillrVideo.UserManagement {
   /// <summary>
   ///  A user's profile information
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class UserProfile : pb::IMessage<UserProfile> {
     private static readonly pb::MessageParser<UserProfile> _parser = new pb::MessageParser<UserProfile>(() => new UserProfile());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<UserProfile> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.UserManagement.UserManagementServiceReflection.Descriptor.MessageTypes[6]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UserProfile() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UserProfile(UserProfile other) : this() {
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
       firstName_ = other.firstName_;
@@ -833,6 +924,7 @@ namespace KillrVideo.UserManagement {
       email_ = other.email_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UserProfile Clone() {
       return new UserProfile(this);
     }
@@ -840,6 +932,7 @@ namespace KillrVideo.UserManagement {
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
@@ -850,37 +943,42 @@ namespace KillrVideo.UserManagement {
     /// <summary>Field number for the "first_name" field.</summary>
     public const int FirstNameFieldNumber = 2;
     private string firstName_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string FirstName {
       get { return firstName_; }
       set {
-        firstName_ = pb::Preconditions.CheckNotNull(value, "value");
+        firstName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "last_name" field.</summary>
     public const int LastNameFieldNumber = 3;
     private string lastName_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string LastName {
       get { return lastName_; }
       set {
-        lastName_ = pb::Preconditions.CheckNotNull(value, "value");
+        lastName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "email" field.</summary>
     public const int EmailFieldNumber = 4;
     private string email_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Email {
       get { return email_; }
       set {
-        email_ = pb::Preconditions.CheckNotNull(value, "value");
+        email_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as UserProfile);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(UserProfile other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -895,6 +993,7 @@ namespace KillrVideo.UserManagement {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (userId_ != null) hash ^= UserId.GetHashCode();
@@ -904,10 +1003,12 @@ namespace KillrVideo.UserManagement {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (userId_ != null) {
         output.WriteRawTag(10);
@@ -927,6 +1028,7 @@ namespace KillrVideo.UserManagement {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (userId_ != null) {
@@ -944,6 +1046,7 @@ namespace KillrVideo.UserManagement {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(UserProfile other) {
       if (other == null) {
         return;
@@ -965,6 +1068,7 @@ namespace KillrVideo.UserManagement {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {

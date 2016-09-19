@@ -10,7 +10,6 @@ using scg = global::System.Collections.Generic;
 namespace KillrVideo.UserManagement.Events {
 
   /// <summary>Holder for reflection information generated from user-management/user_management_events.proto</summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public static partial class UserManagementEventsReflection {
 
     #region Descriptor
@@ -33,8 +32,8 @@ namespace KillrVideo.UserManagement.Events {
             "LlVzZXJNYW5hZ2VtZW50LkV2ZW50c2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::KillrVideo.Protobuf.CommonTypesReflection.Descriptor, },
-          new pbr::GeneratedCodeInfo(null, new pbr::GeneratedCodeInfo[] {
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.UserManagement.Events.UserCreated), global::KillrVideo.UserManagement.Events.UserCreated.Parser, new[]{ "UserId", "FirstName", "LastName", "Email", "Timestamp" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.UserManagement.Events.UserCreated), global::KillrVideo.UserManagement.Events.UserCreated.Parser, new[]{ "UserId", "FirstName", "LastName", "Email", "Timestamp" }, null, null, null)
           }));
     }
     #endregion
@@ -44,25 +43,29 @@ namespace KillrVideo.UserManagement.Events {
   /// <summary>
   ///  Event published when a new user is created
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class UserCreated : pb::IMessage<UserCreated> {
     private static readonly pb::MessageParser<UserCreated> _parser = new pb::MessageParser<UserCreated>(() => new UserCreated());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<UserCreated> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.UserManagement.Events.UserManagementEventsReflection.Descriptor.MessageTypes[0]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UserCreated() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UserCreated(UserCreated other) : this() {
       UserId = other.userId_ != null ? other.UserId.Clone() : null;
       firstName_ = other.firstName_;
@@ -71,6 +74,7 @@ namespace KillrVideo.UserManagement.Events {
       Timestamp = other.timestamp_ != null ? other.Timestamp.Clone() : null;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UserCreated Clone() {
       return new UserCreated(this);
     }
@@ -78,6 +82,7 @@ namespace KillrVideo.UserManagement.Events {
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid UserId {
       get { return userId_; }
       set {
@@ -88,36 +93,40 @@ namespace KillrVideo.UserManagement.Events {
     /// <summary>Field number for the "first_name" field.</summary>
     public const int FirstNameFieldNumber = 2;
     private string firstName_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string FirstName {
       get { return firstName_; }
       set {
-        firstName_ = pb::Preconditions.CheckNotNull(value, "value");
+        firstName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "last_name" field.</summary>
     public const int LastNameFieldNumber = 3;
     private string lastName_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string LastName {
       get { return lastName_; }
       set {
-        lastName_ = pb::Preconditions.CheckNotNull(value, "value");
+        lastName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "email" field.</summary>
     public const int EmailFieldNumber = 4;
     private string email_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Email {
       get { return email_; }
       set {
-        email_ = pb::Preconditions.CheckNotNull(value, "value");
+        email_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "timestamp" field.</summary>
     public const int TimestampFieldNumber = 5;
     private global::Google.Protobuf.WellKnownTypes.Timestamp timestamp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Google.Protobuf.WellKnownTypes.Timestamp Timestamp {
       get { return timestamp_; }
       set {
@@ -125,10 +134,12 @@ namespace KillrVideo.UserManagement.Events {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as UserCreated);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(UserCreated other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -144,6 +155,7 @@ namespace KillrVideo.UserManagement.Events {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (userId_ != null) hash ^= UserId.GetHashCode();
@@ -154,10 +166,12 @@ namespace KillrVideo.UserManagement.Events {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (userId_ != null) {
         output.WriteRawTag(10);
@@ -181,6 +195,7 @@ namespace KillrVideo.UserManagement.Events {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (userId_ != null) {
@@ -201,6 +216,7 @@ namespace KillrVideo.UserManagement.Events {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(UserCreated other) {
       if (other == null) {
         return;
@@ -228,6 +244,7 @@ namespace KillrVideo.UserManagement.Events {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {

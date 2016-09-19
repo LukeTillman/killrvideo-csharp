@@ -40,58 +40,6 @@ namespace KillrVideo.Search {
       get { return global::KillrVideo.Search.SearchServiceReflection.Descriptor.Services[0]; }
     }
 
-    /// <summary>Client for SearchService</summary>
-    [System.Obsolete("Client side interfaced will be removed in the next release. Use client class directly.")]
-    public interface ISearchServiceClient
-    {
-      /// <summary>
-      ///  Searches for videos by a given query term
-      /// </summary>
-      global::KillrVideo.Search.SearchVideosResponse SearchVideos(global::KillrVideo.Search.SearchVideosRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Searches for videos by a given query term
-      /// </summary>
-      global::KillrVideo.Search.SearchVideosResponse SearchVideos(global::KillrVideo.Search.SearchVideosRequest request, CallOptions options);
-      /// <summary>
-      ///  Searches for videos by a given query term
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Search.SearchVideosResponse> SearchVideosAsync(global::KillrVideo.Search.SearchVideosRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Searches for videos by a given query term
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Search.SearchVideosResponse> SearchVideosAsync(global::KillrVideo.Search.SearchVideosRequest request, CallOptions options);
-      /// <summary>
-      ///  Gets search query suggestions (could be used for typeahead support)
-      /// </summary>
-      global::KillrVideo.Search.GetQuerySuggestionsResponse GetQuerySuggestions(global::KillrVideo.Search.GetQuerySuggestionsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Gets search query suggestions (could be used for typeahead support)
-      /// </summary>
-      global::KillrVideo.Search.GetQuerySuggestionsResponse GetQuerySuggestions(global::KillrVideo.Search.GetQuerySuggestionsRequest request, CallOptions options);
-      /// <summary>
-      ///  Gets search query suggestions (could be used for typeahead support)
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Search.GetQuerySuggestionsResponse> GetQuerySuggestionsAsync(global::KillrVideo.Search.GetQuerySuggestionsRequest request, Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken));
-      /// <summary>
-      ///  Gets search query suggestions (could be used for typeahead support)
-      /// </summary>
-      AsyncUnaryCall<global::KillrVideo.Search.GetQuerySuggestionsResponse> GetQuerySuggestionsAsync(global::KillrVideo.Search.GetQuerySuggestionsRequest request, CallOptions options);
-    }
-
-    /// <summary>Interface of server-side implementations of SearchService</summary>
-    [System.Obsolete("Service implementations should inherit from the generated abstract base class instead.")]
-    public interface ISearchService
-    {
-      /// <summary>
-      ///  Searches for videos by a given query term
-      /// </summary>
-      global::System.Threading.Tasks.Task<global::KillrVideo.Search.SearchVideosResponse> SearchVideos(global::KillrVideo.Search.SearchVideosRequest request, ServerCallContext context);
-      /// <summary>
-      ///  Gets search query suggestions (could be used for typeahead support)
-      /// </summary>
-      global::System.Threading.Tasks.Task<global::KillrVideo.Search.GetQuerySuggestionsResponse> GetQuerySuggestions(global::KillrVideo.Search.GetQuerySuggestionsRequest request, ServerCallContext context);
-    }
-
     /// <summary>Base class for server-side implementations of SearchService</summary>
     public abstract class SearchServiceBase
     {
@@ -114,21 +62,24 @@ namespace KillrVideo.Search {
     }
 
     /// <summary>Client for SearchService</summary>
-    #pragma warning disable 0618
-    public class SearchServiceClient : ClientBase<SearchServiceClient>, ISearchServiceClient
-    #pragma warning restore 0618
+    public class SearchServiceClient : ClientBase<SearchServiceClient>
     {
+      /// <summary>Creates a new client for SearchService</summary>
+      /// <param name="channel">The channel to use to make remote calls.</param>
       public SearchServiceClient(Channel channel) : base(channel)
       {
       }
+      /// <summary>Creates a new client for SearchService that uses a custom <c>CallInvoker</c>.</summary>
+      /// <param name="callInvoker">The callInvoker to use to make remote calls.</param>
       public SearchServiceClient(CallInvoker callInvoker) : base(callInvoker)
       {
       }
-      ///<summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      /// <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
       protected SearchServiceClient() : base()
       {
       }
-      ///<summary>Protected constructor to allow creation of configured clients.</summary>
+      /// <summary>Protected constructor to allow creation of configured clients.</summary>
+      /// <param name="configuration">The client configuration.</param>
       protected SearchServiceClient(ClientBaseConfiguration configuration) : base(configuration)
       {
       }
@@ -195,28 +146,10 @@ namespace KillrVideo.Search {
       }
     }
 
-    /// <summary>Creates a new client for SearchService</summary>
-    public static SearchServiceClient NewClient(Channel channel)
-    {
-      return new SearchServiceClient(channel);
-    }
-
     /// <summary>Creates service definition that can be registered with a server</summary>
-    #pragma warning disable 0618
-    public static ServerServiceDefinition BindService(ISearchService serviceImpl)
-    #pragma warning restore 0618
-    {
-      return ServerServiceDefinition.CreateBuilder(__ServiceName)
-          .AddMethod(__Method_SearchVideos, serviceImpl.SearchVideos)
-          .AddMethod(__Method_GetQuerySuggestions, serviceImpl.GetQuerySuggestions).Build();
-    }
-
-    /// <summary>Creates service definition that can be registered with a server</summary>
-    #pragma warning disable 0618
     public static ServerServiceDefinition BindService(SearchServiceBase serviceImpl)
-    #pragma warning restore 0618
     {
-      return ServerServiceDefinition.CreateBuilder(__ServiceName)
+      return ServerServiceDefinition.CreateBuilder()
           .AddMethod(__Method_SearchVideos, serviceImpl.SearchVideos)
           .AddMethod(__Method_GetQuerySuggestions, serviceImpl.GetQuerySuggestions).Build();
     }

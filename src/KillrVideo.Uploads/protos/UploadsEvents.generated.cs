@@ -10,7 +10,6 @@ using scg = global::System.Collections.Generic;
 namespace KillrVideo.Uploads.Events {
 
   /// <summary>Holder for reflection information generated from uploads/uploads_events.proto</summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public static partial class UploadsEventsReflection {
 
     #region Descriptor
@@ -41,11 +40,11 @@ namespace KillrVideo.Uploads.Events {
             "ZW50c2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::KillrVideo.Protobuf.CommonTypesReflection.Descriptor, },
-          new pbr::GeneratedCodeInfo(null, new pbr::GeneratedCodeInfo[] {
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Uploads.Events.UploadedVideoProcessingFailed), global::KillrVideo.Uploads.Events.UploadedVideoProcessingFailed.Parser, new[]{ "VideoId", "Timestamp" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Uploads.Events.UploadedVideoProcessingStarted), global::KillrVideo.Uploads.Events.UploadedVideoProcessingStarted.Parser, new[]{ "VideoId", "Timestamp" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Uploads.Events.UploadedVideoProcessingSucceeded), global::KillrVideo.Uploads.Events.UploadedVideoProcessingSucceeded.Parser, new[]{ "VideoId", "Timestamp" }, null, null, null),
-            new pbr::GeneratedCodeInfo(typeof(global::KillrVideo.Uploads.Events.UploadedVideoPublished), global::KillrVideo.Uploads.Events.UploadedVideoPublished.Parser, new[]{ "VideoId", "Timestamp", "VideoUrl", "ThumbnailUrl" }, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Uploads.Events.UploadedVideoProcessingFailed), global::KillrVideo.Uploads.Events.UploadedVideoProcessingFailed.Parser, new[]{ "VideoId", "Timestamp" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Uploads.Events.UploadedVideoProcessingStarted), global::KillrVideo.Uploads.Events.UploadedVideoProcessingStarted.Parser, new[]{ "VideoId", "Timestamp" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Uploads.Events.UploadedVideoProcessingSucceeded), global::KillrVideo.Uploads.Events.UploadedVideoProcessingSucceeded.Parser, new[]{ "VideoId", "Timestamp" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::KillrVideo.Uploads.Events.UploadedVideoPublished), global::KillrVideo.Uploads.Events.UploadedVideoPublished.Parser, new[]{ "VideoId", "Timestamp", "VideoUrl", "ThumbnailUrl" }, null, null, null)
           }));
     }
     #endregion
@@ -55,30 +54,35 @@ namespace KillrVideo.Uploads.Events {
   /// <summary>
   ///  Event that's published when there's a problem processing an uploaded video
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class UploadedVideoProcessingFailed : pb::IMessage<UploadedVideoProcessingFailed> {
     private static readonly pb::MessageParser<UploadedVideoProcessingFailed> _parser = new pb::MessageParser<UploadedVideoProcessingFailed>(() => new UploadedVideoProcessingFailed());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<UploadedVideoProcessingFailed> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Uploads.Events.UploadsEventsReflection.Descriptor.MessageTypes[0]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UploadedVideoProcessingFailed() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UploadedVideoProcessingFailed(UploadedVideoProcessingFailed other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
       Timestamp = other.timestamp_ != null ? other.Timestamp.Clone() : null;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UploadedVideoProcessingFailed Clone() {
       return new UploadedVideoProcessingFailed(this);
     }
@@ -86,6 +90,7 @@ namespace KillrVideo.Uploads.Events {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -96,6 +101,7 @@ namespace KillrVideo.Uploads.Events {
     /// <summary>Field number for the "timestamp" field.</summary>
     public const int TimestampFieldNumber = 2;
     private global::Google.Protobuf.WellKnownTypes.Timestamp timestamp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Google.Protobuf.WellKnownTypes.Timestamp Timestamp {
       get { return timestamp_; }
       set {
@@ -103,10 +109,12 @@ namespace KillrVideo.Uploads.Events {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as UploadedVideoProcessingFailed);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(UploadedVideoProcessingFailed other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -119,6 +127,7 @@ namespace KillrVideo.Uploads.Events {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
@@ -126,10 +135,12 @@ namespace KillrVideo.Uploads.Events {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -141,6 +152,7 @@ namespace KillrVideo.Uploads.Events {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -152,6 +164,7 @@ namespace KillrVideo.Uploads.Events {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(UploadedVideoProcessingFailed other) {
       if (other == null) {
         return;
@@ -170,6 +183,7 @@ namespace KillrVideo.Uploads.Events {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -200,30 +214,35 @@ namespace KillrVideo.Uploads.Events {
   /// <summary>
   ///  Event that's published when an uploaded video has started being processed
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class UploadedVideoProcessingStarted : pb::IMessage<UploadedVideoProcessingStarted> {
     private static readonly pb::MessageParser<UploadedVideoProcessingStarted> _parser = new pb::MessageParser<UploadedVideoProcessingStarted>(() => new UploadedVideoProcessingStarted());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<UploadedVideoProcessingStarted> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Uploads.Events.UploadsEventsReflection.Descriptor.MessageTypes[1]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UploadedVideoProcessingStarted() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UploadedVideoProcessingStarted(UploadedVideoProcessingStarted other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
       Timestamp = other.timestamp_ != null ? other.Timestamp.Clone() : null;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UploadedVideoProcessingStarted Clone() {
       return new UploadedVideoProcessingStarted(this);
     }
@@ -231,6 +250,7 @@ namespace KillrVideo.Uploads.Events {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -241,6 +261,7 @@ namespace KillrVideo.Uploads.Events {
     /// <summary>Field number for the "timestamp" field.</summary>
     public const int TimestampFieldNumber = 2;
     private global::Google.Protobuf.WellKnownTypes.Timestamp timestamp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Google.Protobuf.WellKnownTypes.Timestamp Timestamp {
       get { return timestamp_; }
       set {
@@ -248,10 +269,12 @@ namespace KillrVideo.Uploads.Events {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as UploadedVideoProcessingStarted);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(UploadedVideoProcessingStarted other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -264,6 +287,7 @@ namespace KillrVideo.Uploads.Events {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
@@ -271,10 +295,12 @@ namespace KillrVideo.Uploads.Events {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -286,6 +312,7 @@ namespace KillrVideo.Uploads.Events {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -297,6 +324,7 @@ namespace KillrVideo.Uploads.Events {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(UploadedVideoProcessingStarted other) {
       if (other == null) {
         return;
@@ -315,6 +343,7 @@ namespace KillrVideo.Uploads.Events {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -345,30 +374,35 @@ namespace KillrVideo.Uploads.Events {
   /// <summary>
   ///  Event that's published when an uploaded video has been successfully processed
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class UploadedVideoProcessingSucceeded : pb::IMessage<UploadedVideoProcessingSucceeded> {
     private static readonly pb::MessageParser<UploadedVideoProcessingSucceeded> _parser = new pb::MessageParser<UploadedVideoProcessingSucceeded>(() => new UploadedVideoProcessingSucceeded());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<UploadedVideoProcessingSucceeded> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Uploads.Events.UploadsEventsReflection.Descriptor.MessageTypes[2]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UploadedVideoProcessingSucceeded() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UploadedVideoProcessingSucceeded(UploadedVideoProcessingSucceeded other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
       Timestamp = other.timestamp_ != null ? other.Timestamp.Clone() : null;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UploadedVideoProcessingSucceeded Clone() {
       return new UploadedVideoProcessingSucceeded(this);
     }
@@ -376,6 +410,7 @@ namespace KillrVideo.Uploads.Events {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -386,6 +421,7 @@ namespace KillrVideo.Uploads.Events {
     /// <summary>Field number for the "timestamp" field.</summary>
     public const int TimestampFieldNumber = 2;
     private global::Google.Protobuf.WellKnownTypes.Timestamp timestamp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Google.Protobuf.WellKnownTypes.Timestamp Timestamp {
       get { return timestamp_; }
       set {
@@ -393,10 +429,12 @@ namespace KillrVideo.Uploads.Events {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as UploadedVideoProcessingSucceeded);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(UploadedVideoProcessingSucceeded other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -409,6 +447,7 @@ namespace KillrVideo.Uploads.Events {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
@@ -416,10 +455,12 @@ namespace KillrVideo.Uploads.Events {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -431,6 +472,7 @@ namespace KillrVideo.Uploads.Events {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -442,6 +484,7 @@ namespace KillrVideo.Uploads.Events {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(UploadedVideoProcessingSucceeded other) {
       if (other == null) {
         return;
@@ -460,6 +503,7 @@ namespace KillrVideo.Uploads.Events {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -490,25 +534,29 @@ namespace KillrVideo.Uploads.Events {
   /// <summary>
   ///  Event that's published when an uploaded video is available and ready for playback
   /// </summary>
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
   public sealed partial class UploadedVideoPublished : pb::IMessage<UploadedVideoPublished> {
     private static readonly pb::MessageParser<UploadedVideoPublished> _parser = new pb::MessageParser<UploadedVideoPublished>(() => new UploadedVideoPublished());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<UploadedVideoPublished> Parser { get { return _parser; } }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::KillrVideo.Uploads.Events.UploadsEventsReflection.Descriptor.MessageTypes[3]; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UploadedVideoPublished() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UploadedVideoPublished(UploadedVideoPublished other) : this() {
       VideoId = other.videoId_ != null ? other.VideoId.Clone() : null;
       Timestamp = other.timestamp_ != null ? other.Timestamp.Clone() : null;
@@ -516,6 +564,7 @@ namespace KillrVideo.Uploads.Events {
       thumbnailUrl_ = other.thumbnailUrl_;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UploadedVideoPublished Clone() {
       return new UploadedVideoPublished(this);
     }
@@ -523,6 +572,7 @@ namespace KillrVideo.Uploads.Events {
     /// <summary>Field number for the "video_id" field.</summary>
     public const int VideoIdFieldNumber = 1;
     private global::KillrVideo.Protobuf.Uuid videoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::KillrVideo.Protobuf.Uuid VideoId {
       get { return videoId_; }
       set {
@@ -533,6 +583,7 @@ namespace KillrVideo.Uploads.Events {
     /// <summary>Field number for the "timestamp" field.</summary>
     public const int TimestampFieldNumber = 2;
     private global::Google.Protobuf.WellKnownTypes.Timestamp timestamp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Google.Protobuf.WellKnownTypes.Timestamp Timestamp {
       get { return timestamp_; }
       set {
@@ -543,27 +594,31 @@ namespace KillrVideo.Uploads.Events {
     /// <summary>Field number for the "video_url" field.</summary>
     public const int VideoUrlFieldNumber = 3;
     private string videoUrl_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string VideoUrl {
       get { return videoUrl_; }
       set {
-        videoUrl_ = pb::Preconditions.CheckNotNull(value, "value");
+        videoUrl_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "thumbnail_url" field.</summary>
     public const int ThumbnailUrlFieldNumber = 4;
     private string thumbnailUrl_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string ThumbnailUrl {
       get { return thumbnailUrl_; }
       set {
-        thumbnailUrl_ = pb::Preconditions.CheckNotNull(value, "value");
+        thumbnailUrl_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as UploadedVideoPublished);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Equals(UploadedVideoPublished other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -578,6 +633,7 @@ namespace KillrVideo.Uploads.Events {
       return true;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
       if (videoId_ != null) hash ^= VideoId.GetHashCode();
@@ -587,10 +643,12 @@ namespace KillrVideo.Uploads.Events {
       return hash;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (videoId_ != null) {
         output.WriteRawTag(10);
@@ -610,6 +668,7 @@ namespace KillrVideo.Uploads.Events {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
       if (videoId_ != null) {
@@ -627,6 +686,7 @@ namespace KillrVideo.Uploads.Events {
       return size;
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(UploadedVideoPublished other) {
       if (other == null) {
         return;
@@ -651,6 +711,7 @@ namespace KillrVideo.Uploads.Events {
       }
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
