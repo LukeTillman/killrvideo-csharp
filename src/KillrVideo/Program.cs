@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using DryIoc;
 using DryIoc.MefAttributedModel;
 using KillrVideo.Cassandra;
 using KillrVideo.Comments;
-using KillrVideo.Configuration;
-using KillrVideo.Host.Config;
+using KillrVideo.Host.ServiceDiscovery;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
 using KillrVideo.Ratings;
@@ -66,12 +66,12 @@ namespace KillrVideo
             var host = container.Resolve<Host.Host>();
             host.Start();
 
-            // Calculate the web UI's address
-            var config = container.Resolve<IHostConfiguration>();
-            string uiAddress = $"http://{config.GetRequiredConfigurationValue(ConfigConstants.DockerIp)}:3000";
+            // Lookup the web UI's address
+            var serviceDiscovery = container.Resolve<IFindServices>();
+            string webLocation = $"http://{serviceDiscovery.LookupServiceAsync("web").Result.First()}";
 
             var logger = Log.ForContext<Program>();
-            logger.Information("Open {WebAddress} in a web browser to see the UI", uiAddress);
+            logger.Information("Open {WebAddress} in a web browser to see the UI", webLocation);
             logger.Information("Killrvideo has started. Press Ctrl+C to exit.");
 
             var autoResetEvent = new AutoResetEvent(false);
