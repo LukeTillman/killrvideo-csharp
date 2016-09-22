@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using DryIocAttributes;
 using Google.Protobuf;
 using KillrVideo.Host;
-using KillrVideo.Host.Config;
 using KillrVideo.Host.Tasks;
 using KillrVideo.MessageBus.Publish;
 using KillrVideo.MessageBus.Subscribe;
@@ -33,16 +32,16 @@ namespace KillrVideo.MessageBus
         /// </summary>
         public string Name => "Message Bus Server";
 
-        public Bus(IHostConfiguration hostConfig, IMessageTransport messageTransport, IHandlerFactory handlerFactory)
+        public Bus(HostOptions hostOptions, IMessageTransport messageTransport, IHandlerFactory handlerFactory)
         {
-            if (hostConfig == null) throw new ArgumentNullException(nameof(hostConfig));
+            if (hostOptions == null) throw new ArgumentNullException(nameof(hostOptions));
             if (messageTransport == null) throw new ArgumentNullException(nameof(messageTransport));
             if (handlerFactory == null) throw new ArgumentNullException(nameof(handlerFactory));
 
             _cancelBusStart = new CancellationTokenSource();
 
             // Create components for the bus from config provided
-            _subscriptionServer = new SubscriptionServer(hostConfig.ApplicationName, messageTransport, handlerFactory);
+            _subscriptionServer = new SubscriptionServer(hostOptions.AppName, messageTransport, handlerFactory);
             _publisher = new Publisher(messageTransport);
             _startedServer = Task.CompletedTask;
         }
