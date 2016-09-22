@@ -16,32 +16,32 @@ namespace KillrVideo.Host
         private static readonly ILogger Logger = Log.ForContext<Host>();
 
         private readonly IEnumerable<IHostTask> _tasks;
-        private readonly IHostConfiguration _hostConfig;
+        private readonly HostOptions _options;
 
-        public Host(IEnumerable<IHostTask> tasks, IHostConfiguration hostConfig)
+        public Host(IEnumerable<IHostTask> tasks, HostOptions options)
         {
             if (tasks == null) throw new ArgumentNullException(nameof(tasks));
-            if (hostConfig == null) throw new ArgumentNullException(nameof(hostConfig));
+            if (options == null) throw new ArgumentNullException(nameof(options));
             _tasks = tasks;
-            _hostConfig = hostConfig;
+            _options = options;
         }
 
         public void Start()
         {
-            Logger.Information("Starting Host {ApplicationName}", _hostConfig.ApplicationName);
+            Logger.Information("Starting Host {AppName}:{AppInstance}", _options.AppName, _options.AppInstance);
 
             foreach (IHostTask task in _tasks)
             {
-                Logger.Information("Starting Task {TaskName} on {ApplicationName}", task.Name, _hostConfig.ApplicationName);
+                Logger.Information("Starting Task {TaskName} on {AppName}:{AppInstance}", task.Name, _options.AppName, _options.AppInstance);
                 task.Start();
             }
 
-            Logger.Information("Started Host {ApplicationName}", _hostConfig.ApplicationName);
+            Logger.Information("Started Host {AppName}:{AppInstance}", _options.AppName, _options.AppInstance);
         }
 
         public void Stop()
         {
-            Logger.Information("Stopping Host {ApplicationName}", _hostConfig.ApplicationName);
+            Logger.Information("Stopping Host {AppName}:{AppInstance}", _options.AppName, _options.AppInstance);
 
             try
             {
@@ -53,17 +53,17 @@ namespace KillrVideo.Host
             }
             catch (Exception e)
             {
-                Logger.Error(e, "Error while stopping Host {ApplicationName}", _hostConfig.ApplicationName);
+                Logger.Error(e, "Error while stopping Host {AppName}:{AppInstance}", _options.AppName, _options.AppInstance);
             }
 
-            Logger.Information("Stopped Host {ApplicationName}", _hostConfig.ApplicationName);
+            Logger.Information("Stopped Host {AppName}:{AppInstance}", _options.AppName, _options.AppInstance);
         }
 
         private async Task StopTask(IHostTask task)
         {
-            Logger.Information("Stopping Task {TaskName} on {ApplicationName}", task.Name, _hostConfig.ApplicationName);
+            Logger.Information("Stopping Task {TaskName} on {AppName}:{AppInstance}", task.Name, _options.AppName, _options.AppInstance);
             await task.StopAsync().ConfigureAwait(false);
-            Logger.Information("Stopped Task {TaskName} on {ApplicationName}", task.Name, _hostConfig.ApplicationName);
+            Logger.Information("Stopped Task {TaskName} on {AppName}:{AppInstance}", task.Name, _options.AppName, _options.AppInstance);
         }
     }
 }

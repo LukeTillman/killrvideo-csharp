@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using DryIocAttributes;
+using KillrVideo.Host;
 using Microsoft.Extensions.Configuration;
 
 namespace KillrVideo.Configuration
@@ -11,7 +12,7 @@ namespace KillrVideo.Configuration
     public static class HostConfigurationFactory
     {
         [Export]
-        public static IConfigurationRoot GetConfigurationRoot(CommandLineArgs commandLineArgs)
+        public static IConfiguration GetConfigurationRoot(CommandLineArgs commandLineArgs)
         {
             return new ConfigurationBuilder()
                 // Add the configuration defaults
@@ -45,6 +46,14 @@ namespace KillrVideo.Configuration
                 // Allow configuration via commandline parameters
                 .AddCommandLine(commandLineArgs.Args)
                 .Build();
+        }
+
+        [Export]
+        public static HostOptions GetHostConfiguration(IConfiguration configuration)
+        {
+            var options = new HostOptions();
+            configuration.Bind(options);
+            return options;
         }
     }
 }
