@@ -129,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cassandra\BootstrapCassandra.cs" />
+    <Compile Include="Configuration\BroadcastOptions.cs" />
     <Compile Include="Configuration\CommandLineArgs.cs" />
     <Compile Include="Configuration\EnvironmentFileProvider.cs" />
     <Compile Include="Configuration\EnvironmentFileSource.cs" />

@@ -4,8 +4,10 @@ using System.ComponentModel.Composition;
 using System.IO;
 using DryIocAttributes;
 using KillrVideo.Host;
+using KillrVideo.Listeners;
 using KillrVideo.Protobuf;
 using KillrVideo.Search;
+using KillrVideo.ServiceDiscovery;
 using KillrVideo.SuggestedVideos;
 using KillrVideo.UserManagement;
 using Microsoft.Extensions.Configuration;
@@ -87,6 +89,22 @@ namespace KillrVideo.Configuration
         public static UserManagementOptions GetUserManagementOptions(IConfiguration configuration)
         {
             return GetOptions<UserManagementOptions>(configuration);
+        }
+
+        [Export]
+        public static BroadcastOptions GetBroadcastOptions(IConfiguration configuration)
+        {
+            var options = new BroadcastOptions();
+            configuration.GetSection("Broadcast").Bind(options);
+            return options;
+        }
+
+        [Export]
+        public static EtcdOptions GetEtcdOptions(IConfiguration configuration)
+        {
+            var options = new EtcdOptions();
+            configuration.GetSection("Etcd").Bind(options);
+            return options;
         }
 
         private static T GetOptions<T>(IConfiguration configuration)

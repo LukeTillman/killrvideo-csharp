@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel.Composition;
 using DryIocAttributes;
 using EtcdNet;
-using KillrVideo.Configuration;
-using KillrVideo.Host.Config;
 
 namespace KillrVideo.ServiceDiscovery
 {
@@ -13,12 +11,11 @@ namespace KillrVideo.ServiceDiscovery
     public static class EtcdClientFactory
     {
         [Export]
-        public static EtcdClient CreateEtcdClient(IHostConfiguration config)
+        public static EtcdClient CreateEtcdClient(EtcdOptions options)
         {
-            string etcdHost = config.GetRequiredConfigurationValue(ConfigConstants.DockerIp);
             var opts = new EtcdClientOpitions()
             {
-                Urls = new[] {$"http://{etcdHost}:2379"}
+                Urls = new[] {$"http://{options.IP}:{options.Port}"}
             };
             return new EtcdClient(opts);
         }

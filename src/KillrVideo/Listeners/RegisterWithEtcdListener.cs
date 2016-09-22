@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
 using System.Threading.Tasks;
 using EtcdNet;
 using Grpc.Core;
 using KillrVideo.Configuration;
-using KillrVideo.Host.Config;
+using KillrVideo.Host;
 using KillrVideo.Protobuf;
 using KillrVideo.Protobuf.Services;
 
@@ -19,33 +18,27 @@ namespace KillrVideo.Listeners
     public class RegisterWithEtcdListener : IServerListener
     {
         private readonly EtcdClient _client;
-        private readonly IHostConfiguration _config;
-        private readonly Lazy<string> _uniqueId;
+        private readonly BroadcastOptions _broadcastOptions;
+        private readonly HostOptions _hostOptions;
 
-        public RegisterWithEtcdListener(EtcdClient client, IHostConfiguration config)
+        public RegisterWithEtcdListener(EtcdClient client, BroadcastOptions broadcastOptions, HostOptions hostOptions)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
-            if (config == null) throw new ArgumentNullException(nameof(config));
+            if (broadcastOptions == null) throw new ArgumentNullException(nameof(broadcastOptions));
+            if (hostOptions == null) throw new ArgumentNullException(nameof(hostOptions));
             _client = client;
-            _config = config;
-            _uniqueId = new Lazy<string>(() => $"{_config.ApplicationName}:{_config.ApplicationInstanceId}");
+            _broadcastOptions = broadcastOptions;
+            _hostOptions = hostOptions;
         }
 
         public void OnStart(IEnumerable<ServerPort> serverPorts, IEnumerable<IGrpcServerService> servicesStarted)
         {
-            string ip = _config.GetRequiredConfigurationValue(ConfigConstants.HostIp);
-        
-            int[] ports = serverPorts.Select(p => p.Port).ToArray();
-
             // Register each service that started with etcd using the host IP setting
             var registerTasks = new List<Task>();
             foreach (IGrpcServerService service in servicesStarted)
             {
-                foreach (int port in ports)
-                {
-                    var t = _client.SetNodeAsync(GetServiceKey(service), $"{ip}:{port}");
-                    registerTasks.Add(t);
-                }
+                var t = _client.SetNodeAsync(GetServiceKey(service), $"{_broadcastOptions.IP}:{_broadcastOptions.Port}");
+                registerTasks.Add(t);
             }
             
             Task.WaitAll(registerTasks.ToArray());
@@ -66,7 +59,7 @@ namespace KillrVideo.Listeners
 
         private string GetServiceKey(IGrpcServerService service)
         {
-            return $"/killrvideo/services/{service.Descriptor.Name}/{_uniqueId.Value}";
+            return $"/killrvideo/services/{service.Descriptor.Name}/{_hostOptions.AppName}-{_hostOptions.AppInstance}";
         }
     }
 }
