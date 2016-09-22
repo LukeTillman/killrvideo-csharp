@@ -4,8 +4,6 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Grpc.Core;
-using KillrVideo.Host;
-using KillrVideo.Host.Config;
 using KillrVideo.Host.Tasks;
 using KillrVideo.Protobuf.Services;
 using Serilog;
@@ -18,13 +16,10 @@ namespace KillrVideo.Protobuf
     [Export(typeof(IHostTask))]
     public class GrpcServerTask : IHostTask
     {
-        public const string AddressConfigKey = "GrpcListenAddress";
-        public const string PortConfigKey = "GrpcListenPort";
-
         private static readonly ILogger Logger = Log.ForContext<GrpcServerTask>();
 
         private readonly IEnumerable<IGrpcServerService> _availableServices;
-        private readonly IHostConfiguration _hostConfiguration;
+        private readonly ListenOptions _listenOptions;
         private readonly Server _server;
         private readonly List<IGrpcServerService> _startedServices;
 
@@ -33,12 +28,12 @@ namespace KillrVideo.Protobuf
         [Import]
         public IEnumerable<IServerListener> Listeners { get; set; }
 
-        public GrpcServerTask(IEnumerable<IGrpcServerService> availableServices, IHostConfiguration hostConfiguration)
+        public GrpcServerTask(IEnumerable<IGrpcServerService> availableServices, ListenOptions listenOptions)
         {
             if (availableServices == null) throw new ArgumentNullException(nameof(availableServices));
-            if (hostConfiguration == null) throw new ArgumentNullException(nameof(hostConfiguration));
+            if (listenOptions == null) throw new ArgumentNullException(nameof(listenOptions));
             _availableServices = availableServices;
-            _hostConfiguration = hostConfiguration;
+            _listenOptions = listenOptions;
 
             GrpcEnvironment.SetLogger(new SerilogGrpcLogger(Log.Logger));
             _server = new Server();
@@ -48,12 +43,7 @@ namespace KillrVideo.Protobuf
 
         public void Start()
         {
-            // Get the host/port configuration for the Grpc Server
-            string host = _hostConfiguration.GetConfigurationValueOrDefault(AddressConfigKey, "0.0.0.0");
-            string portVal = _hostConfiguration.GetConfigurationValueOrDefault(PortConfigKey, "50101");
-            int port = int.Parse(portVal);
-
-            _server.Ports.Add(host, port, ServerCredentials.Insecure);
+            _server.Ports.Add(_listenOptions.IP, _listenOptions.Port, ServerCredentials.Insecure);
 
             // Add services to the server
             foreach (IGrpcServerService service in _availableServices)
@@ -75,7 +65,7 @@ namespace KillrVideo.Protobuf
                 throw new InvalidOperationException("No services found to start");
 
             // Start the server
-            Logger.Debug("Starting Grpc Server on {Host}:{Port} with {ServicesCount} services", host, port, _startedServices.Count);
+            Logger.Debug("Starting Grpc Server on {Host}:{Port} with {ServicesCount} services", _listenOptions.IP, _listenOptions.Port, _startedServices.Count);
             _server.Start();
             OnStart();
             Logger.Debug("Started Grpc Server");

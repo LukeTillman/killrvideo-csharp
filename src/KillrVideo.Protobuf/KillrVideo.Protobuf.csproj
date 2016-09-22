@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Clients\ChannelFactory.cs" />
     <Compile Include="Clients\IChannelFactory.cs" />
+    <Compile Include="ListenOptions.cs" />
     <Compile Include="GrpcServerTask.cs" />
     <Compile Include="IServerListener.cs" />
     <Compile Include="SerilogLogger.cs" />

@@ -4,10 +4,14 @@ using System.ComponentModel.Composition;
 using System.IO;
 using DryIocAttributes;
 using KillrVideo.Host;
+using KillrVideo.Protobuf;
 using Microsoft.Extensions.Configuration;
 
 namespace KillrVideo.Configuration
 {
+    /// <summary>
+    /// Class that contains static factory methods for getting the various options/config objects needed by the application.
+    /// </summary>
     [Export, AsFactory]
     public static class HostConfigurationFactory
     {
@@ -49,10 +53,18 @@ namespace KillrVideo.Configuration
         }
 
         [Export]
-        public static HostOptions GetHostConfiguration(IConfiguration configuration)
+        public static HostOptions GetHostOptions(IConfiguration configuration)
         {
             var options = new HostOptions();
             configuration.Bind(options);
+            return options;
+        }
+
+        [Export]
+        public static ListenOptions GetListenOptions(IConfiguration configuration)
+        {
+            var options = new ListenOptions();
+            configuration.GetSection("Listen").Bind(options);
             return options;
         }
     }
