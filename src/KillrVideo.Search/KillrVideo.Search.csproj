@@ -95,7 +95,7 @@
     <Compile Include="DataStaxEnterpriseSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="protos\VideoCatalogEvents.generated.cs" />
-    <Compile Include="SearchConfig.cs" />
+    <Compile Include="SearchOptions.cs" />
     <Compile Include="SearchVideosByTag.cs" />
   </ItemGroup>
   <ItemGroup>

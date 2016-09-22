@@ -52,7 +52,7 @@ namespace KillrVideo.Protobuf
                 Logger.Debug("Found GrpcServerService {ServiceTypeName}", serviceTypeName);
 
                 var conditionalService = service as IConditionalGrpcServerService;
-                bool shouldRun = conditionalService?.ShouldRun(_hostConfiguration) ?? true;
+                bool shouldRun = conditionalService?.ShouldRun() ?? true;
                 if (shouldRun)
                 {
                     Logger.Debug("Adding GrpcServerService {ServiceTypeName}", serviceTypeName);

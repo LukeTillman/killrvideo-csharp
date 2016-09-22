@@ -1,6 +1,4 @@
-﻿using KillrVideo.Host.Config;
-
-namespace KillrVideo.Protobuf.Services
+﻿namespace KillrVideo.Protobuf.Services
 {
     /// <summary>
     /// Interface for Grpc services that may or may not run based on the host's configuration.
@@ -8,8 +6,8 @@ namespace KillrVideo.Protobuf.Services
     public interface IConditionalGrpcServerService : IGrpcServerService
     {
         /// <summary>
-        /// Returns true if this service should run given the configuration of the host.
+        /// Returns true if this service should run.
         /// </summary>
-        bool ShouldRun(IHostConfiguration hostConfiguration);
+        bool ShouldRun();
     }
 }

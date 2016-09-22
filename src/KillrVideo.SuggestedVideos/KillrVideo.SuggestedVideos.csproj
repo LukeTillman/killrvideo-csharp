@@ -78,7 +78,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="protos\SuggestedVideosService.generated.cs" />
     <Compile Include="protos\SuggestedVideosServiceGrpc.cs" />
-    <Compile Include="SuggestionsConfig.cs" />
+    <Compile Include="SuggestionsOptions.cs" />
     <Compile Include="SuggestVideosByTag.cs" />
     <Compile Include="DataStaxEnterpriseSuggestedVideos.cs" />
   </ItemGroup>

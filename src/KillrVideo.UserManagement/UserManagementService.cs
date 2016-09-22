@@ -7,7 +7,6 @@ using Google.Protobuf.Reflection;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
-using KillrVideo.Host.Config;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
 using KillrVideo.Protobuf.Services;
@@ -23,18 +22,21 @@ namespace KillrVideo.UserManagement
     {
         private readonly ISession _session;
         private readonly IBus _bus;
+        private readonly UserManagementOptions _options;
         private readonly PreparedStatementCache _statementCache;
 
         public ServiceDescriptor Descriptor => UserManagementService.Descriptor;
 
-        public UserManagementServiceImpl(ISession session, PreparedStatementCache statementCache, IBus bus)
+        public UserManagementServiceImpl(ISession session, PreparedStatementCache statementCache, IBus bus, UserManagementOptions options)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             if (bus == null) throw new ArgumentNullException(nameof(bus));
+            if (options == null) throw new ArgumentNullException(nameof(options));
             _session = session;
             _statementCache = statementCache;
             _bus = bus;
+            _options = options;
         }
 
         /// <summary>
@@ -48,10 +50,10 @@ namespace KillrVideo.UserManagement
         /// <summary>
         /// Returns true if this service should run given the configuration of the host.
         /// </summary>
-        public bool ShouldRun(IHostConfiguration hostConfig)
+        public bool ShouldRun()
         {
             // Use this implementation when LINQ is not enabled or not present in the host config
-            return UserManagementConfig.UseLinq(hostConfig) == false;
+            return _options.LinqEnabled == false;
         }
 
         /// <summary>

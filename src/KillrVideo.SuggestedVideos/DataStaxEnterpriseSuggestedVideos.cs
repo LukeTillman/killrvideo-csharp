@@ -8,7 +8,6 @@ using Google.Protobuf.Reflection;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
-using KillrVideo.Host.Config;
 using KillrVideo.Protobuf;
 using KillrVideo.Protobuf.Services;
 using KillrVideo.SuggestedVideos.MLT;
@@ -24,18 +23,21 @@ namespace KillrVideo.SuggestedVideos
     {
         private readonly ISession _session;
         private readonly IRestClient _restClient;
+        private readonly SuggestionsOptions _options;
         private readonly PreparedStatementCache _statementCache;
 
         public ServiceDescriptor Descriptor => SuggestedVideoService.Descriptor;
 
-        public DataStaxEnterpriseSuggestedVideos(ISession session, PreparedStatementCache statementCache, IRestClient restClient)
+        public DataStaxEnterpriseSuggestedVideos(ISession session, PreparedStatementCache statementCache, IRestClient restClient, SuggestionsOptions options)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             if (restClient == null) throw new ArgumentNullException(nameof(restClient));
+            if (options == null) throw new ArgumentNullException(nameof(options));
             _session = session;
             _statementCache = statementCache;
             _restClient = restClient;
+            _options = options;
         }
 
         /// <summary>
@@ -49,10 +51,10 @@ namespace KillrVideo.SuggestedVideos
         /// <summary>
         /// Returns true if this service should run given the configuration of the host.
         /// </summary>
-        public bool ShouldRun(IHostConfiguration hostConfig)
+        public bool ShouldRun()
         {
             // Use this implementation when DSE Search and Spark are enabled in the host config
-            return SuggestionsConfig.UseDse(hostConfig);
+            return _options.DseEnabled;
         }
 
         /// <summary>

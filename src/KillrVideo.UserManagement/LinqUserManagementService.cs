@@ -9,7 +9,6 @@ using Google.Protobuf.Reflection;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
-using KillrVideo.Host.Config;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
 using KillrVideo.Protobuf.Services;
@@ -27,6 +26,7 @@ namespace KillrVideo.UserManagement
     {
         private readonly ISession _session;
         private readonly IBus _bus;
+        private readonly UserManagementOptions _options;
         private readonly PreparedStatementCache _statementCache;
 
         private readonly Table<LinqDtos.UserProfile> _userProfileTable;
@@ -34,14 +34,16 @@ namespace KillrVideo.UserManagement
 
         public ServiceDescriptor Descriptor => UserManagementService.Descriptor;
 
-        public LinqUserManagementService(ISession session, PreparedStatementCache statementCache, IBus bus)
+        public LinqUserManagementService(ISession session, PreparedStatementCache statementCache, IBus bus, UserManagementOptions options)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             if (bus == null) throw new ArgumentNullException(nameof(bus));
+            if (options == null) throw new ArgumentNullException(nameof(options));
             _session = session;
             _statementCache = statementCache;
             _bus = bus;
+            _options = options;
 
             _userProfileTable = new Table<LinqDtos.UserProfile>(session);
             _userCredentialsTable = new Table<UserCredentials>(session);
@@ -58,10 +60,10 @@ namespace KillrVideo.UserManagement
         /// <summary>
         /// Returns true if this service should run given the configuration of the host.
         /// </summary>
-        public bool ShouldRun(IHostConfiguration hostConfig)
+        public bool ShouldRun()
         {
             // Use this implementation when LINQ has been enabled in the host
-            return UserManagementConfig.UseLinq(hostConfig);
+            return _options.LinqEnabled;
         }
 
         /// <summary>

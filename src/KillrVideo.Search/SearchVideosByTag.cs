@@ -7,7 +7,6 @@ using Google.Protobuf.Reflection;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
-using KillrVideo.Host.Config;
 using KillrVideo.Protobuf;
 using KillrVideo.Protobuf.Services;
 
@@ -21,15 +20,18 @@ namespace KillrVideo.Search
     {
         private readonly ISession _session;
         private readonly PreparedStatementCache _statementCache;
+        private readonly SearchOptions _options;
 
         public ServiceDescriptor Descriptor => SearchService.Descriptor;
 
-        public SearchVideosByTag(ISession session, PreparedStatementCache statementCache)
+        public SearchVideosByTag(ISession session, PreparedStatementCache statementCache, SearchOptions options)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
+            if (options == null) throw new ArgumentNullException(nameof(options));
             _session = session;
             _statementCache = statementCache;
+            _options = options;
         }
 
         /// <summary>
@@ -43,10 +45,10 @@ namespace KillrVideo.Search
         /// <summary>
         /// Returns true if this service should run given the configuration of the host.
         /// </summary>
-        public bool ShouldRun(IHostConfiguration hostConfig)
+        public bool ShouldRun()
         {
             // Use this implementation when DSE Search is not enabled or not present in the host config
-            return SearchConfig.UseDseSearch(hostConfig) == false;
+            return _options.DseEnabled == false;
         }
 
         /// <summary>

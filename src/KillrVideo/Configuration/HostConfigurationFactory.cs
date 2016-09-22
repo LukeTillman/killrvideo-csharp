@@ -5,6 +5,9 @@ using System.IO;
 using DryIocAttributes;
 using KillrVideo.Host;
 using KillrVideo.Protobuf;
+using KillrVideo.Search;
+using KillrVideo.SuggestedVideos;
+using KillrVideo.UserManagement;
 using Microsoft.Extensions.Configuration;
 
 namespace KillrVideo.Configuration
@@ -41,7 +44,9 @@ namespace KillrVideo.Configuration
                     // The IP address to broadcast for gRPC services (i.e. register with service discovery)
                     { "Broadcast:IP", "TODO: HOSTIP" },
                     // The Port to broadcast for gRPC services (i.e. register with service discovery)
-                    { "Broadcast:Port", "50101" }
+                    { "Broadcast:Port", "50101" },
+                    // Whether to use any LINQ implementations of services
+                    { "LinqEnabled", "false" }
                 })
                 // Allow configuration from the Docker .env file
                 .Add(new EnvironmentFileSource(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".\\.env")))
@@ -55,9 +60,7 @@ namespace KillrVideo.Configuration
         [Export]
         public static HostOptions GetHostOptions(IConfiguration configuration)
         {
-            var options = new HostOptions();
-            configuration.Bind(options);
-            return options;
+            return GetOptions<HostOptions>(configuration);
         }
 
         [Export]
@@ -65,6 +68,32 @@ namespace KillrVideo.Configuration
         {
             var options = new ListenOptions();
             configuration.GetSection("Listen").Bind(options);
+            return options;
+        }
+
+        [Export]
+        public static SearchOptions GetSearchOptions(IConfiguration configuration)
+        {
+            return GetOptions<SearchOptions>(configuration);
+        }
+
+        [Export]
+        public static SuggestionsOptions GetSuggestionsOptions(IConfiguration configuration)
+        {
+            return GetOptions<SuggestionsOptions>(configuration);
+        }
+
+        [Export]
+        public static UserManagementOptions GetUserManagementOptions(IConfiguration configuration)
+        {
+            return GetOptions<UserManagementOptions>(configuration);
+        }
+
+        private static T GetOptions<T>(IConfiguration configuration)
+            where T : new()
+        {
+            var options = new T();
+            configuration.Bind(options);
             return options;
         }
     }
