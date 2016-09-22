@@ -1,59 +1,50 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
-using System.Text;
 using DryIocAttributes;
-using KillrVideo.Host.Config;
+using Microsoft.Extensions.Configuration;
 
 namespace KillrVideo.Configuration
 {
-    /// <summary>
-    /// Host configuration for the application.
-    /// </summary>
     [Export, AsFactory]
     public static class HostConfigurationFactory
     {
-        /// <summary>
-        /// Get host settings from a combination of environment variables and app settings.
-        /// </summary>
         [Export]
-        public static IHostConfiguration GetHostConfiguration()
+        public static IConfigurationRoot GetConfigurationRoot(CommandLineArgs commandLineArgs)
         {
-            ReadEnvironmentFile();
-            var sources = new IHostConfigurationSource[]
-            {
-                new EnvironmentConfigurationSource()
-            };
-            return new HostConfiguration(sources, "KillrVideo", "1");
-        }
-
-        private static void ReadEnvironmentFile()
-        {
-            // We should have a .env file, so read values from that and set Environment variables appropriately
-            var envFile = new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".\\.env"));
-            using (FileStream readStream = envFile.OpenRead())
-            using (var reader = new StreamReader(readStream, Encoding.UTF8))
-            {
-                while (reader.EndOfStream == false)
+            return new ConfigurationBuilder()
+                // Add the configuration defaults
+                .AddInMemoryCollection(new Dictionary<string, string>
                 {
-                    string config = reader.ReadLine();
-
-                    // Skip empty lines
-                    if (string.IsNullOrWhiteSpace(config))
-                        continue;
-
-                    // Skip comments
-                    if (config.StartsWith("#"))
-                        continue;
-
-                    // Split config keys and values and add to dictionary
-                    string[] configParts = config.Split('=');
-                    if (configParts.Length != 2)
-                        throw new InvalidOperationException($"Bad value {config} in {envFile.FullName}");
-
-                    Environment.SetEnvironmentVariable(configParts[0], configParts[1]);
-                }
-            }
+                    // The default logging output level
+                    { "LoggingLevel", "verbose" },
+                    // Whether to use DSE implementations of services
+                    { "DseEnabled", "false" },
+                    // The name of this application
+                    { "AppName", "killrvideo-csharp" },
+                    // A unique instance number for this application
+                    { "AppInstance", "1" },
+                    // The IP address for etcd to do service discovery
+                    { "Etcd:IP", "TODO: DOCKERIP" },
+                    // The port for etcd to do service discovery
+                    { "Etcd:Port", "2379" },
+                    // The IP address for gRPC services to listen on
+                    { "Listen:IP", "0.0.0.0" },
+                    // The Port for gRPC services to listen on
+                    { "Listen:Port", "50101" },
+                    // The IP address to broadcast for gRPC services (i.e. register with service discovery)
+                    { "Broadcast:IP", "TODO: HOSTIP" },
+                    // The Port to broadcast for gRPC services (i.e. register with service discovery)
+                    { "Broadcast:Port", "50101" }
+                })
+                // Allow configuration from the Docker .env file
+                .Add(new EnvironmentFileSource(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".\\.env")))
+                // Allow configuration via environment variables
+                .AddEnvironmentVariables("KILLRVIDEO")
+                // Allow configuration via commandline parameters
+                .AddCommandLine(commandLineArgs.Args)
+                .Build();
         }
     }
 }

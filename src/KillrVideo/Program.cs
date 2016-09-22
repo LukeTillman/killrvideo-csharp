@@ -6,6 +6,7 @@ using DryIoc;
 using DryIoc.MefAttributedModel;
 using KillrVideo.Cassandra;
 using KillrVideo.Comments;
+using KillrVideo.Configuration;
 using KillrVideo.Host.ServiceDiscovery;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
@@ -50,8 +51,9 @@ namespace KillrVideo
                 .WriteTo.ColoredConsole(outputTemplate: "{Timestamp:HH:mm:ss} [{SourceContext:l}] {Message}{NewLine}{Exception}")
                 .CreateLogger();
 
-            // Create IoC container
+            // Create IoC container and add commandline args to it
             IContainer container = CreateContainer();
+            container.RegisterInstance(new CommandLineArgs(args));
 
             // Let the container pick up any components using the MEF-like attributes in referenced assemblies (this will pick up any 
             // exported Grpc server definitions, message bus handlers, and background tasks in the referenced services)

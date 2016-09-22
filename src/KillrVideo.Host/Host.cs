@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
-using KillrVideo.Host.Config;
 using KillrVideo.Host.Tasks;
 using Serilog;
 
