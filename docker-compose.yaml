@@ -16,7 +16,7 @@ services:
 
   # The sample data generator
   generator:
-    image: killrvideo/killrvideo-generator:1.2.0
+    image: killrvideo/killrvideo-generator:1.2.1
     depends_on:
     - dse
     - etcd
