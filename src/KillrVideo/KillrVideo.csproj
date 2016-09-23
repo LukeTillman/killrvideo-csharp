@@ -129,7 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cassandra\BootstrapCassandra.cs" />
-    <Compile Include="Configuration\BroadcastOptions.cs" />
+    <Compile Include="Listeners\BroadcastOptions.cs" />
     <Compile Include="Configuration\CommandLineArgs.cs" />
     <Compile Include="Configuration\EnvironmentFileProvider.cs" />
     <Compile Include="Configuration\EnvironmentFileSource.cs" />
@@ -141,6 +141,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceDiscovery\EtcdClientFactory.cs" />
+    <Compile Include="ServiceDiscovery\EtcdOptions.cs" />
     <Compile Include="ServiceDiscovery\EtcdServiceDiscovery.cs" />
   </ItemGroup>
   <ItemGroup>

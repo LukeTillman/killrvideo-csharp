@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 
 namespace KillrVideo.Configuration
@@ -8,19 +9,17 @@ namespace KillrVideo.Configuration
     /// </summary>
     public class EnvironmentFileSource : IConfigurationSource
     {
-        public string FilePath { get; }
+        public IDictionary<string, string> Mappings { get; set; }
 
-        public EnvironmentFileSource(string filePath)
+        public EnvironmentFileSource(IDictionary<string, string> mappings)
         {
-            if (string.IsNullOrWhiteSpace(filePath))
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(filePath));
-
-            FilePath = filePath;
+            Mappings = mappings;
+            if (mappings == null) throw new ArgumentNullException(nameof(mappings));
         }
 
         public IConfigurationProvider Build(IConfigurationBuilder builder)
         {
-            return new EnvironmentFileProvider(FilePath);
+            return new EnvironmentFileProvider(Mappings);
         }
     }
 }
