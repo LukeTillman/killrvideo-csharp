@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -85,6 +86,7 @@ namespace KillrVideo.Search
 
             // The driver's built-in paging feature just works with DSE Search Solr paging which is pretty cool
             IStatement bound = prepared.Bind(solrQuery)
+                                       .SetConsistencyLevel(ConsistencyLevel.LocalOne)      // Search queries only support One / LocalOne
                                        .SetAutoPage(false)
                                        .SetPageSize(request.PageSize);
 
@@ -119,7 +121,7 @@ namespace KillrVideo.Search
             restRequest.AddParameter("spellcheck.build", "true");
             restRequest.AddParameter("spellcheck.q", request.Query);
             IRestResponse<SearchSuggestionResult> restResponse = await restClient.ExecuteTaskAsync<SearchSuggestionResult>(restRequest).ConfigureAwait(false);
-            
+
             // Start with an empty response (i.e. no suggestions)
             var response = new GetQuerySuggestionsResponse { Query = request.Query };
 
