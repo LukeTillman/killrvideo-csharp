@@ -86,9 +86,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dtos\SearchSpellcheck.cs" />
-    <Compile Include="Dtos\SearchSpellcheckSuggestions.cs" />
-    <Compile Include="Dtos\SearchSuggestionResult.cs" />
+    <Compile Include="Dtos\SearchResult.cs" />
+    <Compile Include="Dtos\Suggestion.cs" />
+    <Compile Include="Dtos\SuggestionsResult.cs" />
+    <Compile Include="Dtos\SuggestResult.cs" />
     <Compile Include="Handlers\UpdateSearchOnVideoAdded.cs" />
     <Compile Include="protos\SearchService.generated.cs" />
     <Compile Include="protos\SearchServiceGrpc.cs" />

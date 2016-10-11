@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace KillrVideo.Search.Dtos
 {
     [Serializable]
-    public class SearchSpellcheckSuggestions
+    public class SuggestionsResult
     {
         public int NumFound { get; set; }
-        public List<string> Suggestion { get; set; }
+        public List<Suggestion> Suggestions { get; set; }
     }
 }

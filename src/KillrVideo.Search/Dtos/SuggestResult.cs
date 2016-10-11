@@ -4,8 +4,8 @@ using System.Collections.Generic;
 namespace KillrVideo.Search.Dtos
 {
     [Serializable]
-    public class SearchSpellcheck
+    public class SuggestResult
     {
-        public List<string> Suggestions { get; set; }
+        public Dictionary<string, SuggestionsResult> SearchSuggester { get; set; }
     }
 }

@@ -117,10 +117,11 @@ namespace KillrVideo.Search
             var restRequest = new RestRequest("killrvideo.videos/suggest") { Method = Method.POST };
             restRequest.AddParameter("wt", "json");
 
-            // Requires a build after new names are added, added on a safe side.
-            restRequest.AddParameter("spellcheck.build", "true");
-            restRequest.AddParameter("spellcheck.q", request.Query);
-            IRestResponse<SearchSuggestionResult> restResponse = await restClient.ExecuteTaskAsync<SearchSuggestionResult>(restRequest).ConfigureAwait(false);
+            // We'll build on every query, but in a real production app, we'd probably only do this occasionally or use the Solr config to setup
+            // build on commit/optimize of the index
+            restRequest.AddParameter("suggest.build", "true");
+            restRequest.AddParameter("suggest.q", request.Query);
+            IRestResponse<SearchResult> restResponse = await restClient.ExecuteTaskAsync<SearchResult>(restRequest).ConfigureAwait(false);
 
             // Start with an empty response (i.e. no suggestions)
             var response = new GetQuerySuggestionsResponse { Query = request.Query };
@@ -139,38 +140,10 @@ namespace KillrVideo.Search
                 return response;
             }
 
-            // Success
-
-            /* 
-              The spellcheck.suggestions object that comes back in the JSON looks something like this (for example, searching for 'cat'):
-
-                "suggestions": [
-                  "cat",
-                  {
-                    "numFound": 1,
-                    "startOffset": 0,
-                    "endOffset": 3,
-                    "suggestion": [
-                      "cat summer video teaser"
-                    ]
-                  }
-                ]
-              
-              Yes, that's an array of mixed objects (seriously, WTF kind of an API is that Solr?!). Since the array is mixed, we deserialized
-              it as a List<string> where the second element will be the JSON string with the actual data we care about. We need to now run
-              deserialization again on that to get at the actual data.
-            */
-            if (restResponse.Data.Spellcheck.Suggestions.Count >= 2)
-            {
-                // Deserialize the embedded object
-                var suggestions = JsonConvert.DeserializeObject<SearchSpellcheckSuggestions>(restResponse.Data.Spellcheck.Suggestions.Last());
-
-                // Add to response if the object deserialized correctly
-                if (suggestions.Suggestion != null)
-                {
-                    response.Suggestions.Add(suggestions.Suggestion);
-                }
-            }
+            // Success, add responses from DSE Search to gRPC response
+            response.Suggestions.Add(
+                restResponse.Data.Suggest.SearchSuggester[request.Query].Suggestions.Select(s => s.Term)
+            );
 
             return response;
         }
