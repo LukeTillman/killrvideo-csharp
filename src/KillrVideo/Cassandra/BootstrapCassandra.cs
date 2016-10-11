@@ -35,9 +35,7 @@ namespace KillrVideo.Cassandra
             {
                 try
                 {
-                    await CreateKeyspaceIfNotExists().ConfigureAwait(false);
                     session = await _sessionFactory.GetSessionAsync("killrvideo").ConfigureAwait(false);
-                    await CreateSchemaIfNotExists(session);
                 }
                 catch (Exception e)
                 {
@@ -56,53 +54,6 @@ namespace KillrVideo.Cassandra
             }
 
             container.RegisterInstance(session);
-        }
-        
-        private async Task CreateKeyspaceIfNotExists()
-        {
-            ISession session = await _sessionFactory.GetSessionAsync(string.Empty).ConfigureAwait(false);
-            session.CreateKeyspaceIfNotExists("killrvideo", new Dictionary<string, string> { { "class", "SimpleStrategy" }, { "replication_factor", "1" } });
-        }
-
-        private async Task CreateSchemaIfNotExists(ISession session)
-        {
-            // Read all statements from the schema.cql file
-            var statements = new List<string>();
-            var schemaPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "schema.cql");
-            using (var stream = File.OpenRead(schemaPath))
-            using (var reader = new StreamReader(stream, Encoding.UTF8))
-            {
-                var statement = new StringBuilder();
-
-                while (reader.EndOfStream == false)
-                {
-                    string line = reader.ReadLine();
-
-                    // Skip blank lines
-                    if (string.IsNullOrWhiteSpace(line))
-                        continue;
-
-                    // Skip comments
-                    if (line.StartsWith("//"))
-                        continue;
-
-                    // Add to current statement
-                    statement.AppendLine(line);
-
-                    // Is this the end of a statement?
-                    if (line.TrimEnd().EndsWith(";"))
-                    {
-                        statements.Add(statement.ToString());
-                        statement.Clear();
-                    }
-                }
-            }
-
-            // Execute all the statements from the file in order
-            foreach (string statement in statements)
-            {
-                await session.ExecuteAsync(new SimpleStatement(statement)).ConfigureAwait(false);
-            }
         }
     }
 }
