@@ -8,6 +8,6 @@
         /// <summary>
         /// Whether DSE Search is enabled.
         /// </summary>
-        public bool DseEnabled { get; }
+        public bool DseEnabled { get; set; }
     }
 }

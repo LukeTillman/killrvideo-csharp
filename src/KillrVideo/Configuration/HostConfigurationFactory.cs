@@ -38,7 +38,7 @@ namespace KillrVideo.Configuration
                     // The default logging output level
                     { "LoggingLevel", "verbose" },
                     // Whether to use DSE implementations of services
-                    { "DseEnabled", "false" },
+                    { "DseEnabled", "true" },
                     // The name of this application
                     { "AppName", "killrvideo-csharp" },
                     // A unique instance number for this application

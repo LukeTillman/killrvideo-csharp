@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Net;
@@ -8,6 +9,7 @@ using Google.Protobuf.Reflection;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
+using KillrVideo.Host.ServiceDiscovery;
 using KillrVideo.Protobuf;
 using KillrVideo.Protobuf.Services;
 using KillrVideo.Search.Dtos;
@@ -24,22 +26,30 @@ namespace KillrVideo.Search
     public class DataStaxEnterpriseSearch : SearchService.SearchServiceBase, IConditionalGrpcServerService
     {
         private readonly ISession _session;
-        private readonly IRestClient _restClient;
+        private readonly Func<Uri, IRestClient> _createRestClient;
         private readonly SearchOptions _options;
         private readonly PreparedStatementCache _statementCache;
+        private readonly IFindServices _serviceDiscovery;
+
+        private Task<Uri> _dseSearchUri;
 
         public ServiceDescriptor Descriptor => SearchService.Descriptor;
 
-        public DataStaxEnterpriseSearch(ISession session, PreparedStatementCache statementCache, IRestClient restClient, SearchOptions options)
+        public DataStaxEnterpriseSearch(ISession session, PreparedStatementCache statementCache,
+                                        IFindServices serviceDiscovery, Func<Uri, IRestClient> createRestClient,
+                                        SearchOptions options)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
-            if (restClient == null) throw new ArgumentNullException(nameof(restClient));
+            if (serviceDiscovery == null) throw new ArgumentNullException(nameof(serviceDiscovery));
+            if (createRestClient == null) throw new ArgumentNullException(nameof(createRestClient));
             if (options == null) throw new ArgumentNullException(nameof(options));
             _session = session;
             _statementCache = statementCache;
-            _restClient = restClient;
+            _serviceDiscovery = serviceDiscovery;
+            _createRestClient = createRestClient;
             _options = options;
+            _dseSearchUri = null;
         }
 
         /// <summary>
@@ -98,18 +108,17 @@ namespace KillrVideo.Search
         /// </summary>
         public override async Task<GetQuerySuggestionsResponse> GetQuerySuggestions(GetQuerySuggestionsRequest request, ServerCallContext context)
         {
-
-            // Set the base URL of the REST client to use the first node in the Cassandra cluster
-             string nodeIp = _session.Cluster.AllHosts().First().Address.Address.ToString();
-            _restClient.BaseUrl = new Uri($"http://{nodeIp}:8983/solr");
-
+            // Get REST client for dse-search service
+            Uri searchUri = await GetDseSearchUri().ConfigureAwait(false);
+            IRestClient restClient = _createRestClient(searchUri);
+            
             var restRequest = new RestRequest("killrvideo.videos/suggest") { Method = Method.POST };
             restRequest.AddParameter("wt", "json");
 
             // Requires a build after new names are added, added on a safe side.
             restRequest.AddParameter("spellcheck.build", "true");
             restRequest.AddParameter("spellcheck.q", request.Query);
-            IRestResponse<SearchSuggestionResult> restResponse = await _restClient.ExecuteTaskAsync<SearchSuggestionResult>(restRequest).ConfigureAwait(false);
+            IRestResponse<SearchSuggestionResult> restResponse = await restClient.ExecuteTaskAsync<SearchSuggestionResult>(restRequest).ConfigureAwait(false);
             
             // Start with an empty response (i.e. no suggestions)
             var response = new GetQuerySuggestionsResponse { Query = request.Query };
@@ -162,6 +171,25 @@ namespace KillrVideo.Search
             }
 
             return response;
+        }
+
+        private Task<Uri> GetDseSearchUri()
+        {
+            // Try to minimize the number of times we lookup the search service by caching and reusing the task
+            Task<Uri> uri = _dseSearchUri;
+            if (uri != null && uri.IsFaulted == false)
+                return uri;
+
+            // It's not the end of the world if we have a race here and multiple threads do lookups
+            uri = LookupDseSearch();
+            _dseSearchUri = uri;
+            return uri;
+        }
+
+        private async Task<Uri> LookupDseSearch()
+        {
+            IEnumerable<string> ipAndPorts = await _serviceDiscovery.LookupServiceAsync("dse-search").ConfigureAwait(false);
+            return new Uri($"http://{ipAndPorts.First()}/solr");
         }
         
         private static SearchResultsVideoPreview MapRowToVideoPreview(Row row)

@@ -99,7 +99,7 @@ namespace KillrVideo
             var container = new Container(rules => rules.WithResolveIEnumerableAsLazyEnumerable());
             
             // Register REST client
-            container.Register<IRestClient, RestClient>(Made.Of(() => new RestClient()));
+            container.Register<IRestClient, RestClient>(made: Made.Of(() => new RestClient(Arg.Of<Uri>())));
 
             return container;
         }

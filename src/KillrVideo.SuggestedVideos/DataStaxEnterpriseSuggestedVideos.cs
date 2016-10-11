@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Net;
@@ -8,6 +9,7 @@ using Google.Protobuf.Reflection;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using KillrVideo.Cassandra;
+using KillrVideo.Host.ServiceDiscovery;
 using KillrVideo.Protobuf;
 using KillrVideo.Protobuf.Services;
 using KillrVideo.SuggestedVideos.MLT;
@@ -22,22 +24,30 @@ namespace KillrVideo.SuggestedVideos
     public class DataStaxEnterpriseSuggestedVideos : SuggestedVideoService.SuggestedVideoServiceBase, IConditionalGrpcServerService
     {
         private readonly ISession _session;
-        private readonly IRestClient _restClient;
+        private readonly Func<Uri, IRestClient> _createRestClient;
         private readonly SuggestionsOptions _options;
         private readonly PreparedStatementCache _statementCache;
+        private readonly IFindServices _serviceDiscovery;
+
+        private Task<Uri> _dseSearchUri;
 
         public ServiceDescriptor Descriptor => SuggestedVideoService.Descriptor;
 
-        public DataStaxEnterpriseSuggestedVideos(ISession session, PreparedStatementCache statementCache, IRestClient restClient, SuggestionsOptions options)
+        public DataStaxEnterpriseSuggestedVideos(ISession session, PreparedStatementCache statementCache,
+                                                 IFindServices serviceDiscovery, Func<Uri, IRestClient> createRestClient,
+                                                 SuggestionsOptions options)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
-            if (restClient == null) throw new ArgumentNullException(nameof(restClient));
+            if (serviceDiscovery == null) throw new ArgumentNullException(nameof(serviceDiscovery));
+            if (createRestClient == null) throw new ArgumentNullException(nameof(createRestClient));
             if (options == null) throw new ArgumentNullException(nameof(options));
             _session = session;
             _statementCache = statementCache;
-            _restClient = restClient;
+            _serviceDiscovery = serviceDiscovery;
+            _createRestClient = createRestClient;
             _options = options;
+            _dseSearchUri = null;
         }
 
         /// <summary>
@@ -62,11 +72,11 @@ namespace KillrVideo.SuggestedVideos
         /// </summary>
         public override async Task<GetRelatedVideosResponse> GetRelatedVideos(GetRelatedVideosRequest request, ServerCallContext context)
         {
-            // Set the base URL of the REST client to use the first node in the Cassandra cluster
-            string nodeIp = _session.Cluster.AllHosts().First().Address.Address.ToString();
-            _restClient.BaseUrl = new Uri($"http://{nodeIp}:8983/solr");
-            
-            //WebRequest mltRequest = WebRequest.Create("http://127.0.2.15:8983/solr/killrvideo.videos/mlt?q=videoid%3Asome-uuid&wt=json&indent=true&qt=mlt&mlt.fl=name&mlt.mindf=1&mlt.mintf=1");
+            // Get REST client for dse-search service
+            Uri searchUri = await GetDseSearchUri().ConfigureAwait(false);
+            IRestClient restClient = _createRestClient(searchUri);
+
+            // Example request: http://127.0.2.15:8983/solr/killrvideo.videos/mlt?q=videoid%3Asome-uuid&wt=json&indent=true&qt=mlt&mlt.fl=name&mlt.mindf=1&mlt.mintf=1
             var solrRequest = new RestRequest("killrvideo.videos/mlt");
             solrRequest.AddParameter("q", $"videoid:\"{request.VideoId.Value}\"");
             solrRequest.AddParameter("wt", "json");
@@ -88,7 +98,7 @@ namespace KillrVideo.SuggestedVideos
             //MLT Minimum Term Frequency - the frequency below which terms will be ignored in the source doc.
             solrRequest.AddParameter("mlt.mintf", 2);
 
-            IRestResponse<MLTQueryResult> solrResponse = await _restClient.ExecuteTaskAsync<MLTQueryResult>(solrRequest).ConfigureAwait(false);
+            IRestResponse<MLTQueryResult> solrResponse = await restClient.ExecuteTaskAsync<MLTQueryResult>(solrRequest).ConfigureAwait(false);
 
             // Start with an empty response
             var response = new GetRelatedVideosResponse { VideoId = request.VideoId };
@@ -150,7 +160,26 @@ namespace KillrVideo.SuggestedVideos
             response.Videos.Add(rows.Select(MapRowToVideoPreview));
             return response;
         }
-        
+
+        private Task<Uri> GetDseSearchUri()
+        {
+            // Try to minimize the number of times we lookup the search service by caching and reusing the task
+            Task<Uri> uri = _dseSearchUri;
+            if (uri != null && uri.IsFaulted == false)
+                return uri;
+
+            // It's not the end of the world if we have a race here and multiple threads do lookups
+            uri = LookupDseSearch();
+            _dseSearchUri = uri;
+            return uri;
+        }
+
+        private async Task<Uri> LookupDseSearch()
+        {
+            IEnumerable<string> ipAndPorts = await _serviceDiscovery.LookupServiceAsync("dse-search").ConfigureAwait(false);
+            return new Uri($"http://{ipAndPorts.First()}/solr");
+        }
+
         private static SuggestedVideoPreview MapRowToVideoPreview(Row row)
         {
             return new SuggestedVideoPreview
