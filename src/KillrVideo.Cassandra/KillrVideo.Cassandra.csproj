@@ -62,7 +62,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CassandraSessionFactory.cs" />
     <Compile Include="MicrosecondsSinceEpoch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PreparedStatementCache.cs" />

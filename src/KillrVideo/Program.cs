@@ -39,7 +39,7 @@ namespace KillrVideo
             typeof (SearchService).Assembly,
             typeof (Host.Host).Assembly,
             typeof (GrpcServerTask).Assembly,
-            typeof (CassandraSessionFactory).Assembly,
+            typeof (PreparedStatementCache).Assembly,
             typeof (Bus).Assembly,
             typeof (Program).Assembly
         };
@@ -60,9 +60,9 @@ namespace KillrVideo
             container = container.WithMefAttributedModel();
             container.RegisterExports(ProjectAssemblies);
             
-            // Wait for Cassandra to become available
-            var cassandraInit = container.Resolve<BootstrapCassandra>();
-            cassandraInit.RegisterCassandraOnceAvailable(container).Wait();
+            // Wait for DSE to become available
+            var cassandraInit = container.Resolve<BootstrapDataStaxEnterprise>();
+            cassandraInit.RegisterDseOnceAvailable(container).Wait();
 
             // Start host
             var host = container.Resolve<Host.Host>();

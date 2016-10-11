@@ -128,7 +128,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cassandra\BootstrapCassandra.cs" />
+    <Compile Include="Cassandra\BootstrapDataStaxEnterprise.cs" />
     <Compile Include="Listeners\BroadcastOptions.cs" />
     <Compile Include="Configuration\CommandLineArgs.cs" />
     <Compile Include="Configuration\EnvironmentFileProvider.cs" />
