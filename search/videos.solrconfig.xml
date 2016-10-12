@@ -512,27 +512,32 @@
        not be initialized until the first request that uses it.
 
     -->
-  <searchComponent class="solr.SpellCheckComponent" name="suggest">
-    <lst name="spellchecker">
-      <str name="name">suggest</str>
-      <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
-      <str name="lookupImpl">org.apache.solr.spelling.suggest.tst.TSTLookupFactory</str>
-      <str name="field">name_autocomplete</str>
+  
+  <!-- 
+    Settings for search suggestions component. See documentation at:
+    https://cwiki.apache.org/confluence/display/solr/Suggester
+  -->
+  <searchComponent name="suggest" class="solr.SuggestComponent">
+    <lst name="suggester">
+      <str name="name">searchSuggester</str>
+      <str name="lookupImpl">FSTLookupFactory</str>
+      <str name="dictionaryImpl">HighFrequencyDictionaryFactory</str>
+      <float name="threshold">0.1</float>
+      <str name="field">search_suggestions</str>
     </lst>
   </searchComponent>
-  <requestHandler class="org.apache.solr.handler.component.SearchHandler" name="/suggest">
+
+  <!-- Handler for search suggestions -->
+  <requestHandler name="/suggest" class="solr.SearchHandler">
     <lst name="defaults">
-      <str name="spellcheck">true</str>
-      <str name="spellcheck.dictionary">suggest</str>
-      <str name="spellcheck.count">5</str>
+      <str name="suggest">true</str>
+      <str name="suggest.count">5</str>
+      <str name="suggest.dictionary">searchSuggester</str>
     </lst>
     <arr name="components">
       <str>suggest</str>
     </arr>
   </requestHandler>
-
-
-
 
   <!-- MoreLikeThis
   
