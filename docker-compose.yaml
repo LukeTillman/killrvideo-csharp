@@ -24,7 +24,7 @@ services:
     
   # DataStax Enterprise with KillrVideo schema and search config
   dse:
-    image: killrvideo/killrvideo-dse:1.0.0
+    image: killrvideo/killrvideo-dse:2.0.0
     ports:
     - "9042:9042"
     - "8983:8983"
