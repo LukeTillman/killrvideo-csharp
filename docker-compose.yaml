@@ -25,9 +25,11 @@ services:
   # DataStax Enterprise with KillrVideo schema and search config
   dse:
     image: killrvideo/killrvideo-dse:2.0.0
+    command: [ -g ]
     ports:
     - "9042:9042"
     - "8983:8983"
+    - "8182:8182"
     cap_add:
     - IPC_LOCK
     ulimits:
@@ -35,3 +37,5 @@ services:
     environment:
       SERVICE_9042_NAME: cassandra
       SERVICE_8983_NAME: dse-search
+      SERVICE_8182_NAME: gremlin
+
