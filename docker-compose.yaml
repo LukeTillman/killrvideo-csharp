@@ -22,3 +22,12 @@ services:
     - etcd
     environment:
       KILLRVIDEO_ETCD: "etcd:2379"
+
+  # One instance of DataStax Studio
+  studio:
+    image: killrvideo/killrvideo-studio:1.0.0
+    ports:
+    # The Web UI exposed to our host
+    - "9091:9091"
+    depends_on:
+    - dse
