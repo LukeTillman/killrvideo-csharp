@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
-using Cassandra;
+using Dse;
 using Google.Protobuf.Reflection;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;

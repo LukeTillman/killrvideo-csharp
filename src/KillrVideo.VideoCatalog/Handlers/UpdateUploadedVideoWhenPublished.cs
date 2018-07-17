@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Cassandra;
+using Dse;
 using DryIocAttributes;
 using Google.Protobuf.WellKnownTypes;
 using KillrVideo.Cassandra;

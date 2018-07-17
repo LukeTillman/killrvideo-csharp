@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Cassandra;
+using Dse;
 using DryIocAttributes;
 using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
