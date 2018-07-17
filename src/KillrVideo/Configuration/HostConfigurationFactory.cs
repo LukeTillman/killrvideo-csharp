@@ -30,7 +30,9 @@ namespace KillrVideo.Configuration
                     // The IP address for etcd to do service discovery
                     { "Etcd:IP", "KILLRVIDEO_DOCKER_IP" },
                     // The IP address to broadcast for gRPC services (i.e. register with service discovery)
-                    { "Broadcast:IP", "KILLRVIDEO_HOST_IP" }
+                    { "Broadcast:IP", "KILLRVIDEO_HOST_IP" },
+                    // If you are running Docker find the .env file on disk
+                    { "ConfigEnvFilePath", "/Users/cedricklunven/dev/workspace-killrvideos/killrvideo-csharp/.env" }
                 }))
                 // Add the configuration defaults
                 .AddInMemoryCollection(new Dictionary<string, string>
