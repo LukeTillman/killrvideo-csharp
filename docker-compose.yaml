@@ -1,10 +1,10 @@
-version: '2'
+version: '3'
 
 # Other services are specified in .\lib\killrvideo-docker-common\docker-compose.yaml
 services:
   # Start the KillrVideo web UI on port 3000
   web:
-    image: killrvideo/killrvideo-web:1.2.3
+    image: killrvideo/killrvideo-web:1.2.8
     ports:
     - "3000:3000"
     depends_on:
@@ -13,21 +13,35 @@ services:
     environment:
       SERVICE_3000_NAME: web
       KILLRVIDEO_ETCD: "etcd:2379"
+      KILLRVIDEO_DSE_USERNAME: $KILLRVIDEO_DSE_USERNAME
+      KILLRVIDEO_DSE_PASSWORD: $KILLRVIDEO_DSE_PASSWORD
+      KILLRVIDEO_CASSANDRA_REPLICATION: $KILLRVIDEO_CASSANDRA_REPLICATION
+      KILLRVIDEO_LOGGING_LEVEL: $KILLRVIDEO_LOGGING_LEVEL
 
   # The sample data generator
   generator:
-    image: killrvideo/killrvideo-generator:1.2.1
+    image: killrvideo/killrvideo-generator:1.2.5
     depends_on:
     - dse
     - etcd
     environment:
       KILLRVIDEO_ETCD: "etcd:2379"
+      KILLRVIDEO_DSE_USERNAME: $KILLRVIDEO_DSE_USERNAME
+      KILLRVIDEO_DSE_PASSWORD: $KILLRVIDEO_DSE_PASSWORD
+      NODE_ENV: $NODE_ENV
+      KILLRVIDEO_CASSANDRA_REPLICATION: $KILLRVIDEO_CASSANDRA_REPLICATION
+      KILLRVIDEO_LOGGING_LEVEL: $KILLRVIDEO_LOGGING_LEVEL
 
   # One instance of DataStax Studio
   studio:
-    image: killrvideo/killrvideo-studio:1.0.0
+    image: datastax/dse-studio:6.0.0
     ports:
     # The Web UI exposed to our host
     - "9091:9091"
     depends_on:
     - dse
+    environment:
+      SERVICE_9091_NAME: studio
+      DS_LICENSE: accept
+
+

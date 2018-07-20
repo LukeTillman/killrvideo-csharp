@@ -88,3 +88,6 @@ src/spark/*.ipynb
 
 # User environment file
 .env
+
+# Mac-specific files
+.DS_Store
