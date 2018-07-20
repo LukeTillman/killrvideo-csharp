@@ -1,8 +1,8 @@
 version: '3'
 
 #
-# docker-compose.yaml
-#   Default compose file for providing basic infrastructure required by KillrVideo
+# docker-compose-volumes.yaml
+#   use this compose file to preserve DSE Cassandra data on a separate volume
 #
 
 services:
@@ -27,7 +27,7 @@ services:
     depends_on:
     - etcd
     
-  # DataStax Enterprise
+  # DataStax Enterprise with KillrVideo schema and search config
   # configure this as the seed node
   # start with search and graph modes enabled ("-s -g")
   dse:
@@ -39,6 +39,12 @@ services:
     - "8182:8182"
     environment:
       DS_LICENSE: accept
+    volumes:
+      # associate dse-data directory under the directory where we run docker-compose
+      # with the Cassandra data directory on our node
+      # (using relative paths to store at the root directory of the repository which includes
+      # these files, i.e. killrvideo-java or killrvideo-nodejs)
+      - "../../dse-data:/var/lib/cassandra"
     # Allow DSE to lock memory with mlock
     cap_add:
     - IPC_LOCK
@@ -48,7 +54,7 @@ services:
   # Container to load KillrVideo schema and search config into DSE
   # Provides options to configure secure users as well
   dse-config:
-    image: killrvideo/killrvideo-dse-config:1.2.2
+    image: killrvideo/killrvideo-dse-config:1.2.1
     environment:
       KILLRVIDEO_DOCKER_IP: $KILLRVIDEO_DOCKER_IP
       KILLRVIDEO_DSE_EXTERNAL_IP: $KILLRVIDEO_DSE_EXTERNAL_IP

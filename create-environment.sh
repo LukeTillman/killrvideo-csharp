@@ -18,7 +18,11 @@ export LOOPBACK_IP='10.0.75.1'
 echo 'We need to create an alias for the loopback adapter (lo0) using sudo'
 echo 'so your Mac and the Docker VM can communicate. It will be created using'
 echo "IP $LOOPBACK_IP. You will be prompted for your password."
-sudo ifconfig lo0 alias $LOOPBACK_IP
+if [ `uname` = "Darwin" ] ; then
+  sudo ifconfig lo0 alias $LOOPBACK_IP
+else 
+  sudo ifconfig lo:0 $LOOPBACK_IP/24
+fi
 
 # Should use compose file relative to this script, followed by a compose file relative to the
 # working directory (i.e. where the .env file is going to be created)
