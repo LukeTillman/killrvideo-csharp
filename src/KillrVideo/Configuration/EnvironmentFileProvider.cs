@@ -24,9 +24,10 @@ namespace KillrVideo.Configuration
              * When executing on MAC the GetExecutingAssembly is not root of project
              * as a consequence, creatng a new key to locate the env file.
              */
-             //string exePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-             //_fileInfo = new FileInfo(Path.Combine(exePath, ".env"));
-            _fileInfo = new FileInfo(mappings["ConfigEnvFilePath"]);
+            //string exePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string exePath = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
+             _fileInfo = new FileInfo(Path.Combine(exePath, ".env"));
+            //_fileInfo = new FileInfo(mappings["ConfigEnvFilePath"]);
         }
 
         public override void Load()
