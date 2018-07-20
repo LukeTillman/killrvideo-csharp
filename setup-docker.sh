@@ -7,8 +7,6 @@ echo 'Creating docker .env file (this may take a minute)'
 echo
 ./lib/killrvideo-docker-common/create-environment.sh
 
-
-cp ./.env ./src/KillrVideo/bin/Debug/
 echo
 echo 'Pulling all docker dependencies' 
 echo
