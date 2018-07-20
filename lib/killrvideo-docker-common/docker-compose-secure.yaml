@@ -44,11 +44,14 @@ services:
     - IPC_LOCK
     ulimits:
       memlock: -1
+    volumes:
+      # use custom config file with authentication/authorization enabled
+      - "./extras/config-secure:/config"
 
   # Container to load KillrVideo schema and search config into DSE
   # Provides options to configure secure users as well
   dse-config:
-    image: killrvideo/killrvideo-dse-config:1.2.2
+    image: killrvideo/killrvideo-dse-config:1.2.1
     environment:
       KILLRVIDEO_DOCKER_IP: $KILLRVIDEO_DOCKER_IP
       KILLRVIDEO_DSE_EXTERNAL_IP: $KILLRVIDEO_DSE_EXTERNAL_IP

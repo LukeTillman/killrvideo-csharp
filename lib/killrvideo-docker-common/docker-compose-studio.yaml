@@ -1,8 +1,8 @@
 version: '3'
 
 #
-# docker-compose.yaml
-#   Default compose file for providing basic infrastructure required by KillrVideo
+# docker-compose-studio.yaml
+#   Use this compose file to add DSE Studio to the standard KillrVideo infrastructure configuration
 #
 
 services:
@@ -48,7 +48,7 @@ services:
   # Container to load KillrVideo schema and search config into DSE
   # Provides options to configure secure users as well
   dse-config:
-    image: killrvideo/killrvideo-dse-config:1.2.2
+    image: killrvideo/killrvideo-dse-config:1.2.1
     environment:
       KILLRVIDEO_DOCKER_IP: $KILLRVIDEO_DOCKER_IP
       KILLRVIDEO_DSE_EXTERNAL_IP: $KILLRVIDEO_DSE_EXTERNAL_IP
@@ -56,3 +56,15 @@ services:
       KILLRVIDEO_GRAPH_REPLICATION: $KILLRVIDEO_GRAPH_REPLICATION
     depends_on:
     - dse
+
+  # One instance of DataStax Studio
+  studio:
+    image: killrvideo/killrvideo-studio:2.1.0
+    ports:
+    # The Web UI exposed to our host
+    - "9091:9091"
+    depends_on:
+    - dse
+    environment:
+      SERVICE_9091_NAME: studio
+      DS_LICENSE: accept

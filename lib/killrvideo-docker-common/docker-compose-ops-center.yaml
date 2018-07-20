@@ -1,8 +1,8 @@
 version: '3'
 
 #
-# docker-compose.yaml
-#   Default compose file for providing basic infrastructure required by KillrVideo
+# docker-compose-ops-center.yaml
+#   Use this compose file to add DataStax OpsCenter to the standard KillrVideo infrastructure configuration
 #
 
 services:
@@ -26,7 +26,7 @@ services:
     - "/var/run/docker.sock:/tmp/docker.sock"
     depends_on:
     - etcd
-    
+
   # DataStax Enterprise
   # configure this as the seed node
   # start with search and graph modes enabled ("-s -g")
@@ -37,6 +37,8 @@ services:
     - "9042:9042"
     - "8983:8983"
     - "8182:8182"
+    links:
+    - opscenter
     environment:
       DS_LICENSE: accept
     # Allow DSE to lock memory with mlock
@@ -48,7 +50,7 @@ services:
   # Container to load KillrVideo schema and search config into DSE
   # Provides options to configure secure users as well
   dse-config:
-    image: killrvideo/killrvideo-dse-config:1.2.2
+    image: killrvideo/killrvideo-dse-config:1.2.1
     environment:
       KILLRVIDEO_DOCKER_IP: $KILLRVIDEO_DOCKER_IP
       KILLRVIDEO_DSE_EXTERNAL_IP: $KILLRVIDEO_DSE_EXTERNAL_IP
@@ -56,3 +58,12 @@ services:
       KILLRVIDEO_GRAPH_REPLICATION: $KILLRVIDEO_GRAPH_REPLICATION
     depends_on:
     - dse
+
+  # OpsCenter
+  opscenter:
+    image: datastax/dse-opscenter:6.5.0
+    ports:
+    - "8888:8888"
+    environment:
+      SERVICE_8888_NAME: opscenter
+      DS_LICENSE: accept
