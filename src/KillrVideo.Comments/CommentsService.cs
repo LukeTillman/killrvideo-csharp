@@ -22,7 +22,9 @@ namespace KillrVideo.Comments
     public class CommentsServiceImpl : CommentsService.CommentsServiceBase, IGrpcServerService
     {
         private readonly ISession _session;
+
         private readonly IBus _bus;
+
         private readonly PreparedStatementCache _statementCache;
 
         public ServiceDescriptor Descriptor => CommentsService.Descriptor;

@@ -26,8 +26,9 @@ namespace KillrVideo.VideoCatalog
 
         private const int MaxDaysInPastForLatestVideos = 7;
         private static readonly Regex ParseLatestPagingState = new Regex("([0-9]{8}){8}([0-9]{1})(.*)", RegexOptions.Compiled | RegexOptions.Singleline);
-        
+
         private readonly ISession _session;
+
         private readonly IBus _bus;
         private readonly PreparedStatementCache _statementCache;
 

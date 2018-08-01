@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Dse;
+using Dse.Graph;
+using Gremlin.Net.Process.Traversal;
 using Google.Protobuf.Reflection;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
@@ -15,6 +17,11 @@ using KillrVideo.Protobuf.Services;
 using KillrVideo.SuggestedVideos.MLT;
 using RestSharp;
 
+using static KillrVideo.SuggestedVideos.GraphDsl.Kv;
+using static KillrVideo.SuggestedVideos.GraphDsl.Recommender;
+using static KillrVideo.SuggestedVideos.GraphDsl.__KillrVideo;
+using static KillrVideo.SuggestedVideos.GraphDsl.Enrichment;
+
 namespace KillrVideo.SuggestedVideos
 {
     /// <summary>
@@ -23,20 +30,25 @@ namespace KillrVideo.SuggestedVideos
     [Export(typeof(IGrpcServerService))]
     public class DataStaxEnterpriseSuggestedVideos : SuggestedVideoService.SuggestedVideoServiceBase, IConditionalGrpcServerService
     {
-        private readonly ISession _session;
+        // Upgrading to IDseSession to be able to use GRAPH.
+        private readonly IDseSession _session;
+
         private readonly Func<Uri, IRestClient> _createRestClient;
+
         private readonly SuggestionsOptions _options;
+
         private readonly PreparedStatementCache _statementCache;
+
         private readonly IFindServices _serviceDiscovery;
 
         private Task<Uri> _dseSearchUri;
 
         public ServiceDescriptor Descriptor => SuggestedVideoService.Descriptor;
 
-        public DataStaxEnterpriseSuggestedVideos(ISession session, PreparedStatementCache statementCache,
+        private readonly IDseSession _session;
+        public DataStaxEnterpriseSuggestedVideos(IDseSession session, PreparedStatementCache statementCache,
                                                  IFindServices serviceDiscovery, Func<Uri, IRestClient> createRestClient,
-                                                 SuggestionsOptions options)
-        {
+                                                 SuggestionsOptions options) {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             if (serviceDiscovery == null) throw new ArgumentNullException(nameof(serviceDiscovery));
@@ -53,16 +65,14 @@ namespace KillrVideo.SuggestedVideos
         /// <summary>
         /// Convert this instance to a ServerServiceDefinition that can be run on a Grpc server.
         /// </summary>
-        public ServerServiceDefinition ToServerServiceDefinition()
-        {
+        public ServerServiceDefinition ToServerServiceDefinition() {
             return SuggestedVideoService.BindService(this);
         }
 
         /// <summary>
         /// Returns true if this service should run given the configuration of the host.
         /// </summary>
-        public bool ShouldRun()
-        {
+        public bool ShouldRun() {
             // Use this implementation when DSE Search and Spark are enabled in the host config
             return _options.DseEnabled;
         }
@@ -135,10 +145,39 @@ namespace KillrVideo.SuggestedVideos
         /// <summary>
         /// Gets the personalized video suggestions for a specific user.
         /// </summary>
-        public override async Task<GetSuggestedForUserResponse> GetSuggestedForUser(GetSuggestedForUserRequest request, ServerCallContext context)
-        {
-            // Return the output of a Spark job that runs periodically in the background to populate the video_recommendations table
-            // (see the /data/spark folder in the repo for more information)
+        public override async Task<GetSuggestedForUserResponse> GetSuggestedForUser(GetSuggestedForUserRequest request, 
+                                                                                    ServerCallContext context) {
+            // Execute Graph Query
+            // GraphTraversalSource g =  DseGraph.Traversal(_session);
+            // var statement = DseGraph.StatementFromTraversal(g.V().HasLabel("person"));
+            // GraphResultSet result = await _session.ExecuteGraphAsync(statement);
+
+
+            var results = await killrGraph.Users(request.UserId)
+                                    .Recommend(5, 7)
+                                    .Values<string>(
+                                              KeyMovieId, Key, , KeyName).ToList();
+
+
+            return new SuggestedVideoPreview
+            {
+                VideoId = row.GetValue<Guid>("videoid").ToUuid(),
+                AddedDate = row.GetValue<DateTimeOffset>("added_date").ToTimestamp(),
+                Name = row.GetValue<string>("name"),
+                PreviewImageLocation = row.GetValue<string>("preview_image_location"),
+                UserId = row.GetValue<Guid>("authorid").ToUuid()
+            };
+
+            //await _session.ExecuteGraph("system.createGraph('demo').ifNotExist().build()");
+
+       
+
+            //
+            // Reading Suggested video from video_recommandation table (deprecated)
+            //
+            /* Return the output of a Spark job that runs periodically in the background to populate the video_recommendations table
+             * 
+            // (see the /data/spark folder in the repo for more information)*/
             PreparedStatement prepared = await _statementCache.GetOrAddAsync(
                 "SELECT videoid, authorid, name, added_date, preview_image_location FROM video_recommendations WHERE userid=?");
 
@@ -149,12 +188,12 @@ namespace KillrVideo.SuggestedVideos
             // The initial query won't have a paging state, but subsequent calls should if there are more pages
             if (string.IsNullOrEmpty(request.PagingState) == false)
                 bound.SetPagingState(Convert.FromBase64String(request.PagingState));
-
             RowSet rows = await _session.ExecuteAsync(bound).ConfigureAwait(false);
+           
 
-            var response = new GetSuggestedForUserResponse
-            {
+            var response = new GetSuggestedForUserResponse {
                 UserId = request.UserId,
+                // No paging with Graph YET
                 PagingState = rows.PagingState != null && rows.PagingState.Length > 0 ? Convert.ToBase64String(rows.PagingState) : ""
             };
             response.Videos.Add(rows.Select(MapRowToVideoPreview));
@@ -174,8 +213,7 @@ namespace KillrVideo.SuggestedVideos
             return uri;
         }
 
-        private async Task<Uri> LookupDseSearch()
-        {
+        private async Task<Uri> LookupDseSearch() {
             IEnumerable<string> ipAndPorts = await _serviceDiscovery.LookupServiceAsync("dse-search").ConfigureAwait(false);
             return new Uri($"http://{ipAndPorts.First()}/solr");
         }

@@ -18,18 +18,22 @@ using Newtonsoft.Json;
 using RestSharp;
 using Method = RestSharp.Method;
 
-namespace KillrVideo.Search
-{
+namespace KillrVideo.Search  {
+
     /// <summary>
     /// Searches videos using DataStax Enterprise search (Solr integration).
     /// </summary>
     [Export(typeof(IGrpcServerService))]
-    public class DataStaxEnterpriseSearch : SearchService.SearchServiceBase, IConditionalGrpcServerService
-    {
+    public class DataStaxEnterpriseSearch : SearchService.SearchServiceBase, IConditionalGrpcServerService {
+        
         private readonly ISession _session;
+
         private readonly Func<Uri, IRestClient> _createRestClient;
+
         private readonly SearchOptions _options;
+
         private readonly PreparedStatementCache _statementCache;
+
         private readonly IFindServices _serviceDiscovery;
 
         private Task<Uri> _dseSearchUri;
