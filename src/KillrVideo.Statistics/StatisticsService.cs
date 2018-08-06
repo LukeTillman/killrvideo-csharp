@@ -16,12 +16,12 @@ namespace KillrVideo.Statistics
     [Export(typeof(IGrpcServerService))]
     public class StatisticsServiceImpl : StatisticsService.StatisticsServiceBase, IGrpcServerService
     {
-        private readonly ISession _session;
+        private readonly IDseSession _session;
         private readonly PreparedStatementCache _statementCache;
 
         public ServiceDescriptor Descriptor => StatisticsService.Descriptor;
 
-        public StatisticsServiceImpl(ISession session, PreparedStatementCache statementCache)
+        public StatisticsServiceImpl(IDseSession session, PreparedStatementCache statementCache)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));

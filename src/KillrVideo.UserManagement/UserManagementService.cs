@@ -20,14 +20,14 @@ namespace KillrVideo.UserManagement
     [Export(typeof(IGrpcServerService))]
     public class UserManagementServiceImpl : UserManagementService.UserManagementServiceBase, IConditionalGrpcServerService
     {
-        private readonly ISession _session;
+        private readonly IDseSession _session;
         private readonly IBus _bus;
         private readonly UserManagementOptions _options;
         private readonly PreparedStatementCache _statementCache;
 
         public ServiceDescriptor Descriptor => UserManagementService.Descriptor;
 
-        public UserManagementServiceImpl(ISession session, PreparedStatementCache statementCache, IBus bus, UserManagementOptions options)
+        public UserManagementServiceImpl(IDseSession session, PreparedStatementCache statementCache, IBus bus, UserManagementOptions options)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));

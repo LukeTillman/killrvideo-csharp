@@ -7,6 +7,7 @@ using Dse;
 using Google.Protobuf.Reflection;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Serilog;
 using KillrVideo.Cassandra;
 using KillrVideo.Comments.Events;
 using KillrVideo.MessageBus;
@@ -21,15 +22,30 @@ namespace KillrVideo.Comments
     [Export(typeof(IGrpcServerService))]
     public class CommentsServiceImpl : CommentsService.CommentsServiceBase, IGrpcServerService
     {
-        private readonly ISession _session;
+        /// <summary>
+        /// Logger for the class to write into both files and console
+        /// </summary>
+        private static readonly ILogger Logger = Log.ForContext(typeof(CommentsServiceImpl));
 
+        /// <summary>
+        /// Inject Dse Session.
+        /// </summary>
+        private readonly IDseSession _session;
+
+        /// <summary>
+        /// Cache of results
+        /// </summary>
+        private readonly PreparedStatementCache _statementCache;
+
+        /// <summary>
+        /// Exchange messages between services.
+        /// </summary>
         private readonly IBus _bus;
 
-        private readonly PreparedStatementCache _statementCache;
 
         public ServiceDescriptor Descriptor => CommentsService.Descriptor;
 
-        public CommentsServiceImpl(ISession session, PreparedStatementCache statementCache, IBus bus)
+        public CommentsServiceImpl(IDseSession session, PreparedStatementCache statementCache, IBus bus)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));

@@ -19,11 +19,22 @@ namespace KillrVideo.VideoCatalog.Handlers
     [ExportMany, Reuse(ReuseType.Transient)]
     public class UpdateUploadedVideoWhenPublished : IHandleMessage<UploadedVideoPublished>
     {
-        private readonly ISession _session;
-        private readonly IBus _bus;
+        /// <summary>
+        /// Inject Dse Session.
+        /// </summary>
+        private readonly IDseSession _session;
+
+        /// <summary>
+        /// Cache of results
+        /// </summary>
         private readonly PreparedStatementCache _statementCache;
 
-        public UpdateUploadedVideoWhenPublished(ISession session, PreparedStatementCache statementCache, IBus bus)
+        /// <summary>
+        /// Exchange messages between services.
+        /// </summary>
+        private readonly IBus _bus;
+
+        public UpdateUploadedVideoWhenPublished(IDseSession session, PreparedStatementCache statementCache, IBus bus)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));

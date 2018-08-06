@@ -26,7 +26,7 @@ namespace KillrVideo.Search  {
     [Export(typeof(IGrpcServerService))]
     public class DataStaxEnterpriseSearch : SearchService.SearchServiceBase, IConditionalGrpcServerService {
         
-        private readonly ISession _session;
+        private readonly IDseSession _session;
 
         private readonly Func<Uri, IRestClient> _createRestClient;
 
@@ -40,7 +40,7 @@ namespace KillrVideo.Search  {
 
         public ServiceDescriptor Descriptor => SearchService.Descriptor;
 
-        public DataStaxEnterpriseSearch(ISession session, PreparedStatementCache statementCache,
+        public DataStaxEnterpriseSearch(IDseSession session, PreparedStatementCache statementCache,
                                         IFindServices serviceDiscovery, Func<Uri, IRestClient> createRestClient,
                                         SearchOptions options)
         {

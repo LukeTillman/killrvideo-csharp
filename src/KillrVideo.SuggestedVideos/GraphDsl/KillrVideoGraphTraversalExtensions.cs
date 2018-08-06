@@ -11,10 +11,10 @@ using static Gremlin.Net.Process.Traversal.Column;
 using static Gremlin.Net.Process.Traversal.Order;
 
 using static KillrVideo.SuggestedVideos.GraphDsl.Kv;
-using static KillrVideo.SuggestedVideos.GraphDsl.Enrichment;
 
-namespace KillrVideo.SuggestedVideos.GraphDsl {
-    
+namespace KillrVideo.SuggestedVideos.GraphDsl
+{
+
     /// <summary>
     /// The KillrVideo Traversal class which exposes the available steps of the DSL.
     /// </summary>
@@ -123,11 +123,12 @@ namespace KillrVideo.SuggestedVideos.GraphDsl {
         /// the user has not yet seen. Those movies are grouped, counted and sorted based on that count to produce the recommendation.
         /// </summary>
         public static GraphTraversal<Vertex, Vertex> Recommend(
-            this GraphTraversal<Vertex, Vertex> t, 
+            this GraphTraversal<Vertex, Vertex> t,
             int recommendations,
-            int minRating, 
-            Recommender recommender, 
-            GraphTraversal<object, object> include) {
+            int minRating,
+            Recommender recommender,
+            GraphTraversal<object, object> include)
+        {
 
             if (recommendations <= 0) throw new ArgumentException("recommendations must be greater than zero");
 
@@ -141,9 +142,7 @@ namespace KillrVideo.SuggestedVideos.GraphDsl {
                      Order(Local).
                      By(Values, Decr).
                      Limit<IDictionary<Vertex, long>>(Local, recommendations).
-                     // Select<Vertex>(Keys).
-                        
-                     Select<Vertex>(Kv.KeyMovieId).
+                     Select<Vertex>(Kv.KeyVideoId).
                      Unfold<Vertex>();
         }
 

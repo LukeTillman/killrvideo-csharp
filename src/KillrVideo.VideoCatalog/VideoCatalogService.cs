@@ -13,6 +13,7 @@ using KillrVideo.MessageBus;
 using KillrVideo.Protobuf;
 using KillrVideo.Protobuf.Services;
 using KillrVideo.VideoCatalog.Events;
+using Serilog;
 
 namespace KillrVideo.VideoCatalog
 {
@@ -22,19 +23,35 @@ namespace KillrVideo.VideoCatalog
     [Export(typeof(IGrpcServerService))]
     public class VideoCatalogServiceImpl : VideoCatalogService.VideoCatalogServiceBase, IGrpcServerService
     {
+        /// <summary>
+        /// Logger for the class to write into both files and console
+        /// </summary>
+        private static readonly ILogger Logger = Log.ForContext(typeof(VideoCatalogServiceImpl));
+
+        /// <summary>
+        /// Inject Dse Session.
+        /// </summary>
+        private readonly IDseSession _session;
+
+        /// <summary>
+        /// Cache of results
+        /// </summary>
+        private readonly PreparedStatementCache _statementCache;
+
+        /// <summary>
+        /// Exchange messages between services.
+        /// </summary>
+        private readonly IBus _bus;
+
         public static readonly int LatestVideosTtlSeconds = Convert.ToInt32(TimeSpan.FromDays(MaxDaysInPastForLatestVideos).TotalSeconds);
 
         private const int MaxDaysInPastForLatestVideos = 7;
+
         private static readonly Regex ParseLatestPagingState = new Regex("([0-9]{8}){8}([0-9]{1})(.*)", RegexOptions.Compiled | RegexOptions.Singleline);
-
-        private readonly ISession _session;
-
-        private readonly IBus _bus;
-        private readonly PreparedStatementCache _statementCache;
 
         public ServiceDescriptor Descriptor => VideoCatalogService.Descriptor;
 
-        public VideoCatalogServiceImpl(ISession session, PreparedStatementCache statementCache, IBus bus)
+        public VideoCatalogServiceImpl(IDseSession session, PreparedStatementCache statementCache, IBus bus)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
@@ -42,6 +59,7 @@ namespace KillrVideo.VideoCatalog
             _session = session;
             _statementCache = statementCache;
             _bus = bus;
+            Logger.Information("Video Catalog is initialized");
         }
 
         /// <summary>
@@ -203,6 +221,7 @@ namespace KillrVideo.VideoCatalog
         /// </summary>
         public override async Task<GetLatestVideoPreviewsResponse> GetLatestVideoPreviews(GetLatestVideoPreviewsRequest request, ServerCallContext context)
         {
+            Logger.Information("GetLatestVideoPreviews - Start");
             string[] buckets;
             int bucketIndex;
             string rowPagingState;
@@ -328,6 +347,8 @@ namespace KillrVideo.VideoCatalog
         /// </summary>
         private static VideoPreview MapRowToVideoPreview(Row row)
         {
+            Logger.Information("GetLatestVideoPreviews - Mapping {title}", row.GetValue<string>("name"));
+
             return new VideoPreview
             {
                 VideoId = row.GetValue<Guid>("videoid").ToUuid(),
