@@ -163,7 +163,7 @@ namespace KillrVideo.SuggestedVideos
 
             Logger.Information("Request suggested video(s) for user {user}", request.UserId.Value);
 
-            // Enforce Async as async Task expected in the signature (DSL is not)
+            /* Enforce Async as async Task expected in the signature (DSL is not)
             IList<IDictionary<string, object>> suggestedVideos = await Task.Run(() =>
                     // Get a transversal (GraphTraversalSource)
                     DseGraph.Traversal(_session)
@@ -173,6 +173,7 @@ namespace KillrVideo.SuggestedVideos
                     .Recommend(numberOfVideosExpected, minimumRating)
                    // Project result to get required attributes in order to build a SuggestedVideoPreview
                    .Enrich(true, Keys(vextexProperties), InDegree(), OutDegree()).ToList());
+            */
 
             // Building GRPC response from list of results vertices (hopefully 'numberOfVideosExpected')
             var grpcResponse = new GetSuggestedForUserResponse
@@ -180,7 +181,7 @@ namespace KillrVideo.SuggestedVideos
                 UserId = request.UserId,
                 PagingState = ""
             };
-            grpcResponse.Videos.Add(suggestedVideos.Select(MapVertexVideoToVideoPreview));
+            //grpcResponse.Videos.Add(suggestedVideos.Select(MapVertexVideoToVideoPreview));
             return grpcResponse;
         }
 

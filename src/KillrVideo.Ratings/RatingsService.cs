@@ -65,6 +65,11 @@ namespace KillrVideo.Ratings
         /// </summary>
         public override async Task<RateVideoResponse> RateVideo(RateVideoRequest request, ServerCallContext context)
         {
+            Logger.Information("Rate video {videoid} with user {user} rate: {rate}",
+                               request.VideoId.ToGuid(),
+                               request.UserId.ToGuid(),
+                               request.Rating);
+            
             PreparedStatement[] preparedStatements = await _statementCache.GetOrAddAllAsync(
                 "UPDATE video_ratings SET rating_counter = rating_counter + 1, rating_total = rating_total + ? WHERE videoid = ?",
                 "INSERT INTO video_ratings_by_user (videoid, userid, rating) VALUES (?, ?, ?)");
@@ -130,5 +135,6 @@ namespace KillrVideo.Ratings
                 Rating = row?.GetValue<int>("rating") ?? 0
             };
         }
+
     }
 }

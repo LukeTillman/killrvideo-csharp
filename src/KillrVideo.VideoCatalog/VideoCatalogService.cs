@@ -43,11 +43,13 @@ namespace KillrVideo.VideoCatalog
         /// </summary>
         private readonly IBus _bus;
 
-        public static readonly int LatestVideosTtlSeconds = Convert.ToInt32(TimeSpan.FromDays(MaxDaysInPastForLatestVideos).TotalSeconds);
+        public static readonly int LatestVideosTtlSeconds = 
+            Convert.ToInt32(TimeSpan.FromDays(MaxDaysInPastForLatestVideos).TotalSeconds);
 
         private const int MaxDaysInPastForLatestVideos = 7;
 
-        private static readonly Regex ParseLatestPagingState = new Regex("([0-9]{8}){8}([0-9]{1})(.*)", RegexOptions.Compiled | RegexOptions.Singleline);
+        private static readonly Regex ParseLatestPagingState = 
+            new Regex("([0-9]{8}){8}([0-9]{1})(.*)", RegexOptions.Compiled | RegexOptions.Singleline);
 
         public ServiceDescriptor Descriptor => VideoCatalogService.Descriptor;
 
@@ -92,7 +94,8 @@ namespace KillrVideo.VideoCatalog
 
             await _session.ExecuteAsync(batch).ConfigureAwait(false);
 
-            // Tell the world we've accepted an uploaded video (it hasn't officially been added until we get a location for the
+            // Tell the world we've accepted an uploaded video (it hasn't officially been 
+            // added until we get a location for the
             // video playback and thumbnail)
             await _bus.Publish(new UploadedVideoAccepted
             {

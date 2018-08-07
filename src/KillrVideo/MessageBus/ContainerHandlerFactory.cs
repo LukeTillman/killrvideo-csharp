@@ -22,7 +22,7 @@ namespace KillrVideo.MessageBus
 
         public Type[] GetAllHandlerTypes()
         {
-            return _container.GetServiceRegistrations()
+           return _container.GetServiceRegistrations()
                              .Where(sr => sr.ServiceType.IsMessageHandlerInterface())
                              .Select(sr => sr.ServiceType)
                              .ToArray();
