@@ -62,7 +62,7 @@ namespace KillrVideo.VideoCatalog.Handlers
                                  .Property("description", video.Description)
                                  .Property("preview_image_location", video.PreviewImageLocation)
                                  .Property("added_date", video.AddedDate.ToDateTime());
-            traversal.Bytecode;
+            //traversal.Bytecode;
             //GroovyTranslator groovyTranslator = new GroovyTranslator();
 
             Logger.Information("Inserting to graph {transversal}" , traversal.ToString());
