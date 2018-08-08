@@ -112,9 +112,11 @@ namespace KillrVideo.Dse
                    
                     // Graph Options
                     Logger.Information("+ Graph connection to {graphName}", _kvConfig[ConfigKeys.DseGraphName]);
-                    var graphOptions = new GraphOptions().SetName(_kvConfig[ConfigKeys.DseGraphName]);
+                    var graphOptions = new GraphOptions();
+                    graphOptions.SetName(_kvConfig[ConfigKeys.DseGraphName]);
                     graphOptions.SetReadTimeoutMillis(int.Parse(_kvConfig[ConfigKeys.DseGraphReadTimeout]));
-                    graphOptions.SetReadConsistencyLevel(ConsistencyLevel.LocalQuorum);
+                    graphOptions.SetReadConsistencyLevel(ConsistencyLevel.One);
+                    graphOptions.SetWriteConsistencyLevel(ConsistencyLevel.One);
                     builder.WithGraphOptions(graphOptions);
 
                     // Cassandra

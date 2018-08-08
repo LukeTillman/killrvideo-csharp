@@ -55,18 +55,18 @@ namespace KillrVideo.VideoCatalog.Handlers
         /// Create new node in the Graph for
         /// </summary>
         public async Task AddVideoVertexToGraph(YouTubeVideoAdded video) {
-            GraphTraversalSource g = DseGraph.Traversal(_session);
-            var traversal = g.V().AddV("video")
-                                 .Property("videoId", video.VideoId.ToGuid())
-                                 .Property("name", video.Name)
-                                 .Property("description", video.Description)
-                                 .Property("preview_image_location", video.PreviewImageLocation)
-                                 .Property("added_date", video.AddedDate.ToDateTime());
-            //traversal.Bytecode;
-            //GroovyTranslator groovyTranslator = new GroovyTranslator();
+            Logger.Information("Inserting to graph video {video} ", video.VideoId.ToGuid());
 
-            Logger.Information("Inserting to graph {transversal}" , traversal.ToString());
-            await _session.ExecuteGraphAsync(traversal);
+            // Create Traversal
+            GraphTraversalSource g = DseGraph.Traversal(_session);
+            // Add Vertex 'video' with expected properties asynchronously
+            await _session.ExecuteGraphAsync(
+                g.V().AddV("video")
+                     .Property("videoId", video.VideoId.ToGuid().ToString())
+                     .Property("name", video.Name)
+                     .Property("description", video.Description)
+                     .Property("preview_image_location", video.PreviewImageLocation)
+                     .Property("added_date", DateTimeOffset.UtcNow));
         }
     }
 }

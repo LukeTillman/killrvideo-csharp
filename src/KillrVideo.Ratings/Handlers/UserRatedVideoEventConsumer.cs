@@ -53,32 +53,25 @@ namespace KillrVideo.Ratings
                              message.Rating);
         }
 
-        public async Task RateVideoInGraph(Guid videoId, Guid userId, int rating)
-        {
-            /* g.V().hasLabel("video").has("videoId", MY_VIDEO_ID)
-             *      .sideEffect(__.as("^video").coalesce(__.V()
-             *      .has("user", "userId", MY_USER_ID)
-             *      .addE("rated").property("rating", RATING)
-             *      .to("^video")
-             *      .inV()))
-             */
+        public async Task RateVideoInGraph(Guid videoId, Guid userId, int rating) {
             GraphTraversalSource g = DseGraph.Traversal(_session);
-
-            var traversal = g.V()
-                    .HasLabel("video")
-                    .Has("videoId", videoId.ToString())
-                    .SideEffect(
-                     __.As("^video")
+            await _session.ExecuteGraphAsync(
+                    // Begin of Traversal
+                    g.V()
+                    // Locate target Video vertex by its unique videoId
+                    .HasLabel("video").Has("videoId", videoId.ToString())
+                    // Set result as a variable named ^video 
+                    .SideEffect(__.As("^video")
+                       // Keep going for request 
                        .Coalesce<object>(
+                          // Locate target User vertex by its unique UserId         
                           __.V()
                             .HasLabel("user")
                             .Has("userId", userId.ToString())
-                            .AddE("rated").Property("rating", rating))
-                       .To("^video").InV()
-                    );
-            // Todo Error when executing transversal
-            var traversalMock = g.V();
-            await _session.ExecuteGraphAsync(traversalMock);
+                          // Create edge 'rated' from User to Video with value
+                            .AddE("rated").Property("rating", rating)
+                            .To("^video").InV()))
+            );
         }
     }
 }

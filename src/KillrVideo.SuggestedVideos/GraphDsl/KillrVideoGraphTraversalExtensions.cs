@@ -109,6 +109,15 @@ namespace KillrVideo.SuggestedVideos.GraphDsl
         /// <summary>
         /// A convenience overload for <code>recommend(int, int, Recommender, Traversal)</code>.
         /// </summary>
+        public static GraphTraversal<Vertex, Vertex> KvRecommend(
+            this GraphTraversal<Vertex, Vertex> t, int recommendations, int minRating)
+        {
+            return Recommend(t, recommendations, minRating, Recommender.SmallSample, __.Identity());
+        }
+
+        /// <summary>
+        /// A convenience overload for <code>recommend(int, int, Recommender, Traversal)</code>.
+        /// </summary>
         public static GraphTraversal<Vertex, Vertex> Recommend(this GraphTraversal<Vertex, Vertex> t, int recommendations,
                                                                 int minRating, GraphTraversal<object, object> include)
         {

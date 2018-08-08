@@ -54,13 +54,16 @@ namespace KillrVideo.UserManagement.Handlers
         /// Create new node in the Graph for
         /// </summary>
         public async Task AddUserVertexToGraph(UserCreated user) {
+            Logger.Information("Inserting to graph Vertext user {user} ", user.UserId.ToGuid());
+
+            // Create Traversal
             GraphTraversalSource g = DseGraph.Traversal(_session);
-            var traversal = g.V().AddV("user")
-                                 .Property("userId", user.UserId.ToGuid())
-                                 .Property("email", user.Email)
-                                 .Property("added_date", user.Timestamp.ToDateTime());
-            Logger.Information("Inserting User to graph {transeral}", traversal.ToString());
-            await _session.ExecuteGraphAsync(traversal);
+            // Add Vertex 'user' with expected properties asynchronously
+            await _session.ExecuteGraphAsync(
+                g.V().AddV("user")
+                     .Property("userId", user.UserId.ToGuid().ToString())
+                     .Property("email", user.Email)
+                     .Property("added_date", DateTimeOffset.UtcNow));
         }
     }
 }
