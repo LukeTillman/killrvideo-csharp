@@ -54,19 +54,59 @@ namespace KillrVideo.VideoCatalog.Handlers
         /// <summary>
         /// Create new node in the Graph for
         /// </summary>
-        public async Task AddVideoVertexToGraph(YouTubeVideoAdded video) {
+        public async Task AddVideoVertexToGraph(YouTubeVideoAdded video)
+        {
             Logger.Information("Inserting to graph video {video} ", video.VideoId.ToGuid());
 
             // Create Traversal
             GraphTraversalSource g = DseGraph.Traversal(_session);
-            // Add Vertex 'video' with expected properties asynchronously
-            await _session.ExecuteGraphAsync(
-                g.V().AddV("video")
-                     .Property("videoId", video.VideoId.ToGuid().ToString())
-                     .Property("name", video.Name)
-                     .Property("description", video.Description)
-                     .Property("preview_image_location", video.PreviewImageLocation)
-                     .Property("added_date", DateTimeOffset.UtcNow));
+
+            // Create Traversal to add a Vertex Video, Edge 'upload from user to Vide, and Tags
+            var now       = DateTimeOffset.UtcNow;
+            var traversal =
+                g.V().Has("video", "videoId", video.VideoId.ToGuid().ToString())
+                 .Fold()
+                 .Coalesce<Vertex>(
+                  __.Unfold<Vertex>(),
+
+                     //Add or update video
+                  __.AddV("video")
+                    .Property("videoId", video.VideoId.ToGuid().ToString())
+                    .Property("name", video.Name)
+                    .Property("description", video.Description)
+                    .Property("preview_image_location", video.PreviewImageLocation)
+                     .Property("added_date", now)
+                    
+                    //Add edge 'Upload' between user and video
+                    .SideEffect(
+                         __.As ("^video").Coalesce<Vertex>(
+                             __.In("uploaded")
+                               .HasLabel("user")
+                               .Has("userId", video.UserId.ToGuid().ToString()),
+                             __.V()
+                               .Has("user", "userId", video.UserId.ToGuid().ToString())
+                               .AddE("uploaded")
+                               .To("^video").InV())
+                     )
+                  );
+           
+                  // Add Tags
+                  foreach(string tag in video.Tags) {
+                    traversal.SideEffect(
+                    __.As("^video").Coalesce<Vertex>(
+                        __.Out("taggedWith")
+                          .HasLabel("tag")
+                          .Has("name", tag),
+                        __.Coalesce<Vertex>(
+                            __.V().Has("tag", "name", tag),
+                            __.AddV("tag")
+                              .Property("name", tag)
+                              .Property("tagged_date", now))
+                          .AddE("taggedWith")
+                          .From("^video").InV()
+                    ));   
+                  }
+            await _session.ExecuteGraphAsync(traversal);
         }
     }
 }

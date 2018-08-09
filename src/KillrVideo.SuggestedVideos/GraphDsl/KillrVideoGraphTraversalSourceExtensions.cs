@@ -5,16 +5,81 @@ using Gremlin.Net.Process.Traversal;
 using Gremlin.Net.Structure;
 
 using static KillrVideo.SuggestedVideos.GraphDsl.Kv;
+using static Gremlin.Net.Process.Traversal.P;
+
 
 namespace KillrVideo.SuggestedVideos.GraphDsl
 {
 
-    /// <summary>
+     /// <summary>
     /// The KillrVideo DSL TraversalSource which will provide the start steps for DSL-based traversals. 
     /// This TraversalSource spawns KillrVideoTraversal instances.
     /// </summary>
     public static class KillrVideoGraphTraversalSourceExtensions
     {
+
+        /// <summary>
+        /// Take a deep breath here, you will be fine... hopefully 
+        /// </summary>
+        public static GraphTraversal<Vertex, IDictionary<string, Vertex>> recommendUserByRating(this GraphTraversalSource g, 
+                                                                           string userId, 
+                                                                           int numberOfVideosExpected,
+                                                                           int minimumRating,
+                                                                           int numToSample,
+                                                                           int minimumLocalRating) {
+            GraphTraversal < Vertex, IDictionary<string, Vertex>> traversal = g
+              // Locate User by its userId
+              // V().HasLabel("user").Has("userId", request.UserId.Value)
+              .Users(userId)
+              .As("^currentUser")
+
+              // Find all related watched video as they rated
+              .Map<Vertex>(__.Out("rated").Dedup().Fold())
+              .As("^watchedVideos")
+
+              // go back to our current user
+              .Select<Vertex>("^currentUser")
+              // for the video's I rated highly...
+              .OutE("rated").Has("rating", Gt(minimumRating)).InV()
+              // what other users rated those videos highly? (this is like saying "what users share my taste")
+              .InE("rated").Has("rating", Gt(minimumRating))
+              // but don't grab too many, or this won't work OLTP, and "by('rating')" favors the higher ratings
+              .Sample(numToSample).By("rating").OutV()
+              // (except me)
+              .Where(Neq("^currentUser"))
+              // Now we're working with "similar users". For those users who share my taste, grab N highly rated 
+              // videos. Save the rating so we can sum the scores later, and use sack() because it does not require 
+              // path information. (as()/select() was slow)
+              .Local<List<Vertex>>(
+                    __.OutE("rated")
+                      .Has("rating", Gt(minimumRating))
+                      .Limit(minimumLocalRating))
+              .Sack(Operator.Assign)
+              .By("rating").InV()
+
+              // excluding the videos I have already watched
+              .Not(__.Where(Within("^watchedVideos")))
+
+              // Filter out the video if for some reason there is no uploaded edge to a user
+              // I found this could be a case where an "uploaded" edge was not created for a video given we don't guarantee graph data
+              .Filter(__.In("uploaded").HasLabel("user"))
+
+              // what are the most popular videos as calculated by the sum of all their ratings
+              .Group<string, long>()
+              .By().By(__.Sack<object>()
+              .Sum<long>())
+
+              // now that we have that big map of [video: score], lets order it
+              .Order(Scope.Local).By(Column.Values, Order.Decr)
+              .Limit<IDictionary<Vertex, long>>(Scope.Local, numberOfVideosExpected)
+              .Select<Vertex>(Column.Keys)
+              .Unfold<Vertex>()
+              .Project<Vertex>("video", "user")
+              .By()
+              .By(__.In("uploaded"));
+            return traversal;
+        }
+
         /// <summary>
         /// Gets movies by their title.
         /// </summary>

@@ -54,8 +54,7 @@ namespace KillrVideo.SuggestedVideos
 
         public DataStaxEnterpriseSuggestedVideos(IDseSession session, PreparedStatementCache statementCache,
                                                  IFindServices serviceDiscovery, Func<Uri, IRestClient> createRestClient,
-                                                 SuggestionsOptions options)
-        {
+                                                 SuggestionsOptions options) {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
             if (serviceDiscovery == null) throw new ArgumentNullException(nameof(serviceDiscovery));
@@ -160,90 +159,24 @@ namespace KillrVideo.SuggestedVideos
         public override async Task<GetSuggestedForUserResponse> GetSuggestedForUser(GetSuggestedForUserRequest request,
                                                                                     ServerCallContext context)
         {
-            int numberOfVideosExpected = 5;
-            int minimumRating          = 4;
-            int numToSample            = 1000;
-            int minimumLocalRating     = 5;
-
-            string[] vextexProperties = { KeyVideoId, KeyUserId, KeyName, KeyAddedDate, KeyPreviewImage };
-
             Logger.Information("Request suggested video(s) for user {user}", request.UserId.Value);
-
             GraphTraversalSource g = DseGraph.Traversal(_session);
 
-            var traversal = g
-              // Locate User by its userId
-              // V().HasLabel("user").Has("userId", request.UserId.Value)
-              .Users(request.UserId.ToGuid().ToString())
-              .As("^currentUser")
-
-              // Find all related watched video as they rated
-              .Map<Vertex>(__.Out("rated").Dedup().Fold())
-              .As("^watchedVideos")
-
-              // go back to our current user
-              .Select<Vertex>("^currentUser")
-              // for the video's I rated highly...
-              .OutE("rated").Has("rating", Gt(minimumRating)).InV()
-              // what other users rated those videos highly? (this is like saying "what users share my taste")
-              .InE("rated").Has("rating", Gt(minimumRating))
-              // but don't grab too many, or this won't work OLTP, and "by('rating')" favors the higher ratings
-              .Sample(numToSample).By("rating").OutV()
-              // (except me)
-              .Where(Neq("^currentUser"))
-              // Now we're working with "similar users". For those users who share my taste, grab N highly rated 
-              // videos. Save the rating so we can sum the scores later, and use sack() because it does not require 
-              // path information. (as()/select() was slow)
-              .Local<List<Vertex>>(
-                    __.OutE("rated")
-                      .Has("rating", Gt(minimumRating))
-                      .Limit(minimumLocalRating))
-              .Sack(Operator.Assign)
-              .By("rating").InV()
-
-              // excluding the videos I have already watched
-              .Not(__.Where(Within("^watchedVideos")))
-
-              // Filter out the video if for some reason there is no uploaded edge to a user
-              // I found this could be a case where an "uploaded" edge was not created for a video given we don't guarantee graph data
-              .Filter(__.In("uploaded").HasLabel("user"))
-
-              // what are the most popular videos as calculated by the sum of all their ratings
-              .Group<string, long>()
-              .By().By(__.Sack<object>()
-              .Sum<long>())
-
-              // now that we have that big map of [video: score], lets order it
-              .Order(Scope.Local).By(Column.Values, Order.Decr)
-              .Limit<IDictionary<Vertex, long>>(Scope.Local, numberOfVideosExpected)
-              .Select<Vertex>(Column.Keys)
-              .Unfold<Vertex>()
-              .Project<Vertex>("video", "user")
-              .By()
-              .By(__.In("uploaded"));
-
+            // DSL Baby !
+            var traversal = g.recommendUserByRating(request.UserId.ToGuid().ToString(), 5, 4, 1000, 5);
             GraphResultSet result = await _session.ExecuteGraphAsync(traversal);
-            foreach (IVertex vertex in result.To<IVertex>()) {
-                Logger.Information("Result " + vertex);
-            }
-            // Enforce Async as async Task expected in the signature (DSL is not)
-            //IList<IDictionary<string, object>> suggestedVideos = await Task.Run(() =>
-                    // Get a transversal (GraphTraversalSource)
-                    //DseGraph.Traversal(_session)
-                    // Locate current user by its label and user id in the graph (single vertex)
-                    //.Users(request.UserId.Value)
-                    // Use Recommendation engine (threshold on ratings) to find movies Vertices
-                    //.Recommend(numberOfVideosExpected, minimumRating)
-                    // Project result to get required attributes in order to build a SuggestedVideoPreview
-                    //.Enrich(true, Keys(vextexProperties), InDegree(), OutDegree()).ToList());
-           
+
             // Building GRPC response from list of results vertices (hopefully 'numberOfVideosExpected')
             var grpcResponse = new GetSuggestedForUserResponse
             {
                 UserId = request.UserId,
                 PagingState = ""
             };
-            //grpcResponse.Videos.Add(suggestedVideos.Select(MapVertexVideoToVideoPreview));
+
+            foreach (IVertex vertex in result.To<IVertex>()) {
+                Logger.Information("Result " + vertex);
+                grpcResponse.Videos.Add(MapVertexToVideoPreview(vertex));
+            }
             return grpcResponse;
         }
 
@@ -256,7 +189,6 @@ namespace KillrVideo.SuggestedVideos
             return new SuggestedVideoPreview
             {
                 VideoId = new Guid(vertexVideo[KeyVideoId].ToString()).ToUuid(),
-                //AddedDate = "".ToTimestamp(),
                 Name = vertexVideo[KeyName].ToString(),
                 PreviewImageLocation = vertexVideo[KeyPreviewImage].ToString(),
                 UserId = new Guid(vertexVideo[KeyUserId].ToString()).ToUuid()
@@ -282,18 +214,16 @@ namespace KillrVideo.SuggestedVideos
             return new Uri($"http://{ipAndPorts.First()}/solr");
         }
 
-
-
-        private static SuggestedVideoPreview MapRowToVideoPreview(Row row)
+        private static SuggestedVideoPreview MapVertexToVideoPreview(IVertex vertex)
         {
             return new SuggestedVideoPreview
             {
-                VideoId = row.GetValue<Guid>("videoid").ToUuid(),
-                AddedDate = row.GetValue<DateTimeOffset>("added_date").ToTimestamp(),
-                Name = row.GetValue<string>("name"),
-                PreviewImageLocation = row.GetValue<string>("preview_image_location"),
-                UserId = row.GetValue<Guid>("authorid").ToUuid()
+                VideoId              = new Guid(vertex.GetProperty(KeyVideoId).Value.ToString()).ToUuid(),
+                Name                 = vertex.GetProperty(KeyName).Value.ToString(),
+                PreviewImageLocation = vertex.GetProperty(KeyPreviewImage).Value.ToString(),
+                UserId               = new Guid(vertex.GetProperty(KeyUserId).Value.ToString()).ToUuid()
             };
         }
+
     }
 }
