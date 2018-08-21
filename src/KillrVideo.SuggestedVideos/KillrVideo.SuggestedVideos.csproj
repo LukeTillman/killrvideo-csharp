@@ -169,12 +169,6 @@
     <Compile Include="protos\SuggestedVideosServiceGrpc.cs" />
     <Compile Include="SuggestionsOptions.cs" />
     <Compile Include="SuggestVideosByTag.cs" />
-    <Compile Include="GraphDsl\Enrichment.cs" />
-    <Compile Include="GraphDsl\Schema.cs" />
-    <Compile Include="GraphDsl\__KillrVideo.cs" />
-    <Compile Include="GraphDsl\KillrVideoGraphTraversalExtensions.cs" />
-    <Compile Include="GraphDsl\KillrVideoGraphTraversalSourceExtensions.cs" />
-    <Compile Include="GraphDsl\Recommender.cs" />
     <Compile Include="DataStaxEnterpriseSuggestedVideos.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -196,9 +190,10 @@
       <Project>{4a41c0c8-6a27-4728-b596-b64227a26fb6}</Project>
       <Name>KillrVideo.Protobuf</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GraphDsl\" />
+    <ProjectReference Include="..\KillrVideo.GraphDsl\KillrVideo.GraphDsl.csproj">
+      <Project>{FC16AB3E-E132-4654-8530-A8831DACB392}</Project>
+      <Name>KillrVideo.GraphDsl</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\build\Protobuf.targets" />

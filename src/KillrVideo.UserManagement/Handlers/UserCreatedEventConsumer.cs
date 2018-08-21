@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel.Composition;
 using Dse;
 using Dse.Graph;
-using Gremlin.Net.Process.Traversal;
 using Serilog;
 using KillrVideo.MessageBus;
 using System;
 using System.Threading.Tasks;
 using KillrVideo.UserManagement.Events;
 using DryIocAttributes;
+
+using static KillrVideo.GraphDsl.__KillrVideo;
 
 namespace KillrVideo.UserManagement.Handlers
 {
@@ -54,16 +55,16 @@ namespace KillrVideo.UserManagement.Handlers
         /// Create new node in the Graph for
         /// </summary>
         public async Task AddUserVertexToGraph(UserCreated user) {
-            Logger.Information("Inserting to graph Vertext user {user} ", user.UserId.ToGuid());
+
+            String userId = user.UserId.ToGuid().ToString();
+            Logger.Information("Inserting to graph Vertext user {user} ", userId);
 
             // Create Traversal
-            GraphTraversalSource g = DseGraph.Traversal(_session);
+            var traversal = DseGraph.Traversal(_session)
+                                    .CreateUserVertex(userId, user.Email);
+
             // Add Vertex 'user' with expected properties asynchronously
-            await _session.ExecuteGraphAsync(
-                g.V().AddV("user")
-                     .Property("userId", user.UserId.ToGuid().ToString())
-                     .Property("email", user.Email)
-                     .Property("added_date", DateTimeOffset.UtcNow));
+            await _session.ExecuteGraphAsync(traversal);
         }
     }
 }

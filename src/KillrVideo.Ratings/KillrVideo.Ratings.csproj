@@ -206,6 +206,10 @@
       <Project>{4a41c0c8-6a27-4728-b596-b64227a26fb6}</Project>
       <Name>KillrVideo.Protobuf</Name>
     </ProjectReference>
+    <ProjectReference Include="..\KillrVideo.GraphDsl\KillrVideo.GraphDsl.csproj">
+      <Project>{FC16AB3E-E132-4654-8530-A8831DACB392}</Project>
+      <Name>KillrVideo.GraphDsl</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Handlers\" />

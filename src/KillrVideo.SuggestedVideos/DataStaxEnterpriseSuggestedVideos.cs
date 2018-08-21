@@ -17,13 +17,9 @@ using KillrVideo.Protobuf.Services;
 using KillrVideo.SuggestedVideos.MLT;
 using RestSharp;
 
-using static KillrVideo.SuggestedVideos.GraphDsl.Kv;
-using static KillrVideo.SuggestedVideos.GraphDsl.KillrVideoGraphTraversalSourceExtensions;
-using static KillrVideo.SuggestedVideos.GraphDsl.KillrVideoGraphTraversalExtensions;
-using static KillrVideo.SuggestedVideos.GraphDsl.Enrichment;
+using static KillrVideo.GraphDsl.__KillrVideo;
 
 using Gremlin.Net.Process.Traversal;
-using static Gremlin.Net.Process.Traversal.P;
 
 namespace KillrVideo.SuggestedVideos
 {
@@ -163,7 +159,8 @@ namespace KillrVideo.SuggestedVideos
             GraphTraversalSource g = DseGraph.Traversal(_session);
 
             // DSL Baby !
-            var traversal = g.recommendUserByRating(request.UserId.ToGuid().ToString(), 5, 4, 1000, 5);
+            var traversal = g.RecommendVideos(request.UserId.ToGuid().ToString(), 5, 4, 1000, 5);
+
             GraphResultSet result = await _session.ExecuteGraphAsync(traversal);
 
             // Building GRPC response from list of results vertices (hopefully 'numberOfVideosExpected')
@@ -185,13 +182,13 @@ namespace KillrVideo.SuggestedVideos
         /// </summary>
         private static SuggestedVideoPreview MapVertexVideoToVideoPreview(IDictionary<string, object> vertexVideo)
         {
-            Logger.Information(" + Result : {videoid} + date {}", vertexVideo[KeyVideoId], vertexVideo[KeyAddedDate]);
+            Logger.Information(" + Result : {videoid} + date {}", vertexVideo[PropertyVideoId], vertexVideo[PropertyAddedDate]);
             return new SuggestedVideoPreview
             {
-                VideoId = new Guid(vertexVideo[KeyVideoId].ToString()).ToUuid(),
-                Name = vertexVideo[KeyName].ToString(),
-                PreviewImageLocation = vertexVideo[KeyPreviewImage].ToString(),
-                UserId = new Guid(vertexVideo[KeyUserId].ToString()).ToUuid()
+                VideoId = new Guid(vertexVideo[PropertyVideoId].ToString()).ToUuid(),
+                Name = vertexVideo[PropertyName].ToString(),
+                PreviewImageLocation = vertexVideo[PropertyPreviewImage].ToString(),
+                UserId = new Guid(vertexVideo[PropertyUserId].ToString()).ToUuid()
             };
         }
 
@@ -218,10 +215,11 @@ namespace KillrVideo.SuggestedVideos
         {
             return new SuggestedVideoPreview
             {
-                VideoId              = new Guid(vertex.GetProperty(KeyVideoId).Value.ToString()).ToUuid(),
-                Name                 = vertex.GetProperty(KeyName).Value.ToString(),
-                PreviewImageLocation = vertex.GetProperty(KeyPreviewImage).Value.ToString(),
-                UserId               = new Guid(vertex.GetProperty(KeyUserId).Value.ToString()).ToUuid()
+                VideoId = new Guid(vertex.GetProperty(PropertyVideoId).Value.ToString()).ToUuid(),
+                Name = vertex.GetProperty(PropertyName).Value.ToString(),
+                PreviewImageLocation = vertex.GetProperty(PropertyPreviewImage).Value.ToString(),
+                UserId = new Guid(vertex.GetProperty(PropertyUserId).Value.ToString()).ToUuid(),
+                AddedDate = vertex.GetProperty(PropertyAddedDate).Value.To<DateTimeOffset>().ToTimestamp()
             };
         }
 

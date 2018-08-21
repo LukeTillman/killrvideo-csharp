@@ -10,6 +10,8 @@ using KillrVideo.MessageBus;
 using KillrVideo.Ratings.Events;
 using DryIocAttributes;
 
+using static KillrVideo.GraphDsl.__KillrVideo;
+
 namespace KillrVideo.Ratings
 {
     /// <summary>
@@ -48,30 +50,15 @@ namespace KillrVideo.Ratings
         /// </summary>
         public async Task Handle(UserRatedVideo message) {
             Logger.Information("Incoming Event 'UserRatedVideo' rated video {videoid}: ", message.VideoId.ToGuid());
-            await RateVideoInGraph(message.VideoId.ToGuid(),
-                             message.UserId.ToGuid(),
+            await RateVideoInGraph(message.VideoId.ToGuid().ToString(),
+                             message.UserId.ToGuid().ToString(),
                              message.Rating);
         }
 
-        public async Task RateVideoInGraph(Guid videoId, Guid userId, int rating) {
-            GraphTraversalSource g = DseGraph.Traversal(_session);
-            await _session.ExecuteGraphAsync(
-                    // Begin of Traversal
-                    g.V()
-                    // Locate target Video vertex by its unique videoId
-                    .HasLabel("video").Has("videoId", videoId.ToString())
-                    // Set result as a variable named ^video 
-                    .SideEffect(__.As("^video")
-                       // Keep going for request 
-                       .Coalesce<object>(
-                          // Locate target User vertex by its unique UserId         
-                          __.V()
-                            .HasLabel("user")
-                            .Has("userId", userId.ToString())
-                          // Create edge 'rated' from User to Video with value
-                            .AddE("rated").Property("rating", rating)
-                            .To("^video").InV()))
-            );
+        public async Task RateVideoInGraph(String videoId, String userId, int rating) {
+            var traversal = DseGraph.Traversal(_session)
+                                    .UserRateVideo(userId, videoId, rating);
+            await _session.ExecuteGraphAsync(traversal);
         }
     }
 }

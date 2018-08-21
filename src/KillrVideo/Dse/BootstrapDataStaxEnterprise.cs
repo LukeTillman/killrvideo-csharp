@@ -88,11 +88,11 @@ namespace KillrVideo.Dse
                         String certPath     = _kvConfig[ConfigKeys.DseSslCertPath];
                         String certPassword = _kvConfig[ConfigKeys.DseSslCertPassword];
                         if(string.IsNullOrEmpty(certPath)) {
-                            throw new ArgumentNullException("Cannot real SSL File " + certPath);
+                            throw new ArgumentNullException("Cannot read SSL File " + certPath);
                         }
                         if (string.IsNullOrEmpty(certPath))
                         {
-                            throw new ArgumentNullException("Cannot real SSL Certificate password " + certPath);
+                            throw new ArgumentNullException("Cannot read SSL Certificate password " + certPath);
                         }
                         Logger.Information("+ Setup SSL options with {certPath}", certPath);
                         SSLOptions sslOptions = new SSLOptions();
