@@ -177,21 +177,6 @@ namespace KillrVideo.SuggestedVideos
             return grpcResponse;
         }
 
-        /// <summary>
-        /// Map a Vertex from Graph Transversal up to GRPC Bean
-        /// </summary>
-        private static SuggestedVideoPreview MapVertexVideoToVideoPreview(IDictionary<string, object> vertexVideo)
-        {
-            Logger.Information(" + Result : {videoid} + date {}", vertexVideo[PropertyVideoId], vertexVideo[PropertyAddedDate]);
-            return new SuggestedVideoPreview
-            {
-                VideoId = new Guid(vertexVideo[PropertyVideoId].ToString()).ToUuid(),
-                Name = vertexVideo[PropertyName].ToString(),
-                PreviewImageLocation = vertexVideo[PropertyPreviewImage].ToString(),
-                UserId = new Guid(vertexVideo[PropertyUserId].ToString()).ToUuid()
-            };
-        }
-
         private Task<Uri> GetDseSearchUri()
         {
             // Try to minimize the number of times we lookup the search service by caching and reusing the task
@@ -215,11 +200,11 @@ namespace KillrVideo.SuggestedVideos
         {
             return new SuggestedVideoPreview
             {
-                VideoId = new Guid(vertex.GetProperty(PropertyVideoId).Value.ToString()).ToUuid(),
-                Name = vertex.GetProperty(PropertyName).Value.ToString(),
+                VideoId              = new Guid(vertex.GetProperty(PropertyVideoId).Value.ToString()).ToUuid(),
+                UserId               = new Guid(vertex.GetProperty(PropertyUserId).Value.ToString()).ToUuid(),
+                Name                 = vertex.GetProperty(PropertyName).Value.ToString(),
                 PreviewImageLocation = vertex.GetProperty(PropertyPreviewImage).Value.ToString(),
-                UserId = new Guid(vertex.GetProperty(PropertyUserId).Value.ToString()).ToUuid(),
-                AddedDate = vertex.GetProperty(PropertyAddedDate).Value.To<DateTimeOffset>().ToTimestamp()
+                AddedDate            = vertex.GetProperty(PropertyAddedDate).Value.To<DateTimeOffset>().ToTimestamp()
             };
         }
 
