@@ -12,15 +12,22 @@ namespace KillrVideo.Cassandra
     /// A cache for PreparedStatements based on the CQL string.
     /// </summary>
     [Export]
-    public class PreparedStatementCache
-    {
-        private readonly ISession _session;
+    public class PreparedStatementCache {
+
+        /// <summary>
+        /// Inject Dse Session
+        /// </summary>
+        private readonly IDseSession _session;
+
+        /// <summary>
+        /// Working Cache
+        /// </summary>
         private readonly ConcurrentDictionary<string, Lazy<Task<PreparedStatement>>> _cachedItems;
 
         /// <summary>
         /// Create a new TaskCache using the provided factoryFunc to generate items from keys.
         /// </summary>
-        public PreparedStatementCache(ISession session)
+        public PreparedStatementCache(IDseSession session)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
             _session = session;

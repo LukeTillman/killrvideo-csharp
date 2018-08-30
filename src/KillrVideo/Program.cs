@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Threading;
 using DryIoc;
 using DryIoc.MefAttributedModel;
+using KillrVideo.Dse;
 using KillrVideo.Cassandra;
 using KillrVideo.Comments;
 using KillrVideo.Configuration;

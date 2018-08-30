@@ -4,7 +4,6 @@ using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 using EtcdNet;
 using Grpc.Core;
-using KillrVideo.Configuration;
 using KillrVideo.Host;
 using KillrVideo.Protobuf;
 using KillrVideo.Protobuf.Services;

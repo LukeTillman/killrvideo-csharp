@@ -15,6 +15,27 @@ using Microsoft.Extensions.Configuration;
 namespace KillrVideo.Configuration
 {
     /// <summary>
+    /// String tokens for graph element lables and property keys.
+    /// </summary>
+    public static class ConfigKeys {
+
+        public const String DseKeySpace         = "DseKeySpace";
+        public const String DseGraphName        = "DseGraphName";
+
+        public const String DseGraphReadTimeout = "DseGraphReadTimeout";
+
+        public const String DseUsername         = "DseUsername";
+        public const String DsePassword         = "DsePassword";
+        public const String DseEnableSSL        = "DseEnableSSL";
+        public const String DseSslCertPath      = "DseSslCertPath";
+        public const String DseSslCertPassword  = "DseSslCertPassword";
+
+        public const String MaxRetry            = "AttemptsBeforeLoggingErrors";
+        public const String RetryDelay          = "RetryDelay";
+        public const String EtcdCassandraKey    = "cassandra";
+    }
+
+    /// <summary>
     /// Class that contains static factory methods for getting the various options/config objects needed by the application.
     /// </summary>
     [Export, AsFactory]
@@ -30,13 +51,32 @@ namespace KillrVideo.Configuration
                     // The IP address for etcd to do service discovery
                     { "Etcd:IP", "KILLRVIDEO_DOCKER_IP" },
                     // The IP address to broadcast for gRPC services (i.e. register with service discovery)
-                    { "Broadcast:IP", "KILLRVIDEO_HOST_IP" },
-                    // If you are running Docker find the .env file on disk
-                    { "ConfigEnvFilePath", "/Users/cedricklunven/dev/workspace-killrvideos/killrvideo-csharp/.env" }
+                    { "Broadcast:IP", "KILLRVIDEO_HOST_IP" }
                 }))
                 // Add the configuration defaults
                 .AddInMemoryCollection(new Dictionary<string, string>
                 {
+                    // Externalization of used KeySpace
+                    { ConfigKeys.DseKeySpace, "killrvideo" },
+                    // Externalization of used KeySpace
+                    { ConfigKeys.DseGraphName, "killrvideo_video_recommendations" },
+                    // Externalization of timeout
+                    { ConfigKeys.DseGraphReadTimeout, "30000" },
+                    // UserName
+                    { ConfigKeys.DseUsername, "" },
+                    // Password
+                    { ConfigKeys.DsePassword, "" },
+                    // Enable SSL
+                    { ConfigKeys.DseEnableSSL, "false" },
+                    // SSL Certificate Path
+                    { ConfigKeys.DseSslCertPath, "C:\\TMP\\sample.cert" },
+                    // SSL Certificate Password
+                    { ConfigKeys.DseSslCertPassword, "change_me" },
+                    // Number of tries before leaving
+                    { ConfigKeys.MaxRetry, "6" },
+                    // Number of tries before leaving
+                    { ConfigKeys.RetryDelay, "10000" },
+
                     // The default logging output level
                     { "LoggingLevel", "verbose" },
                     // Whether to use DSE implementations of services

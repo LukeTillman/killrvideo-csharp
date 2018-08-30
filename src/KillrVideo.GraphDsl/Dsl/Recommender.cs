@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Gremlin.Net.Process.Traversal;
 using Gremlin.Net.Structure;
 
-using static KillrVideo.SuggestedVideos.GraphDsl.Kv;
+using static KillrVideo.GraphDsl.KvGraph;
 
-namespace KillrVideo.SuggestedVideos.GraphDsl
+namespace KillrVideo.GraphDsl
 {
 
     /// <summary>

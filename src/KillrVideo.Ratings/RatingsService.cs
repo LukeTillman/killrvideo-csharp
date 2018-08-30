@@ -6,6 +6,7 @@ using Dse;
 using Google.Protobuf.Reflection;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Serilog;
 using KillrVideo.Cassandra;
 using KillrVideo.MessageBus;
 using KillrVideo.Protobuf.Services;
@@ -19,13 +20,29 @@ namespace KillrVideo.Ratings
     [Export(typeof(IGrpcServerService))]
     public class RatingsServiceImpl : RatingsService.RatingsServiceBase, IGrpcServerService
     {
-        private readonly ISession _session;
-        private readonly IBus _bus;
+        /// <summary>
+        /// Logger for the class to write into both files and console
+        /// </summary>
+        private static readonly ILogger Logger = Log.ForContext(typeof(RatingsServiceImpl));
+
+        /// <summary>
+        /// Inject Dse Session.
+        /// </summary>
+        private readonly IDseSession _session;
+
+        /// <summary>
+        /// Cache of results
+        /// </summary>
         private readonly PreparedStatementCache _statementCache;
+
+        /// <summary>
+        /// Exchange messages between services.
+        /// </summary>
+        private readonly IBus _bus;
 
         public ServiceDescriptor Descriptor => RatingsService.Descriptor;
 
-        public RatingsServiceImpl(ISession session, PreparedStatementCache statementCache, IBus bus)
+        public RatingsServiceImpl(IDseSession session, PreparedStatementCache statementCache, IBus bus)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
@@ -48,6 +65,11 @@ namespace KillrVideo.Ratings
         /// </summary>
         public override async Task<RateVideoResponse> RateVideo(RateVideoRequest request, ServerCallContext context)
         {
+            Logger.Information("Rate video {videoid} with user {user} rate: {rate}",
+                               request.VideoId.ToGuid(),
+                               request.UserId.ToGuid(),
+                               request.Rating);
+            
             PreparedStatement[] preparedStatements = await _statementCache.GetOrAddAllAsync(
                 "UPDATE video_ratings SET rating_counter = rating_counter + 1, rating_total = rating_total + ? WHERE videoid = ?",
                 "INSERT INTO video_ratings_by_user (videoid, userid, rating) VALUES (?, ?, ?)");
@@ -113,5 +135,6 @@ namespace KillrVideo.Ratings
                 Rating = row?.GetValue<int>("rating") ?? 0
             };
         }
+
     }
 }

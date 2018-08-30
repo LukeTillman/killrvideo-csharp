@@ -17,14 +17,14 @@ namespace KillrVideo.Search.Handlers
     [ExportMany, Reuse(ReuseType.Transient)]
     public class UpdateSearchOnVideoAdded : IHandleMessage<UploadedVideoAdded>, IHandleMessage<YouTubeVideoAdded>
     {
-        private readonly ISession _session;
+        private readonly IDseSession _session;
+
         private readonly PreparedStatementCache _statementCache;
 
-        public UpdateSearchOnVideoAdded(ISession session, PreparedStatementCache statementCache)
-        {
+        public UpdateSearchOnVideoAdded(IDseSession session, PreparedStatementCache statementCache) {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (statementCache == null) throw new ArgumentNullException(nameof(statementCache));
-            _session = session;
+            _session        = session;
             _statementCache = statementCache;
         }
 
