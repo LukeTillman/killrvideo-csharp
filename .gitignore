@@ -91,3 +91,4 @@ src/spark/*.ipynb
 
 # Mac-specific files
 .DS_Store
+.idea
