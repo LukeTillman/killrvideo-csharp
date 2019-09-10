@@ -1,0 +1,585 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EtcdNet</name>
+    </assembly>
+    <members>
+        <member name="T:EtcdNet.DefaultJsonDeserializer">
+            <summary>
+            DefaultJsonDeserializer takes use of DataContractJsonSerializer
+            </summary>
+        </member>
+        <member name="T:EtcdNet.IJsonDeserializer">
+            <summary>
+            This interface allows to choose alternative JSON deserializer
+            </summary>
+        </member>
+        <member name="M:EtcdNet.IJsonDeserializer.Deserialize``1(System.String)">
+            <summary>
+            Deserialize the json string
+            </summary>
+            <typeparam name="T">Expected type</typeparam>
+            <param name="json">json string</param>
+            <returns>deserialized json object</returns>
+        </member>
+        <member name="T:EtcdNet.ErrorResponse">
+            <summary>
+            Represent etcd error JSON
+            </summary>
+        </member>
+        <member name="P:EtcdNet.ErrorResponse.ErrorCode">
+            <summary>
+            Error Code
+            https://github.com/coreos/etcd/blob/master/Documentation/errorcode.md
+            </summary>
+        </member>
+        <member name="P:EtcdNet.ErrorResponse.Message">
+            <summary>
+            Error message
+            </summary>
+        </member>
+        <member name="P:EtcdNet.ErrorResponse.Cause">
+            <summary>
+            Cause
+            </summary>
+        </member>
+        <member name="P:EtcdNet.ErrorResponse.Index">
+            <summary>
+            Index
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdNode">
+            <summary>
+            Represent a node in etcd
+            </summary>
+        </member>
+        <member name="M:EtcdNet.EtcdNode.GetExpirationTime">
+            <summary>
+            Get expiration time of this node
+            If none, DateTime.MaxValue is returned
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:EtcdNet.EtcdNode.Key">
+            <summary>
+            Path of the node
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdNode.IsDirectory">
+            <summary>
+            Is directory
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdNode.Value">
+            <summary>
+            Value
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdNode.CreatedIndex">
+            <summary>
+            Index which creates this node
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdNode.ModifiedIndex">
+            <summary>
+            Index of the modification
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdNode.TTL">
+            <summary>
+            Time to live, in second
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdNode.Expiration">
+            <summary>
+            Expiration time
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdNode.Nodes">
+            <summary>
+            Children nodes
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdResponse">
+            <summary>
+            Normal response of etcd
+            </summary>
+        </member>
+        <member name="F:EtcdNet.EtcdResponse.ACTION_CREATE">
+            <summary>
+            Create action
+            </summary>
+        </member>
+        <member name="F:EtcdNet.EtcdResponse.ACTION_DELETE">
+            <summary>
+            Delete action
+            </summary>
+        </member>
+        <member name="F:EtcdNet.EtcdResponse.ACTION_SET">
+            <summary>
+            Set action
+            </summary>
+        </member>
+        <member name="F:EtcdNet.EtcdResponse.ACTION_GET">
+            <summary>
+            Get action
+            </summary>
+        </member>
+        <member name="F:EtcdNet.EtcdResponse.ACTION_EXPIRE">
+            <summary>
+            Expire action
+            </summary>
+        </member>
+        <member name="F:EtcdNet.EtcdResponse.ACTION_COMPARE_AND_SWAP">
+            <summary>
+            CAS action
+            </summary>
+        </member>
+        <member name="F:EtcdNet.EtcdResponse.ACTION_COMPARE_AND_DELETE">
+            <summary>
+            CAD action
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdResponse.Action">
+            <summary>
+            Represents the action
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdResponse.Node">
+            <summary>
+            Changed node
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdResponse.PrevNode">
+            <summary>
+            Previous node
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdResponse.EtcdServer">
+            <summary>
+            The url of Etcd server which produce the response
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdResponse.EtcdClusterID">
+            <summary>
+            X-Etcd-Cluster-Id
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdResponse.EtcdIndex">
+            <summary>
+            X-Etcd-Index is the current etcd index as explained above. When request is a watch on key space, X-Etcd-Index is the current etcd index when the watch starts, which means that the watched event may happen after X-Etcd-Index.
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdResponse.RaftIndex">
+            <summary>
+            X-Raft-Index is similar to the etcd index but is for the underlying raft protocol
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdResponse.RaftTerm">
+            <summary>
+            X-Raft-Term is an integer that will increase whenever an etcd master election happens in the cluster. If this number is increasing rapidly, you may need to tune the election timeout. See the tuning section for details.
+            </summary>
+        </member>
+        <member name="T:EtcdNet.ErrorCode">
+            <summary>
+             error code in key space '/v2/keys'
+             https://github.com/coreos/etcd/blob/master/Documentation/errorcode.md
+            </summary>
+        </member>
+        <member name="F:EtcdNet.ErrorCode.KeyNotFound">
+            <summary>
+            Key not found
+            </summary>
+        </member>
+        <member name="F:EtcdNet.ErrorCode.TestFailed">
+            <summary>
+            Compare failed
+            </summary>
+        </member>
+        <member name="F:EtcdNet.ErrorCode.NotFile">
+            <summary>
+            Not a file
+            </summary>
+        </member>
+        <member name="F:EtcdNet.ErrorCode.NotDir">
+            <summary>
+            Not a directory
+            </summary>
+        </member>
+        <member name="F:EtcdNet.ErrorCode.NodeExist">
+            <summary>
+            Key already exists
+            </summary>
+        </member>
+        <member name="F:EtcdNet.ErrorCode.RootReadOnly">
+            <summary>
+            Root is read only
+            </summary>
+        </member>
+        <member name="F:EtcdNet.ErrorCode.DirNotEmpty">
+            <summary>
+            Directory not empty
+            </summary>
+        </member>
+        <member name="F:EtcdNet.ErrorCode.PrevValueRequired">
+            <summary>
+            PrevValue is Required in POST form
+            </summary>
+        </member>
+        <member name="F:EtcdNet.ErrorCode.TTLNaN">
+            <summary>
+            The given TTL in POST form is not a number
+            </summary>
+        </member>
+        <member name="F:EtcdNet.ErrorCode.IndexNaN">
+            <summary>
+            The given index in POST form is not a number
+            </summary>
+        </member>
+        <member name="F:EtcdNet.ErrorCode.InvalidField">
+            <summary>
+            Invalid field
+            </summary>
+        </member>
+        <member name="F:EtcdNet.ErrorCode.InvalidForm">
+            <summary>
+            Invalid POST form
+            </summary>
+        </member>
+        <member name="F:EtcdNet.ErrorCode.RaftInternal">
+            <summary>
+            Raft Internal Error
+            </summary>
+        </member>
+        <member name="F:EtcdNet.ErrorCode.LeaderElect">
+            <summary>
+            During Leader Election
+            </summary>
+        </member>
+        <member name="F:EtcdNet.ErrorCode.WatcherCleared">
+            <summary>
+            watcher is cleared due to etcd recovery
+            </summary>
+        </member>
+        <member name="F:EtcdNet.ErrorCode.EventIndexCleared">
+            <summary>
+            The event in requested index is outdated and cleared
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdClient">
+            <summary>
+            The EtcdClient class is used to talk with etcd service
+            </summary>
+        </member>
+        <member name="M:EtcdNet.EtcdClient.#ctor(EtcdNet.EtcdClientOpitions)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="options">options to initialize</param>
+        </member>
+        <member name="M:EtcdNet.EtcdClient.GetNodeAsync(System.String,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Get etcd node specified by `key`
+            </summary>
+            <param name="key">The path of the node, must start with `/`</param>
+            <param name="recursive">Represents whether list the children nodes</param>
+            <param name="sorted">To enumerate the in-order keys as a sorted list, use the "sorted" parameter.</param>
+            <param name="ignoreKeyNotFoundException">If `true`, `EtcdCommonException.KeyNotFound` exception is ignored and `null` is returned instead.</param>
+            <returns>represents response; or `null` if not exist</returns>
+        </member>
+        <member name="M:EtcdNet.EtcdClient.GetNodeValueAsync(System.String,System.Boolean)">
+            <summary>
+            Simplified version of `GetNodeAsync`.
+            Get the value of the specific node
+            </summary>
+            <param name="key">The path of the node, must start with `/`</param>
+            <param name="ignoreKeyNotFoundException">If `true`, `EtcdCommonException.KeyNotFound` exception is ignored and `null` is returned instead.</param>
+            <returns>A string represents a value. It could be `null`</returns>
+        </member>
+        <member name="M:EtcdNet.EtcdClient.SetNodeAsync(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Boolean})">
+            <summary>
+            Get etcd node specified by `key`
+            </summary>
+            <param name="key">path of the node</param>
+            <param name="value">value to be set</param>
+            <param name="ttl">time to live, in seconds</param>
+            <param name="dir">indicates if this is a directory</param>
+            <returns>SetNodeResponse</returns>
+        </member>
+        <member name="M:EtcdNet.EtcdClient.DeleteNodeAsync(System.String,System.Boolean,System.Nullable{System.Boolean})">
+            <summary>
+            delete specific node
+            </summary>
+            <param name="key">The path of the node, must start with `/`</param>
+            <param name="dir">true to delete an empty directory</param>
+            <param name="ignoreKeyNotFoundException">If `true`, `EtcdCommonException.KeyNotFound` exception is ignored and `null` is returned instead.</param>
+            <returns>SetNodeResponse instance or `null`</returns>
+        </member>
+        <member name="M:EtcdNet.EtcdClient.CreateInOrderNodeAsync(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Boolean})">
+            <summary>
+            Create in-order node
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="ttl"></param>
+            <param name="dir"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EtcdNet.EtcdClient.CreateNodeAsync(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Boolean})">
+            <summary>
+            Create a new node. If node exists, EtcdCommonException.NodeExist occurs
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="ttl"></param>
+            <param name="dir"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EtcdNet.EtcdClient.CompareAndSwapNodeAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Boolean})">
+            <summary>
+            CAS(Compare and Swap) a node
+            </summary>
+            <param name="key"></param>
+            <param name="prevValue"></param>
+            <param name="value"></param>
+            <param name="ttl"></param>
+            <param name="dir"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EtcdNet.EtcdClient.CompareAndSwapNodeAsync(System.String,System.Int64,System.String,System.Nullable{System.Int32},System.Nullable{System.Boolean})">
+            <summary>
+            CAS(Compare and Swap) a node
+            </summary>
+            <param name="key">path of the node</param>
+            <param name="prevIndex">previous index</param>
+            <param name="value">value</param>
+            <param name="ttl">time to live (in seconds)</param>
+            <param name="dir">is directory</param>
+            <returns></returns>
+        </member>
+        <member name="M:EtcdNet.EtcdClient.CompareAndDeleteNodeAsync(System.String,System.String)">
+            <summary>
+            Compare and delete specific node
+            </summary>
+            <param name="key">Path of the node</param>
+            <param name="prevValue">previous value</param>
+            <returns>EtcdResponse</returns>
+        </member>
+        <member name="M:EtcdNet.EtcdClient.CompareAndDeleteNodeAsync(System.String,System.Int64)">
+            <summary>
+            Compare and delete specific node
+            </summary>
+            <param name="key">path of the node</param>
+            <param name="prevIndex">previous index</param>
+            <returns>EtcdResponse</returns>
+        </member>
+        <member name="M:EtcdNet.EtcdClient.WatchNodeAsync(System.String,System.Boolean,System.Nullable{System.Int64})">
+            <summary>
+            Watch changes
+            </summary>
+            <param name="key">Path of the node</param>
+            <param name="recursive">true to monitor descendants</param>
+            <param name="waitIndex">Etcd Index is continue monitor from</param>
+            <returns>EtcdResponse</returns>
+        </member>
+        <member name="P:EtcdNet.EtcdClient.ClusterID">
+            <summary>
+            X-Etcd-Cluster-Id
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdClient.LastIndex">
+            <summary>
+            Lastest X-Etcd-Index received by this instance
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdClientOpitions">
+            <summary>
+            Options to initialize EtcdClient
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdClientOpitions.Urls">
+            <summary>
+            The urls of etcd servers (mandatory)
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdClientOpitions.IgnoreCertificateError">
+            <summary>
+            ignore invalid SSL certificate
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdClientOpitions.X509Certificate">
+            <summary>
+            Client certificate
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdClientOpitions.Username">
+            <summary>
+            Username
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdClientOpitions.Password">
+            <summary>
+            Password
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdClientOpitions.UseProxy">
+            <summary>
+            Use proxy?
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdClientOpitions.JsonDeserializer">
+            <summary>
+            If this field is null, default deserializer is used
+            This parameter allows to use a different deserializer like ServiceStack.Text or Newtonsoft.Json
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdGenericException">
+            <summary>
+            Represents the generic exception from etcd
+            https://github.com/coreos/etcd/blob/master/Documentation/errorcode.md
+            EtcdGenericException
+             ├── EtcdCommonException
+             |    ├─ KeyNotFound
+             |    ├─ TestFailed
+             |    ├─ NotFile
+             |    ├─ NotDir
+             |    ├─ NodeExist
+             |    ├─ RootReadOnly
+             |    └─ DirNotEmpty
+             ├── EtcdPostFormException
+             |    ├─ PrevValueRequired
+             |    ├─ TTLNaN
+             |    ├─ IndexNaN
+             |    ├─ InvalidField
+             |    └─ InvalidForm
+             ├── EtcdRaftException
+             |    ├─ RaftInternal
+             |    └─ LeaderElect
+             └── EtcdException
+                  ├─ WatcherCleared
+                  └─ EventIndexCleared
+            </summary>
+        </member>
+        <member name="M:EtcdNet.EtcdGenericException.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="P:EtcdNet.EtcdGenericException.Code">
+            <summary>
+            https://github.com/coreos/etcd/blob/master/Documentation/errorcode.md
+            </summary>
+        </member>
+        <member name="P:EtcdNet.EtcdGenericException.Cause">
+            <summary>
+            Cause
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdCommonException">
+            <summary>
+            Command Related Error
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdCommonException.KeyNotFound">
+            <summary>
+            EcodeKeyNotFound	100	"Key not found"
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdCommonException.TestFailed">
+            <summary>
+            EcodeTestFailed	101	"Compare failed"
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdCommonException.NotFile">
+            <summary>
+            EcodeNotFile	102	"Not a file"
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdCommonException.NotDir">
+            <summary>
+            EcodeNotDir	104	"Not a directory"
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdCommonException.NodeExist">
+            <summary>
+            EcodeNodeExist	105	"Key already exists"
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdCommonException.RootReadOnly">
+            <summary>
+            EcodeRootROnly	107	"Root is read only"
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdCommonException.DirNotEmpty">
+            <summary>
+            EcodeDirNotEmpty	108	"Directory not empty"
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdPostFormException">
+            <summary>
+            Post Form Related Error
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdPostFormException.PrevValueRequired">
+            <summary>
+            EcodePrevValueRequired	201	"PrevValue is Required in POST form"
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdPostFormException.TTLNaN">
+            <summary>
+            EcodeTTLNaN	202	"The given TTL in POST form is not a number"
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdPostFormException.IndexNaN">
+            <summary>
+            EcodeIndexNaN	203	"The given index in POST form is not a number"
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdPostFormException.InvalidField">
+            <summary>
+            EcodeInvalidField	209	"Invalid field"
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdPostFormException.InvalidForm">
+            <summary>
+            EcodeInvalidForm	210	"Invalid POST form"
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdRaftException">
+            <summary>
+            Raft Related Error
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdRaftException.Internal">
+            <summary>
+            EcodeRaftInternal	300	"Raft Internal Error"
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdRaftException.LeaderElect">
+            <summary>
+            EcodeLeaderElect	301	"During Leader Election"
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdException">
+            <summary>
+            Etcd Related Error
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdException.WatcherCleared">
+            <summary>
+            EcodeWatcherCleared	400	"watcher is cleared due to etcd recovery"
+            </summary>
+        </member>
+        <member name="T:EtcdNet.EtcdException.EventIndexCleared">
+            <summary>
+            EcodeEventIndexCleared	401	"The event in requested index is outdated and cleared"
+            </summary>
+        </member>
+        <member name="P:EtcdNet.HttpClientEx.Next">
+            <summary>
+            A loop
+            </summary>
+        </member>
+    </members>
+</doc>

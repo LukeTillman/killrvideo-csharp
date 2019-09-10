@@ -1,0 +1,3142 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gremlin.Net</name>
+    </assembly>
+    <members>
+        <member name="T:Gremlin.Net.Driver.Exceptions.ResponseException">
+            <summary>
+                The exception that is thrown when a response is received from Gremlin Server that indicates that an error occurred.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Driver.Exceptions.ResponseException.#ctor(System.String)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Driver.Exceptions.ResponseException" /> class.
+            </summary>
+            <param name="message">The error message string.</param>
+        </member>
+        <member name="T:Gremlin.Net.Driver.GremlinClient">
+            <summary>
+                Provides a mechanism for submitting Gremlin requests to one Gremlin Server.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Driver.GremlinClient.#ctor(Gremlin.Net.Driver.GremlinServer,Gremlin.Net.Structure.IO.GraphSON.GraphSONReader,Gremlin.Net.Structure.IO.GraphSON.GraphSONWriter)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Driver.GremlinClient" /> class for the specified Gremlin Server.
+            </summary>
+            <param name="gremlinServer">The <see cref="T:Gremlin.Net.Driver.GremlinServer" /> the requests should be sent to.</param>
+            <param name="graphSONReader">A <see cref="T:Gremlin.Net.Structure.IO.GraphSON.GraphSONReader" /> instance to read received GraphSON data.</param>
+            <param name="graphSONWriter">a <see cref="T:Gremlin.Net.Structure.IO.GraphSON.GraphSONWriter" /> instance to write GraphSON data.</param>
+        </member>
+        <member name="P:Gremlin.Net.Driver.GremlinClient.NrConnections">
+            <summary>
+                Gets the number of open connections.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Driver.GremlinClient.SubmitAsync``1(Gremlin.Net.Driver.Messages.RequestMessage)">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Driver.GremlinClient.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Driver.GremlinClient.Dispose(System.Boolean)">
+            <summary>
+                Releases the resources used by the <see cref="T:Gremlin.Net.Driver.GremlinClient" /> instance.
+            </summary>
+            <param name="disposing">Specifies whether managed resources should be released.</param>
+        </member>
+        <member name="T:Gremlin.Net.Driver.GremlinClientExtensions">
+            <summary>
+                Provides extension methods for the <see cref="T:Gremlin.Net.Driver.IGremlinClient" /> interface.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Driver.GremlinClientExtensions.SubmitWithSingleResultAsync``1(Gremlin.Net.Driver.IGremlinClient,System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+                Submits a request message that consists of a script with bindings as an asynchronous operation where only a single
+                result gets returned.
+            </summary>
+            <remarks>
+                If multiple results are received from Gremlin Server, then only the first gets returned. Use
+                <see cref="M:Gremlin.Net.Driver.GremlinClientExtensions.SubmitAsync``1(Gremlin.Net.Driver.IGremlinClient,System.String,System.Collections.Generic.Dictionary{System.String,System.Object})" /> instead when you expect a collection of results.
+            </remarks>
+            <typeparam name="T">The type of the expected result.</typeparam>
+            <param name="gremlinClient">The <see cref="T:Gremlin.Net.Driver.IGremlinClient" /> that submits the request.</param>
+            <param name="requestScript">The Gremlin request script to send.</param>
+            <param name="bindings">Bindings for parameters used in the requestScript.</param>
+            <returns>A single result received from the Gremlin Server.</returns>
+            <exception cref="T:Gremlin.Net.Driver.Exceptions.ResponseException">
+                Thrown when a response is received from Gremlin Server that indicates
+                that an error occurred.
+            </exception>
+        </member>
+        <member name="M:Gremlin.Net.Driver.GremlinClientExtensions.SubmitWithSingleResultAsync``1(Gremlin.Net.Driver.IGremlinClient,Gremlin.Net.Driver.Messages.RequestMessage)">
+            <summary>
+                Submits a request message as an asynchronous operation where only a single result gets returned.
+            </summary>
+            <remarks>
+                If multiple results are received from Gremlin Server, then only the first gets returned. Use
+                <see cref="M:Gremlin.Net.Driver.GremlinClientExtensions.SubmitAsync``1(Gremlin.Net.Driver.IGremlinClient,System.String,System.Collections.Generic.Dictionary{System.String,System.Object})" /> instead when you expect a collection of results.
+            </remarks>
+            <typeparam name="T">The type of the expected result.</typeparam>
+            <param name="gremlinClient">The <see cref="T:Gremlin.Net.Driver.IGremlinClient" /> that submits the request.</param>
+            <param name="requestMessage">The <see cref="T:Gremlin.Net.Driver.Messages.RequestMessage" /> to send.</param>
+            <returns>A single result received from the Gremlin Server.</returns>
+            <exception cref="T:Gremlin.Net.Driver.Exceptions.ResponseException">
+                Thrown when a response is received from Gremlin Server that indicates
+                that an error occurred.
+            </exception>
+        </member>
+        <member name="M:Gremlin.Net.Driver.GremlinClientExtensions.SubmitAsync(Gremlin.Net.Driver.IGremlinClient,System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+                Submits a request message that consists of a script with bindings as an asynchronous operation without returning
+                the result received from the Gremlin Server.
+            </summary>
+            <param name="gremlinClient">The <see cref="T:Gremlin.Net.Driver.IGremlinClient" /> that submits the request.</param>
+            <param name="requestScript">The Gremlin request script to send.</param>
+            <param name="bindings">Bindings for parameters used in the requestScript.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+            <exception cref="T:Gremlin.Net.Driver.Exceptions.ResponseException">
+                Thrown when a response is received from Gremlin Server that indicates
+                that an error occurred.
+            </exception>
+        </member>
+        <member name="M:Gremlin.Net.Driver.GremlinClientExtensions.SubmitAsync(Gremlin.Net.Driver.IGremlinClient,Gremlin.Net.Driver.Messages.RequestMessage)">
+            <summary>
+                Submits a request message as an asynchronous operation without returning the result received from the Gremlin
+                Server.
+            </summary>
+            <param name="gremlinClient">The <see cref="T:Gremlin.Net.Driver.IGremlinClient" /> that submits the request.</param>
+            <param name="requestMessage">The <see cref="T:Gremlin.Net.Driver.Messages.RequestMessage" /> to send.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+            <exception cref="T:Gremlin.Net.Driver.Exceptions.ResponseException">
+                Thrown when a response is received from Gremlin Server that indicates
+                that an error occurred.
+            </exception>
+        </member>
+        <member name="M:Gremlin.Net.Driver.GremlinClientExtensions.SubmitAsync``1(Gremlin.Net.Driver.IGremlinClient,System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+                Submits a request message that consists of a script with bindings as an asynchronous operation.
+            </summary>
+            <typeparam name="T">The type of the expected results.</typeparam>
+            <param name="gremlinClient">The <see cref="T:Gremlin.Net.Driver.IGremlinClient" /> that submits the request.</param>
+            <param name="requestScript">The Gremlin request script to send.</param>
+            <param name="bindings">Bindings for parameters used in the requestScript.</param>
+            <returns>A collection of the data returned from the server.</returns>
+            <exception cref="T:Gremlin.Net.Driver.Exceptions.ResponseException">
+                Thrown when a response is received from Gremlin Server that indicates
+                that an error occurred.
+            </exception>
+        </member>
+        <member name="T:Gremlin.Net.Driver.GremlinServer">
+            <summary>
+                Represents a Gremlin Server.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Driver.GremlinServer.#ctor(System.String,System.Int32,System.Boolean,System.String,System.String)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Driver.GremlinServer" /> class with the specified connection parameters.
+            </summary>
+            <param name="hostname">The hostname of the server.</param>
+            <param name="port">The port on which Gremlin Server can be reached.</param>
+            <param name="enableSsl">Specifies whether SSL should be enabled.</param>
+            <param name="username">The username to submit on requests that require authentication.</param>
+            <param name="password">The password to submit on requests that require authentication.</param>
+        </member>
+        <member name="P:Gremlin.Net.Driver.GremlinServer.Uri">
+            <summary>
+                Gets the URI of the Gremlin Server.
+            </summary>
+            <value>The WebSocket <see cref="T:System.Uri" /> that the Gremlin Server responds to.</value>
+        </member>
+        <member name="P:Gremlin.Net.Driver.GremlinServer.Username">
+            <summary>
+                Gets the username to submit on requests that require authentication.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Driver.GremlinServer.Password">
+            <summary>
+                Gets the password to submit on requests that require authentication.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Driver.IGremlinClient">
+            <summary>
+                Provides a mechanism for submitting Gremlin requests.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Driver.IGremlinClient.SubmitAsync``1(Gremlin.Net.Driver.Messages.RequestMessage)">
+            <summary>
+                Submits a request message as an asynchronous operation.
+            </summary>
+            <typeparam name="T">The type of the expected results.</typeparam>
+            <param name="requestMessage">The <see cref="T:Gremlin.Net.Driver.Messages.RequestMessage" /> to send.</param>
+            <returns>A collection of the data returned from the server.</returns>
+            <exception cref="T:Gremlin.Net.Driver.Exceptions.ResponseException">
+                Thrown when a response is received from Gremlin Server that indicates
+                that an error occurred.
+            </exception>
+        </member>
+        <member name="T:Gremlin.Net.Driver.Messages.RequestMessage">
+            <summary>
+                The model for a request message sent to the server.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Driver.Messages.RequestMessage.RequestId">
+            <summary>
+                Gets the ID of this request message.
+            </summary>
+            <value>A UUID representing the unique identification for the request.</value>
+        </member>
+        <member name="P:Gremlin.Net.Driver.Messages.RequestMessage.Operation">
+            <summary>
+                Gets the name of the operation that should be executed by the Gremlin Server.
+            </summary>
+            <value>
+                The name of the "operation" to execute based on the available OpProcessor configured in the Gremlin Server. This
+                defaults to "eval" which evaluates a request script.
+            </value>
+        </member>
+        <member name="P:Gremlin.Net.Driver.Messages.RequestMessage.Processor">
+            <summary>
+                Gets the name of the OpProcessor to utilize.
+            </summary>
+            <value>
+                The name of the OpProcessor to utilize. This defaults to an empty string which represents the default
+                OpProcessor for evaluating scripts.
+            </value>
+        </member>
+        <member name="P:Gremlin.Net.Driver.Messages.RequestMessage.Arguments">
+            <summary>
+                Gets arguments of the <see cref="T:Gremlin.Net.Driver.Messages.RequestMessage" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Driver.Messages.RequestMessage.Build(System.String)">
+            <summary>
+                Initializes a <see cref="T:Gremlin.Net.Driver.Messages.RequestMessage.Builder" /> to build a <see cref="T:Gremlin.Net.Driver.Messages.RequestMessage" />.
+            </summary>
+            <param name="operation">The name of the OpProcessor to utilize.</param>
+            <returns>A <see cref="T:Gremlin.Net.Driver.Messages.RequestMessage.Builder" /> to build a <see cref="T:Gremlin.Net.Driver.Messages.RequestMessage" />.</returns>
+        </member>
+        <member name="T:Gremlin.Net.Driver.Messages.RequestMessage.Builder">
+            <summary>
+                Allows to build <see cref="T:Gremlin.Net.Driver.Messages.RequestMessage" /> objects.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Driver.Messages.RequestMessage.Builder.Processor(System.String)">
+            <summary>
+                If this value is not set in the builder then the <see cref="P:Gremlin.Net.Driver.Messages.RequestMessage.Processor" /> defaults to
+                the standard op processor (empty string).
+            </summary>
+            <param name="processor">The name of the processor.</param>
+            <returns>The <see cref="T:Gremlin.Net.Driver.Messages.RequestMessage.Builder" />.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Driver.Messages.RequestMessage.Builder.OverrideRequestId(System.Guid)">
+            <summary>
+                Overrides the request identifier with a specified one, otherwise the
+                <see cref="T:Gremlin.Net.Driver.Messages.RequestMessage.Builder" /> will randomly generate a <see cref="T:System.Guid" />.
+            </summary>
+            <param name="requestId">The request identifier to use.</param>
+            <returns>The <see cref="T:Gremlin.Net.Driver.Messages.RequestMessage.Builder" />.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Driver.Messages.RequestMessage.Builder.AddArgument(System.String,System.Object)">
+            <summary>
+                Adds and argument to the <see cref="T:Gremlin.Net.Driver.Messages.RequestMessage" />.
+            </summary>
+            <param name="key">The key of the argument.</param>
+            <param name="value">The value of the argument.</param>
+            <returns>The <see cref="T:Gremlin.Net.Driver.Messages.RequestMessage.Builder" />.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Driver.Messages.RequestMessage.Builder.Create">
+            <summary>
+                Creates the <see cref="T:Gremlin.Net.Driver.Messages.RequestMessage" /> given the settings provided to the <see cref="T:Gremlin.Net.Driver.Messages.RequestMessage.Builder" />.
+            </summary>
+            <returns>The built <see cref="T:Gremlin.Net.Driver.Messages.RequestMessage" />.</returns>
+        </member>
+        <member name="T:Gremlin.Net.Driver.Remote.DriverRemoteConnection">
+            <summary>
+                A <see cref="T:Gremlin.Net.Process.Remote.IRemoteConnection" /> implementation for Gremlin Server.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Driver.Remote.DriverRemoteConnection.#ctor(Gremlin.Net.Driver.IGremlinClient)">
+            <summary>
+                Initializes a new <see cref="T:Gremlin.Net.Process.Remote.IRemoteConnection" />.
+            </summary>
+            <param name="client">The <see cref="T:Gremlin.Net.Driver.IGremlinClient" /> that will be used for the connection.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when client is null.</exception>
+        </member>
+        <member name="M:Gremlin.Net.Driver.Remote.DriverRemoteConnection.#ctor(Gremlin.Net.Driver.IGremlinClient,System.String)">
+            <summary>
+                Initializes a new <see cref="T:Gremlin.Net.Process.Remote.IRemoteConnection" />.
+            </summary>
+            <param name="client">The <see cref="T:Gremlin.Net.Driver.IGremlinClient" /> that will be used for the connection.</param>
+            <param name="traversalSource">The name of the traversal source on the server to bind to.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when client is null.</exception>
+        </member>
+        <member name="M:Gremlin.Net.Driver.Remote.DriverRemoteConnection.SubmitAsync``2(Gremlin.Net.Process.Traversal.Bytecode)">
+            <summary>
+                Submits <see cref="T:Gremlin.Net.Process.Traversal.Bytecode" /> for evaluation to a remote Gremlin Server.
+            </summary>
+            <param name="bytecode">The <see cref="T:Gremlin.Net.Process.Traversal.Bytecode" /> to submit.</param>
+            <returns>A <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" /> allowing to access the results and side-effects.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Driver.Remote.DriverRemoteConnection.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:Gremlin.Net.Driver.Tokens">
+            <summary>
+                String constants used to configure a <see cref="T:Gremlin.Net.Driver.Messages.RequestMessage" />.
+            </summary>
+        </member>
+        <member name="F:Gremlin.Net.Driver.Tokens.OpsAuthentication">
+            <summary>
+                Operation used by the client to authenticate itself.
+            </summary>
+        </member>
+        <member name="F:Gremlin.Net.Driver.Tokens.OpsBytecode">
+            <summary>
+                Operation used for a request that contains the Bytecode representation of a Traversal.
+            </summary>
+        </member>
+        <member name="F:Gremlin.Net.Driver.Tokens.OpsEval">
+            <summary>
+                Operation used to evaluate a Gremlin script provided as a string.
+            </summary>
+        </member>
+        <member name="F:Gremlin.Net.Driver.Tokens.OpsGather">
+            <summary>
+                Operation used to get a particular side-effect as produced by a previously executed Traversal.
+            </summary>
+        </member>
+        <member name="F:Gremlin.Net.Driver.Tokens.OpsKeys">
+            <summary>
+                Operation used to get all the keys of all side-effects as produced by a previously executed Traversal.
+            </summary>
+        </member>
+        <member name="F:Gremlin.Net.Driver.Tokens.OpsClose">
+            <summary>
+                Operation used to get all the keys of all side-effects as produced by a previously executed Traversal.
+            </summary>
+        </member>
+        <member name="F:Gremlin.Net.Driver.Tokens.ProcessorTraversal">
+            <summary>
+                Default OpProcessor.
+            </summary>
+        </member>
+        <member name="F:Gremlin.Net.Driver.Tokens.ArgsBatchSize">
+            <summary>
+                Argument name that allows to defines the number of iterations each ResponseMessage should contain - overrides the
+                resultIterationBatchSize server setting.
+            </summary>
+        </member>
+        <member name="F:Gremlin.Net.Driver.Tokens.ArgsBindings">
+            <summary>
+                Argument name that allows to provide a map of key/value pairs to apply as variables in the context of the Gremlin
+                script.
+            </summary>
+        </member>
+        <member name="F:Gremlin.Net.Driver.Tokens.ArgsAliases">
+            <summary>
+                Argument name that allows to define aliases that represent globally bound Graph and TraversalSource objects.
+            </summary>
+        </member>
+        <member name="F:Gremlin.Net.Driver.Tokens.ArgsGremlin">
+            <summary>
+                Argument name that corresponds to the Traversal to evaluate.
+            </summary>
+        </member>
+        <member name="F:Gremlin.Net.Driver.Tokens.ArgsSideEffect">
+            <summary>
+                Argument name that allows to specify the unique identifier for the request.
+            </summary>
+        </member>
+        <member name="F:Gremlin.Net.Driver.Tokens.ArgsSideEffectKey">
+            <summary>
+                Argument name that allows to specify the key for a specific side-effect.
+            </summary>
+        </member>
+        <member name="F:Gremlin.Net.Driver.Tokens.ArgsAggregateTo">
+            <summary>
+                <see cref="T:Gremlin.Net.Driver.Messages.ResponseMessage`1" /> argument that describes how side-effect data should be treated.
+            </summary>
+        </member>
+        <member name="F:Gremlin.Net.Driver.Tokens.ArgsLanguage">
+            <summary>
+                Argument name that allows to change the flavor of Gremlin used (e.g. gremlin-groovy).
+            </summary>
+        </member>
+        <member name="F:Gremlin.Net.Driver.Tokens.ArgsEvalTimeout">
+            <summary>
+                Argument name that allows to override the server setting that determines the maximum time to wait for a script to
+                execute on the server.
+            </summary>
+        </member>
+        <member name="F:Gremlin.Net.Driver.Tokens.ArgsSasl">
+            <summary>
+                Argument name for the response to the server authentication challenge. This value is dependent on the SASL
+                authentication mechanism required by the server.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Remote.IRemoteConnection">
+            <summary>
+                A simple abstraction of a "connection" to a "server".
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Remote.IRemoteConnection.SubmitAsync``2(Gremlin.Net.Process.Traversal.Bytecode)">
+            <summary>
+                Submits <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" /> <see cref="T:Gremlin.Net.Process.Traversal.Bytecode" /> to a server and returns a
+                <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" />.
+            </summary>
+            <param name="bytecode">The <see cref="T:Gremlin.Net.Process.Traversal.Bytecode" /> to send.</param>
+            <returns>The <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" /> with the results and optional side-effects.</returns>
+        </member>
+        <member name="T:Gremlin.Net.Process.Remote.RemoteStrategy">
+            <summary>
+                Reconstructs a <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" /> by submitting it to a remote server via an
+                <see cref="T:Gremlin.Net.Process.Remote.IRemoteConnection" /> instance.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Remote.RemoteStrategy.#ctor(Gremlin.Net.Process.Remote.IRemoteConnection)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Process.Remote.RemoteStrategy" /> class.
+            </summary>
+            <param name="remoteConnection">The <see cref="T:Gremlin.Net.Process.Remote.IRemoteConnection" /> that should be used.</param>
+        </member>
+        <member name="M:Gremlin.Net.Process.Remote.RemoteStrategy.Apply``2(Gremlin.Net.Process.Traversal.ITraversal{``0,``1})">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Process.Remote.RemoteStrategy.ApplyAsync``2(Gremlin.Net.Process.Traversal.ITraversal{``0,``1})">
+            <inheritdoc />
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Binding">
+            <summary>
+                Associates a variable with a value.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Binding.#ctor(System.String,System.Object)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Process.Traversal.Binding" /> class.
+            </summary>
+            <param name="key">The key that identifies the <see cref="T:Gremlin.Net.Process.Traversal.Binding" />.</param>
+            <param name="value">The value of the <see cref="T:Gremlin.Net.Process.Traversal.Binding" />.</param>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.Binding.Key">
+            <summary>
+                Gets the key that identifies the <see cref="T:Gremlin.Net.Process.Traversal.Binding" />.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.Binding.Value">
+            <summary>
+                Gets the value of the <see cref="T:Gremlin.Net.Process.Traversal.Binding" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Binding.Equals(Gremlin.Net.Process.Traversal.Binding)">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Binding.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Binding.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Bindings">
+            <summary>
+                Bindings are used to associate a variable with a value.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.Bindings.Instance">
+            <summary>
+                Gets an instance of the <see cref="T:Gremlin.Net.Process.Traversal.Bindings" /> class.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Bindings.Of``1(System.String,``0)">
+            <summary>
+                Binds the variable to the specified value.
+            </summary>
+            <param name="variable">The variable to bind.</param>
+            <param name="value">The value to which the variable should be bound.</param>
+            <returns>The bound value.</returns>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Bytecode">
+            <summary>
+                A language agnostic representation of <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" /> mutations.
+            </summary>
+            <remarks>
+                Bytecode is simply a list of ordered instructions.
+                Bytecode can be serialized between environments and machines by way of a GraphSON representation.
+                Thus, Gremlin.Net can create bytecode in C# and ship it to Gremlin-Java for evaluation in Java.
+            </remarks>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Bytecode.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Process.Traversal.Bytecode" /> class.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Bytecode.#ctor(Gremlin.Net.Process.Traversal.Bytecode)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Process.Traversal.Bytecode" /> class.
+            </summary>
+            <param name="byteCode">Already existing <see cref="T:Gremlin.Net.Process.Traversal.Bytecode" /> that should be cloned.</param>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.Bytecode.SourceInstructions">
+            <summary>
+                Gets the traversal source instructions.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.Bytecode.StepInstructions">
+            <summary>
+                Gets the <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" /> instructions.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Bytecode.AddSource(System.String,System.Object[])">
+            <summary>
+                Add a traversal source instruction to the bytecode.
+            </summary>
+            <param name="sourceName">The traversal source method name (e.g. withSack()).</param>
+            <param name="args">The traversal source method arguments.</param>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Bytecode.AddStep(System.String,System.Object[])">
+            <summary>
+                Adds a <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" /> instruction to the bytecode.
+            </summary>
+            <param name="stepName">The traversal method name (e.g. out()).</param>
+            <param name="args">The traversal method arguments.</param>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.DefaultTraversal`2">
+            <summary>
+                A traversal represents a directed walk over a graph.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.DefaultTraversal`2.Bytecode">
+            <summary>
+                Gets the <see cref="T:Gremlin.Net.Process.Traversal.Bytecode" /> representation of this traversal.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.DefaultTraversal`2.SideEffects">
+            <summary>
+                Gets or sets the <see cref="T:Gremlin.Net.Process.Traversal.ITraversalSideEffects" /> of this traversal.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.DefaultTraversal`2.Traversers">
+            <summary>
+                Gets or sets the <see cref="T:Gremlin.Net.Process.Traversal.Traverser" />'s of this traversal that hold the results of the traversal.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.DefaultTraversal`2.TraversalStrategies">
+            <summary>
+                Gets or sets the <see cref="T:Gremlin.Net.Process.Traversal.ITraversalStrategy" /> strategies of this traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.DefaultTraversal`2.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.DefaultTraversal`2.MoveNext">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.DefaultTraversal`2.Reset">
+            <summary>
+                Reset is not supported.
+            </summary>
+            <exception cref="T:System.NotSupportedException">Thrown always as this operation is not supported.</exception>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.DefaultTraversal`2.Current">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.DefaultTraversal`2.GetValue(System.Type,System.Object)">
+            <summary>
+            Gets the value, converting to the expected type when necessary and supported. 
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.DefaultTraversal`2.Next">
+            <summary>
+                Gets the next result from the traversal.
+            </summary>
+            <returns>The result.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.DefaultTraversal`2.Next(System.Int32)">
+            <summary>
+                Gets the next n-number of results from the traversal.
+            </summary>
+            <param name="amount">The number of results to get.</param>
+            <returns>The n-results.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.DefaultTraversal`2.Iterate">
+            <summary>
+                Iterates all <see cref="T:Gremlin.Net.Process.Traversal.Traverser" /> instances in the traversal.
+            </summary>
+            <returns>The fully drained traversal.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.DefaultTraversal`2.NextTraverser">
+            <summary>
+                Gets the next <see cref="T:Gremlin.Net.Process.Traversal.Traverser" />.
+            </summary>
+            <returns>The next <see cref="T:Gremlin.Net.Process.Traversal.Traverser" />.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.DefaultTraversal`2.ToList">
+            <summary>
+                Puts all the results into a <see cref="T:System.Collections.Generic.List`1" />.
+            </summary>
+            <returns>The results in a list.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.DefaultTraversal`2.ToSet">
+            <summary>
+                Puts all the results into a <see cref="T:System.Collections.Generic.HashSet`1" />.
+            </summary>
+            <returns>The results in a set.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.DefaultTraversal`2.Dispose(System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.DefaultTraversal`2.Promise``1(System.Func{Gremlin.Net.Process.Traversal.ITraversal{`0,`1},``0})">
+            <summary>
+                Starts a promise to execute a function on the current traversal that will be completed in the future.
+            </summary>
+            <typeparam name="TReturn">The return type of the <paramref name="callback" />.</typeparam>
+            <param name="callback">The function to execute on the current traversal.</param>
+            <returns>The result of the executed <paramref name="callback" />.</returns>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.EnumWrapper">
+            <summary>
+                Represents an enum.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.EnumWrapper.EnumName">
+            <summary>
+                Gets the name of the enum.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.EnumWrapper.EnumValue">
+            <summary>
+                Gets the value of the enum.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.EnumWrapper.#ctor(System.String,System.String)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Process.Traversal.EnumWrapper" /> class.
+            </summary>
+            <param name="enumName">The name of the enum.</param>
+            <param name="enumValue">The value of the enum.</param>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.GraphTraversal`2">
+            <summary>
+                Graph traversals are the primary way in which graphs are processed.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> class.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.#ctor(System.Collections.Generic.ICollection{Gremlin.Net.Process.Traversal.ITraversalStrategy},Gremlin.Net.Process.Traversal.Bytecode)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> class.
+            </summary>
+            <param name="traversalStrategies">The traversal strategies to be used by this graph traversal at evaluation time.</param>
+            <param name="bytecode">The <see cref="T:Gremlin.Net.Process.Traversal.Bytecode" /> associated with the construction of this graph traversal.</param>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.V(System.Object[])">
+            <summary>
+                Adds the V step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.AddE(Gremlin.Net.Process.Traversal.Direction,System.String,System.String,System.Object[])">
+            <summary>
+                Adds the addE step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.AddE(System.String)">
+            <summary>
+                Adds the addE step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.AddInE(System.String,System.String,System.Object[])">
+            <summary>
+                Adds the addInE step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.AddOutE(System.String,System.String,System.Object[])">
+            <summary>
+                Adds the addOutE step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.AddV">
+            <summary>
+                Adds the addV step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.AddV(System.Object[])">
+            <summary>
+                Adds the addV step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.AddV(System.String)">
+            <summary>
+                Adds the addV step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Aggregate(System.String)">
+            <summary>
+                Adds the aggregate step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.And(Gremlin.Net.Process.Traversal.ITraversal[])">
+            <summary>
+                Adds the and step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.As(System.String,System.String[])">
+            <summary>
+                Adds the as step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Barrier">
+            <summary>
+                Adds the barrier step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Barrier(Gremlin.Net.Process.Traversal.IConsumer)">
+            <summary>
+                Adds the barrier step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Barrier(System.Int32)">
+            <summary>
+                Adds the barrier step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Both(System.String[])">
+            <summary>
+                Adds the both step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.BothE(System.String[])">
+            <summary>
+                Adds the bothE step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.BothV">
+            <summary>
+                Adds the bothV step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Branch``1(Gremlin.Net.Process.Traversal.IFunction)">
+            <summary>
+                Adds the branch step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Branch``1(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the branch step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.By">
+            <summary>
+                Adds the by step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.By(Gremlin.Net.Process.Traversal.IComparator)">
+            <summary>
+                Adds the by step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.By(Gremlin.Net.Process.Traversal.IFunction)">
+            <summary>
+                Adds the by step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.By(Gremlin.Net.Process.Traversal.IFunction,Gremlin.Net.Process.Traversal.IComparator)">
+            <summary>
+                Adds the by step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.By(Gremlin.Net.Process.Traversal.Order)">
+            <summary>
+                Adds the by step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.By(System.String)">
+            <summary>
+                Adds the by step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.By(System.String,Gremlin.Net.Process.Traversal.IComparator)">
+            <summary>
+                Adds the by step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.By(Gremlin.Net.Process.Traversal.T)">
+            <summary>
+                Adds the by step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.By(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the by step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.By(Gremlin.Net.Process.Traversal.ITraversal,Gremlin.Net.Process.Traversal.IComparator)">
+            <summary>
+                Adds the by step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Cap``1(System.String,System.String[])">
+            <summary>
+                Adds the cap step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Choose``1(Gremlin.Net.Process.Traversal.IFunction)">
+            <summary>
+                Adds the choose step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Choose``1(Gremlin.Net.Process.Traversal.IPredicate,Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the choose step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Choose``1(Gremlin.Net.Process.Traversal.IPredicate,Gremlin.Net.Process.Traversal.ITraversal,Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the choose step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Choose``1(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the choose step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Choose``1(Gremlin.Net.Process.Traversal.ITraversal,Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the choose step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Choose``1(Gremlin.Net.Process.Traversal.ITraversal,Gremlin.Net.Process.Traversal.ITraversal,Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the choose step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Coalesce``1(Gremlin.Net.Process.Traversal.ITraversal[])">
+            <summary>
+                Adds the coalesce step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Coin(System.Double)">
+            <summary>
+                Adds the coin step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Constant``1(``0)">
+            <summary>
+                Adds the constant step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Count">
+            <summary>
+                Adds the count step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Count(Gremlin.Net.Process.Traversal.Scope)">
+            <summary>
+                Adds the count step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.CyclicPath">
+            <summary>
+                Adds the cyclicPath step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Dedup(Gremlin.Net.Process.Traversal.Scope,System.String[])">
+            <summary>
+                Adds the dedup step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Dedup(System.String[])">
+            <summary>
+                Adds the dedup step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Drop">
+            <summary>
+                Adds the drop step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Emit">
+            <summary>
+                Adds the emit step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Emit(Gremlin.Net.Process.Traversal.IPredicate)">
+            <summary>
+                Adds the emit step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Emit(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the emit step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Filter(Gremlin.Net.Process.Traversal.IPredicate)">
+            <summary>
+                Adds the filter step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Filter(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the filter step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.FlatMap``1(Gremlin.Net.Process.Traversal.IFunction)">
+            <summary>
+                Adds the flatMap step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.FlatMap``1(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the flatMap step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Fold">
+            <summary>
+                Adds the fold step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Fold``1(``0,Gremlin.Net.Process.Traversal.IBiFunction)">
+            <summary>
+                Adds the fold step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.From(System.String)">
+            <summary>
+                Adds the from step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.From(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the from step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Group``2">
+            <summary>
+                Adds the group step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Group(System.String)">
+            <summary>
+                Adds the group step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.GroupCount``1">
+            <summary>
+                Adds the groupCount step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.GroupCount(System.String)">
+            <summary>
+                Adds the groupCount step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.GroupV3d0``2">
+            <summary>
+                Adds the groupV3d0 step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.GroupV3d0(System.String)">
+            <summary>
+                Adds the groupV3d0 step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Has(System.String)">
+            <summary>
+                Adds the has step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Has(System.String,System.Object)">
+            <summary>
+                Adds the has step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Has(System.String,Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Adds the has step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Has(System.String,System.String,System.Object)">
+            <summary>
+                Adds the has step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Has(System.String,System.String,Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Adds the has step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Has(System.String,Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the has step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Has(Gremlin.Net.Process.Traversal.T,System.Object)">
+            <summary>
+                Adds the has step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Has(Gremlin.Net.Process.Traversal.T,Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Adds the has step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Has(Gremlin.Net.Process.Traversal.T,Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the has step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.HasId(System.Object,System.Object[])">
+            <summary>
+                Adds the hasId step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.HasId(Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Adds the hasId step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.HasKey(Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Adds the hasKey step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.HasKey(System.String,System.String[])">
+            <summary>
+                Adds the hasKey step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.HasLabel(Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Adds the hasLabel step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.HasLabel(System.String,System.String[])">
+            <summary>
+                Adds the hasLabel step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.HasNot(System.String)">
+            <summary>
+                Adds the hasNot step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.HasValue(System.Object,System.Object[])">
+            <summary>
+                Adds the hasValue step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.HasValue(Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Adds the hasValue step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Id">
+            <summary>
+                Adds the id step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Identity">
+            <summary>
+                Adds the identity step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.In(System.String[])">
+            <summary>
+                Adds the in step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.InE(System.String[])">
+            <summary>
+                Adds the inE step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.InV">
+            <summary>
+                Adds the inV step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Inject(`1[])">
+            <summary>
+                Adds the inject step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Is(System.Object)">
+            <summary>
+                Adds the is step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Is(Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Adds the is step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Key">
+            <summary>
+                Adds the key step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Label">
+            <summary>
+                Adds the label step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Limit``1(Gremlin.Net.Process.Traversal.Scope,System.Int64)">
+            <summary>
+                Adds the limit step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Limit(System.Int64)">
+            <summary>
+                Adds the limit step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Local``1(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the local step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Loops">
+            <summary>
+                Adds the loops step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Map``1(Gremlin.Net.Process.Traversal.IFunction)">
+            <summary>
+                Adds the map step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Map``1(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the map step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.MapKeys``1">
+            <summary>
+                Adds the mapKeys step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.MapValues``1">
+            <summary>
+                Adds the mapValues step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Match``1(Gremlin.Net.Process.Traversal.ITraversal[])">
+            <summary>
+                Adds the match step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Max``1">
+            <summary>
+                Adds the max step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Max``1(Gremlin.Net.Process.Traversal.Scope)">
+            <summary>
+                Adds the max step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Mean``1">
+            <summary>
+                Adds the mean step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Mean``1(Gremlin.Net.Process.Traversal.Scope)">
+            <summary>
+                Adds the mean step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Min``1">
+            <summary>
+                Adds the min step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Min``1(Gremlin.Net.Process.Traversal.Scope)">
+            <summary>
+                Adds the min step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Not(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the not step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Option(System.Object,Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the option step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Option(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the option step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Optional``1(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the optional step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Or(Gremlin.Net.Process.Traversal.ITraversal[])">
+            <summary>
+                Adds the or step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Order">
+            <summary>
+                Adds the order step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Order(Gremlin.Net.Process.Traversal.Scope)">
+            <summary>
+                Adds the order step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.OtherV">
+            <summary>
+                Adds the otherV step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Out(System.String[])">
+            <summary>
+                Adds the out step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.OutE(System.String[])">
+            <summary>
+                Adds the outE step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.OutV">
+            <summary>
+                Adds the outV step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.PageRank">
+            <summary>
+                Adds the pageRank step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.PageRank(System.Double)">
+            <summary>
+                Adds the pageRank step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Path">
+            <summary>
+                Adds the path step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.PeerPressure">
+            <summary>
+                Adds the peerPressure step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Profile``1">
+            <summary>
+                Adds the profile step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Profile(System.String)">
+            <summary>
+                Adds the profile step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Program(System.Object)">
+            <summary>
+                Adds the program step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Project``1(System.String,System.String[])">
+            <summary>
+                Adds the project step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Properties``1(System.String[])">
+            <summary>
+                Adds the properties step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Property(Gremlin.Net.Process.Traversal.Cardinality,System.Object,System.Object,System.Object[])">
+            <summary>
+                Adds the property step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Property(System.Object,System.Object,System.Object[])">
+            <summary>
+                Adds the property step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.PropertyMap``1(System.String[])">
+            <summary>
+                Adds the propertyMap step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Range``1(Gremlin.Net.Process.Traversal.Scope,System.Int64,System.Int64)">
+            <summary>
+                Adds the range step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Range(System.Int64,System.Int64)">
+            <summary>
+                Adds the range step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Repeat(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the repeat step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Sack``1">
+            <summary>
+                Adds the sack step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Sack(Gremlin.Net.Process.Traversal.IBiFunction)">
+            <summary>
+                Adds the sack step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Sack(Gremlin.Net.Process.Traversal.IBiFunction,System.String)">
+            <summary>
+                Adds the sack step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Sample(Gremlin.Net.Process.Traversal.Scope,System.Int32)">
+            <summary>
+                Adds the sample step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Sample(System.Int32)">
+            <summary>
+                Adds the sample step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Select``1(Gremlin.Net.Process.Traversal.Column)">
+            <summary>
+                Adds the select step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Select``1(Gremlin.Net.Process.Traversal.Pop,System.String)">
+            <summary>
+                Adds the select step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Select``1(Gremlin.Net.Process.Traversal.Pop,System.String,System.String,System.String[])">
+            <summary>
+                Adds the select step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Select``1(System.String)">
+            <summary>
+                Adds the select step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Select``1(System.String,System.String,System.String[])">
+            <summary>
+                Adds the select step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.SideEffect(Gremlin.Net.Process.Traversal.IConsumer)">
+            <summary>
+                Adds the sideEffect step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.SideEffect(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the sideEffect step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.SimplePath">
+            <summary>
+                Adds the simplePath step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Store(System.String)">
+            <summary>
+                Adds the store step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Subgraph(System.String)">
+            <summary>
+                Adds the subgraph step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Sum``1">
+            <summary>
+                Adds the sum step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Sum``1(Gremlin.Net.Process.Traversal.Scope)">
+            <summary>
+                Adds the sum step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Tail">
+            <summary>
+                Adds the tail step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Tail``1(Gremlin.Net.Process.Traversal.Scope)">
+            <summary>
+                Adds the tail step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Tail``1(Gremlin.Net.Process.Traversal.Scope,System.Int64)">
+            <summary>
+                Adds the tail step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Tail(System.Int64)">
+            <summary>
+                Adds the tail step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.TimeLimit(System.Int64)">
+            <summary>
+                Adds the timeLimit step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Times(System.Int32)">
+            <summary>
+                Adds the times step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.To(Gremlin.Net.Process.Traversal.Direction,System.String[])">
+            <summary>
+                Adds the to step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.To(System.String)">
+            <summary>
+                Adds the to step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.To(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the to step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.ToE(Gremlin.Net.Process.Traversal.Direction,System.String[])">
+            <summary>
+                Adds the toE step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.ToV(Gremlin.Net.Process.Traversal.Direction)">
+            <summary>
+                Adds the toV step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Tree``1">
+            <summary>
+                Adds the tree step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Tree(System.String)">
+            <summary>
+                Adds the tree step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Unfold``1">
+            <summary>
+                Adds the unfold step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Union``1(Gremlin.Net.Process.Traversal.ITraversal[])">
+            <summary>
+                Adds the union step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Until(Gremlin.Net.Process.Traversal.IPredicate)">
+            <summary>
+                Adds the until step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Until(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the until step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Value``1">
+            <summary>
+                Adds the value step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.ValueMap``1(System.String[])">
+            <summary>
+                Adds the valueMap step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.ValueMap``1(System.Boolean,System.String[])">
+            <summary>
+                Adds the valueMap step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Values``1(System.String[])">
+            <summary>
+                Adds the values step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Where(Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Adds the where step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Where(System.String,Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Adds the where step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversal`2.Where(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Adds the where step to this <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.GraphTraversalSource">
+            <summary>
+                A <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversalSource" /> is the primary DSL of the Gremlin traversal machine.
+                It provides access to all the configurations and steps for Turing complete graph computing.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.GraphTraversalSource.TraversalStrategies">
+            <summary>
+                Gets or sets the traversal strategies associated with this graph traversal source.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.GraphTraversalSource.Bytecode">
+            <summary>
+                Gets or sets the <see cref="T:Gremlin.Net.Process.Traversal.Bytecode" /> associated with the current state of this graph traversal
+                source.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversalSource.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversalSource" /> class.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversalSource.#ctor(System.Collections.Generic.ICollection{Gremlin.Net.Process.Traversal.ITraversalStrategy},Gremlin.Net.Process.Traversal.Bytecode)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversalSource" /> class.
+            </summary>
+            <param name="traversalStrategies">The traversal strategies associated with this graph traversal source.</param>
+            <param name="bytecode">
+                The <see cref="T:Gremlin.Net.Process.Traversal.Bytecode" /> associated with the current state of this graph traversal
+                source.
+            </param>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversalSource.WithRemote(Gremlin.Net.Process.Remote.IRemoteConnection)">
+            <summary>
+                Configures the <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversalSource" /> as a "remote" to issue the
+                <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> for execution elsewhere.
+            </summary>
+            <param name="remoteConnection">
+                The <see cref="T:Gremlin.Net.Process.Remote.IRemoteConnection" /> instance to use to submit the
+                <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </param>
+            <returns>A <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversalSource" /> configured to use the provided <see cref="T:Gremlin.Net.Process.Remote.IRemoteConnection" />.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversalSource.WithComputer(System.String,System.Nullable{System.Int32},System.String,System.String,Gremlin.Net.Process.Traversal.ITraversal,Gremlin.Net.Process.Traversal.ITraversal,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+                Add a GraphComputer class used to execute the traversal.
+                This adds a <see cref="T:Gremlin.Net.Process.Traversal.Strategy.Decoration.VertexProgramStrategy" /> to the strategies.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversalSource.E(System.Object[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> off this graph traversal source and adds the E step to that
+                traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversalSource.V(System.Object[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> off this graph traversal source and adds the V step to that
+                traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversalSource.AddV">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> off this graph traversal source and adds the addV step to that
+                traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversalSource.AddV(System.Object[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> off this graph traversal source and adds the addV step to that
+                traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversalSource.AddV(System.String)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> off this graph traversal source and adds the addV step to that
+                traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.GraphTraversalSource.Inject``1(``0[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> off this graph traversal source and adds the inject step to that
+                traversal.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.IBiFunction">
+            <summary>
+                Represents a function that accepts two arguments and produces a result. This is the two-arity specialization of
+                <see cref="T:Gremlin.Net.Process.Traversal.IFunction"/>.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.IBinaryOperator">
+            <summary>
+                Represents an operation upon two operands of the same type, producing a result of the same type as the operands.
+                This is a specialization of <see cref="T:Gremlin.Net.Process.Traversal.IBiFunction" /> for the case where the operands and the result are all of
+                the same type.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.IComparator">
+            <summary>
+                A comparison function, which imposes a total ordering on some collection of objects.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.IConsumer">
+            <summary>
+                Represents an operation that accepts a single input argument and returns no result. Unlike most other functional
+                interfaces, Consumer is expected to operate via side-effects.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.IFunction">
+            <summary>
+                Represents a function that accepts one argument and produces a result. 
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Instruction">
+            <summary>
+                Represents a <see cref="T:Gremlin.Net.Process.Traversal.Bytecode" /> instruction by an operator name and its arguments.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Instruction.#ctor(System.String,System.Object[])">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Process.Traversal.Instruction" /> class.
+            </summary>
+            <param name="operatorName">The name of the operator.</param>
+            <param name="arguments">The arguments.</param>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.Instruction.OperatorName">
+            <summary>
+                Gets the name of the operator.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.Instruction.Arguments">
+            <summary>
+                Gets the arguments.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.IPredicate">
+            <summary>
+                Represents a predicate (boolean-valued function) of one argument. 
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.ISupplier">
+            <summary>
+                Represents a supplier of results
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.ITraversal">
+            <summary>
+            Represents the basic information for a walk over a graph.
+            </summary>
+            <seealso cref="T:Gremlin.Net.Process.Traversal.ITraversal`2"/>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.ITraversal.Bytecode">
+            <summary>
+                Gets the <see cref="P:Gremlin.Net.Process.Traversal.ITraversal.Bytecode" /> representation of this traversal.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.ITraversal.SideEffects">
+            <summary>
+                Gets or sets the <see cref="T:Gremlin.Net.Process.Traversal.ITraversalSideEffects" /> of this traversal.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.ITraversal.Traversers">
+            <summary>
+                Gets or sets the <see cref="T:Gremlin.Net.Process.Traversal.Traverser" />'s of this traversal that hold the results of the traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.ITraversal.Iterate">
+            <summary>
+                Iterates all <see cref="T:Gremlin.Net.Process.Traversal.Traverser" /> instances in the traversal.
+            </summary>
+            <returns>The fully drained traversal.</returns>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.ITraversal`2">
+            <summary>
+                A traversal represents a directed walk over a graph.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.ITraversal`2.Next">
+            <summary>
+                Gets the next result from the traversal.
+            </summary>
+            <returns>The result.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.ITraversal`2.Next(System.Int32)">
+            <summary>
+                Gets the next n-number of results from the traversal.
+            </summary>
+            <param name="amount">The number of results to get.</param>
+            <returns>The n-results.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.ITraversal`2.Iterate">
+            <summary>
+                Iterates all <see cref="T:Gremlin.Net.Process.Traversal.Traverser" /> instances in the traversal.
+            </summary>
+            <returns>The fully drained traversal.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.ITraversal`2.NextTraverser">
+            <summary>
+                Gets the next <see cref="T:Gremlin.Net.Process.Traversal.Traverser" />.
+            </summary>
+            <returns>The next <see cref="T:Gremlin.Net.Process.Traversal.Traverser" />.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.ITraversal`2.ToList">
+            <summary>
+                Puts all the results into a <see cref="T:System.Collections.Generic.IList`1" />.
+            </summary>
+            <returns>The results in a list.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.ITraversal`2.ToSet">
+            <summary>
+                Puts all the results into a <see cref="T:System.Collections.Generic.ISet`1" />.
+            </summary>
+            <returns>The results in a set.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.ITraversal`2.Promise``1(System.Func{Gremlin.Net.Process.Traversal.ITraversal{`0,`1},``0})">
+            <summary>
+                Starts a promise to execute a function on the current traversal that will be completed in the future.
+            </summary>
+            <typeparam name="TReturn">The return type of the <paramref name="callback" />.</typeparam>
+            <param name="callback">The function to execute on the current traversal.</param>
+            <returns>The result of the executed <paramref name="callback" />.</returns>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.ITraversalSideEffects">
+            <summary>
+                A <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" /> can maintain global sideEffects.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.ITraversalSideEffects.Keys">
+            <summary>
+                Retrieves the keys of the side-effect that can be supplied to <see cref="M:Gremlin.Net.Process.Traversal.ITraversalSideEffects.Get(System.String)" />.
+            </summary>
+            <returns>The keys of the side-effect.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.ITraversalSideEffects.Get(System.String)">
+            <summary>
+                Gets the side-effect associated with the provided key.
+            </summary>
+            <param name="key">The key to get the value for.</param>
+            <returns>The value associated with key.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.ITraversalSideEffects.Close">
+            <summary>
+                Invalidates the side effect cache for traversal.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.ITraversalStrategy">
+            <summary>
+                A <see cref="T:Gremlin.Net.Process.Traversal.ITraversalStrategy" /> defines a particular atomic operation for mutating a
+                <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" /> prior to its evaluation.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.ITraversalStrategy.Apply``2(Gremlin.Net.Process.Traversal.ITraversal{``0,``1})">
+            <summary>
+                Applies the strategy to the given <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" />.
+            </summary>
+            <param name="traversal">The <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" /> the strategy should be applied to.</param>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.ITraversalStrategy.ApplyAsync``2(Gremlin.Net.Process.Traversal.ITraversal{``0,``1})">
+            <summary>
+                Applies the strategy to the given <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" /> asynchronously.
+            </summary>
+            <param name="traversal">The <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" /> the strategy should be applied to.</param>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.IUnaryOperator">
+            <summary>
+                Represents an operation on a single operand that produces a result of the same type as its operand. This is a
+                specialization of Function for the case where the operand and result are of the same type.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.ILambda">
+            <summary>
+                Represents a lambda.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.ILambda.LambdaExpression">
+            <summary>
+                Gets the lambda expression.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.ILambda.Language">
+            <summary>
+                Gets the language of this lambda.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.ILambda.Arguments">
+            <summary>
+                Gets the arguments of this lambda.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Lambda">
+            <summary>
+                Provides methods to create lambdas.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Lambda.Groovy(System.String)">
+            <summary>
+                Creates a new Groovy lambda.
+            </summary>
+            <param name="expression">The lambda expression.</param>
+            <returns>The created lambda.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Lambda.Python(System.String)">
+            <summary>
+                Creates a new Python lambda.
+            </summary>
+            <param name="expression">The lambda expression.</param>
+            <returns>The created lambda.</returns>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.P">
+            <summary>
+                A <see cref="T:Gremlin.Net.Process.Traversal.P" /> is a predicate of the form Func&lt;object, bool&gt;.
+                That is, given some object, return true or false.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.P.#ctor(System.String,System.Object,Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Process.Traversal.P" /> class.
+            </summary>
+            <param name="operatorName">The name of the predicate.</param>
+            <param name="value">The value of the predicate.</param>
+            <param name="other">An optional other predicate that is used as an argument for this predicate.</param>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.P.OperatorName">
+            <summary>
+                Gets the name of the predicate.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.P.Value">
+            <summary>
+                Gets the value of the predicate.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.P.Other">
+            <summary>
+                Gets an optional other predicate that is used as an argument for this predicate.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.P.And(Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Returns a composed predicate that represents a logical AND of this predicate and another.
+            </summary>
+            <param name="otherPredicate">A predicate that will be logically-ANDed with this predicate.</param>
+            <returns>The composed predicate.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.P.Or(Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Returns a composed predicate that represents a logical OR of this predicate and another.
+            </summary>
+            <param name="otherPredicate">A predicate that will be logically-ORed with this predicate.</param>
+            <returns>The composed predicate.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.P.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Strategy.AbstractTraversalStrategy">
+            <summary>
+                Provides a common base class for strategies that are only included in <see cref="T:Gremlin.Net.Process.Traversal.Bytecode" />
+                to be applied remotely.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.Strategy.AbstractTraversalStrategy.StrategyName">
+            <summary>
+                Gets the name of the strategy.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.Strategy.AbstractTraversalStrategy.Configuration">
+            <summary>
+                Gets the configuration of the strategy.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Strategy.AbstractTraversalStrategy.Equals(Gremlin.Net.Process.Traversal.Strategy.AbstractTraversalStrategy)">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Strategy.AbstractTraversalStrategy.Apply``2(Gremlin.Net.Process.Traversal.ITraversal{``0,``1})">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Strategy.AbstractTraversalStrategy.ApplyAsync``2(Gremlin.Net.Process.Traversal.ITraversal{``0,``1})">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Strategy.AbstractTraversalStrategy.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Strategy.AbstractTraversalStrategy.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Strategy.AbstractTraversalStrategy.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Strategy.Decoration.ConnectiveStrategy">
+            <summary>
+                ConnectiveStrategy rewrites the binary conjunction form of <c>a.and().b</c> into an AndStep of
+                <c>and(a, b)</c> (likewise for OrStep).
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Strategy.Decoration.ElementIdStrategy">
+            <summary>
+                Provides a degree of control over element identifier assignment as some graphs don't provide that feature.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Strategy.Decoration.PartitionStrategy">
+            <summary>
+                Partitions the vertices, edges and vertex properties of a graph into String named partitions.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Strategy.Decoration.PartitionStrategy.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Process.Traversal.Strategy.Decoration.PartitionStrategy" /> class.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Strategy.Decoration.PartitionStrategy.#ctor(System.String,System.String,System.Collections.Generic.IEnumerable{System.String},System.Nullable{System.Boolean})">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Process.Traversal.Strategy.Decoration.PartitionStrategy" /> class.
+            </summary>
+            <param name="partitionKey">Specifies the partition key name.</param>
+            <param name="writePartition">
+                Specifies the name of the partition to write when adding vertices, edges and vertex
+                properties.
+            </param>
+            <param name="readPartitions">Specifies the partition of the graph to read from.</param>
+            <param name="includeMetaProperties">Set to true if vertex properties should get assigned to partitions.</param>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Strategy.Decoration.SubgraphStrategy">
+            <summary>
+                Provides a way to limit the view of a <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Strategy.Decoration.SubgraphStrategy.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Process.Traversal.Strategy.Decoration.SubgraphStrategy" /> class.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Strategy.Decoration.SubgraphStrategy.#ctor(Gremlin.Net.Process.Traversal.ITraversal,Gremlin.Net.Process.Traversal.ITraversal,Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Process.Traversal.Strategy.Decoration.SubgraphStrategy" /> class.
+            </summary>
+            <param name="vertexCriterion">Constrains vertices for the <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" />.</param>
+            <param name="edgeCriterion">Constrains edges for the <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" />.</param>
+            <param name="vertexPropertyCriterion">Constrains vertex properties for the <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" />.</param>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Strategy.Optimization.AdjacentToIncidentStrategy">
+            <summary>
+                Optimizes vertex- and value-emitting steps.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Strategy.Optimization.FilterRankingStrategy">
+            <summary>
+                Reorders filter- and order-steps according to their rank.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Strategy.Optimization.IdentityRemovalStrategy">
+            <summary>
+                Looks for <c>Identity()</c>-steps and removes them.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Strategy.Optimization.IncidentToAdjacentStrategy">
+            <summary>
+                Replaces <c>.OutE().InV()</c> with <c>.Out()</c>, <c>.InE().OutV()</c> with <c>In()</c> and <c>.BothE().BothV()</c>
+                with <c>Both()</c>.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Strategy.Optimization.InlineFilterStrategy">
+            <summary>
+                Analyzes filter-steps with child traversals that themselves are pure filters.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Strategy.Optimization.LazyBarrierStrategy">
+            <summary>
+                Inserts <c>Barrier()</c>-steps into a <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" /> where appropriate in order to gain the "bulking
+                optimization".
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Strategy.Optimization.MatchPredicateStrategy">
+            <summary>
+                Folds any post<c>Where()</c> step that maintains a traversal constraint into <c>Match()</c>.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Strategy.Optimization.PathProcessorStrategy">
+            <summary>
+                Helps to ensure that more traversals meet the local child constraint imposed on OLAP traversals.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Strategy.Optimization.RangeByIsCountStrategy">
+            <summary>
+                Optimizes any occurrence of <c>Count()</c>-step followed by an <c>Is()</c>-step.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Strategy.Verification.LambdaRestrictionStrategy">
+            <summary>
+                Does not allow lambdas to be used in a <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" />.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Strategy.Verification.ReadOnlyStrategy">
+            <summary>
+                Detects mutating steps and throws an exception if one is found.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.Traverser">
+            <summary>
+                A traverser represents the current state of an object flowing through a <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Traverser.#ctor(System.Object,System.Int64)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Process.Traversal.Traverser" /> class.
+            </summary>
+            <param name="obj">The object of the traverser.</param>
+            <param name="bulk">The number of traversers represented in this traverser.</param>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.Traverser.Object">
+            <summary>
+                Gets the object of this traverser.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Process.Traversal.Traverser.Bulk">
+            <summary>
+                Gets the number of traversers represented in this traverser.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Traverser.Equals(Gremlin.Net.Process.Traversal.Traverser)">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Traverser.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.Traverser.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="T:Gremlin.Net.Process.Traversal.__">
+            <summary>
+                An anonymous <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Start">
+            <summary>
+                Starts an empty <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.V(System.Object[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the V step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.AddE(Gremlin.Net.Process.Traversal.Direction,System.String,System.String,System.Object[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the addE step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.AddE(System.String)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the addE step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.AddInE(System.String,System.String,System.Object[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the addInE step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.AddOutE(System.String,System.String,System.Object[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the addOutE step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.AddV">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the addV step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.AddV(System.Object[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the addV step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.AddV(System.String)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the addV step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Aggregate(System.String)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the aggregate step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.And(Gremlin.Net.Process.Traversal.ITraversal[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the and step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.As(System.String,System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the as step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Barrier">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the barrier step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Barrier(Gremlin.Net.Process.Traversal.IConsumer)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the barrier step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Barrier(System.Int32)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the barrier step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Both(System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the both step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.BothE(System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the bothE step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.BothV">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the bothV step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Branch``1(Gremlin.Net.Process.Traversal.IFunction)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the branch step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Branch``1(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the branch step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Cap``1(System.String,System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the cap step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Choose``1(Gremlin.Net.Process.Traversal.IFunction)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the choose step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Choose``1(Gremlin.Net.Process.Traversal.IPredicate,Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the choose step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Choose``1(Gremlin.Net.Process.Traversal.IPredicate,Gremlin.Net.Process.Traversal.ITraversal,Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the choose step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Choose``1(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the choose step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Choose``1(Gremlin.Net.Process.Traversal.ITraversal,Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the choose step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Choose``1(Gremlin.Net.Process.Traversal.ITraversal,Gremlin.Net.Process.Traversal.ITraversal,Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the choose step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Coalesce``1(Gremlin.Net.Process.Traversal.ITraversal[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the coalesce step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Coin(System.Double)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the coin step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Constant``1(``0)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the constant step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Count">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the count step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Count(Gremlin.Net.Process.Traversal.Scope)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the count step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.CyclicPath">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the cyclicPath step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Dedup(Gremlin.Net.Process.Traversal.Scope,System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the dedup step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Dedup(System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the dedup step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Drop">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the drop step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Emit">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the emit step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Emit(Gremlin.Net.Process.Traversal.IPredicate)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the emit step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Emit(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the emit step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Filter(Gremlin.Net.Process.Traversal.IPredicate)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the filter step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Filter(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the filter step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.FlatMap``1(Gremlin.Net.Process.Traversal.IFunction)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the flatMap step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.FlatMap``1(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the flatMap step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Fold``1">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the fold step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Fold``1(``0,Gremlin.Net.Process.Traversal.IBiFunction)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the fold step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Group``2">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the group step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Group(System.String)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the group step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.GroupCount``1">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the groupCount step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.GroupCount(System.String)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the groupCount step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.GroupV3d0``2">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the groupV3d0 step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.GroupV3d0(System.String)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the groupV3d0 step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Has(System.String)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the has step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Has(System.String,System.Object)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the has step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Has(System.String,Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the has step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Has(System.String,System.String,System.Object)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the has step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Has(System.String,System.String,Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the has step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Has(System.String,Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the has step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Has(Gremlin.Net.Process.Traversal.T,System.Object)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the has step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Has(Gremlin.Net.Process.Traversal.T,Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the has step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Has(Gremlin.Net.Process.Traversal.T,Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the has step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.HasId(System.Object,System.Object[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the hasId step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.HasId(Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the hasId step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.HasKey(Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the hasKey step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.HasKey(System.String,System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the hasKey step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.HasLabel(Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the hasLabel step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.HasLabel(System.String,System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the hasLabel step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.HasNot(System.String)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the hasNot step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.HasValue(System.Object,System.Object[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the hasValue step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.HasValue(Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the hasValue step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Id">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the id step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Identity">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the identity step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.In(System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the in step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.InE(System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the inE step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.InV">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the inV step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Inject(System.Object[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the inject step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Is(System.Object)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the is step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Is(Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the is step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Key">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the key step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Label">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the label step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Limit``1(Gremlin.Net.Process.Traversal.Scope,System.Int64)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the limit step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Limit``1(System.Int64)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the limit step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Local``1(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the local step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Loops">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the loops step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Map``1(Gremlin.Net.Process.Traversal.IFunction)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the map step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Map``1(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the map step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.MapKeys``1">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the mapKeys step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.MapValues``1">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the mapValues step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Match``1(Gremlin.Net.Process.Traversal.ITraversal[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the match step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Max``1">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the max step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Max``1(Gremlin.Net.Process.Traversal.Scope)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the max step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Mean``1">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the mean step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Mean``1(Gremlin.Net.Process.Traversal.Scope)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the mean step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Min``1">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the min step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Min``1(Gremlin.Net.Process.Traversal.Scope)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the min step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Not(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the not step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Optional``1(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the optional step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Or(Gremlin.Net.Process.Traversal.ITraversal[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the or step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Order">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the order step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Order(Gremlin.Net.Process.Traversal.Scope)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the order step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.OtherV">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the otherV step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Out(System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the out step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.OutE(System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the outE step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.OutV">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the outV step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Path">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the path step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Project``1(System.String,System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the project step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Properties``1(System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the properties step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Property(Gremlin.Net.Process.Traversal.Cardinality,System.Object,System.Object,System.Object[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the property step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Property(System.Object,System.Object,System.Object[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the property step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.PropertyMap``1(System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the propertyMap step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Range``1(Gremlin.Net.Process.Traversal.Scope,System.Int64,System.Int64)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the range step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Range``1(System.Int64,System.Int64)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the range step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Repeat(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the repeat step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Sack``1">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the sack step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Sack(Gremlin.Net.Process.Traversal.IBiFunction)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the sack step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Sack(Gremlin.Net.Process.Traversal.IBiFunction,System.String)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the sack step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Sample(Gremlin.Net.Process.Traversal.Scope,System.Int32)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the sample step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Sample(System.Int32)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the sample step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Select``1(Gremlin.Net.Process.Traversal.Column)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the select step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Select``1(Gremlin.Net.Process.Traversal.Pop,System.String)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the select step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Select``1(Gremlin.Net.Process.Traversal.Pop,System.String,System.String,System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the select step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Select``1(System.String)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the select step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Select``1(System.String,System.String,System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the select step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.SideEffect(Gremlin.Net.Process.Traversal.IConsumer)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the sideEffect step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.SideEffect(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the sideEffect step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.SimplePath">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the simplePath step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Store(System.String)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the store step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Subgraph(System.String)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the subgraph step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Sum``1">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the sum step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Sum``1(Gremlin.Net.Process.Traversal.Scope)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the sum step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Tail``1">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the tail step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Tail``1(Gremlin.Net.Process.Traversal.Scope)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the tail step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Tail``1(Gremlin.Net.Process.Traversal.Scope,System.Int64)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the tail step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Tail``1(System.Int64)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the tail step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.TimeLimit(System.Int64)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the timeLimit step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Times(System.Int32)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the times step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.To(Gremlin.Net.Process.Traversal.Direction,System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the to step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.ToE(Gremlin.Net.Process.Traversal.Direction,System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the toE step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.ToV(Gremlin.Net.Process.Traversal.Direction)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the toV step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Tree``1">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the tree step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Tree(System.String)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the tree step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Unfold``1">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the unfold step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Union``1(Gremlin.Net.Process.Traversal.ITraversal[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the union step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Until(Gremlin.Net.Process.Traversal.IPredicate)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the until step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Until(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the until step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Value``1">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the value step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.ValueMap``1(System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the valueMap step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.ValueMap``1(System.Boolean,System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the valueMap step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Values``1(System.String[])">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the values step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Where(Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the where step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Where(System.String,Gremlin.Net.Process.Traversal.P)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the where step to that traversal.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Traversal.__.Where(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+                Spawns a <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversal`2" /> and adds the where step to that traversal.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Process.Utils">
+            <summary>
+            Contains useful methods that can be reused across the project. 
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Process.Utils.WaitUnwrap(System.Threading.Tasks.Task)">
+            <summary>
+            Waits the completion of the provided Task.
+            When an AggregateException is thrown, the inner exception is thrown.
+            </summary>
+        </member>
+        <member name="T:Gremlin.Net.Structure.Edge">
+            <summary>
+                Represents an edge between to vertices.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Structure.Edge.#ctor(System.Object,Gremlin.Net.Structure.Vertex,System.String,Gremlin.Net.Structure.Vertex)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Structure.Edge" /> class.
+            </summary>
+            <param name="id">The id of the edge.</param>
+            <param name="outV">The outgoing/tail vertex of the edge.</param>
+            <param name="label">The label of the edge.</param>
+            <param name="inV">The incoming/head vertex of the edge.</param>
+        </member>
+        <member name="P:Gremlin.Net.Structure.Edge.InV">
+            <summary>
+                Gets or sets the incoming/head vertex of this edge.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Structure.Edge.OutV">
+            <summary>
+                Gets or sets the outgoing/tail vertex of this edge.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Structure.Edge.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:Gremlin.Net.Structure.Element">
+            <summary>
+                A common base class for Graph elements.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Structure.Element.#ctor(System.Object,System.String)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Structure.Element" /> class.
+            </summary>
+            <param name="id">The id of the element.</param>
+            <param name="label">The label of the element.</param>
+        </member>
+        <member name="P:Gremlin.Net.Structure.Element.Id">
+            <summary>
+                Gets the id of this <see cref="T:Gremlin.Net.Structure.Element" />.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Structure.Element.Label">
+            <summary>
+                Gets the label of this <see cref="T:Gremlin.Net.Structure.Element" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Structure.Element.Equals(Gremlin.Net.Structure.Element)">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Structure.Element.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Structure.Element.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="T:Gremlin.Net.Structure.Graph">
+            <summary>
+                A <see cref="T:Gremlin.Net.Structure.Graph" /> is a container object for a collection of <see cref="T:Gremlin.Net.Structure.Vertex" />, <see cref="T:Gremlin.Net.Structure.Edge" />,
+                <see cref="T:Gremlin.Net.Structure.VertexProperty" />, and <see cref="T:Gremlin.Net.Structure.Property" /> objects.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Structure.Graph.Traversal">
+            <summary>
+                Generates a reusable <see cref="T:Gremlin.Net.Process.Traversal.GraphTraversalSource" /> instance.
+            </summary>
+            <returns>A graph traversal source.</returns>
+        </member>
+        <member name="T:Gremlin.Net.Structure.IO.GraphSON.GraphSONReader">
+            <summary>
+                Allows to deserialize GraphSON to objects.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Structure.IO.GraphSON.GraphSONReader.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Structure.IO.GraphSON.GraphSONReader" /> class.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Structure.IO.GraphSON.GraphSONReader.#ctor(System.Collections.Generic.IReadOnlyDictionary{System.String,Gremlin.Net.Structure.IO.GraphSON.IGraphSONDeserializer})">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Structure.IO.GraphSON.GraphSONReader" /> class.
+            </summary>
+            <param name="deserializerByGraphSONType">
+                <see cref="T:Gremlin.Net.Structure.IO.GraphSON.IGraphSONDeserializer" /> deserializers identified by their
+                GraphSON type.
+            </param>
+        </member>
+        <member name="M:Gremlin.Net.Structure.IO.GraphSON.GraphSONReader.ToObject(System.Collections.Generic.IEnumerable{Newtonsoft.Json.Linq.JToken})">
+            <summary>
+                Deserializes a GraphSON collection to an object.
+            </summary>
+            <param name="graphSonData">The GraphSON collection to deserialize.</param>
+            <returns>The deserialized object.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Structure.IO.GraphSON.GraphSONReader.ToObject(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+                Deserializes GraphSON to an object.
+            </summary>
+            <param name="jToken">The GraphSON to deserialize.</param>
+            <returns>The deserialized object.</returns>
+        </member>
+        <member name="T:Gremlin.Net.Structure.IO.GraphSON.GraphSONUtil">
+            <summary>
+                Provides helper methods for GraphSON serialization.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Structure.IO.GraphSON.GraphSONUtil.ToTypedValue(System.String,System.Object,System.String)">
+            <summary>
+                Transforms a value intos its GraphSON representation including type information.
+            </summary>
+            <param name="typename">The name of the type.</param>
+            <param name="value">The value to transform.</param>
+            <param name="prefix">A namespace prefix for the typename.</param>
+            <returns>The GraphSON representation including type information.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Structure.IO.GraphSON.GraphSONUtil.FormatTypeName(System.String,System.String)">
+            <summary>
+                Formats a type name with its prefix to a GraphSON TypeID.
+            </summary>
+            <param name="namespacePrefix">The namespace prefix (default is "g").</param>
+            <param name="typeName">The name of the type.</param>
+            <returns>The formatted TypeID.</returns>
+        </member>
+        <member name="T:Gremlin.Net.Structure.IO.GraphSON.GraphSONWriter">
+            <summary>
+                Allows to serialize objects to GraphSON.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Structure.IO.GraphSON.GraphSONWriter.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Structure.IO.GraphSON.GraphSONWriter" /> class.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Structure.IO.GraphSON.GraphSONWriter.#ctor(System.Collections.Generic.IReadOnlyDictionary{System.Type,Gremlin.Net.Structure.IO.GraphSON.IGraphSONSerializer})">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Structure.IO.GraphSON.GraphSONWriter" /> class.
+            </summary>
+            <param name="customSerializerByType">
+                <see cref="T:Gremlin.Net.Structure.IO.GraphSON.IGraphSONSerializer" /> serializers identified by their
+                <see cref="T:System.Type" />.
+            </param>
+        </member>
+        <member name="M:Gremlin.Net.Structure.IO.GraphSON.GraphSONWriter.WriteObject(System.Object)">
+            <summary>
+                Serializes an object to GraphSON.
+            </summary>
+            <param name="objectData">The object to serialize.</param>
+            <returns>The serialized GraphSON.</returns>
+        </member>
+        <member name="T:Gremlin.Net.Structure.IO.GraphSON.IGraphSONDeserializer">
+            <summary>
+                Supports deserializing GraphSON into an object.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Structure.IO.GraphSON.IGraphSONDeserializer.Objectify(Newtonsoft.Json.Linq.JToken,Gremlin.Net.Structure.IO.GraphSON.GraphSONReader)">
+            <summary>
+                Deserializes GraphSON to an object.
+            </summary>
+            <param name="graphsonObject">The GraphSON object to objectify.</param>
+            <param name="reader">A <see cref="T:Gremlin.Net.Structure.IO.GraphSON.GraphSONReader" /> that can be used to objectify properties of the GraphSON object.</param>
+            <returns>The deserialized object.</returns>
+        </member>
+        <member name="T:Gremlin.Net.Structure.IO.GraphSON.IGraphSONSerializer">
+            <summary>
+                Supports serializing of an object to GraphSON.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Structure.IO.GraphSON.IGraphSONSerializer.Dictify(System.Object,Gremlin.Net.Structure.IO.GraphSON.GraphSONWriter)">
+            <summary>
+                Transforms an object into a dictionary that resembles its GraphSON representation.
+            </summary>
+            <param name="objectData">The object to dictify.</param>
+            <param name="writer">A <see cref="T:Gremlin.Net.Structure.IO.GraphSON.GraphSONWriter" /> that can be used to dictify properties of the object.</param>
+            <returns>The GraphSON representation.</returns>
+        </member>
+        <member name="T:Gremlin.Net.Structure.Path">
+            <summary>
+                A Path denotes a particular walk through a graph as defined by a <see cref="T:Gremlin.Net.Process.Traversal.ITraversal" />.
+            </summary>
+            <remarks>
+                In abstraction, any Path implementation maintains two lists: a list of sets of labels and a list of objects.
+                The list of labels are the labels of the steps traversed. The list of objects are the objects traversed.
+            </remarks>
+        </member>
+        <member name="M:Gremlin.Net.Structure.Path.#ctor(System.Collections.Generic.List{System.Collections.Generic.List{System.String}},System.Collections.Generic.List{System.Object})">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Structure.Path" /> class.
+            </summary>
+            <param name="labels">The labels associated with the path</param>
+            <param name="objects">The objects in the <see cref="T:Gremlin.Net.Structure.Path" />.</param>
+        </member>
+        <member name="P:Gremlin.Net.Structure.Path.Labels">
+            <summary>
+                Gets an ordered list of the labels associated with the <see cref="T:Gremlin.Net.Structure.Path" />.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Structure.Path.Objects">
+            <summary>
+                Gets an ordered list of the objects in the <see cref="T:Gremlin.Net.Structure.Path" />.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Structure.Path.Item(System.String)">
+            <summary>
+                Gets the object associated with the particular label of the path.
+            </summary>
+            <remarks>If the path has multiple labels of the type, then get a collection of those objects.</remarks>
+            <param name="label">The label of the path</param>
+            <returns>The object associated with the label of the path</returns>
+            <exception cref="T:System.Collections.Generic.KeyNotFoundException">Thrown if the path does not contain the label.</exception>
+        </member>
+        <member name="M:Gremlin.Net.Structure.Path.Equals(Gremlin.Net.Structure.Path)">
+            <inheritdoc />
+        </member>
+        <member name="P:Gremlin.Net.Structure.Path.Item(System.Int32)">
+            <summary>
+                Get the object associated with the specified index into the path.
+            </summary>
+            <param name="index">The index of the path</param>
+            <returns>The object associated with the index of the path</returns>
+        </member>
+        <member name="P:Gremlin.Net.Structure.Path.Count">
+            <summary>
+                Gets the number of steps in the path.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Structure.Path.GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Structure.Path.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Structure.Path.ContainsKey(System.String)">
+            <summary>
+                Returns true if the path has the specified label, else return false.
+            </summary>
+            <param name="key">The label to search for.</param>
+            <returns>True if the label exists in the path.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Structure.Path.TryGetValue(System.String,System.Object@)">
+            <summary>
+                Tries to get the object associated with the particular label of the path.
+            </summary>
+            <remarks>If the path has multiple labels of the type, then get a collection of those objects.</remarks>
+            <param name="label">The label of the path.</param>
+            <param name="value">The object associated with the label of the path.</param>
+            <returns>True, if an object was found for the label.</returns>
+        </member>
+        <member name="M:Gremlin.Net.Structure.Path.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Structure.Path.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="T:Gremlin.Net.Structure.Property">
+            <summary>
+                A <see cref="T:Gremlin.Net.Structure.Property" /> denotes a key/value pair associated with an <see cref="T:Gremlin.Net.Structure.Edge" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Structure.Property.#ctor(System.String,System.Object,Gremlin.Net.Structure.Element)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Structure.Property" /> class.
+            </summary>
+            <param name="key">The key of the property.</param>
+            <param name="value">The value of the property.</param>
+            <param name="element">The element that the property is associated with.</param>
+        </member>
+        <member name="P:Gremlin.Net.Structure.Property.Key">
+            <summary>
+                Gets the key of the property.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Structure.Property.Value">
+            <summary>
+                Gets the value of the property.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Structure.Property.Element">
+            <summary>
+                Gets the element that this property is associated with.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Structure.Property.Equals(Gremlin.Net.Structure.Property)">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Structure.Property.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Structure.Property.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Gremlin.Net.Structure.Property.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="T:Gremlin.Net.Structure.Vertex">
+            <summary>
+                Represents a vertex.
+            </summary>
+        </member>
+        <member name="F:Gremlin.Net.Structure.Vertex.DefaultLabel">
+            <summary>
+                The default label to use for a vertex.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Structure.Vertex.#ctor(System.Object,System.String)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Structure.Vertex" /> class.
+            </summary>
+            <param name="id">The id of the vertex.</param>
+            <param name="label">The label of the vertex.</param>
+        </member>
+        <member name="M:Gremlin.Net.Structure.Vertex.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:Gremlin.Net.Structure.VertexProperty">
+            <summary>
+                A <see cref="T:Gremlin.Net.Structure.VertexProperty" /> denotes a key/value pair associated with a <see cref="P:Gremlin.Net.Structure.VertexProperty.Vertex" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Structure.VertexProperty.#ctor(System.Object,System.String,System.Object,Gremlin.Net.Structure.Vertex)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Gremlin.Net.Structure.VertexProperty" /> class.
+            </summary>
+            <param name="id">The id of the vertex property.</param>
+            <param name="label">The label of the vertex property.</param>
+            <param name="value">The id of the vertex property.</param>
+            <param name="vertex">The <see cref="P:Gremlin.Net.Structure.VertexProperty.Vertex" /> that owns this <see cref="T:Gremlin.Net.Structure.VertexProperty" />.</param>
+        </member>
+        <member name="P:Gremlin.Net.Structure.VertexProperty.Value">
+            <summary>
+                The value of this <see cref="T:Gremlin.Net.Structure.VertexProperty" />.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Structure.VertexProperty.Vertex">
+            <summary>
+                The <see cref="P:Gremlin.Net.Structure.VertexProperty.Vertex" /> that owns this <see cref="T:Gremlin.Net.Structure.VertexProperty" />.
+            </summary>
+        </member>
+        <member name="P:Gremlin.Net.Structure.VertexProperty.Key">
+            <summary>
+                The key of this <see cref="T:Gremlin.Net.Structure.VertexProperty" />.
+            </summary>
+        </member>
+        <member name="M:Gremlin.Net.Structure.VertexProperty.ToString">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Dse.Graph</name>
+    </assembly>
+    <members>
+        <member name="T:Dse.Graph.DseGraph">
+            <summary>
+            Utility class for interacting with DataStax Enterprise Graph and Apache TinkerPop.
+            </summary>
+        </member>
+        <member name="M:Dse.Graph.DseGraph.Traversal(Dse.IDseSession,Dse.Graph.GraphOptions)">
+            <summary>
+            Creates a new Apache TinkerPop's <c>GraphTraversalSource</c> instance, that can be used to build 
+            <c>GraphTraversal</c> instances.
+            </summary>
+            <param name="session">
+            The session instance, representing a pool of connections connected to the DSE cluster.
+            </param>
+            <param name="graphOptions">
+            Configurations to use for this traversal source. When provided, the options on this instance will override
+            the ones defined when building the <see cref="T:Dse.IDseCluster"/> instance for <c>GraphTraversal</c>
+            execution methods like <c>ToList()</c>.
+            <para>
+            These options won't have any effect when using the method <see cref="M:Dse.Graph.DseGraph.StatementFromTraversal(Gremlin.Net.Process.Traversal.ITraversal)"/>.
+            </para>
+            </param>
+        </member>
+        <member name="M:Dse.Graph.DseGraph.StatementFromTraversal(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+            Creates an initialized <see cref="T:Dse.Graph.IGraphStatement"/> from a <c>GraphTraversal</c> to use directly with a 
+            <see cref="T:Dse.IDseSession"/>.
+            <para>
+            Note that the <c>IGraphStatement</c> will use the default <c>GraphOptions</c> at cluster level and not the
+            ones defined on the <c>GraphTraversalSource</c>. 
+            </para>
+            </summary>
+        </member>
+        <member name="M:Dse.Graph.DseGraph.ExecuteGraph(Dse.IDseSession,Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+            Creates a <see cref="T:Dse.Graph.IGraphStatement"/> from the given traversal and executes it using the provided session.
+            </summary>
+            <param name="session">The session instance used to execute the statement.</param>
+            <param name="traversal">The traversal to create the statement to execute.</param>
+        </member>
+        <member name="M:Dse.Graph.DseGraph.ExecuteGraphAsync(Dse.IDseSession,Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+            Creates a <see cref="T:Dse.Graph.IGraphStatement"/> from the given traversal and asynchronously executes it using the
+            provided session.
+            </summary>
+            <param name="session">The session instance used to execute the statement.</param>
+            <param name="traversal">The traversal to create the statement to execute.</param>
+        </member>
+        <member name="M:Dse.Graph.DseGraph.Batch(Dse.Graph.GraphOptions)">
+            <summary>
+            Create a <see cref="T:Dse.Graph.ITraversalBatch"/> instance to perform batch mutations in DSE Graph.
+            <para>
+            Mutations made to the DSE Graph may all or none succeed. In case of an issue during one of the mutations,
+            the execution of the batch will fail and none of the mutations will have been applied.
+            </para>
+            <para>
+            A <see cref="T:Dse.Graph.ITraversalBatch"/> can be directly executed via
+            <see cref="M:Dse.Graph.DseGraph.ExecuteGraph(Dse.IDseSession,Dse.Graph.ITraversalBatch)"/> extension method.
+            </para>
+            </summary>
+        </member>
+        <member name="M:Dse.Graph.DseGraph.ExecuteGraphAsync(Dse.IDseSession,Dse.Graph.ITraversalBatch)">
+            <summary>
+            Asynchronously executes a batch of traversals.
+            </summary>
+            <param name="session">The session to extend.</param>
+            <param name="batch">The batch of traversals to execute.</param>
+            <seealso cref="M:Dse.Graph.DseGraph.Batch(Dse.Graph.GraphOptions)"/>
+        </member>
+        <member name="M:Dse.Graph.DseGraph.ExecuteGraph(Dse.IDseSession,Dse.Graph.ITraversalBatch)">
+            <summary>
+            Executes a batch of traversals.
+            </summary>
+            <param name="session">The session to extend.</param>
+            <param name="batch">The batch of traversals to execute.</param>
+            <seealso cref="M:Dse.Graph.DseGraph.Batch(Dse.Graph.GraphOptions)"/>
+        </member>
+        <member name="T:Dse.Graph.ITraversalBatch">
+            <summary>
+            Represents a group of traversals to allow executing multiple DSE Graph mutation operations inside the
+            same transaction.
+            </summary>
+            <inheritdoc />
+        </member>
+        <member name="M:Dse.Graph.ITraversalBatch.Add(Gremlin.Net.Process.Traversal.ITraversal)">
+            <summary>
+            Adds a new traversal to this batch.
+            </summary>
+            <returns>This instance.</returns>
+        </member>
+        <member name="M:Dse.Graph.ITraversalBatch.ToGraphStatement">
+            <summary>
+            Converts this batch into a <see cref="T:Dse.Graph.IGraphStatement"/> that can be executed using
+            a <see cref="T:Dse.IDseSession"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">
+            Throws InvalidOperationException when the batch does not contain any traversals.
+            </exception>
+        </member>
+        <member name="P:Dse.Graph.Serialization.ITypeSerializer.FullTypeName">
+            <summary>
+            Gets the full TinkerPop name, ie: g:UUID
+            </summary>
+        </member>
+        <member name="P:Dse.Graph.Serialization.ITypeSerializer.Type">
+            <summary>
+            Gets the type that it's handled by this serializer.
+            </summary>
+        </member>
+    </members>
+</doc>
