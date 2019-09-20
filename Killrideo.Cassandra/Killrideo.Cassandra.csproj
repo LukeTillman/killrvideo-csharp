@@ -2,14 +2,10 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
-        <PublicSign>false</PublicSign>
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Dsl" />
+      <PackageReference Include="Dse" Version="2.8.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Gremlin.Net" Version="3.2.9" />
-    </ItemGroup>
 </Project>

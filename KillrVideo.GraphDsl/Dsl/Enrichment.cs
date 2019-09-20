@@ -1,10 +1,9 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Gremlin.Net.Process.Traversal;
-
 using static KillrVideo.GraphDsl.__KillrVideo;
 
-namespace KillrVideo.GraphDsl
+namespace KillrVideo.GraphDsl.Dsl
 {
     /// <summary>
     /// Provides for pre-built data enrichment options for the <code>enrich(Enrichment...)</code> step. These options will

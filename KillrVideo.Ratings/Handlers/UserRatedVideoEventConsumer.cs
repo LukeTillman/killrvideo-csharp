@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-
+using DryIocAttributes;
 using Dse;
 using Dse.Graph;
-using Gremlin.Net.Process.Traversal;
-using Serilog;
-
 using KillrVideo.MessageBus;
 using KillrVideo.Ratings.Events;
-using DryIocAttributes;
-
-using static KillrVideo.GraphDsl.__KillrVideo;
+using Serilog;
 
 namespace KillrVideo.Ratings
 {
@@ -56,8 +51,9 @@ namespace KillrVideo.Ratings
         }
 
         public async Task RateVideoInGraph(String videoId, String userId, int rating) {
-            var traversal = DseGraph.Traversal(_session)
-                                    .UserRateVideo(userId, videoId, rating);
+            var traversal = DseGraph.Traversal(_session).V(); //Added V() here so it doesn't fail
+                            //TODO Not sure what is expected here
+                                   // .UserRateVideo(userId, videoId, rating);
             await _session.ExecuteGraphAsync(traversal);
         }
     }

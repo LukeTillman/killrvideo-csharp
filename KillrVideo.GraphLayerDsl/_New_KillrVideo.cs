@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Gremlin.Net.Process.Traversal;
 using Gremlin.Net.Structure;
-using KillrVideo.GraphDsl.Dsl;
 using static Gremlin.Net.Process.Traversal.P;
 
 namespace KillrVideo.GraphDsl {

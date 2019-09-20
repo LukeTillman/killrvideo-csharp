@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Gremlin.Net.Process.Traversal;
 using Gremlin.Net.Structure;
 
-using static KillrVideo.GraphDsl.KvGraph;
 
-namespace KillrVideo.GraphDsl
+namespace KillrVideo.GraphDsl.Dsl
 {
 
     /// <summary>
@@ -26,11 +24,11 @@ namespace KillrVideo.GraphDsl
     {
         public static readonly Dictionary<Recommender, GraphTraversal<object, IList<Vertex>>> Traversals = new Dictionary<Recommender, GraphTraversal<object, IList<Vertex>>>
         {
-            {Recommender.SmallSample, __.OutE(EdgeActor).Sample(3).InV().Fold()},
-            {Recommender.LargeSample, __.OutE(EdgeActor).Sample(10).InV().Fold()},
-            {Recommender.Fifty50Sample, __.OutE(EdgeActor).Coin(0.5).InV().Fold()},
-            {Recommender.TimedSample, __.OutE(EdgeActor).TimeLimit(250).InV().Fold()},
-            {Recommender.All, __.OutE(EdgeActor).InV().Fold()}
+            {Recommender.SmallSample, __.OutE(KvGraph.EdgeActor).Sample(3).InV().Fold()},
+            {Recommender.LargeSample, __.OutE(KvGraph.EdgeActor).Sample(10).InV().Fold()},
+            {Recommender.Fifty50Sample, __.OutE(KvGraph.EdgeActor).Coin(0.5).InV().Fold()},
+            {Recommender.TimedSample, __.OutE(KvGraph.EdgeActor).TimeLimit(250).InV().Fold()},
+            {Recommender.All, __.OutE(KvGraph.EdgeActor).InV().Fold()}
         };
     }
 }

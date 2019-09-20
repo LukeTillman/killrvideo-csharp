@@ -1,15 +1,12 @@
-﻿using System;
-
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Collections.Generic;
 using Gremlin.Net.Process.Traversal;
 using Gremlin.Net.Structure;
-
 using static Gremlin.Net.Process.Traversal.P;
 
 using static KillrVideo.GraphDsl.__KillrVideo;
 
-namespace KillrVideo.GraphDsl {
+namespace KillrVideo.GraphDsl.Dsl {
 
     /// <summary>
     /// The KillrVideo Traversal class which exposes the available steps of the DSL.
@@ -41,7 +38,7 @@ namespace KillrVideo.GraphDsl {
         /// what other users rated those videos highly
         /// </summary>
         public static GraphTraversal<Vertex, Vertex> VideosRatedByOthers(this GraphTraversal<Vertex, Vertex> t, 
-                                                                         int minRate, int minLocalRate) {
+                                                                         int minRate, long minLocalRate) {
             return
                   // Now we're working with "similar users". For those users who share my taste, grab N highly rated 
                   // videos. Save the rating so we can sum the scores later, and use sack() because it does not require 

@@ -1,4 +1,4 @@
-﻿namespace KillrVideo.Host
+namespace KillrVideo.Host
 {
     /// <summary>
     /// Options needed by the host.

@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace KillrVideo.GraphDsl {
+namespace KillrVideo.GraphDsl.Dsl {
 
     /// <summary>
     /// String tokens for graph element lables and property keys.
@@ -17,6 +16,7 @@ namespace KillrVideo.GraphDsl {
         public const String EdgeRated            = "rated";
         public const String EdgeUploaded         = "uploaded";
         public const String EdgeTagWith          = "taggedWith";
+        public const String EdgeActor            = "actor";
 
         // Properties (both Vertices and edges)
         public const String PropertyRating       = "rating";
