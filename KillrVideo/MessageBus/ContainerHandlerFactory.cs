@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using DryIoc;
@@ -12,9 +13,9 @@ namespace KillrVideo.MessageBus
     [Export(typeof(IHandlerFactory))]
     public class ContainerHandlerFactory : IHandlerFactory
     {
-        private readonly IContainer _container;
+        private readonly DryIoc.IContainer _container;
 
-        public ContainerHandlerFactory(IContainer container)
+        public ContainerHandlerFactory(DryIoc.IContainer container)
         {
             if (container == null) throw new ArgumentNullException(nameof(container));
             _container = container;

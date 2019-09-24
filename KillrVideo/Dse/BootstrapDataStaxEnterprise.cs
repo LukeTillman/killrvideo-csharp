@@ -54,7 +54,7 @@ namespace KillrVideo.Dse
         /// <summary>
         /// Register the singleton ISession instance with the container once we can connect to the killrvideo schema.
         /// </summary>
-        public async Task RegisterDseOnceAvailable(IContainer container)
+        public async Task RegisterDseOnceAvailable(DryIoc.IContainer container)
         {
             IDseSession session = null;
             int attempts = 0;
@@ -84,7 +84,7 @@ namespace KillrVideo.Dse
                     }
 
                     // SSL : To be tested (first try based on documentation)
-                    if (Boolean.Parse(_kvConfig[ConfigKeys.DseEnableSSL])) {
+                    if (Boolean.Parse(_kvConfig[ConfigKeys.DseEnableSsl])) {
                         String certPath     = _kvConfig[ConfigKeys.DseSslCertPath];
                         String certPassword = _kvConfig[ConfigKeys.DseSslCertPassword];
                         if(string.IsNullOrEmpty(certPath)) {
@@ -96,7 +96,7 @@ namespace KillrVideo.Dse
                         }
                         Logger.Information("+ Setup SSL options with {certPath}", certPath);
                         SSLOptions sslOptions = new SSLOptions();
-                        X509Certificate2[] certs = new X509Certificate2[] { new X509Certificate2(readX509Certificate(certPath), certPassword) };
+                        X509Certificate2[] certs = new X509Certificate2[] { new X509Certificate2(ReadX509Certificate(certPath), certPassword) };
                         sslOptions.SetCertificateCollection(new X509CertificateCollection(certs));
                         sslOptions.SetRemoteCertValidationCallback((a1, a2, a3, a4) => true);
                         //sslOptions.SetHostNameResolver((internalIPAddress) => { return "test_client"; });
@@ -161,7 +161,7 @@ namespace KillrVideo.Dse
             return new IPEndPoint(IPAddress.Parse(parts[0]), int.Parse(parts[1]));
         }
 
-        public static byte[] readX509Certificate(string resourceName) {
+        public static byte[] ReadX509Certificate(string resourceName) {
             using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName)) {
                 byte[] buffer = new byte[1024];
                 using (MemoryStream ms = new MemoryStream())

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.IO;
 using DryIocAttributes;
 using KillrVideo.Host;
 using KillrVideo.Listeners;
@@ -26,7 +25,7 @@ namespace KillrVideo.Configuration
 
         public const String DseUsername         = "DseUsername";
         public const String DsePassword         = "DsePassword";
-        public const String DseEnableSSL        = "DseEnableSSL";
+        public const String DseEnableSsl        = "DseEnableSSL";
         public const String DseSslCertPath      = "DseSslCertPath";
         public const String DseSslCertPassword  = "DseSslCertPassword";
 
@@ -67,7 +66,7 @@ namespace KillrVideo.Configuration
                     // Password
                     { ConfigKeys.DsePassword, "" },
                     // Enable SSL
-                    { ConfigKeys.DseEnableSSL, "false" },
+                    { ConfigKeys.DseEnableSsl, "false" },
                     // SSL Certificate Path
                     { ConfigKeys.DseSslCertPath, "C:\\TMP\\sample.cert" },
                     // SSL Certificate Password
@@ -114,6 +113,7 @@ namespace KillrVideo.Configuration
         {
             var options = new ListenOptions();
             configuration.GetSection("Listen").Bind(options);
+            
             return options;
         }
 

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
-using EtcdNet;
 using Grpc.Core;
 using KillrVideo.Host;
 using KillrVideo.Protobuf;
 using KillrVideo.Protobuf.Services;
+using EtcdNet;
 
 namespace KillrVideo.Listeners
 {
