@@ -5,4 +5,27 @@
         <TargetFramework>netcoreapp2.2</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\KillrVideo.Comments\KillrVideo.Comments.csproj" />
+      <ProjectReference Include="..\KillrVideo.Host\KillrVideo.Host.csproj" />
+      <ProjectReference Include="..\KillrVideo.Protobuf\KillrVideo.Protobuf.csproj" />
+      <ProjectReference Include="..\KillrVideo.Ratings\KillrVideo.Ratings.csproj" />
+      <ProjectReference Include="..\KillrVideo.Search\KillrVideo.Search.csproj" />
+      <ProjectReference Include="..\KillrVideo.Statistics\KillrVideo.Statistics.csproj" />
+      <ProjectReference Include="..\KillrVideo.SuggestedVideos\KillrVideo.SuggestedVideos.csproj" />
+      <ProjectReference Include="..\KillrVideo.Uploads\KillrVideo.Uploads.csproj" />
+      <ProjectReference Include="..\KillrVideo.UserManagement\KillrVideo.UserManagement.csproj" />
+      <ProjectReference Include="..\KillrVideo.VideoCatalog\KillrVideo.VideoCatalog.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="DryIoc" Version="4.0.7" />
+      <PackageReference Include="DryIoc.MefAttributedModel" Version="5.0.0" />
+      <PackageReference Include="EtcdNetCore" Version="1.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.2.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.2.4" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.2.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.4" />
+    </ItemGroup>
+
 </Project>
