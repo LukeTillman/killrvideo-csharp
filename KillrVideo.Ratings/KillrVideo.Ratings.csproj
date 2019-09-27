@@ -5,7 +5,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="DryIoc" Version="4.0.7" />
       <PackageReference Include="Dse" Version="2.8.0" />
       <PackageReference Include="Dse.Graph" Version="1.2.0" />
       <PackageReference Include="Grpc.Core" Version="2.23.0" />
