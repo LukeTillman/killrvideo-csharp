@@ -13,7 +13,7 @@ Use these guides to get started running KillrVideo locally on your development m
 This project will continue to evolve along with Cassandra and you can expect that as Cassandra and the DataStax driver add new features, this sample application will try and provide examples of those.  I'll gladly accept any pull requests for bug fixes, new features, etc.  and if you have a request for an example that you don't see in the code currently, send me a message [@LukeTillman][twitter] on Twitter or open an issue here on GitHub.
 
 ## License
-Copyright 2016 Luke Tillman
+Copyright 2016-2019 Luke Tillman
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

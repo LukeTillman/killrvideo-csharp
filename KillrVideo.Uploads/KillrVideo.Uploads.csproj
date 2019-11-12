@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Google.Protobuf" Version="3.9.1" />
+      <PackageReference Include="Grpc.Core" Version="2.23.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\KillrVideo.Protobuf\KillrVideo.Protobuf.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Dse" Version="2.8.0" />
+      <PackageReference Include="System.ComponentModel.Composition" Version="4.5.0" />
+    </ItemGroup>
+
+</Project>
